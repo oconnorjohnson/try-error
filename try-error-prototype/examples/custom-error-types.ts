@@ -348,44 +348,48 @@ class ApiClient {
       body: JSON.stringify({ fromAccount, toAccount, amount }),
     });
 
-    // Map API errors to business errors for specific cases
-    return tryMapAsync(Promise.resolve(result), (response) => {
-      // Check for business logic errors in the response
-      if (response.data.status === "failed") {
-        const { errorCode, reason } = response.data;
+    if (isErr(result)) {
+      return result;
+    }
 
-        switch (errorCode) {
-          case "INSUFFICIENT_FUNDS":
-            throw createBusinessError(
-              "InsufficientFunds",
-              "Account has insufficient funds for this transfer",
-              errorCode,
-              {
-                availableBalance: response.data.availableBalance,
-                requestedAmount: amount,
-              }
-            );
+    // Check for business logic errors in the response
+    if (result.data.status === "failed") {
+      const { errorCode, reason } = result.data;
 
-          case "ACCOUNT_LOCKED":
-            throw createBusinessError(
-              "AccountLocked",
-              "Account is locked and cannot perform transfers",
-              errorCode,
-              { accountId: fromAccount, lockReason: response.data.lockReason }
-            );
+      switch (errorCode) {
+        case "INSUFFICIENT_FUNDS":
+          return createBusinessError(
+            "InsufficientFunds",
+            "Account has insufficient funds for this transfer",
+            errorCode || "INSUFFICIENT_FUNDS",
+            {
+              availableBalance: result.data.availableBalance,
+              requestedAmount: amount,
+            }
+          );
 
-          default:
-            throw createBusinessError(
-              "InvalidOperation",
-              reason || "Transfer failed",
-              errorCode,
-              response.data
-            );
-        }
+        case "ACCOUNT_LOCKED":
+          return createBusinessError(
+            "AccountLocked",
+            "Account is locked and cannot perform transfers",
+            errorCode || "ACCOUNT_LOCKED",
+            {
+              accountId: fromAccount,
+              lockReason: result.data.lockReason,
+            }
+          );
+
+        default:
+          return createBusinessError(
+            "InvalidOperation",
+            reason || "Transfer failed",
+            errorCode || "UNKNOWN_ERROR",
+            result.data
+          );
       }
+    }
 
-      return response.data;
-    });
+    return result.data;
   }
 
   /**
