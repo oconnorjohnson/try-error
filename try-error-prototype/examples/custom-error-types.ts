@@ -384,7 +384,7 @@ class ApiClient {
             "InvalidOperation",
             reason || "Transfer failed",
             errorCode || "UNKNOWN_ERROR",
-            result.data
+            { ...result.data }
           );
       }
     }
