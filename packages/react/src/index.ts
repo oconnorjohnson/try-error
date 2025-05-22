@@ -21,4 +21,4 @@ export {
   createErrorFactory,
   chainError,
   wrapWithContext,
-} from "../../try-error-prototype/src";
+} from "try-error";
