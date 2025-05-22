@@ -329,7 +329,10 @@ class ApiClient {
       body: JSON.stringify(userData),
     });
 
-    return tryMapAsync(Promise.resolve(result), (response) => response.data);
+    if (isErr(result)) {
+      return result;
+    }
+    return result.data;
   }
 
   /**
