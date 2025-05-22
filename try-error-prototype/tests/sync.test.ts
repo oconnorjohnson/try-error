@@ -13,7 +13,6 @@ import {
   tryAny,
   TrySyncOptions,
 } from "../src/sync";
-import { TryError, isTryError } from "../src/types";
 
 describe("Synchronous Error Handling", () => {
   describe("trySync", () => {

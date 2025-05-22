@@ -157,21 +157,82 @@ Building a lightweight, progressive, type-safe error handling library for TypeSc
 - ✅ Error wrapping preserves all context
 - ✅ Type safety maintained with generics
 
-#### 🔄 Step 4: Core trySync Implementation (1.5 hours) - IN PROGRESS
+#### ✅ Step 4: Core trySync Implementation (1.5 hours) - COMPLETED
 
 **Started:** 12:15 PM  
-**Estimated completion:** 1:45 PM
+**Completed:** 1:45 PM  
+**Duration:** 1.5 hours
+
+**What we did:**
+
+- [x] Create `trySync()` function for wrapping synchronous operations
+  - Automatic error detection and wrapping
+  - Custom error types and messages
+  - Context preservation
+  - Zero-overhead success path
+- [x] Add `trySyncTuple()` for Go-style error handling
+  - Returns `[result, null]` on success
+  - Returns `[null, error]` on failure
+- [x] Add `tryCall()` for function calls with arguments
+  - Flexible argument handling
+  - Optional configuration support
+  - Type-safe function calling
+- [x] Implement `tryMap()` for transforming success values
+  - Transforms success values, passes through errors
+  - Catches errors in mapper functions
+  - Maintains type safety
+- [x] Add `tryChain()` for chaining operations
+  - Short-circuits on first error
+  - Chains TryResult-returning functions
+  - Preserves error types
+- [x] Create utility functions for result handling
+  - `unwrap()` - Extract value or throw
+  - `unwrapOr()` - Extract value or return default
+  - `unwrapOrElse()` - Extract value or compute default
+  - `isOk()` / `isErr()` - Type predicates
+- [x] Add collection utilities
+  - `tryAll()` - All must succeed
+  - `tryAny()` - First success wins
+- [x] Write comprehensive tests for all sync functions
+  - 33 test cases covering all scenarios
+  - Complex chaining examples
+  - Error propagation verification
+  - Type safety validation
+
+**Key decisions:**
+
+- Zero-overhead success path with union types
+- Rich error context preservation
+- Functional programming patterns (map, chain)
+- Type-safe error handling with predicates
+- Comprehensive utility functions for different use cases
+- Go-style tuple support for alternative API
+
+**Files created:**
+
+- `src/sync.ts` - Synchronous error handling (350+ lines)
+- `tests/sync.test.ts` - Comprehensive sync tests (400+ lines)
+
+**Verification:**
+
+- ✅ All tests pass (66 tests total)
+- ✅ Complex chaining scenarios work correctly
+- ✅ Error propagation maintains type safety
+- ✅ Zero-overhead success path confirmed
+
+#### 🔄 Step 5: Core tryAsync Implementation (1.5 hours) - IN PROGRESS
+
+**Started:** 1:45 PM  
+**Estimated completion:** 3:15 PM
 
 **To do:**
 
-- [ ] Create `trySync()` function for wrapping synchronous operations
-- [ ] Add `tryCall()` for function calls with arguments
-- [ ] Implement `tryMap()` for transforming success values
-- [ ] Add `tryChain()` for chaining operations
-- [ ] Create utility functions like `unwrap()`, `unwrapOr()`
-- [ ] Write comprehensive tests for all sync functions
-
-#### ⏳ Step 5: Core tryAsync Implementation (1.5 hours) - NOT STARTED
+- [ ] Create `tryAsync()` function for wrapping async operations
+- [ ] Add `tryAsyncTuple()` for Go-style async error handling
+- [ ] Implement async versions of `tryMap()`, `tryChain()`
+- [ ] Add `tryAwait()` for awaiting promises safely
+- [ ] Create async collection utilities like `tryAllAsync()`
+- [ ] Write comprehensive tests for all async functions
 
 #### ⏳ Step 6: Integration Tests (1 hour) - NOT STARTED
 
