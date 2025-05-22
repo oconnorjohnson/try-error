@@ -367,7 +367,6 @@ describe("Integration Tests", () => {
             return "Please check your input";
           default:
             // TypeScript should ensure this is never reached
-            const _exhaustive: never = error;
             return "Unknown error";
         }
       };
