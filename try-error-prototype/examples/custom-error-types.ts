@@ -510,7 +510,7 @@ async function exampleUsage() {
   });
 
   if (isErr(createResult)) {
-    if (createResult.type === "ValidationError") {
+    if (isValidationError(createResult)) {
       console.error("Validation failed:");
       Object.entries(createResult.fields).forEach(([field, errors]) => {
         console.error(`  ${field}: ${errors.join(", ")}`);
