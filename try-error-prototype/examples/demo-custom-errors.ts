@@ -77,7 +77,7 @@ interface User {
 
 // Mock function that simulates API calls with different error scenarios
 function mockApiCall(scenario: string): TryResult<User, ApiError> {
-  return trySync(() => {
+  const result = trySync(() => {
     switch (scenario) {
       case "success":
         return { id: "1", name: "John Doe", email: "john@example.com" };
@@ -104,13 +104,19 @@ function mockApiCall(scenario: string): TryResult<User, ApiError> {
         throw new Error("Unknown scenario");
     }
   });
+
+  // Type assertion to ensure the error type matches ApiError
+  if (isErr(result)) {
+    return result as ApiError;
+  }
+  return result;
 }
 
 // Mock validation function
 function validateUser(
   userData: Partial<User>
 ): TryResult<User, ValidationError> {
-  return trySync(() => {
+  const result = trySync(() => {
     const fields: Record<string, string[]> = {};
 
     if (!userData.name || userData.name.trim().length < 2) {
@@ -131,6 +137,12 @@ function validateUser(
 
     return userData as User;
   });
+
+  // Type assertion to ensure the error type matches ValidationError
+  if (isErr(result)) {
+    return result as ValidationError;
+  }
+  return result;
 }
 
 // ============================================================================
