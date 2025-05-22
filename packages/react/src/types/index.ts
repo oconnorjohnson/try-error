@@ -2,7 +2,7 @@ import React from "react";
 import { TryError, TryResult } from "try-error";
 
 // Re-export core types for convenience
-export { TryError, TryResult, TryTuple } from "try-error";
+export type { TryError, TryResult, TryTuple } from "try-error";
 
 // Hook-specific types
 export interface UseTryOptions<T, E extends TryError> {

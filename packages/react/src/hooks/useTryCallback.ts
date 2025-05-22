@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { tryAsync } from "../../../try-error-prototype/src";
+import { tryAsync } from "try-error";
 import {
   UseTryCallbackOptions,
   UseTryCallbackResult,

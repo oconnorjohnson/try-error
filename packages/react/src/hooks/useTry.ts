@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { tryAsync } from "../../../try-error-prototype/src";
+import { tryAsync } from "try-error";
 import { UseTryOptions, UseTryResult, TryError } from "../types";
 
 /**
