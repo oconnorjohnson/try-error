@@ -138,7 +138,7 @@ class UserService {
   ]);
 
   getUser(userId: string): TryResult<User, UserError> {
-    return trySync(() => {
+    const result = trySync(() => {
       const user = this.users.get(userId);
       if (!user) {
         throw createUserError("UserNotFound", "User not found", {
@@ -163,6 +163,8 @@ class UserService {
 
       return user;
     });
+
+    return result as TryResult<User, UserError>;
   }
 }
 
