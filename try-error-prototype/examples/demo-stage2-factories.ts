@@ -138,33 +138,29 @@ class UserService {
   ]);
 
   getUser(userId: string): TryResult<User, UserError> {
-    const result = trySync(() => {
-      const user = this.users.get(userId);
-      if (!user) {
-        throw createUserError("UserNotFound", "User not found", {
-          entityId: userId,
-        });
-      }
+    const user = this.users.get(userId);
+    if (!user) {
+      return createUserError("UserNotFound", "User not found", {
+        entityId: userId,
+      });
+    }
 
-      if (user.status === "suspended") {
-        throw createUserError("UserSuspended", "User account is suspended", {
-          entityId: userId,
-          accountStatus: user.status,
-          suspensionReason: "Policy violation",
-        });
-      }
+    if (user.status === "suspended") {
+      return createUserError("UserSuspended", "User account is suspended", {
+        entityId: userId,
+        accountStatus: user.status,
+        suspensionReason: "Policy violation",
+      });
+    }
 
-      if (user.status === "limited") {
-        throw createUserError("UserLimitExceeded", "User has exceeded limits", {
-          entityId: userId,
-          accountStatus: user.status,
-        });
-      }
+    if (user.status === "limited") {
+      return createUserError("UserLimitExceeded", "User has exceeded limits", {
+        entityId: userId,
+        accountStatus: user.status,
+      });
+    }
 
-      return user;
-    });
-
-    return result as TryResult<User, UserError>;
+    return user;
   }
 }
 
@@ -179,39 +175,37 @@ class InventoryService {
     productId: string,
     quantity: number
   ): TryResult<Product, InventoryError> {
-    return trySync(() => {
-      const product = this.products.get(productId);
-      if (!product) {
-        throw createInventoryError("InvalidProduct", "Product not found", {
+    const product = this.products.get(productId);
+    if (!product) {
+      return createInventoryError("InvalidProduct", "Product not found", {
+        entityId: productId,
+        requestedQuantity: quantity,
+        availableQuantity: 0,
+      });
+    }
+
+    if (product.stock === 0) {
+      return createInventoryError("OutOfStock", "Product is out of stock", {
+        entityId: productId,
+        requestedQuantity: quantity,
+        availableQuantity: 0,
+        restockDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
+      });
+    }
+
+    if (product.stock < quantity) {
+      return createInventoryError(
+        "ReservedItem",
+        "Insufficient stock available",
+        {
           entityId: productId,
           requestedQuantity: quantity,
-          availableQuantity: 0,
-        });
-      }
+          availableQuantity: product.stock,
+        }
+      );
+    }
 
-      if (product.stock === 0) {
-        throw createInventoryError("OutOfStock", "Product is out of stock", {
-          entityId: productId,
-          requestedQuantity: quantity,
-          availableQuantity: 0,
-          restockDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
-        });
-      }
-
-      if (product.stock < quantity) {
-        throw createInventoryError(
-          "ReservedItem",
-          "Insufficient stock available",
-          {
-            entityId: productId,
-            requestedQuantity: quantity,
-            availableQuantity: product.stock,
-          }
-        );
-      }
-
-      return product;
-    });
+    return product;
   }
 }
 
