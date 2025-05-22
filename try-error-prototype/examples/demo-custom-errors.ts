@@ -171,11 +171,19 @@ function demoApiErrors() {
     const result = mockApiCall(scenario);
 
     if (isErr(result)) {
-      console.log(`❌ ${result.type}: ${result.message}`);
-      console.log(`   Status: ${result.statusCode}`);
-      console.log(`   Endpoint: ${result.endpoint}`);
-      console.log(`   Source: ${result.source}`);
-      console.log(`   Timestamp: ${new Date(result.timestamp).toISOString()}`);
+      if (isApiError(result)) {
+        console.log(`❌ ${result.type}: ${result.message}`);
+        console.log(`   Status: ${result.statusCode}`);
+        console.log(`   Endpoint: ${result.endpoint}`);
+        console.log(`   Source: ${result.source}`);
+        console.log(
+          `   Timestamp: ${new Date(result.timestamp).toISOString()}`
+        );
+      } else {
+        console.log(`❌ Generic error: ${result.message}`);
+        console.log(`   Type: ${result.type}`);
+        console.log(`   Source: ${result.source}`);
+      }
     } else {
       console.log(`✅ Success: User ${result.name} (${result.email})`);
     }
