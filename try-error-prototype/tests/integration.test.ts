@@ -146,7 +146,7 @@ describe("Integration Tests", () => {
         : '{"apiUrl": "https://default.api.com", "timeout": 3000}';
 
       const parsedConfig = await tryAsyncMap(
-        Promise.resolve(configResults),
+        Promise.resolve(finalConfig),
         async (content) => {
           if (typeof content === "string") {
             return JSON.parse(content);
