@@ -139,7 +139,10 @@ describe("Integration Tests", () => {
       const configResults = await tryAnyAsync([
         tryAsync(() => readFile(invalidFileContent)),
         tryAsync(() => readFile(mockFileContent)),
-        Promise.resolve({ apiUrl: "https://default.api.com", timeout: 3000 }),
+        tryAsync(async () => ({
+          apiUrl: "https://default.api.com",
+          timeout: 3000,
+        })),
       ]);
 
       const parsedConfig = await tryAsyncMap(
@@ -191,7 +194,7 @@ describe("Integration Tests", () => {
       expect(isOk(allUsersResult)).toBe(true);
       if (isOk(allUsersResult)) {
         expect(allUsersResult).toHaveLength(3);
-        expect(allUsersResult[0].name).toBe("User 1");
+        expect((allUsersResult as any)[0].name).toBe("User 1");
       }
     });
 
@@ -335,9 +338,9 @@ describe("Integration Tests", () => {
       expect(isOk(profileResult)).toBe(true);
       if (isOk(profileResult)) {
         // TypeScript should infer the correct type here
-        expect(profileResult.userId).toBe(1);
-        expect(profileResult.displayName).toBe("USER 1");
-        expect(profileResult.isValidEmail).toBe(true);
+        expect((profileResult as any).userId).toBe(1);
+        expect((profileResult as any).displayName).toBe("USER 1");
+        expect((profileResult as any).isValidEmail).toBe(true);
       }
     });
 
