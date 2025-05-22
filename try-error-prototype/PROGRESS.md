@@ -220,21 +220,79 @@ Building a lightweight, progressive, type-safe error handling library for TypeSc
 - ✅ Error propagation maintains type safety
 - ✅ Zero-overhead success path confirmed
 
-#### 🔄 Step 5: Core tryAsync Implementation (1.5 hours) - IN PROGRESS
+#### ✅ Step 5: Core tryAsync Implementation (1.5 hours) - COMPLETED
 
 **Started:** 1:45 PM  
-**Estimated completion:** 3:15 PM
+**Completed:** 3:15 PM  
+**Duration:** 1.5 hours
+
+**What we did:**
+
+- [x] Create `tryAsync()` function for wrapping async operations
+  - Handles Promise rejections and thrown errors
+  - Built-in timeout support
+  - Custom error types and context
+  - Zero-overhead success path for async operations
+- [x] Add `tryAsyncTuple()` for Go-style async error handling
+  - Returns `Promise<[result, null]>` on success
+  - Returns `Promise<[null, error]>` on failure
+- [x] Add `tryAwait()` for awaiting promises safely
+  - Wraps any Promise in error handling
+  - Perfect for third-party Promise APIs
+- [x] Implement async versions of transformation functions
+  - `tryMapAsync()` - Transform with async mapper
+  - `tryMap()` - Transform with sync mapper (async version)
+  - `tryChainAsync()` - Chain async operations
+  - `tryChain()` - Chain with sync operations (async version)
+- [x] Create async collection utilities
+  - `tryAllAsync()` - All async operations must succeed
+  - `tryAnyAsync()` - First async success wins (parallel)
+  - `tryAnySequential()` - First async success wins (sequential)
+- [x] Add advanced async utilities
+  - `withTimeout()` - Add timeout to any Promise<TryResult>
+  - `retry()` - Retry with exponential backoff and custom logic
+- [x] Write comprehensive tests for all async functions
+  - 38 test cases covering all async scenarios
+  - Timeout handling verification
+  - Retry logic with backoff testing
+  - Complex async operation chains
+  - Error propagation in async contexts
+
+**Key decisions:**
+
+- Built-in timeout support in `tryAsync()`
+- Separate functions for async vs sync mappers/chainers
+- Comprehensive retry mechanism with exponential backoff
+- Both parallel and sequential "any" operations
+- Rich timeout utilities for real-world async scenarios
+- Full compatibility with existing Promise APIs
+
+**Files created:**
+
+- `src/async.ts` - Asynchronous error handling (450+ lines)
+- `tests/async.test.ts` - Comprehensive async tests (600+ lines)
+
+**Verification:**
+
+- ✅ All tests pass (104 tests total)
+- ✅ Timeout handling works correctly
+- ✅ Retry logic with exponential backoff verified
+- ✅ Complex async chains maintain type safety
+- ✅ Promise rejection handling works properly
+
+#### 🔄 Step 6: Integration Tests (1 hour) - IN PROGRESS
+
+**Started:** 3:15 PM  
+**Estimated completion:** 4:15 PM
 
 **To do:**
 
-- [ ] Create `tryAsync()` function for wrapping async operations
-- [ ] Add `tryAsyncTuple()` for Go-style async error handling
-- [ ] Implement async versions of `tryMap()`, `tryChain()`
-- [ ] Add `tryAwait()` for awaiting promises safely
-- [ ] Create async collection utilities like `tryAllAsync()`
-- [ ] Write comprehensive tests for all async functions
-
-#### ⏳ Step 6: Integration Tests (1 hour) - NOT STARTED
+- [ ] Create main entry point (`src/index.ts`) exporting all functions
+- [ ] Write integration tests combining sync and async operations
+- [ ] Test real-world scenarios (API client, file operations, etc.)
+- [ ] Verify type inference works correctly across modules
+- [ ] Test error propagation in complex scenarios
+- [ ] Create performance benchmarks
 
 #### ⏳ Step 7: Initial Documentation (30 min) - NOT STARTED
 
