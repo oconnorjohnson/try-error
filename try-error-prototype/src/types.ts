@@ -1,0 +1,106 @@
+/**
+ * Core error type with rich context for debugging and error handling
+ */
+export interface TryError<T extends string = string> {
+  /**
+   * The type of error - used for discriminated unions
+   */
+  readonly type: T;
+
+  /**
+   * Human-readable error message
+   */
+  readonly message: string;
+
+  /**
+   * Stack trace if available (may be stripped in production)
+   */
+  readonly stack?: string;
+
+  /**
+   * Source location where the error occurred (file:line:column)
+   */
+  readonly source: string;
+
+  /**
+   * Timestamp when the error was created
+   */
+  readonly timestamp: number;
+
+  /**
+   * Additional context data for debugging
+   */
+  readonly context?: Record<string, unknown>;
+
+  /**
+   * The original error or thrown value that caused this error
+   */
+  readonly cause?: unknown;
+}
+
+/**
+ * Result type for operations that might fail
+ * Success case: returns T directly (zero overhead)
+ * Error case: returns TryError
+ */
+export type TryResult<T, E extends TryError = TryError> = T | E;
+
+/**
+ * Tuple result for Go-style error handling
+ * Success: [value, null]
+ * Error: [null, error]
+ */
+export type TryTuple<T, E extends TryError = TryError> =
+  | readonly [T, null]
+  | readonly [null, E];
+
+/**
+ * Type guard to check if a value is a TryError
+ */
+export function isTryError<E extends TryError = TryError>(
+  value: unknown
+): value is E {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    "type" in value &&
+    "message" in value &&
+    "source" in value &&
+    "timestamp" in value &&
+    typeof (value as any).type === "string" &&
+    typeof (value as any).message === "string" &&
+    typeof (value as any).source === "string" &&
+    typeof (value as any).timestamp === "number"
+  );
+}
+
+/**
+ * Extract the success type from a TryResult
+ */
+export type TrySuccess<T> = T extends TryError ? never : T;
+
+/**
+ * Extract the error type from a TryResult
+ */
+export type TryFailure<R> = R extends TryError ? R : never;
+
+/**
+ * Utility type to extract the data type from a TryResult
+ */
+export type UnwrapTry<R> = R extends TryResult<infer T, infer E>
+  ? Exclude<T, E>
+  : never;
+
+/**
+ * Utility type to extract the error type from a TryResult
+ */
+export type UnwrapTryError<R> = R extends TryResult<any, infer E> ? E : never;
+
+/**
+ * Type predicate to narrow a TryResult to its success type
+ */
+export function isTrySuccess<T, E extends TryError>(
+  result: TryResult<T, E>
+): result is T {
+  return !isTryError(result);
+}
