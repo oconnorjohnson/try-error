@@ -178,17 +178,11 @@ function demoApiErrors() {
     const result = mockApiCall(scenario);
 
     if (isErr(result)) {
-      if (isApiError(result)) {
-        console.log(`❌ ${result.type}: ${result.message}`);
-        console.log(`   Status: ${result.statusCode}`);
-        console.log(`   Endpoint: ${result.endpoint}`);
-        console.log(`   Source: ${result.source}`);
-        console.log(
-          `   Timestamp: ${new Date(result.timestamp).toISOString()}`
-        );
-      } else {
-        console.log(`❌ Unknown error: ${result.message}`);
-      }
+      console.log(`❌ ${result.type}: ${result.message}`);
+      console.log(`   Status: ${result.statusCode}`);
+      console.log(`   Endpoint: ${result.endpoint}`);
+      console.log(`   Source: ${result.source}`);
+      console.log(`   Timestamp: ${new Date(result.timestamp).toISOString()}`);
     } else {
       console.log(`✅ Success: User ${result.name} (${result.email})`);
     }
@@ -212,16 +206,12 @@ function demoValidationErrors() {
     const result = validateUser(userData);
 
     if (isErr(result)) {
-      if (isValidationError(result)) {
-        console.log(`❌ ${result.type}: ${result.message}`);
-        console.log(`   Code: ${result.code}`);
-        console.log(`   Fields:`);
-        Object.entries(result.fields).forEach(([field, errors]) => {
-          console.log(`     ${field}: ${errors.join(", ")}`);
-        });
-      } else {
-        console.log(`❌ Unknown error: ${result.message}`);
-      }
+      console.log(`❌ ${result.type}: ${result.message}`);
+      console.log(`   Code: ${result.code}`);
+      console.log(`   Fields:`);
+      Object.entries(result.fields).forEach(([field, errors]) => {
+        console.log(`     ${field}: ${errors.join(", ")}`);
+      });
     } else {
       console.log(`✅ Valid user: ${result.name} (${result.email})`);
     }
