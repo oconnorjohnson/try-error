@@ -487,7 +487,9 @@ async function exampleUsage() {
         break;
 
       case "ValidationError":
-        console.error("Validation error:", userResult.fields);
+        if (isValidationError(userResult)) {
+          console.error("Validation error:", userResult.fields);
+        }
         break;
 
       default:
