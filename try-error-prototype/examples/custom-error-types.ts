@@ -306,7 +306,10 @@ class ApiClient {
     }
 
     const result = await this.request<User>(`/users/${userId}`);
-    return tryMapAsync(Promise.resolve(result), (response) => response.data);
+    if (isErr(result)) {
+      return result;
+    }
+    return result.data;
   }
 
   /**
