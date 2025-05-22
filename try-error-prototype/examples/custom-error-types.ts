@@ -270,10 +270,15 @@ class ApiClient {
         }
 
         const data = await response.json();
+        const headers: Record<string, string> = {};
+        response.headers.forEach((value, key) => {
+          headers[key] = value;
+        });
+
         return {
           data,
           status: response.status,
-          headers: Object.fromEntries(response.headers.entries()),
+          headers,
           requestId,
         };
       },
