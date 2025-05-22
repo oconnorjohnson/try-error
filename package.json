@@ -4,7 +4,7 @@
   "private": true,
   "workspaces": [
     "try-error-prototype",
-    "packages/*"
+    "try-error-prototype/packages/*"
   ],
   "scripts": {
     "build": "pnpm -r build",
