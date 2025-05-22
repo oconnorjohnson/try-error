@@ -4,14 +4,7 @@
  * This demo shows how custom error types work in practice
  */
 
-import {
-  TryError,
-  TryResult,
-  createError,
-  trySync,
-  tryAsync,
-  isErr,
-} from "../src/index";
+import { TryError, TryResult, createError, trySync, isErr } from "../src/index";
 
 // ============================================================================
 // 1. DEFINE CUSTOM ERROR TYPES
