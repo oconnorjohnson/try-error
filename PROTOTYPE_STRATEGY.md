@@ -123,14 +123,95 @@ if (isTryError(result)) {
 
 ### Day 1: Core Types & Functions
 
+#### Step 1: Project Setup (30 min)
+
+- [ ] Initialize npm project with TypeScript
+- [ ] Configure tsconfig.json with strict mode
+- [ ] Set up Jest for testing
+- [ ] Create basic folder structure
+- [ ] Add .gitignore and essential configs
+
+#### Step 2: Core Types (1 hour)
+
 ```typescript
-// Start with the absolute minimum
-- TryError interface
-- trySync implementation
-- tryAsync implementation
-- isTryError guard
-- Basic tests
+// src/types.ts
+- [ ] Define TryError interface with all fields
+  - type: string literal type
+  - message: string
+  - stack?: string
+  - source: string
+  - timestamp: number
+  - context?: Record<string, unknown>
+  - cause?: unknown
+- [ ] Create type guard isTryError
+- [ ] Add TryResult<T, E> type alias
+- [ ] Write type tests to verify inference
 ```
+
+#### Step 3: Error Creation Utilities (45 min)
+
+```typescript
+// src/error.ts
+- [ ] Implement createTryError function
+  - Handle Error instances
+  - Handle string/number/unknown throws
+  - Preserve stack traces
+  - Extract source from stack
+- [ ] Add source extraction logic
+- [ ] Create error factory helpers
+- [ ] Unit test all error scenarios
+```
+
+#### Step 4: Core trySync Implementation (1.5 hours)
+
+```typescript
+// src/try.ts
+- [ ] Implement basic trySync
+  - Wrap function execution
+  - Catch and transform errors
+  - Return unwrapped success value
+  - Ensure zero overhead on success
+- [ ] Add optional error transformer
+- [ ] Test with various function types
+- [ ] Verify type inference works
+- [ ] Benchmark vs raw try/catch
+```
+
+#### Step 5: Core tryAsync Implementation (1.5 hours)
+
+```typescript
+// src/try.ts
+- [ ] Implement tryAsync
+  - Handle Promise rejection
+  - Handle async function throws
+  - Maintain error context
+  - Support error transformation
+- [ ] Test with fetch, setTimeout, etc
+- [ ] Test error propagation
+- [ ] Verify no memory leaks
+- [ ] Benchmark async performance
+```
+
+#### Step 6: Integration Tests (1 hour)
+
+```typescript
+// tests/integration.test.ts
+- [ ] Real-world scenarios
+  - JSON parsing errors
+  - Network timeouts
+  - Validation failures
+  - Nested try calls
+- [ ] Type inference tests
+- [ ] Error message preservation
+- [ ] Stack trace verification
+```
+
+#### Step 7: Initial Documentation (30 min)
+
+- [ ] Document type definitions
+- [ ] Add JSDoc comments
+- [ ] Create simple README
+- [ ] Add code examples
 
 ### Day 2: Composition
 
