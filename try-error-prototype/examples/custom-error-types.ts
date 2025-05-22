@@ -648,7 +648,5 @@ export {
   ApiClient,
 };
 
-// Run the example
-if (require.main === module) {
-  exampleUsage().catch(console.error);
-}
+// Run the example (uncomment to execute)
+// exampleUsage().catch(console.error);
