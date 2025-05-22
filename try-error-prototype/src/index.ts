@@ -55,6 +55,47 @@ export {
   retry,
 } from "./async";
 
+// Stage 2: Domain-specific error factories and base types
+export type {
+  ErrorFactoryOptions,
+  EntityError,
+  AmountError,
+  ExternalError,
+  ValidationError,
+} from "./factories";
+
+export {
+  createErrorFactory,
+  chainError,
+  wrapWithContext,
+  createEntityError,
+  createAmountError,
+  createExternalError,
+  createValidationError,
+} from "./factories";
+
+// Stage 1: Enhanced utilities for common patterns
+export type { ErrorHandlingOptions } from "./utils";
+
+export {
+  createEnhancedError,
+  isErrorOfType,
+  isErrorOfTypes,
+  getErrorMessage,
+  getErrorContext,
+  hasErrorContext,
+  transformResult,
+  withDefault,
+  withDefaultFn,
+  filterSuccess,
+  filterErrors,
+  partitionResults,
+  combineErrors,
+  getErrorSummary,
+  formatErrorForLogging,
+  createErrorReport,
+} from "./utils";
+
 // Re-export commonly used functions with clearer names
 export { trySync as try$ } from "./sync";
 
