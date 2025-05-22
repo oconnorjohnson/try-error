@@ -214,43 +214,37 @@ class PaymentService {
     amount: number,
     cardLast4: string
   ): Promise<TryResult<string, PaymentError>> {
-    return tryAsync(async () => {
-      // Simulate different payment scenarios
-      if (cardLast4 === "0000") {
-        throw createPaymentError(
-          "CardDeclined",
-          "Card was declined by issuer",
-          {
-            amount,
-            transactionId: `tx_${Date.now()}`,
-            cardLast4,
-          }
-        );
-      }
+    // Simulate different payment scenarios
+    if (cardLast4 === "0000") {
+      return createPaymentError("CardDeclined", "Card was declined by issuer", {
+        amount,
+        transactionId: `tx_${Date.now()}`,
+        cardLast4,
+      });
+    }
 
-      if (amount > 1000) {
-        throw createPaymentError("InsufficientFunds", "Insufficient funds", {
+    if (amount > 1000) {
+      return createPaymentError("InsufficientFunds", "Insufficient funds", {
+        amount,
+        transactionId: `tx_${Date.now()}`,
+        cardLast4,
+      });
+    }
+
+    if (Math.random() < 0.1) {
+      // 10% chance of processing error
+      return createPaymentError(
+        "ProcessingError",
+        "Payment processing failed",
+        {
           amount,
           transactionId: `tx_${Date.now()}`,
           cardLast4,
-        });
-      }
+        }
+      );
+    }
 
-      if (Math.random() < 0.1) {
-        // 10% chance of processing error
-        throw createPaymentError(
-          "ProcessingError",
-          "Payment processing failed",
-          {
-            amount,
-            transactionId: `tx_${Date.now()}`,
-            cardLast4,
-          }
-        );
-      }
-
-      return `tx_${Date.now()}_success`;
-    });
+    return `tx_${Date.now()}_success`;
   }
 }
 
