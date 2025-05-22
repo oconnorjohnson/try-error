@@ -139,11 +139,11 @@ describe("Integration Tests", () => {
       const configResults = await tryAnyAsync([
         tryAsync(() => readFile(invalidFileContent)),
         tryAsync(() => readFile(mockFileContent)),
-        tryAsync(async () => ({
-          apiUrl: "https://default.api.com",
-          timeout: 3000,
-        })),
       ]);
+
+      const finalConfig = isOk(configResults)
+        ? configResults
+        : '{"apiUrl": "https://default.api.com", "timeout": 3000}';
 
       const parsedConfig = await tryAsyncMap(
         Promise.resolve(configResults),
