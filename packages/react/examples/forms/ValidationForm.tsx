@@ -1,10 +1,5 @@
 import React, { useState } from "react";
-import {
-  trySync,
-  isTryError,
-  createValidationError,
-  tryAll,
-} from "../../../../src";
+import { trySync, isTryError, createError, tryAll } from "../../../../src";
 
 interface FormData {
   email: string;
@@ -23,7 +18,7 @@ interface FieldError {
 const validateEmail = (email: string) => {
   return trySync(() => {
     if (!email.trim()) {
-      throw createValidationError({
+      throw createError({
         type: "REQUIRED_FIELD",
         message: "Email is required",
         context: { field: "email" },
@@ -32,7 +27,7 @@ const validateEmail = (email: string) => {
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      throw createValidationError({
+      throw createError({
         type: "INVALID_FORMAT",
         message: "Please enter a valid email address",
         context: { field: "email" },
@@ -46,25 +41,28 @@ const validateEmail = (email: string) => {
 const validatePassword = (password: string) => {
   return trySync(() => {
     if (!password) {
-      throw createValidationError("REQUIRED_FIELD", "Password is required", {
-        field: "password",
+      throw createError({
+        type: "REQUIRED_FIELD",
+        message: "Password is required",
+        context: { field: "password" },
       });
     }
 
     if (password.length < 8) {
-      throw createValidationError(
-        "TOO_SHORT",
-        "Password must be at least 8 characters long",
-        { field: "password" }
-      );
+      throw createError({
+        type: "TOO_SHORT",
+        message: "Password must be at least 8 characters long",
+        context: { field: "password" },
+      });
     }
 
     if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(password)) {
-      throw createValidationError(
-        "WEAK_PASSWORD",
-        "Password must contain at least one uppercase letter, one lowercase letter, and one number",
-        { field: "password" }
-      );
+      throw createError({
+        type: "WEAK_PASSWORD",
+        message:
+          "Password must contain at least one uppercase letter, one lowercase letter, and one number",
+        context: { field: "password" },
+      });
     }
 
     return password;
@@ -74,19 +72,19 @@ const validatePassword = (password: string) => {
 const validateConfirmPassword = (password: string, confirmPassword: string) => {
   return trySync(() => {
     if (!confirmPassword) {
-      throw createValidationError(
-        "REQUIRED_FIELD",
-        "Please confirm your password",
-        { field: "confirmPassword" }
-      );
+      throw createError({
+        type: "REQUIRED_FIELD",
+        message: "Please confirm your password",
+        context: { field: "confirmPassword" },
+      });
     }
 
     if (password !== confirmPassword) {
-      throw createValidationError(
-        "PASSWORDS_MISMATCH",
-        "Passwords do not match",
-        { field: "confirmPassword" }
-      );
+      throw createError({
+        type: "PASSWORDS_MISMATCH",
+        message: "Passwords do not match",
+        context: { field: "confirmPassword" },
+      });
     }
 
     return confirmPassword;
@@ -96,29 +94,35 @@ const validateConfirmPassword = (password: string, confirmPassword: string) => {
 const validateAge = (age: string) => {
   return trySync(() => {
     if (!age.trim()) {
-      throw createValidationError("REQUIRED_FIELD", "Age is required", {
-        field: "age",
+      throw createError({
+        type: "REQUIRED_FIELD",
+        message: "Age is required",
+        context: { field: "age" },
       });
     }
 
     const ageNum = parseInt(age, 10);
     if (isNaN(ageNum)) {
-      throw createValidationError("INVALID_FORMAT", "Age must be a number", {
-        field: "age",
+      throw createError({
+        type: "INVALID_FORMAT",
+        message: "Age must be a number",
+        context: { field: "age" },
       });
     }
 
     if (ageNum < 13) {
-      throw createValidationError(
-        "TOO_YOUNG",
-        "You must be at least 13 years old",
-        { field: "age" }
-      );
+      throw createError({
+        type: "TOO_YOUNG",
+        message: "You must be at least 13 years old",
+        context: { field: "age" },
+      });
     }
 
     if (ageNum > 120) {
-      throw createValidationError("INVALID_AGE", "Please enter a valid age", {
-        field: "age",
+      throw createError({
+        type: "INVALID_AGE",
+        message: "Please enter a valid age",
+        context: { field: "age" },
       });
     }
 
@@ -129,11 +133,11 @@ const validateAge = (age: string) => {
 const validateTerms = (terms: boolean) => {
   return trySync(() => {
     if (!terms) {
-      throw createValidationError(
-        "REQUIRED_FIELD",
-        "You must accept the terms and conditions",
-        { field: "terms" }
-      );
+      throw createError({
+        type: "REQUIRED_FIELD",
+        message: "You must accept the terms and conditions",
+        context: { field: "terms" },
+      });
     }
 
     return terms;
