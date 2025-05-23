@@ -169,13 +169,7 @@ function ErrorThrowingComponent() {
 }
 
 // Custom fallback component
-function CustomErrorFallback({
-  error,
-  retry,
-}: {
-  error: Error | TryError;
-  retry: () => void;
-}) {
+function CustomErrorFallback(error: Error | TryError, retry: () => void) {
   return (
     <div className="p-6 bg-gradient-to-r from-red-50 to-pink-50 border border-red-200 rounded-lg">
       <div className="flex items-center mb-4">
