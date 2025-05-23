@@ -1,3 +1,5 @@
+import { CodeBlock } from "../../../../components/EnhancedCodeBlock";
+
 export default function PerformancePage() {
   return (
     <div className="max-w-4xl mx-auto py-8 px-6">
@@ -32,9 +34,13 @@ export default function PerformancePage() {
                 Stack trace capture can be expensive. Optimize based on your
                 environment.
               </p>
-              <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-3">
-                <pre>
-                  <code>{`// Production: Disable stack traces for performance
+              <CodeBlock
+                language="typescript"
+                title="Stack Trace Configuration"
+                showLineNumbers={true}
+                className="mb-3"
+              >
+                {`// Production: Disable stack traces for performance
 configureTryError({
   captureStackTrace: process.env.NODE_ENV !== 'production',
   stackTraceLimit: process.env.NODE_ENV === 'production' ? 0 : 10
@@ -44,9 +50,8 @@ configureTryError({
 configureTryError({
   lazyStackTrace: true, // Only capture when accessed
   stackTraceLimit: 5    // Limit depth in production
-});`}</code>
-                </pre>
-              </div>
+});`}
+              </CodeBlock>
               <div className="bg-green-50 border border-green-200 rounded-lg p-3">
                 <h4 className="font-semibold text-green-800 text-sm mb-1">
                   Performance Impact
@@ -66,9 +71,13 @@ configureTryError({
                 Large error contexts can impact memory usage and serialization
                 performance.
               </p>
-              <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-3">
-                <pre>
-                  <code>{`// Limit context size
+              <CodeBlock
+                language="typescript"
+                title="Context Size Optimization"
+                showLineNumbers={true}
+                className="mb-3"
+              >
+                {`// Limit context size
 configurePerformance({
   contextCapture: {
     maxContextSize: 1024 * 5, // 5KB limit
@@ -91,9 +100,8 @@ function createOptimizedError(type: string, message: string, context: any) {
   };
   
   return createTryError(type, message, filteredContext);
-}`}</code>
-                </pre>
-              </div>
+}`}
+              </CodeBlock>
             </div>
 
             <div className="border border-slate-200 rounded-lg p-6">
@@ -104,9 +112,13 @@ function createOptimizedError(type: string, message: string, context: any) {
                 For high-frequency error scenarios, consider object pooling to
                 reduce GC pressure.
               </p>
-              <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-3">
-                <pre>
-                  <code>{`// Enable experimental object pooling
+              <CodeBlock
+                language="typescript"
+                title="Error Object Pooling"
+                showLineNumbers={true}
+                className="mb-3"
+              >
+                {`// Enable experimental object pooling
 configurePerformance({
   errorCreation: {
     objectPooling: true,
@@ -142,9 +154,8 @@ class ErrorPool {
   }
 }
 
-const errorPool = new ErrorPool();`}</code>
-                </pre>
-              </div>
+const errorPool = new ErrorPool();`}
+              </CodeBlock>
             </div>
           </div>
         </section>
@@ -164,9 +175,13 @@ const errorPool = new ErrorPool();`}</code>
                 Use consistent error types across your application for better
                 error handling.
               </p>
-              <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-3">
-                <pre>
-                  <code>{`// Define error types as constants
+              <CodeBlock
+                language="typescript"
+                title="Error Type Consistency"
+                showLineNumbers={true}
+                className="mb-3"
+              >
+                {`// Define error types as constants
 export const ErrorTypes = {
   VALIDATION: 'ValidationError',
   NETWORK: 'NetworkError',
@@ -200,9 +215,8 @@ function handleApiError(error: TryError): ApiResponse {
     default:
       return { status: 500, message: 'Internal server error' };
   }
-}`}</code>
-                </pre>
-              </div>
+}`}
+              </CodeBlock>
             </div>
 
             <div className="border border-slate-200 rounded-lg p-6">
@@ -213,9 +227,13 @@ function handleApiError(error: TryError): ApiResponse {
                 Include relevant context while avoiding sensitive or excessive
                 data.
               </p>
-              <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-3">
-                <pre>
-                  <code>{`// Good: Relevant, structured context
+              <CodeBlock
+                language="typescript"
+                title="Context Best Practices"
+                showLineNumbers={true}
+                className="mb-3"
+              >
+                {`// Good: Relevant, structured context
 const result = await tryAsync(async () => {
   const user = await fetchUser(userId);
   if (!user) {
@@ -258,9 +276,8 @@ function sanitizeContext(context: Record<string, any>): Record<string, any> {
   });
   
   return sanitized;
-}`}</code>
-                </pre>
-              </div>
+}`}
+              </CodeBlock>
             </div>
 
             <div className="border border-slate-200 rounded-lg p-6">
@@ -271,9 +288,13 @@ function sanitizeContext(context: Record<string, any>): Record<string, any> {
                 Handle errors at the appropriate level and avoid swallowing
                 important errors.
               </p>
-              <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-3">
-                <pre>
-                  <code>{`// Good: Handle errors at the right level
+              <CodeBlock
+                language="typescript"
+                title="Error Propagation Patterns"
+                showLineNumbers={true}
+                className="mb-3"
+              >
+                {`// Good: Handle errors at the right level
 async function processUserData(userId: string): Promise<TryResult<ProcessedData, TryError>> {
   const userResult = await fetchUser(userId);
   if (isTryError(userResult)) {
@@ -322,9 +343,8 @@ function enrichError(originalError: TryError, additionalContext: Record<string, 
     },
     originalError
   );
-}`}</code>
-                </pre>
-              </div>
+}`}
+              </CodeBlock>
             </div>
           </div>
         </section>
@@ -339,9 +359,13 @@ function enrichError(originalError: TryError, additionalContext: Record<string, 
             Proper memory management is crucial for long-running applications.
           </p>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`// Configure memory limits
+          <CodeBlock
+            language="typescript"
+            title="Memory Management Configuration"
+            showLineNumbers={true}
+            className="mb-4"
+          >
+            {`// Configure memory limits
 configurePerformance({
   memory: {
     maxErrorHistory: 50,     // Limit error history
@@ -389,9 +413,8 @@ setInterval(() => {
   if (global.gc) {
     global.gc(); // Force garbage collection if available
   }
-}, 300000); // Every 5 minutes`}</code>
-            </pre>
-          </div>
+}, 300000); // Every 5 minutes`}
+          </CodeBlock>
         </section>
 
         {/* Monitoring and Observability */}
@@ -404,9 +427,13 @@ setInterval(() => {
             Set up proper monitoring to track error patterns and performance.
           </p>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`// Error metrics collection
+          <CodeBlock
+            language="typescript"
+            title="Error Monitoring and Metrics"
+            showLineNumbers={true}
+            className="mb-4"
+          >
+            {`// Error metrics collection
 class ErrorMetrics {
   private metrics = new Map<string, number>();
   private performanceMetrics = new Map<string, number[]>();
@@ -468,9 +495,8 @@ configureTryError({
 // Health check endpoint
 app.get('/health/errors', (req, res) => {
   res.json(errorMetrics.exportMetrics());
-});`}</code>
-            </pre>
-          </div>
+});`}
+          </CodeBlock>
         </section>
 
         {/* Testing Best Practices */}
@@ -483,9 +509,13 @@ app.get('/health/errors', (req, res) => {
             Comprehensive testing strategies for error handling code.
           </p>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`// Test error scenarios explicitly
+          <CodeBlock
+            language="typescript"
+            title="Testing Error Handling"
+            showLineNumbers={true}
+            className="mb-4"
+          >
+            {`// Test error scenarios explicitly
 describe('User Service', () => {
   it('should handle user not found', async () => {
     const result = await UserService.findById('non-existent');
@@ -553,9 +583,8 @@ describe('Error Performance', () => {
     // Memory increase should be reasonable (less than 10MB)
     expect(memoryIncrease).toBeLessThan(10 * 1024 * 1024);
   });
-});`}</code>
-            </pre>
-          </div>
+});`}
+          </CodeBlock>
         </section>
 
         {/* Performance Checklist */}

@@ -1,3 +1,5 @@
+import { CodeBlock } from "../../../../components/EnhancedCodeBlock";
+
 export default function ReactTypesPage() {
   return (
     <div className="max-w-4xl mx-auto py-8 px-6">
@@ -19,16 +21,18 @@ export default function ReactTypesPage() {
             UseTryAsyncResult
           </h3>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`interface UseTryAsyncResult<T> {
+          <CodeBlock
+            language="typescript"
+            title="UseTryAsyncResult Interface"
+            className="mb-4"
+          >
+            {`interface UseTryAsyncResult<T> {
   data: T | null;
   error: TryError | null;
   loading: boolean;
   refetch: () => void;
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
 
           <p className="text-slate-600 mb-4">
             Return type for the useTryAsync hook, providing data, error state,
@@ -39,15 +43,17 @@ export default function ReactTypesPage() {
             UseTrySyncResult
           </h3>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`interface UseTrySyncResult<T> {
+          <CodeBlock
+            language="typescript"
+            title="UseTrySyncResult Interface"
+            className="mb-4"
+          >
+            {`interface UseTrySyncResult<T> {
   data: T | null;
   error: TryError | null;
   execute: () => void;
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
 
           <p className="text-slate-600 mb-4">
             Return type for the useTrySync hook, providing data, error state,
@@ -58,17 +64,19 @@ export default function ReactTypesPage() {
             UseTryMutationResult
           </h3>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`interface UseTryMutationResult<T, TVariables = void> {
+          <CodeBlock
+            language="typescript"
+            title="UseTryMutationResult Interface"
+            className="mb-4"
+          >
+            {`interface UseTryMutationResult<T, TVariables = void> {
   mutate: (variables: TVariables) => Promise<void>;
   data: T | null;
   error: TryError | null;
   loading: boolean;
   reset: () => void;
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
 
           <p className="text-slate-600 mb-4">
             Return type for the useTryMutation hook, providing mutation
@@ -86,9 +94,12 @@ export default function ReactTypesPage() {
             TryErrorBoundaryProps
           </h3>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`interface TryErrorBoundaryProps {
+          <CodeBlock
+            language="typescript"
+            title="TryErrorBoundary Props Interfaces"
+            className="mb-4"
+          >
+            {`interface TryErrorBoundaryProps {
   fallback: React.ComponentType<TryErrorFallbackProps>;
   onError?: (error: TryError, errorInfo: React.ErrorInfo) => void;
   children: React.ReactNode;
@@ -98,17 +109,19 @@ interface TryErrorFallbackProps {
   error: TryError;
   resetError: () => void;
   retry: () => void;
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
 
           <h3 className="text-lg font-semibold text-slate-900 mb-3">
             AsyncComponentProps
           </h3>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`interface AsyncComponentProps<T> {
+          <CodeBlock
+            language="typescript"
+            title="AsyncComponent Props Interfaces"
+            className="mb-4"
+          >
+            {`interface AsyncComponentProps<T> {
   asyncFn: () => Promise<T>;
   deps?: React.DependencyList;
   loadingComponent?: React.ComponentType;
@@ -119,17 +132,19 @@ interface TryErrorFallbackProps {
 interface AsyncErrorProps {
   error: TryError;
   retry: () => void;
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
 
           <h3 className="text-lg font-semibold text-slate-900 mb-3">
             TryFormProps
           </h3>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`interface TryFormProps<T> {
+          <CodeBlock
+            language="typescript"
+            title="TryForm Props Interfaces"
+            className="mb-4"
+          >
+            {`interface TryFormProps<T> {
   onSubmit: (data: FormData) => Promise<T>;
   onSuccess?: (result: T) => void;
   onError?: (error: TryError) => void;
@@ -140,26 +155,27 @@ interface TryFormState {
   loading: boolean;
   error: TryError | null;
   submit: (e: React.FormEvent) => void;
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
 
           <h3 className="text-lg font-semibold text-slate-900 mb-3">
             ErrorDisplayProps
           </h3>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`interface ErrorDisplayProps {
+          <CodeBlock
+            language="typescript"
+            title="ErrorDisplay Props Interface"
+            className="mb-4"
+          >
+            {`interface ErrorDisplayProps {
   error: TryError;
   showStack?: boolean;
   showContext?: boolean;
   showTimestamp?: boolean;
   onDismiss?: () => void;
   className?: string;
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
         </section>
 
         {/* Utility Types */}
@@ -172,15 +188,17 @@ interface TryFormState {
             ReactTryResult
           </h3>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`type ReactTryResult<T> = {
+          <CodeBlock
+            language="typescript"
+            title="ReactTryResult Utility Type"
+            className="mb-4"
+          >
+            {`type ReactTryResult<T> = {
   data: T | null;
   error: TryError | null;
   loading: boolean;
-};`}</code>
-            </pre>
-          </div>
+};`}
+          </CodeBlock>
 
           <p className="text-slate-600 mb-4">
             A utility type representing the common pattern of data, error, and
@@ -191,31 +209,37 @@ interface TryFormState {
             AsyncFunction
           </h3>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`type AsyncFunction<T> = () => Promise<T>;`}</code>
-            </pre>
-          </div>
+          <CodeBlock
+            language="typescript"
+            title="AsyncFunction Type"
+            className="mb-4"
+          >
+            {`type AsyncFunction<T> = () => Promise<T>;`}
+          </CodeBlock>
 
           <h3 className="text-lg font-semibold text-slate-900 mb-3">
             SyncFunction
           </h3>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`type SyncFunction<T> = () => T;`}</code>
-            </pre>
-          </div>
+          <CodeBlock
+            language="typescript"
+            title="SyncFunction Type"
+            className="mb-4"
+          >
+            {`type SyncFunction<T> = () => T;`}
+          </CodeBlock>
 
           <h3 className="text-lg font-semibold text-slate-900 mb-3">
             MutationFunction
           </h3>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`type MutationFunction<T, TVariables = void> = (variables: TVariables) => Promise<T>;`}</code>
-            </pre>
-          </div>
+          <CodeBlock
+            language="typescript"
+            title="MutationFunction Type"
+            className="mb-4"
+          >
+            {`type MutationFunction<T, TVariables = void> = (variables: TVariables) => Promise<T>;`}
+          </CodeBlock>
         </section>
 
         {/* Generic Constraints */}
@@ -228,9 +252,13 @@ interface TryFormState {
             Understanding the generic constraints used in try-error React types:
           </p>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`// T represents the success data type
+          <CodeBlock
+            language="typescript"
+            title="Generic Constraints Examples"
+            showLineNumbers={true}
+            className="mb-4"
+          >
+            {`// T represents the success data type
 function useTryAsync<T>(
   asyncFn: () => Promise<T>,
   deps?: React.DependencyList
@@ -245,9 +273,8 @@ function useTryMutation<T, TVariables = void>(
 function useTryCallback<T extends (...args: any[]) => any>(
   callback: T,
   deps: React.DependencyList
-): T & { error: TryError | null; clearError: () => void }`}</code>
-            </pre>
-          </div>
+): T & { error: TryError | null; clearError: () => void }`}
+          </CodeBlock>
         </section>
 
         {/* Type Guards */}
@@ -260,9 +287,13 @@ function useTryCallback<T extends (...args: any[]) => any>(
             Additional type guards specifically for React patterns:
           </p>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`// Check if a React component result has data
+          <CodeBlock
+            language="typescript"
+            title="React Type Guards"
+            showLineNumbers={true}
+            className="mb-4"
+          >
+            {`// Check if a React component result has data
 function hasData<T>(result: ReactTryResult<T>): result is ReactTryResult<T> & { data: T } {
   return result.data !== null && !result.error;
 }
@@ -296,9 +327,8 @@ function UserProfile({ userId }: { userId: string }) {
   }
   
   return null;
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
         </section>
 
         {/* Advanced Patterns */}
@@ -311,9 +341,13 @@ function UserProfile({ userId }: { userId: string }) {
             Conditional Types for Hooks
           </h3>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`// Conditional return type based on whether deps are provided
+          <CodeBlock
+            language="typescript"
+            title="Conditional Types Example"
+            showLineNumbers={true}
+            className="mb-4"
+          >
+            {`// Conditional return type based on whether deps are provided
 type UseTryAsyncReturn<T, HasDeps extends boolean> = HasDeps extends true
   ? UseTryAsyncResult<T>
   : UseTryAsyncResult<T> & { execute: () => void };
@@ -322,17 +356,20 @@ type UseTryAsyncReturn<T, HasDeps extends boolean> = HasDeps extends true
 function useTryAsync<T, HasDeps extends boolean = true>(
   asyncFn: () => Promise<T>,
   deps?: HasDeps extends true ? React.DependencyList : never
-): UseTryAsyncReturn<T, HasDeps>`}</code>
-            </pre>
-          </div>
+): UseTryAsyncReturn<T, HasDeps>`}
+          </CodeBlock>
 
           <h3 className="text-lg font-semibold text-slate-900 mb-3">
             Discriminated Unions for State
           </h3>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`// More precise state representation
+          <CodeBlock
+            language="typescript"
+            title="Discriminated Union State"
+            showLineNumbers={true}
+            className="mb-4"
+          >
+            {`// More precise state representation
 type AsyncState<T> =
   | { status: 'idle'; data: null; error: null; loading: false }
   | { status: 'loading'; data: null; error: null; loading: true }
@@ -342,9 +379,8 @@ type AsyncState<T> =
 // Usage in components
 function useTypedTryAsync<T>(asyncFn: () => Promise<T>): AsyncState<T> {
   // Implementation would return the discriminated union
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
         </section>
 
         {/* Best Practices */}
