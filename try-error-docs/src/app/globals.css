@@ -139,150 +139,150 @@
 /* Dark theme overrides for existing light theme classes */
 @layer utilities {
   .dark .text-slate-900 {
-    @apply text-foreground;
+    color: hsl(220 9% 95%) !important;
   }
 
   .dark .text-slate-800 {
-    @apply text-foreground;
+    color: hsl(220 9% 95%) !important;
   }
 
   .dark .text-slate-700 {
-    @apply text-muted-foreground;
+    color: hsl(220 9% 65%) !important;
   }
 
   .dark .text-slate-600 {
-    @apply text-muted-foreground;
+    color: hsl(220 9% 65%) !important;
   }
 
   .dark .bg-slate-50 {
-    @apply bg-muted;
+    background-color: hsl(220 13% 15%) !important;
   }
 
   .dark .bg-slate-100 {
-    @apply bg-muted;
+    background-color: hsl(220 13% 15%) !important;
   }
 
   .dark .border-slate-200 {
-    @apply border-border;
+    border-color: hsl(220 13% 20%) !important;
   }
 
   .dark .border-slate-300 {
-    @apply border-border;
+    border-color: hsl(220 13% 20%) !important;
   }
 
   /* Color-specific overrides for callout boxes */
   .dark .bg-blue-50 {
-    @apply bg-blue-950/20;
+    background-color: hsl(220 91% 15% / 0.2) !important;
   }
 
   .dark .border-blue-200 {
-    @apply border-blue-800/30;
+    border-color: hsl(220 91% 30% / 0.3) !important;
   }
 
   .dark .text-blue-900 {
-    @apply text-blue-100;
+    color: hsl(220 91% 90%) !important;
   }
 
   .dark .text-blue-800 {
-    @apply text-blue-200;
+    color: hsl(220 91% 80%) !important;
   }
 
   .dark .text-blue-700 {
-    @apply text-blue-300;
+    color: hsl(220 91% 70%) !important;
   }
 
   .dark .bg-blue-100 {
-    @apply bg-blue-900/30;
+    background-color: hsl(220 91% 20% / 0.3) !important;
   }
 
   .dark .border-blue-300 {
-    @apply border-blue-700/50;
+    border-color: hsl(220 91% 40% / 0.5) !important;
   }
 
   /* Green callouts */
   .dark .bg-green-50 {
-    @apply bg-green-950/20;
+    background-color: hsl(142 76% 15% / 0.2) !important;
   }
 
   .dark .border-green-200 {
-    @apply border-green-800/30;
+    background-color: hsl(142 76% 30% / 0.3) !important;
   }
 
   .dark .text-green-900 {
-    @apply text-green-100;
+    color: hsl(142 76% 90%) !important;
   }
 
   .dark .text-green-800 {
-    @apply text-green-200;
+    color: hsl(142 76% 80%) !important;
   }
 
   .dark .text-green-700 {
-    @apply text-green-300;
+    color: hsl(142 76% 70%) !important;
   }
 
   .dark .bg-green-100 {
-    @apply bg-green-900/30;
+    background-color: hsl(142 76% 20% / 0.3) !important;
   }
 
   .dark .border-green-300 {
-    @apply border-green-700/50;
+    border-color: hsl(142 76% 40% / 0.5) !important;
   }
 
   /* Yellow/amber callouts */
   .dark .bg-yellow-50 {
-    @apply bg-yellow-950/20;
+    background-color: hsl(38 92% 15% / 0.2) !important;
   }
 
   .dark .bg-amber-50 {
-    @apply bg-amber-950/20;
+    background-color: hsl(38 92% 15% / 0.2) !important;
   }
 
   .dark .border-yellow-200 {
-    @apply border-yellow-800/30;
+    border-color: hsl(38 92% 30% / 0.3) !important;
   }
 
   .dark .border-amber-200 {
-    @apply border-amber-800/30;
+    border-color: hsl(38 92% 30% / 0.3) !important;
   }
 
   .dark .text-yellow-800 {
-    @apply text-yellow-200;
+    color: hsl(38 92% 80%) !important;
   }
 
   .dark .text-yellow-700 {
-    @apply text-yellow-300;
+    color: hsl(38 92% 70%) !important;
   }
 
   .dark .text-amber-900 {
-    @apply text-amber-100;
+    color: hsl(38 92% 90%) !important;
   }
 
   .dark .text-amber-800 {
-    @apply text-amber-200;
+    color: hsl(38 92% 80%) !important;
   }
 
   .dark .text-amber-700 {
-    @apply text-amber-300;
+    color: hsl(38 92% 70%) !important;
   }
 
   /* Red callouts */
   .dark .bg-red-50 {
-    @apply bg-red-950/20;
+    background-color: hsl(0 75% 15% / 0.2) !important;
   }
 
   .dark .border-red-200 {
-    @apply border-red-800/30;
+    border-color: hsl(0 75% 30% / 0.3) !important;
   }
 
   .dark .text-red-900 {
-    @apply text-red-100;
+    color: hsl(0 75% 90%) !important;
   }
 
   .dark .text-red-800 {
-    @apply text-red-200;
+    color: hsl(0 75% 80%) !important;
   }
 
   .dark .text-red-700 {
-    @apply text-red-300;
+    color: hsl(0 75% 70%) !important;
   }
 }
