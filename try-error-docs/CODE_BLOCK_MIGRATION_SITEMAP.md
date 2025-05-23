@@ -43,12 +43,12 @@ Replace ALL code blocks across the entire try-error documentation with enhanced 
 
 #### API Reference (2 pages remaining)
 
-- [ ] `/docs/api/errors` - Placeholder page (no code blocks)
-- [ ] `/docs/api/utils` - Placeholder page (no code blocks)
+- [x] `/docs/api/errors` - ✅ Just completed (15 code blocks) - Error creation API (createTryError, error factories, utilities)
+- [x] `/docs/api/utils` - ✅ Just completed (12 code blocks) - Utility functions (type guards, result transformers, helpers)
 
 #### Examples (1 page remaining)
 
-- [ ] `/docs/examples/real-world` - Placeholder page (no code blocks)
+- [ ] `/docs/examples/real-world` - Real-world production examples and case studies
 
 #### Reference (3 pages)
 
@@ -144,8 +144,8 @@ The following pages currently have placeholder content and need comprehensive do
 
 ### **API Reference (2 pages)**
 
-- [ ] `/docs/api/errors` - Error creation API (createTryError, error factories, utilities)
-- [ ] `/docs/api/utils` - Utility functions (type guards, result transformers, helpers)
+- [x] `/docs/api/errors` - ✅ Just completed (15 code blocks) - Error creation API (createTryError, error factories, utilities)
+- [x] `/docs/api/utils` - ✅ Just completed (12 code blocks) - Utility functions (type guards, result transformers, helpers)
 
 ### **Examples (1 page)**
 
@@ -153,7 +153,7 @@ The following pages currently have placeholder content and need comprehensive do
 
 ### **Concepts (1 page)**
 
-- [ ] `/docs/concepts/success-vs-error` - Success vs error path handling, type narrowing
+- [x] `/docs/concepts/success-vs-error` - ✅ Just completed (8 code blocks) - Success vs error path handling, type narrowing
 
 ### **Advanced Topics (2 pages)**
 
