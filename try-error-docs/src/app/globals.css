@@ -2,11 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-
-
 @layer base {
   :root {
-
     --background: 0 0% 100%;
 
     --foreground: 0 0% 3.9%;
@@ -55,8 +52,7 @@
 
     --chart-5: 27 87% 67%;
 
-    --radius: 0.5rem
-  ;
+    --radius: 0.5rem;
 
     --sidebar-background: 0 0% 98%;
 
@@ -72,76 +68,64 @@
 
     --sidebar-border: 220 13% 91%;
 
-    --sidebar-ring: 217.2 91.2% 59.8%}
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
   .dark {
+    /* Main backgrounds - classic dark grey developer theme */
+    --background: 220 13% 9%; /* Very dark blue-grey background */
+    --foreground: 220 9% 95%; /* Light grey text */
 
-    --background: 0 0% 3.9%;
+    /* Cards and surfaces */
+    --card: 220 13% 11%; /* Slightly lighter than background */
+    --card-foreground: 220 9% 95%; /* Light grey text on cards */
 
-    --foreground: 0 0% 98%;
+    /* Popovers and dropdowns */
+    --popover: 220 13% 11%;
+    --popover-foreground: 220 9% 95%;
 
-    --card: 0 0% 3.9%;
+    /* Primary colors - blue accent */
+    --primary: 217 91% 60%; /* Nice blue for primary actions */
+    --primary-foreground: 220 13% 9%; /* Dark text on blue */
 
-    --card-foreground: 0 0% 98%;
+    /* Secondary surfaces */
+    --secondary: 220 13% 15%; /* Medium dark grey */
+    --secondary-foreground: 220 9% 90%; /* Light text */
 
-    --popover: 0 0% 3.9%;
+    /* Muted elements */
+    --muted: 220 13% 15%; /* Same as secondary */
+    --muted-foreground: 220 9% 65%; /* Medium grey text */
 
-    --popover-foreground: 0 0% 98%;
+    /* Accent colors */
+    --accent: 220 13% 18%; /* Slightly lighter for hover states */
+    --accent-foreground: 220 9% 95%; /* Light text */
 
-    --primary: 0 0% 98%;
+    /* Destructive/error colors */
+    --destructive: 0 75% 60%; /* Red for errors */
+    --destructive-foreground: 220 13% 9%; /* Dark text on red */
 
-    --primary-foreground: 0 0% 9%;
+    /* Borders and inputs */
+    --border: 220 13% 20%; /* Subtle borders */
+    --input: 220 13% 18%; /* Input backgrounds */
+    --ring: 217 91% 60%; /* Focus rings match primary */
 
-    --secondary: 0 0% 14.9%;
+    /* Chart colors - developer friendly palette */
+    --chart-1: 217 91% 60%; /* Blue */
+    --chart-2: 142 76% 36%; /* Green */
+    --chart-3: 38 92% 50%; /* Orange */
+    --chart-4: 280 100% 70%; /* Purple */
+    --chart-5: 346 77% 49%; /* Red */
 
-    --secondary-foreground: 0 0% 98%;
-
-    --muted: 0 0% 14.9%;
-
-    --muted-foreground: 0 0% 63.9%;
-
-    --accent: 0 0% 14.9%;
-
-    --accent-foreground: 0 0% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-
-    --destructive-foreground: 0 0% 98%;
-
-    --border: 0 0% 14.9%;
-
-    --input: 0 0% 14.9%;
-
-    --ring: 0 0% 83.1%;
-
-    --chart-1: 220 70% 50%;
-
-    --chart-2: 160 60% 45%;
-
-    --chart-3: 30 80% 55%;
-
-    --chart-4: 280 65% 60%;
-
-    --chart-5: 340 75% 55%
-  ;
-
-    --sidebar-background: 240 5.9% 10%;
-
-    --sidebar-foreground: 240 4.8% 95.9%;
-
-    --sidebar-primary: 224.3 76.3% 48%;
-
-    --sidebar-primary-foreground: 0 0% 100%;
-
-    --sidebar-accent: 240 3.7% 15.9%;
-
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-
-    --sidebar-border: 240 3.7% 15.9%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%}
+    /* Sidebar - darker for contrast */
+    --sidebar-background: 220 13% 7%; /* Even darker than main background */
+    --sidebar-foreground: 220 9% 90%; /* Light text */
+    --sidebar-primary: 217 91% 60%; /* Blue accent */
+    --sidebar-primary-foreground: 220 13% 9%; /* Dark text on blue */
+    --sidebar-accent: 220 13% 13%; /* Hover states */
+    --sidebar-accent-foreground: 220 9% 95%; /* Light text */
+    --sidebar-border: 220 13% 18%; /* Subtle borders */
+    --sidebar-ring: 217 91% 60%; /* Focus rings */
+  }
 }
-
-
 
 @layer base {
   * {
