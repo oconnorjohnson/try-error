@@ -20,13 +20,16 @@ export default function RealWorldExamplesPage() {
           </h2>
 
           <p className="text-slate-600 mb-4">
-            A complete order processing system demonstrating error handling across multiple services,
-            payment processing, inventory management, and notification systems.
+            A complete order processing system demonstrating error handling
+            across multiple services, payment processing, inventory management,
+            and notification systems.
           </p>
 
           <div className="space-y-6">
             <div>
-              <h3 className="text-lg font-semibold text-slate-900 mb-3">Order Service</h3>
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">
+                Order Service
+              </h3>
               <CodeBlock
                 language="typescript"
                 title="Order Processing Pipeline"
@@ -194,7 +197,9 @@ class OrderService {
             </div>
 
             <div>
-              <h3 className="text-lg font-semibold text-slate-900 mb-3">Error Recovery & Rollback</h3>
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">
+                Error Recovery & Rollback
+              </h3>
               <CodeBlock
                 language="typescript"
                 title="Comprehensive Error Recovery"
@@ -315,12 +320,15 @@ class OrderService {
           </h2>
 
           <p className="text-slate-600 mb-4">
-            Handling errors in distributed systems with circuit breakers, timeouts, and fallback strategies.
+            Handling errors in distributed systems with circuit breakers,
+            timeouts, and fallback strategies.
           </p>
 
           <div className="space-y-6">
             <div>
-              <h3 className="text-lg font-semibold text-slate-900 mb-3">Service Client with Circuit Breaker</h3>
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">
+                Service Client with Circuit Breaker
+              </h3>
               <CodeBlock
                 language="typescript"
                 title="Resilient Service Communication"
@@ -379,7 +387,7 @@ class ServiceClient {
 
     // If operation failed and we have a fallback, try it
     if (isTryError(result) && fallback) {
-      console.warn(\`Service \${serviceName} failed, using fallback:`, result.message);
+      console.warn(\`Service \${serviceName} failed, using fallback:\`, result.message);
       return tryAsync(fallback);
     }
 
@@ -496,12 +504,15 @@ class UserService {
           </h2>
 
           <p className="text-slate-600 mb-4">
-            A robust data processing pipeline with validation, transformation, and error recovery.
+            A robust data processing pipeline with validation, transformation,
+            and error recovery.
           </p>
 
           <div className="space-y-6">
             <div>
-              <h3 className="text-lg font-semibold text-slate-900 mb-3">ETL Pipeline</h3>
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">
+                ETL Pipeline
+              </h3>
               <CodeBlock
                 language="typescript"
                 title="Data Processing with Error Handling"
@@ -588,7 +599,7 @@ class DataProcessor {
     const enrichResult = await this.enrichRecord(transformResult);
     if (isTryError(enrichResult)) {
       // Enrichment failure is not critical - continue with original data
-      console.warn(\`Failed to enrich record \${record.id}:`, enrichResult.message);
+      console.warn(\`Failed to enrich record \${record.id}:\`, enrichResult.message);
       return transformResult;
     }
 
@@ -721,12 +732,15 @@ class DataProcessor {
           </h2>
 
           <p className="text-slate-600 mb-4">
-            A command-line tool with comprehensive error handling, user-friendly messages, and graceful degradation.
+            A command-line tool with comprehensive error handling, user-friendly
+            messages, and graceful degradation.
           </p>
 
           <div className="space-y-6">
             <div>
-              <h3 className="text-lg font-semibold text-slate-900 mb-3">File Processing CLI</h3>
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">
+                File Processing CLI
+              </h3>
               <CodeBlock
                 language="typescript"
                 title="CLI with Error Handling"
@@ -1014,7 +1028,9 @@ if (require.main === module) {
 
           <div className="space-y-4">
             <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-              <h4 className="font-semibold text-green-800 mb-2">✅ Error Handling Patterns</h4>
+              <h4 className="font-semibold text-green-800 mb-2">
+                ✅ Error Handling Patterns
+              </h4>
               <ul className="space-y-1 text-green-700 text-sm">
                 <li>• Use circuit breakers for external service calls</li>
                 <li>• Implement comprehensive rollback mechanisms</li>
@@ -1026,7 +1042,9 @@ if (require.main === module) {
             </div>
 
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <h4 className="font-semibold text-blue-800 mb-2">🔧 Operational Considerations</h4>
+              <h4 className="font-semibold text-blue-800 mb-2">
+                🔧 Operational Considerations
+              </h4>
               <ul className="space-y-1 text-blue-700 text-sm">
                 <li>• Monitor error rates and patterns</li>
                 <li>• Set up alerts for critical error types</li>
@@ -1038,7 +1056,9 @@ if (require.main === module) {
             </div>
 
             <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-              <h4 className="font-semibold text-yellow-800 mb-2">⚡ Performance Tips</h4>
+              <h4 className="font-semibold text-yellow-800 mb-2">
+                ⚡ Performance Tips
+              </h4>
               <ul className="space-y-1 text-yellow-700 text-sm">
                 <li>• Use timeouts to prevent hanging operations</li>
                 <li>• Implement request deduplication for retries</li>
@@ -1058,7 +1078,9 @@ if (require.main === module) {
           </h2>
           <div className="grid md:grid-cols-2 gap-4">
             <div className="border border-slate-200 rounded-lg p-4">
-              <h3 className="font-semibold text-slate-900 mb-2">Basic Examples</h3>
+              <h3 className="font-semibold text-slate-900 mb-2">
+                Basic Examples
+              </h3>
               <p className="text-slate-600 text-sm mb-3">
                 Start with fundamental patterns and use cases
               </p>
@@ -1071,7 +1093,9 @@ if (require.main === module) {
             </div>
 
             <div className="border border-slate-200 rounded-lg p-4">
-              <h3 className="font-semibold text-slate-900 mb-2">Migration Guide</h3>
+              <h3 className="font-semibold text-slate-900 mb-2">
+                Migration Guide
+              </h3>
               <p className="text-slate-600 text-sm mb-3">
                 Learn how to adopt try-error in existing projects
               </p>
