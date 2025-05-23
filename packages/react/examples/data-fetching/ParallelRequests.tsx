@@ -118,7 +118,7 @@ export function ParallelRequests() {
       if (isTryError(result)) {
         setError(`Failed to load all data: ${result.message}`);
       } else {
-        const [post, comments, user] = result;
+        const [post, comments, user] = result as [Post, Comment[], User];
         setData({ post, comments, user });
       }
     } else {
