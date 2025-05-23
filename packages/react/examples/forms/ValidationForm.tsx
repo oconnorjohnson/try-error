@@ -1,5 +1,10 @@
 import React, { useState } from "react";
-import { trySync, isTryError, createValidationError, tryAll } from "try-error";
+import {
+  trySync,
+  isTryError,
+  createValidationError,
+  tryAll,
+} from "../../../../src";
 
 interface FormData {
   email: string;
@@ -18,18 +23,20 @@ interface FieldError {
 const validateEmail = (email: string) => {
   return trySync(() => {
     if (!email.trim()) {
-      throw createValidationError("REQUIRED_FIELD", "Email is required", {
-        field: "email",
+      throw createValidationError({
+        type: "REQUIRED_FIELD",
+        message: "Email is required",
+        context: { field: "email" },
       });
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      throw createValidationError(
-        "INVALID_FORMAT",
-        "Please enter a valid email address",
-        { field: "email" }
-      );
+      throw createValidationError({
+        type: "INVALID_FORMAT",
+        message: "Please enter a valid email address",
+        context: { field: "email" },
+      });
     }
 
     return email.toLowerCase().trim();
