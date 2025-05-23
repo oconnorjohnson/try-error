@@ -1,3 +1,5 @@
+import { CodeBlock } from "../../../../components/EnhancedCodeBlock";
+
 export default function TryResultVsExceptionsPage() {
   return (
     <div className="max-w-4xl mx-auto py-8 px-6">
@@ -120,27 +122,24 @@ export default function TryResultVsExceptionsPage() {
               <h4 className="text-sm font-semibold text-red-600 mb-2">
                 ❌ Exceptions
               </h4>
-              <div className="bg-slate-900 text-slate-100 p-4 rounded-lg">
-                <pre>
-                  <code>{`// No indication of possible errors
+              <CodeBlock language="typescript" title="Exception-based Approach">
+                {`// No indication of possible errors
 function parseJSON(input: string): object {
   return JSON.parse(input); // Might throw!
 }
 
 // Caller has no type-level guidance
 const result = parseJSON(userInput);
-// What if it throws? TypeScript can't help`}</code>
-                </pre>
-              </div>
+// What if it throws? TypeScript can't help`}
+              </CodeBlock>
             </div>
 
             <div>
               <h4 className="text-sm font-semibold text-green-600 mb-2">
                 ✅ try-error
               </h4>
-              <div className="bg-slate-900 text-slate-100 p-4 rounded-lg">
-                <pre>
-                  <code>{`// Clear error possibility in return type
+              <CodeBlock language="typescript" title="try-error Approach">
+                {`// Clear error possibility in return type
 function parseJSON(input: string): TryResult<object, TryError> {
   return trySync(() => JSON.parse(input));
 }
@@ -151,9 +150,8 @@ if (isTryError(result)) {
   // Handle error case
 } else {
   // Use successful result
-}`}</code>
-                </pre>
-              </div>
+}`}
+              </CodeBlock>
             </div>
           </div>
 
@@ -169,9 +167,13 @@ if (isTryError(result)) {
             </p>
           </div>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-6">
-            <pre>
-              <code>{`// Exception performance cost
+          <CodeBlock
+            language="typescript"
+            title="Performance Comparison"
+            showLineNumbers={true}
+            className="mb-6"
+          >
+            {`// Exception performance cost
 try {
   const result = riskyOperation(); // If this throws...
   return result;
@@ -186,9 +188,8 @@ if (isTryError(result)) {
   // No stack unwinding, just a return value
   return null;
 }
-return result; // Zero overhead for success`}</code>
-            </pre>
-          </div>
+return result; // Zero overhead for success`}
+          </CodeBlock>
 
           <h3 className="text-lg font-semibold text-slate-900 mb-3">
             Error Propagation
@@ -199,9 +200,8 @@ return result; // Zero overhead for success`}</code>
               <h4 className="text-sm font-semibold text-slate-600 mb-2">
                 Exceptions
               </h4>
-              <div className="bg-slate-900 text-slate-100 p-4 rounded-lg">
-                <pre>
-                  <code>{`async function processData() {
+              <CodeBlock language="typescript" title="Exception Propagation">
+                {`async function processData() {
   try {
     const step1 = await fetchData();
     const step2 = await processStep1(step1);
@@ -212,18 +212,16 @@ return result; // Zero overhead for success`}</code>
     console.error('Something failed:', error);
     throw error;
   }
-}`}</code>
-                </pre>
-              </div>
+}`}
+              </CodeBlock>
             </div>
 
             <div>
               <h4 className="text-sm font-semibold text-slate-600 mb-2">
                 try-error
               </h4>
-              <div className="bg-slate-900 text-slate-100 p-4 rounded-lg">
-                <pre>
-                  <code>{`async function processData() {
+              <CodeBlock language="typescript" title="try-error Propagation">
+                {`async function processData() {
   const step1 = await tryAsync(() => fetchData());
   if (isTryError(step1)) return step1;
   
@@ -232,9 +230,8 @@ return result; // Zero overhead for success`}</code>
   
   const step3 = await tryAsync(() => processStep2(step2));
   return step3; // Clear which step succeeded/failed
-}`}</code>
-                </pre>
-              </div>
+}`}
+              </CodeBlock>
             </div>
           </div>
         </section>
@@ -292,9 +289,13 @@ return result; // Zero overhead for success`}</code>
           <h3 className="text-lg font-semibold text-slate-900 mb-3">
             Boundary Pattern
           </h3>
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`// Use try-error internally, exceptions at boundaries
+          <CodeBlock
+            language="typescript"
+            title="Boundary Pattern"
+            showLineNumbers={true}
+            className="mb-4"
+          >
+            {`// Use try-error internally, exceptions at boundaries
 class UserService {
   // Internal methods use try-error
   private async fetchUserData(id: string): Promise<TryResult<User, TryError>> {
@@ -310,16 +311,18 @@ class UserService {
     }
     return result;
   }
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
 
           <h3 className="text-lg font-semibold text-slate-900 mb-3">
             Adapter Pattern
           </h3>
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`// Wrap exception-based APIs with try-error
+          <CodeBlock
+            language="typescript"
+            title="Adapter Pattern"
+            className="mb-4"
+          >
+            {`// Wrap exception-based APIs with try-error
 function safeFetch(url: string): Promise<TryResult<Response, TryError>> {
   return tryAsync(() => fetch(url));
 }
@@ -331,9 +334,8 @@ function throwingParse(json: string): object {
     throw new Error(result.message);
   }
   return result;
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
         </section>
 
         {/* Performance Benchmarks */}
@@ -350,9 +352,13 @@ function throwingParse(json: string): object {
             </p>
           </div>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`// Performance comparison example
+          <CodeBlock
+            language="typescript"
+            title="Performance Benchmark Example"
+            showLineNumbers={true}
+            className="mb-4"
+          >
+            {`// Performance comparison example
 // Exception version: ~100ms for 1000 errors
 function parseWithExceptions(inputs: string[]) {
   const results = [];
@@ -374,9 +380,8 @@ function parseWithTryError(inputs: string[]) {
     results.push(isTryError(result) ? null : result);
   }
   return results;
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
         </section>
 
         {/* Next Steps */}

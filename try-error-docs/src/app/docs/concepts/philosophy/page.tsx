@@ -1,3 +1,5 @@
+import { CodeBlock } from "../../../../components/EnhancedCodeBlock";
+
 export default function PhilosophyPage() {
   return (
     <div className="max-w-4xl mx-auto py-8 px-6">
@@ -104,9 +106,12 @@ export default function PhilosophyPage() {
             </ul>
           </div>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`// What errors can this function throw? 🤷‍♂️
+          <CodeBlock
+            language="typescript"
+            title="Problems with Traditional Error Handling"
+            className="mb-4"
+          >
+            {`// What errors can this function throw? 🤷‍♂️
 async function fetchUserData(id: string): Promise<User> {
   const response = await fetch(\`/api/users/\${id}\`);
   const data = await response.json();
@@ -122,9 +127,8 @@ try {
 } catch (error) {
   // What type is error? What should we do?
   console.error(error);
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
         </section>
 
         {/* The try-error Solution */}
@@ -161,9 +165,13 @@ try {
             </ul>
           </div>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`// Clear error handling contract
+          <CodeBlock
+            language="typescript"
+            title="try-error Solution"
+            showLineNumbers={true}
+            className="mb-4"
+          >
+            {`// Clear error handling contract
 async function fetchUserData(id: string): Promise<TryResult<User, TryError>> {
   const response = await tryAsync(() => fetch(\`/api/users/\${id}\`));
   if (isTryError(response)) return response;
@@ -184,14 +192,13 @@ if (isTryError(result)) {
 }
 
 // TypeScript knows result is User here
-console.log('User name:', result.name);`}</code>
-            </pre>
-          </div>
+console.log('User name:', result.name);`}
+          </CodeBlock>
         </section>
 
         {/* Design Decisions */}
         <section>
-          <h2 className="text-2xl font-semibent text-slate-900 mb-4">
+          <h2 className="text-2xl font-semibold text-slate-900 mb-4">
             Design Decisions
           </h2>
 
@@ -205,9 +212,12 @@ console.log('User name:', result.name);`}</code>
             TypeScript patterns.
           </p>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`// Simple union type - familiar to TS developers
+          <CodeBlock
+            language="typescript"
+            title="Union Types vs Monads"
+            className="mb-4"
+          >
+            {`// Simple union type - familiar to TS developers
 type TryResult<T, E> = T | E;
 
 // vs. Monadic approach - requires learning new patterns
@@ -215,9 +225,8 @@ interface Result<T, E> {
   map<U>(fn: (value: T) => U): Result<U, E>;
   flatMap<U>(fn: (value: T) => Result<U, E>): Result<U, E>;
   // ... many more methods
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
 
           <h3 className="text-lg font-semibold text-slate-900 mb-3">
             Why Not Just Use Result Libraries?
@@ -237,9 +246,12 @@ interface Result<T, E> {
             lightweight and serializable.
           </p>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`interface TryError {
+          <CodeBlock
+            language="typescript"
+            title="TryError Interface"
+            className="mb-4"
+          >
+            {`interface TryError {
   readonly type: 'TryError';
   readonly message: string;
   readonly stack?: string;
@@ -247,9 +259,8 @@ interface Result<T, E> {
   readonly timestamp: number;
   readonly context?: Record<string, unknown>;
   readonly cause?: Error | TryError;
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
         </section>
 
         {/* When to Use try-error */}

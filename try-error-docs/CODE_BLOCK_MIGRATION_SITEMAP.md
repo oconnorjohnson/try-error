@@ -21,6 +21,8 @@ Replace ALL code blocks across the entire try-error documentation with enhanced 
 - [x] `/docs/demo/code-blocks` - ✅ Demo page
 - [x] `/docs/quick-start` - ✅ Just completed (6 code blocks)
 - [x] `/docs` (page.tsx) - ✅ Just completed (2 code blocks)
+- [x] `/docs/concepts/philosophy` - ✅ Just completed (4 code blocks)
+- [x] `/docs/concepts/tryresult-vs-exceptions` - ✅ Just completed (8 code blocks)
 
 ### 🔄 IN PROGRESS / TODO PAGES
 
@@ -28,12 +30,10 @@ Replace ALL code blocks across the entire try-error documentation with enhanced 
 
 - [ ] `/docs/migration` - Migration guide
 
-#### Concepts (4 pages)
+#### Concepts (3 pages remaining)
 
-- [ ] `/docs/concepts/philosophy` - 4 code blocks
 - [ ] `/docs/concepts/error-types` - 6 code blocks
 - [ ] `/docs/concepts/success-vs-error` - Basic page
-- [ ] `/docs/concepts/tryresult-vs-exceptions` - 8 code blocks
 
 #### API Reference (4 pages)
 
@@ -76,8 +76,8 @@ Replace ALL code blocks across the entire try-error documentation with enhanced 
 1. **High Priority** (user-facing, frequently accessed):
 
    - ✅ `/docs` (main intro) - COMPLETED
-   - `/docs/concepts/philosophy`
-   - `/docs/concepts/tryresult-vs-exceptions`
+   - ✅ `/docs/concepts/philosophy` - COMPLETED
+   - ✅ `/docs/concepts/tryresult-vs-exceptions` - COMPLETED
    - `/docs/examples/basic`
    - `/docs/api/sync`
 
@@ -109,6 +109,6 @@ Based on grep search results: **100+ code blocks** across all pages
 ## Progress Tracking
 
 - Total Pages: ~25 pages
-- Completed: 5 pages (20%)
-- Remaining: 20 pages (80%)
+- Completed: 7 pages (28%)
+- Remaining: 18 pages (72%)
 - Estimated Code Blocks: 100+
