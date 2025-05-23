@@ -1,7 +1,7 @@
 // useTryCallback hook for React error handling
 // TODO: Implement React callback hook for try-error integration
 
-import { useCallback, useMemo } from "react";
+import { useCallback } from "react";
 import { tryAsync, trySync, isTryError, TryResult, TryError } from "try-error";
 
 // Options for useTryCallback hook
