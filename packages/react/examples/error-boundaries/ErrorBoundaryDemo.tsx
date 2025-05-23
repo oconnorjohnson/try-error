@@ -1,5 +1,5 @@
 import React, { Component, ReactNode, useState } from "react";
-import { createError, isTryError, TryError } from "try-error";
+import { createError, isTryError, TryError } from "../../../../src";
 
 interface ErrorBoundaryState {
   hasError: boolean;
@@ -115,7 +115,9 @@ function ErrorThrowingComponent() {
 
     switch (type) {
       case "try-error":
-        throw createError("DEMO_ERROR", "This is a try-error with context", {
+        throw createError({
+          type: "DEMO_ERROR",
+          message: "This is a try-error with context",
           context: { userId: 123, action: "demo" },
         });
       case "regular":
@@ -123,7 +125,10 @@ function ErrorThrowingComponent() {
       case "async":
         // This won't be caught by error boundary (async errors need different handling)
         setTimeout(() => {
-          throw createError("ASYNC_ERROR", "This async error won't be caught");
+          throw createError({
+            type: "ASYNC_ERROR",
+            message: "This async error won't be caught",
+          });
         }, 100);
         break;
       default:
