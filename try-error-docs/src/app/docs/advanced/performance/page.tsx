@@ -160,6 +160,536 @@ const errorPool = new ErrorPool();`}
           </div>
         </section>
 
+        {/* Implementation Guide */}
+        <section>
+          <h2 className="text-2xl font-semibold text-slate-900 mb-4">
+            Implementation Guide
+          </h2>
+
+          <p className="text-slate-600 mb-6">
+            Here's exactly where to put these configurations in different types
+            of projects.
+          </p>
+
+          {/* Quick Setup */}
+          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-6 mb-8">
+            <h3 className="text-lg font-semibold text-blue-900 mb-3">
+              ⚡ Quick Setup (Recommended)
+            </h3>
+            <p className="text-blue-800 mb-4">
+              Use our one-liner setup utilities for instant optimization with
+              sensible defaults:
+            </p>
+            <CodeBlock
+              language="typescript"
+              title="One-Liner Setup for Any Environment"
+              showLineNumbers={true}
+              className="mb-4"
+            >
+              {`// Node.js/Express - Automatic environment detection
+import { setupNode } from 'try-error/setup';
+setupNode(); // ✨ That's it! Optimized for dev/prod automatically
+
+// React/Vite - Browser-optimized configuration  
+import { setupReact } from 'try-error/setup';
+setupReact(); // ✨ Perfect for client-side apps
+
+// Next.js - Handles both SSR and client-side
+import { setupNextJs } from 'try-error/setup';
+setupNextJs(); // ✨ Works for both server and client
+
+// Auto-detect environment (works everywhere)
+import { autoSetup } from 'try-error/setup';
+autoSetup(); // ✨ Detects Node.js, React, Next.js, etc.
+
+// High-performance (for critical applications)
+import { setupPerformance } from 'try-error/setup';
+setupPerformance(); // ✨ Maximum performance, minimal overhead
+
+// With custom options (still easy!)
+setupNode({
+  onError: (error) => sendToSentry(error) // Add your monitoring
+});`}
+            </CodeBlock>
+            <div className="bg-blue-100 border border-blue-300 rounded-lg p-3">
+              <h4 className="font-semibold text-blue-900 text-sm mb-1">
+                🎯 Benefits of Quick Setup
+              </h4>
+              <ul className="text-blue-800 text-sm space-y-1">
+                <li>
+                  • <strong>Zero boilerplate:</strong> One line replaces 20+
+                  lines of configuration
+                </li>
+                <li>
+                  • <strong>Environment-aware:</strong> Automatically optimizes
+                  for dev/prod/test
+                </li>
+                <li>
+                  • <strong>Best practices:</strong> Includes performance
+                  optimizations by default
+                </li>
+                <li>
+                  • <strong>Extensible:</strong> Easy to customize with your own
+                  options
+                </li>
+                <li>
+                  • <strong>Tree-shakeable:</strong> Only includes what you use
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="space-y-6">
+            <div className="border border-slate-200 rounded-lg p-6">
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">
+                Node.js/Express Applications
+              </h3>
+              <p className="text-slate-600 mb-3">
+                Configure try-error early in your application startup, before
+                importing other modules.
+              </p>
+              <CodeBlock
+                language="typescript"
+                title="Project Structure & Setup"
+                showLineNumbers={true}
+                className="mb-3"
+              >
+                {`// Project structure:
+// src/
+//   config/
+//     try-error.config.ts
+//   app.ts
+//   server.ts
+
+// src/config/try-error.config.ts
+import { configureTryError, configurePerformance } from 'try-error';
+
+export function initializeTryError() {
+  // Configure based on environment
+  configureTryError({
+    captureStackTrace: process.env.NODE_ENV !== 'production',
+    stackTraceLimit: process.env.NODE_ENV === 'production' ? 5 : 50,
+    developmentMode: process.env.NODE_ENV === 'development',
+    
+    onError: (error) => {
+      if (process.env.NODE_ENV === 'production') {
+        // Send to monitoring service
+        console.error(\`[ERROR] \${error.type}: \${error.message}\`);
+      } else {
+        // Detailed logging in development
+        console.error('TryError Details:', {
+          type: error.type,
+          message: error.message,
+          context: error.context,
+          stack: error.stack
+        });
+      }
+      return error;
+    }
+  });
+
+  // Performance optimizations
+  configurePerformance({
+    contextCapture: {
+      maxContextSize: 1024 * 10, // 10KB
+      deepClone: false
+    },
+    memory: {
+      maxErrorHistory: 50,
+      useWeakRefs: true
+    }
+  });
+}
+
+// src/app.ts
+import express from 'express';
+import { initializeTryError } from './config/try-error.config';
+
+// Initialize try-error FIRST, before other imports
+initializeTryError();
+
+// Now import your application modules
+import { userRoutes } from './routes/users';
+import { errorHandler } from './middleware/error-handler';
+
+const app = express();
+
+// Your middleware and routes
+app.use('/api/users', userRoutes);
+app.use(errorHandler);
+
+export default app;
+
+// src/server.ts
+import app from './app';
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(\`Server running on port \${PORT}\`);
+});`}
+              </CodeBlock>
+            </div>
+
+            <div className="border border-slate-200 rounded-lg p-6">
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">
+                Next.js Applications
+              </h3>
+              <p className="text-slate-600 mb-3">
+                Configure try-error in your Next.js app using the app directory
+                structure.
+              </p>
+              <CodeBlock
+                language="typescript"
+                title="Next.js Setup"
+                showLineNumbers={true}
+                className="mb-3"
+              >
+                {`// Project structure:
+// src/
+//   app/
+//     layout.tsx
+//     globals.css
+//   lib/
+//     try-error.config.ts
+//   middleware.ts
+
+// src/lib/try-error.config.ts
+import { configureTryError } from 'try-error';
+
+export function initializeTryError() {
+  configureTryError({
+    captureStackTrace: process.env.NODE_ENV !== 'production',
+    stackTraceLimit: process.env.NODE_ENV === 'production' ? 3 : 20,
+    developmentMode: process.env.NODE_ENV === 'development',
+    
+    onError: (error) => {
+      // Client-side error reporting
+      if (typeof window !== 'undefined') {
+        // Send to analytics or error reporting service
+        if (process.env.NODE_ENV === 'production') {
+          fetch('/api/errors', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              type: error.type,
+              message: error.message,
+              url: window.location.href,
+              userAgent: navigator.userAgent
+            })
+          }).catch(() => {}); // Silent fail
+        }
+      }
+      return error;
+    }
+  });
+}
+
+// src/app/layout.tsx
+import { initializeTryError } from '@/lib/try-error.config';
+import './globals.css';
+
+// Initialize try-error on both server and client
+initializeTryError();
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en">
+      <body>{children}</body>
+    </html>
+  );
+}
+
+// src/middleware.ts (for API routes)
+import { NextRequest, NextResponse } from 'next/server';
+import { initializeTryError } from '@/lib/try-error.config';
+
+// Initialize for middleware/API routes
+initializeTryError();
+
+export function middleware(request: NextRequest) {
+  // Your middleware logic
+  return NextResponse.next();
+}
+
+// src/app/api/users/route.ts
+import { tryAsync, isTryError } from 'try-error';
+import { NextRequest, NextResponse } from 'next/server';
+
+export async function GET(request: NextRequest) {
+  const result = await tryAsync(async () => {
+    // Your API logic here
+    const users = await fetchUsers();
+    return users;
+  });
+
+  if (isTryError(result)) {
+    return NextResponse.json(
+      { error: result.message },
+      { status: 500 }
+    );
+  }
+
+  return NextResponse.json(result);
+}`}
+              </CodeBlock>
+            </div>
+
+            <div className="border border-slate-200 rounded-lg p-6">
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">
+                React Applications (Vite/CRA)
+              </h3>
+              <p className="text-slate-600 mb-3">
+                Configure try-error in your React app's entry point.
+              </p>
+              <CodeBlock
+                language="typescript"
+                title="React App Setup"
+                showLineNumbers={true}
+                className="mb-3"
+              >
+                {`// Project structure:
+// src/
+//   config/
+//     try-error.config.ts
+//   components/
+//   hooks/
+//   main.tsx (Vite) or index.tsx (CRA)
+//   App.tsx
+
+// src/config/try-error.config.ts
+import { configureTryError } from 'try-error';
+
+export function initializeTryError() {
+  configureTryError({
+    captureStackTrace: import.meta.env.DEV, // Vite
+    // captureStackTrace: process.env.NODE_ENV === 'development', // CRA
+    stackTraceLimit: import.meta.env.PROD ? 3 : 20,
+    developmentMode: import.meta.env.DEV,
+    
+    onError: (error) => {
+      // Client-side error tracking
+      if (import.meta.env.PROD) {
+        // Send to error tracking service
+        window.gtag?.('event', 'exception', {
+          description: \`\${error.type}: \${error.message}\`,
+          fatal: false
+        });
+      } else {
+        // Development logging
+        console.group(\`🚨 TryError: \${error.type}\`);
+        console.error('Message:', error.message);
+        console.error('Context:', error.context);
+        console.groupEnd();
+      }
+      return error;
+    }
+  });
+}
+
+// src/main.tsx (Vite) or src/index.tsx (CRA)
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { initializeTryError } from './config/try-error.config';
+import App from './App';
+
+// Initialize try-error BEFORE rendering
+initializeTryError();
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
+
+// src/App.tsx
+import { TryErrorBoundary } from '@try-error/react';
+import { UserProfile } from './components/UserProfile';
+
+function App() {
+  return (
+    <TryErrorBoundary
+      fallback={({ error, retry }) => (
+        <div className="error-fallback">
+          <h2>Something went wrong</h2>
+          <p>{error.message}</p>
+          <button onClick={retry}>Try again</button>
+        </div>
+      )}
+    >
+      <UserProfile />
+    </TryErrorBoundary>
+  );
+}
+
+export default App;`}
+              </CodeBlock>
+            </div>
+
+            <div className="border border-slate-200 rounded-lg p-6">
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">
+                Environment-Specific Configuration Files
+              </h3>
+              <p className="text-slate-600 mb-3">
+                Use separate configuration files for different environments.
+              </p>
+              <CodeBlock
+                language="typescript"
+                title="Environment-Based Config"
+                showLineNumbers={true}
+                className="mb-3"
+              >
+                {`// config/try-error/
+//   index.ts
+//   development.ts
+//   production.ts
+//   test.ts
+
+// config/try-error/index.ts
+import { TryErrorConfig } from 'try-error';
+
+const env = process.env.NODE_ENV || 'development';
+
+let config: TryErrorConfig;
+
+switch (env) {
+  case 'production':
+    config = require('./production').default;
+    break;
+  case 'test':
+    config = require('./test').default;
+    break;
+  default:
+    config = require('./development').default;
+}
+
+export default config;
+
+// config/try-error/development.ts
+import { TryErrorConfig } from 'try-error';
+
+const config: TryErrorConfig = {
+  captureStackTrace: true,
+  stackTraceLimit: 50,
+  developmentMode: true,
+  
+  onError: (error) => {
+    console.group(\`🚨 TryError: \${error.type}\`);
+    console.error('Message:', error.message);
+    console.error('Context:', error.context);
+    console.error('Stack:', error.stack);
+    console.groupEnd();
+    return error;
+  }
+};
+
+export default config;
+
+// config/try-error/production.ts
+import { TryErrorConfig } from 'try-error';
+
+const config: TryErrorConfig = {
+  captureStackTrace: false,
+  stackTraceLimit: 0,
+  developmentMode: false,
+  
+  onError: (error) => {
+    // Send to monitoring service
+    sendToSentry(error);
+    sendToDatadog(error);
+    
+    // Minimal logging
+    console.error(\`Error: \${error.type} - \${error.message}\`);
+    return error;
+  }
+};
+
+export default config;
+
+// Usage in your app:
+// src/app.ts
+import { configureTryError } from 'try-error';
+import tryErrorConfig from '../config/try-error';
+
+// Apply configuration
+configureTryError(tryErrorConfig);`}
+              </CodeBlock>
+            </div>
+
+            <div className="border border-slate-200 rounded-lg p-6">
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">
+                Package.json Scripts Integration
+              </h3>
+              <p className="text-slate-600 mb-3">
+                Set up npm scripts to handle different environments
+                automatically.
+              </p>
+              <CodeBlock
+                language="json"
+                title="package.json Scripts"
+                showLineNumbers={true}
+                className="mb-3"
+              >
+                {`{
+  "scripts": {
+    "dev": "NODE_ENV=development tsx watch src/server.ts",
+    "build": "NODE_ENV=production tsc",
+    "start": "NODE_ENV=production node dist/server.js",
+    "test": "NODE_ENV=test jest",
+    "start:staging": "NODE_ENV=staging node dist/server.js"
+  },
+  "dependencies": {
+    "try-error": "^1.0.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.0.0",
+    "typescript": "^5.0.0"
+  }
+}`}
+              </CodeBlock>
+            </div>
+          </div>
+
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-6">
+            <h4 className="font-semibold text-blue-800 mb-2">
+              🔑 Key Implementation Tips
+            </h4>
+            <ul className="space-y-1 text-blue-700 text-sm">
+              <li>
+                • <strong>Use Quick Setup:</strong> Start with setup utilities
+                (setupNode, setupReact, etc.) for instant optimization
+              </li>
+              <li>
+                • <strong>Initialize Early:</strong> Configure try-error before
+                importing other modules
+              </li>
+              <li>
+                • <strong>Environment Variables:</strong> Use NODE_ENV to switch
+                between configurations
+              </li>
+              <li>
+                • <strong>Separate Configs:</strong> Keep environment-specific
+                settings in separate files for complex setups
+              </li>
+              <li>
+                • <strong>Error Boundaries:</strong> Wrap React components with
+                TryErrorBoundary
+              </li>
+              <li>
+                • <strong>API Integration:</strong> Configure error reporting
+                endpoints for production
+              </li>
+              <li>
+                • <strong>Performance:</strong> Disable stack traces and limit
+                context size in production
+              </li>
+            </ul>
+          </div>
+        </section>
+
         {/* Best Practices */}
         <section>
           <h2 className="text-2xl font-semibold text-slate-900 mb-4">

@@ -19,6 +19,22 @@ export type { CreateErrorOptions } from "./errors";
 
 export { createError, wrapError, fromThrown } from "./errors";
 
+// Configuration utilities (tree-shakeable)
+export type { TryErrorConfig, PerformanceConfig } from "./config";
+
+export {
+  configure,
+  getConfig,
+  resetConfig,
+  createScope,
+  createEnvConfig,
+  ConfigPresets,
+  Performance,
+} from "./config";
+
+// Setup utilities are available as separate imports to keep main bundle lightweight:
+// import { setupNode, setupReact, setupNextJs, autoSetup } from 'try-error/setup';
+
 // Synchronous error handling
 export type { TrySyncOptions } from "./sync";
 
