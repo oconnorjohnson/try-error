@@ -1,5 +1,10 @@
 import React, { useState } from "react";
-import { tryAllAsync, tryAnyAsync, isTryError, createError } from "try-error";
+import {
+  tryAllAsync,
+  tryAnyAsync,
+  isTryError,
+  createError,
+} from "../../../../src";
 
 interface Post {
   id: number;
@@ -29,7 +34,10 @@ const fetchPost = async (postId: number): Promise<Post> => {
   );
 
   if (Math.random() < 0.2) {
-    throw createError("FETCH_ERROR", `Failed to fetch post ${postId}`);
+    throw createError({
+      type: "FETCH_ERROR",
+      message: `Failed to fetch post ${postId}`,
+    });
   }
 
   return {
@@ -46,10 +54,10 @@ const fetchComments = async (postId: number): Promise<Comment[]> => {
   );
 
   if (Math.random() < 0.15) {
-    throw createError(
-      "FETCH_ERROR",
-      `Failed to fetch comments for post ${postId}`
-    );
+    throw createError({
+      type: "FETCH_ERROR",
+      message: `Failed to fetch comments for post ${postId}`,
+    });
   }
 
   return Array.from({ length: 3 }, (_, i) => ({
@@ -67,7 +75,10 @@ const fetchUser = async (userId: number): Promise<User> => {
   );
 
   if (Math.random() < 0.1) {
-    throw createError("FETCH_ERROR", `Failed to fetch user ${userId}`);
+    throw createError({
+      type: "FETCH_ERROR",
+      message: `Failed to fetch user ${userId}`,
+    });
   }
 
   return {
