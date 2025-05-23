@@ -12,6 +12,7 @@ import {
   Zap,
 } from "lucide-react";
 import { useEffect } from "react";
+import { usePathname } from "next/navigation";
 
 import {
   Sidebar,
@@ -208,6 +209,7 @@ const navigation = [
 
 export function AppSidebar() {
   const { scrollContainerRef, handleScroll, cleanup } = useSidebarScroll();
+  const pathname = usePathname();
 
   // Cleanup on unmount
   useEffect(() => {
@@ -234,16 +236,19 @@ export function AppSidebar() {
             <SidebarGroupLabel>{section.title}</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
-                {section.items.map((item) => (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild>
-                      <a href={item.url}>
-                        <item.icon className="h-4 w-4" />
-                        <span>{item.title}</span>
-                      </a>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
+                {section.items.map((item) => {
+                  const isActive = pathname === item.url;
+                  return (
+                    <SidebarMenuItem key={item.title}>
+                      <SidebarMenuButton asChild isActive={isActive}>
+                        <a href={item.url}>
+                          <item.icon className="h-4 w-4" />
+                          <span>{item.title}</span>
+                        </a>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  );
+                })}
               </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup>
