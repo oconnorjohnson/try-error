@@ -336,7 +336,8 @@ app.listen(PORT, () => {
               </h3>
               <p className="text-slate-600 mb-3">
                 Configure try-error in your Next.js app using the app directory
-                structure.
+                structure and the instrumentation.ts file for server startup
+                initialization.
               </p>
               <CodeBlock
                 language="typescript"
@@ -351,7 +352,7 @@ app.listen(PORT, () => {
 //     globals.css
 //   lib/
 //     try-error.config.ts
-//   middleware.ts
+//   instrumentation.ts (for server initialization)
 
 // src/lib/try-error.config.ts
 import { configureTryError } from 'try-error';
@@ -384,12 +385,23 @@ export function initializeTryError() {
   });
 }
 
+// instrumentation.ts (in project root, for server-side initialization)
+export async function register() {
+  if (process.env.NEXT_RUNTIME === 'nodejs') {
+    // Server-side initialization - runs once on server startup
+    const { initializeTryError } = await import('./src/lib/try-error.config');
+    initializeTryError();
+  }
+}
+
 // src/app/layout.tsx
 import { initializeTryError } from '@/lib/try-error.config';
 import './globals.css';
 
-// Initialize try-error on both server and client
-initializeTryError();
+// Initialize try-error on client-side
+if (typeof window !== 'undefined') {
+  initializeTryError();
+}
 
 export default function RootLayout({
   children,
@@ -401,18 +413,6 @@ export default function RootLayout({
       <body>{children}</body>
     </html>
   );
-}
-
-// src/middleware.ts (for API routes)
-import { NextRequest, NextResponse } from 'next/server';
-import { initializeTryError } from '@/lib/try-error.config';
-
-// Initialize for middleware/API routes
-initializeTryError();
-
-export function middleware(request: NextRequest) {
-  // Your middleware logic
-  return NextResponse.next();
 }
 
 // src/app/api/users/route.ts
@@ -436,6 +436,17 @@ export async function GET(request: NextRequest) {
   return NextResponse.json(result);
 }`}
               </CodeBlock>
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mt-3">
+                <h4 className="font-semibold text-blue-800 mb-2">
+                  📝 About instrumentation.ts
+                </h4>
+                <p className="text-blue-700 text-sm">
+                  The <code>instrumentation.ts</code> file runs once on server
+                  startup and is the correct place for server-side
+                  initialization. Don't use <code>middleware.ts</code> for
+                  initialization - it runs on every request!
+                </p>
+              </div>
             </div>
 
             <div className="border border-slate-200 rounded-lg p-6">
