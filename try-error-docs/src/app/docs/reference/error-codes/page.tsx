@@ -1,3 +1,5 @@
+import { CodeBlock } from "../../../../components/EnhancedCodeBlock";
+
 export default function ErrorCodesPage() {
   return (
     <div className="max-w-4xl mx-auto py-8 px-6">
@@ -33,8 +35,8 @@ export default function ErrorCodesPage() {
                 criteria.
               </p>
               <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-3">
-                <pre>
-                  <code>{`// Example usage
+                <CodeBlock>
+                  {`// Example usage
 const result = trySync(() => {
   if (!email.includes('@')) {
     throw createTryError('ValidationError', 'Invalid email format', {
@@ -44,8 +46,8 @@ const result = trySync(() => {
     });
   }
   return email;
-});`}</code>
-                </pre>
+});`}
+                </CodeBlock>
               </div>
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
                 <h4 className="font-semibold text-blue-800 text-sm mb-1">
@@ -77,8 +79,8 @@ const result = trySync(() => {
                 or connectivity issues.
               </p>
               <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-3">
-                <pre>
-                  <code>{`// Example usage
+                <CodeBlock>
+                  {`// Example usage
 const result = await tryAsync(async () => {
   const response = await fetch('/api/users');
   if (!response.ok) {
@@ -90,8 +92,8 @@ const result = await tryAsync(async () => {
     });
   }
   return response.json();
-});`}</code>
-                </pre>
+});`}
+                </CodeBlock>
               </div>
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
                 <h4 className="font-semibold text-blue-800 text-sm mb-1">
@@ -125,8 +127,8 @@ const result = await tryAsync(async () => {
                 Used when authentication fails or credentials are invalid.
               </p>
               <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-3">
-                <pre>
-                  <code>{`// Example usage
+                <CodeBlock>
+                  {`// Example usage
 const result = await tryAsync(async () => {
   const token = getAuthToken();
   if (!token || isTokenExpired(token)) {
@@ -136,8 +138,8 @@ const result = await tryAsync(async () => {
     });
   }
   return validateToken(token);
-});`}</code>
-                </pre>
+});`}
+                </CodeBlock>
               </div>
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
                 <h4 className="font-semibold text-blue-800 text-sm mb-1">
@@ -169,8 +171,8 @@ const result = await tryAsync(async () => {
                 specific action.
               </p>
               <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-3">
-                <pre>
-                  <code>{`// Example usage
+                <CodeBlock>
+                  {`// Example usage
 const result = trySync(() => {
   if (!user.hasPermission('admin')) {
     throw createTryError('AuthorizationError', 'Insufficient permissions', {
@@ -181,8 +183,8 @@ const result = trySync(() => {
     });
   }
   return accessAdminPanel();
-});`}</code>
-                </pre>
+});`}
+                </CodeBlock>
               </div>
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
                 <h4 className="font-semibold text-blue-800 text-sm mb-1">
@@ -216,8 +218,8 @@ const result = trySync(() => {
                 Used when a requested resource cannot be found.
               </p>
               <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-3">
-                <pre>
-                  <code>{`// Example usage
+                <CodeBlock>
+                  {`// Example usage
 const result = await tryAsync(async () => {
   const user = await database.findUser(userId);
   if (!user) {
@@ -228,8 +230,8 @@ const result = await tryAsync(async () => {
     });
   }
   return user;
-});`}</code>
-                </pre>
+});`}
+                </CodeBlock>
               </div>
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
                 <h4 className="font-semibold text-blue-800 text-sm mb-1">
@@ -262,8 +264,8 @@ const result = await tryAsync(async () => {
                 resource.
               </p>
               <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-3">
-                <pre>
-                  <code>{`// Example usage
+                <CodeBlock>
+                  {`// Example usage
 const result = await tryAsync(async () => {
   const existingUser = await database.findUserByEmail(email);
   if (existingUser) {
@@ -275,8 +277,8 @@ const result = await tryAsync(async () => {
     });
   }
   return database.createUser({ email, name });
-});`}</code>
-                </pre>
+});`}
+                </CodeBlock>
               </div>
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
                 <h4 className="font-semibold text-blue-800 text-sm mb-1">
@@ -308,8 +310,8 @@ const result = await tryAsync(async () => {
                 Used when rate limiting is triggered due to too many requests.
               </p>
               <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-3">
-                <pre>
-                  <code>{`// Example usage
+                <CodeBlock>
+                  {`// Example usage
 const result = await tryAsync(async () => {
   if (requestCount > rateLimit) {
     throw createTryError('RateLimitError', 'Rate limit exceeded', {
@@ -321,8 +323,8 @@ const result = await tryAsync(async () => {
     });
   }
   return processRequest();
-});`}</code>
-                </pre>
+});`}
+                </CodeBlock>
               </div>
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
                 <h4 className="font-semibold text-blue-800 text-sm mb-1">
@@ -482,8 +484,8 @@ const result = await tryAsync(async () => {
           </p>
 
           <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`// Define custom error types
+            <CodeBlock>
+              {`// Define custom error types
 export const CustomErrorTypes = {
   PAYMENT_FAILED: 'PaymentError',
   INVENTORY_INSUFFICIENT: 'InventoryError',
@@ -516,8 +518,8 @@ const inventoryResult = trySync(() => {
     });
   }
   return reserveInventory(product, quantity);
-});`}</code>
-            </pre>
+});`}
+            </CodeBlock>
           </div>
 
           <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
@@ -548,8 +550,8 @@ const inventoryResult = trySync(() => {
           </p>
 
           <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`// Check if error is of specific type
+            <CodeBlock>
+              {`// Check if error is of specific type
 function isErrorType(error: TryError, type: string): boolean {
   return error.type === type;
 }
@@ -589,8 +591,8 @@ if (isTryError(result)) {
   const status = getHttpStatusFromError(result);
   const response = createErrorResponse(result);
   res.status(status).json(response);
-}`}</code>
-            </pre>
+}`}
+            </CodeBlock>
           </div>
         </section>
 

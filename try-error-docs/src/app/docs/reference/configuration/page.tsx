@@ -1,3 +1,5 @@
+import { CodeBlock } from "../../../../components/EnhancedCodeBlock";
+
 export default function ConfigurationPage() {
   return (
     <div className="max-w-4xl mx-auto py-8 px-6">
@@ -24,8 +26,8 @@ export default function ConfigurationPage() {
           </p>
 
           <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`import { configureTryError } from 'try-error';
+            <CodeBlock>
+              {`import { configureTryError } from 'try-error';
 
 // Configure global settings
 configureTryError({
@@ -63,8 +65,8 @@ configureTryError({
     }
     return error;
   }
-});`}</code>
-            </pre>
+});`}
+            </CodeBlock>
           </div>
 
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
@@ -119,8 +121,8 @@ configureTryError({
                 Development Configuration
               </h3>
               <div className="bg-slate-900 text-slate-100 p-4 rounded-lg">
-                <pre>
-                  <code>{`// config/development.ts
+                <CodeBlock>
+                  {`// config/development.ts
 import { configureTryError } from 'try-error';
 
 configureTryError({
@@ -149,8 +151,8 @@ configureTryError({
     console.groupEnd();
     return error;
   }
-});`}</code>
-                </pre>
+});`}
+                </CodeBlock>
               </div>
             </div>
 
@@ -159,8 +161,8 @@ configureTryError({
                 Production Configuration
               </h3>
               <div className="bg-slate-900 text-slate-100 p-4 rounded-lg">
-                <pre>
-                  <code>{`// config/production.ts
+                <CodeBlock>
+                  {`// config/production.ts
 import { configureTryError } from 'try-error';
 
 configureTryError({
@@ -185,8 +187,8 @@ configureTryError({
     console.error(\`Error: \${error.type} - \${error.message}\`);
     return error;
   }
-});`}</code>
-                </pre>
+});`}
+                </CodeBlock>
               </div>
             </div>
 
@@ -195,8 +197,8 @@ configureTryError({
                 Testing Configuration
               </h3>
               <div className="bg-slate-900 text-slate-100 p-4 rounded-lg">
-                <pre>
-                  <code>{`// config/test.ts
+                <CodeBlock>
+                  {`// config/test.ts
 import { configureTryError } from 'try-error';
 
 configureTryError({
@@ -219,8 +221,8 @@ configureTryError({
     }
     return error;
   }
-});`}</code>
-                </pre>
+});`}
+                </CodeBlock>
               </div>
             </div>
           </div>
@@ -237,8 +239,8 @@ configureTryError({
           </p>
 
           <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`import { configureErrorContext } from 'try-error';
+            <CodeBlock>
+              {`import { configureErrorContext } from 'try-error';
 
 configureErrorContext({
   // Automatically include request context in web applications
@@ -284,8 +286,8 @@ configureErrorContext({
     delete sanitized.apiKey;
     return sanitized;
   }
-});`}</code>
-            </pre>
+});`}
+            </CodeBlock>
           </div>
         </section>
 
@@ -300,8 +302,8 @@ configureErrorContext({
           </p>
 
           <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`import { configureLogging } from 'try-error';
+            <CodeBlock>
+              {`import { configureLogging } from 'try-error';
 
 configureLogging({
   // Log levels
@@ -350,8 +352,8 @@ configureLogging({
       filter: (error) => error.type === 'CriticalError'
     }
   ]
-});`}</code>
-            </pre>
+});`}
+            </CodeBlock>
           </div>
         </section>
 
@@ -367,8 +369,8 @@ configureLogging({
           </p>
 
           <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`import { configurePerformance } from 'try-error';
+            <CodeBlock>
+              {`import { configurePerformance } from 'try-error';
 
 configurePerformance({
   // Error creation optimization
@@ -418,8 +420,8 @@ configurePerformance({
     // Weak references for large contexts
     useWeakRefs: true
   }
-});`}</code>
-            </pre>
+});`}
+            </CodeBlock>
           </div>
         </section>
 
@@ -435,8 +437,8 @@ configurePerformance({
                 Express.js Configuration
               </h3>
               <div className="bg-slate-900 text-slate-100 p-4 rounded-lg">
-                <pre>
-                  <code>{`// config/express.ts
+                <CodeBlock>
+                  {`// config/express.ts
 import { configureExpress } from '@try-error/express';
 
 configureExpress({
@@ -472,8 +474,8 @@ configureExpress({
       next(error);
     }
   }
-});`}</code>
-                </pre>
+});`}
+                </CodeBlock>
               </div>
             </div>
 
@@ -482,8 +484,8 @@ configureExpress({
                 Next.js Configuration
               </h3>
               <div className="bg-slate-900 text-slate-100 p-4 rounded-lg">
-                <pre>
-                  <code>{`// config/nextjs.ts
+                <CodeBlock>
+                  {`// config/nextjs.ts
 import { configureNextJs } from '@try-error/nextjs';
 
 configureNextJs({
@@ -507,8 +509,8 @@ configureNextJs({
     captureUrl: true,
     reportToApi: '/api/errors'
   }
-});`}</code>
-                </pre>
+});`}
+                </CodeBlock>
               </div>
             </div>
 
@@ -517,8 +519,8 @@ configureNextJs({
                 React Configuration
               </h3>
               <div className="bg-slate-900 text-slate-100 p-4 rounded-lg">
-                <pre>
-                  <code>{`// config/react.ts
+                <CodeBlock>
+                  {`// config/react.ts
 import { configureReact } from '@try-error/react';
 
 configureReact({
@@ -553,8 +555,8 @@ configureReact({
     showErrorOverlay: true,
     logToConsole: true
   }
-});`}</code>
-                </pre>
+});`}
+                </CodeBlock>
               </div>
             </div>
           </div>
@@ -572,8 +574,8 @@ configureReact({
                 JSON Configuration
               </h3>
               <div className="bg-slate-900 text-slate-100 p-4 rounded-lg">
-                <pre>
-                  <code>{`// try-error.config.json
+                <CodeBlock>
+                  {`// try-error.config.json
 {
   "captureStackTrace": true,
   "stackTraceLimit": 10,
@@ -600,8 +602,8 @@ configureReact({
       "maxContextSize": 10240
     }
   }
-}`}</code>
-                </pre>
+}`}
+                </CodeBlock>
               </div>
             </div>
 
@@ -610,8 +612,8 @@ configureReact({
                 TypeScript Configuration
               </h3>
               <div className="bg-slate-900 text-slate-100 p-4 rounded-lg">
-                <pre>
-                  <code>{`// try-error.config.ts
+                <CodeBlock>
+                  {`// try-error.config.ts
 import { TryErrorConfig } from 'try-error';
 
 const config: TryErrorConfig = {
@@ -643,8 +645,8 @@ const config: TryErrorConfig = {
   })
 };
 
-export default config;`}</code>
-                </pre>
+export default config;`}
+                </CodeBlock>
               </div>
             </div>
           </div>
