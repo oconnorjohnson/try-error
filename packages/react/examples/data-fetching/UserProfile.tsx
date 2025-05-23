@@ -59,9 +59,9 @@ export function UserProfile() {
       return await retry(
         () => withTimeout(fetchUser(id), 5000), // 5 second timeout
         {
-          maxAttempts: 3,
-          delay: 1000,
-          backoff: "exponential",
+          attempts: 3,
+          baseDelay: 1000,
+          backoffFactor: 2,
         }
       );
     });
