@@ -1,3 +1,5 @@
+import { CodeBlock } from "../../../../components/EnhancedCodeBlock";
+
 export default function BasicExamplesPage() {
   return (
     <div className="max-w-4xl mx-auto py-8 px-6">
@@ -21,9 +23,13 @@ export default function BasicExamplesPage() {
             One of the most common use cases for try-error is safe JSON parsing:
           </p>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`import { trySync, isTryError } from 'try-error';
+          <CodeBlock
+            language="typescript"
+            title="Safe JSON Parsing with Fallbacks"
+            showLineNumbers={true}
+            className="mb-4"
+          >
+            {`import { trySync, isTryError } from 'try-error';
 
 function parseUserConfig(jsonString: string) {
   const result = trySync(() => JSON.parse(jsonString));
@@ -47,9 +53,8 @@ console.log(config.theme); // "dark"
 
 const invalidJson = '{"theme": "dark", "language":}'; // Invalid JSON
 const fallbackConfig = parseUserConfig(invalidJson);
-console.log(fallbackConfig.theme); // "light" (default)`}</code>
-            </pre>
-          </div>
+console.log(fallbackConfig.theme); // "light" (default)`}
+          </CodeBlock>
         </section>
 
         {/* API Calls */}
@@ -62,9 +67,13 @@ console.log(fallbackConfig.theme); // "light" (default)`}</code>
             Handle network requests with proper error handling:
           </p>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`import { tryAsync, isTryError } from 'try-error';
+          <CodeBlock
+            language="typescript"
+            title="API Calls with Error Handling"
+            showLineNumbers={true}
+            className="mb-4"
+          >
+            {`import { tryAsync, isTryError } from 'try-error';
 
 async function fetchUserProfile(userId: string) {
   // Fetch user data
@@ -113,9 +122,8 @@ if (profile.error) {
   console.error(\`Failed to load profile: \${profile.message}\`);
 } else {
   console.log('User loaded:', profile.user.name);
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
         </section>
 
         {/* File Operations */}
@@ -128,9 +136,13 @@ if (profile.error) {
             Safe file reading and writing operations:
           </p>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`import { trySync, tryAsync, isTryError } from 'try-error';
+          <CodeBlock
+            language="typescript"
+            title="File Operations with Error Handling"
+            showLineNumbers={true}
+            className="mb-4"
+          >
+            {`import { trySync, tryAsync, isTryError } from 'try-error';
 import fs from 'fs';
 
 // Synchronous file reading
@@ -180,9 +192,8 @@ if (config) {
 const saved = await saveUserData('123', { name: 'John', age: 30 });
 if (!saved) {
   console.error('Failed to save user data');
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
         </section>
 
         {/* Form Validation */}
@@ -195,9 +206,13 @@ if (!saved) {
             Validate user input with detailed error reporting:
           </p>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`import { trySync, isTryError } from 'try-error';
+          <CodeBlock
+            language="typescript"
+            title="Form Validation with Error Aggregation"
+            showLineNumbers={true}
+            className="mb-4"
+          >
+            {`import { trySync, isTryError } from 'try-error';
 
 interface UserForm {
   email: string;
@@ -285,9 +300,8 @@ if (validation.valid) {
   console.log('Form is valid:', validation.data);
 } else {
   console.error('Validation errors:', validation.errors);
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
         </section>
 
         {/* Database Operations */}
@@ -300,9 +314,13 @@ if (validation.valid) {
             Handle database operations with proper error handling:
           </p>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`import { tryAsync, isTryError } from 'try-error';
+          <CodeBlock
+            language="typescript"
+            title="Database Repository Pattern"
+            showLineNumbers={true}
+            className="mb-4"
+          >
+            {`import { tryAsync, isTryError } from 'try-error';
 
 class UserRepository {
   constructor(private db: any) {}
@@ -381,9 +399,8 @@ if (user) {
   console.log('User found:', user.name);
 } else {
   console.log('User not found');
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
         </section>
 
         {/* Configuration Loading */}
@@ -396,9 +413,13 @@ if (user) {
             Load and validate application configuration with fallbacks:
           </p>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`import { trySync, isTryError } from 'try-error';
+          <CodeBlock
+            language="typescript"
+            title="Configuration Loading with Fallbacks"
+            showLineNumbers={true}
+            className="mb-4"
+          >
+            {`import { trySync, isTryError } from 'try-error';
 
 interface AppConfig {
   port: number;
@@ -476,9 +497,8 @@ function loadConfig(): AppConfig {
 // Usage
 const config = loadConfig();
 console.log(\`Server will run on port \${config.port}\`);
-console.log(\`Database: \${config.database.host}:\${config.database.port}\`);`}</code>
-            </pre>
-          </div>
+console.log(\`Database: \${config.database.host}:\${config.database.port}\`);`}
+          </CodeBlock>
         </section>
 
         {/* Next Steps */}
