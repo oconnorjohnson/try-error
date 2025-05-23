@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { trySyncTuple, createError } from "try-error";
+import { trySyncTuple, createError } from "../../../../src";
 
 // Example demonstrating tuple-style error handling (Go-style)
 export function TupleExample() {
@@ -12,20 +12,26 @@ export function TupleExample() {
       const trimmed = input.trim();
 
       if (!trimmed) {
-        throw createError("EMPTY_INPUT", "Input cannot be empty");
+        throw createError({
+          type: "EMPTY_INPUT",
+          message: "Input cannot be empty",
+        });
       }
 
       const parsed = parseFloat(trimmed);
 
       if (isNaN(parsed)) {
-        throw createError(
-          "INVALID_NUMBER",
-          `"${trimmed}" is not a valid number`
-        );
+        throw createError({
+          type: "INVALID_NUMBER",
+          message: `"${trimmed}" is not a valid number`,
+        });
       }
 
       if (parsed < 0) {
-        throw createError("NEGATIVE_NUMBER", "Number must be positive");
+        throw createError({
+          type: "NEGATIVE_NUMBER",
+          message: "Number must be positive",
+        });
       }
 
       return parsed;
