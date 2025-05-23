@@ -1,6 +1,6 @@
 import { atomWithStorage } from "jotai/utils";
 import { useAtom } from "jotai";
-import { useLayoutEffect, useRef, useCallback } from "react";
+import { useLayoutEffect, useRef, useCallback, useEffect } from "react";
 
 // Atom to persist sidebar scroll position
 export const sidebarScrollAtom = atomWithStorage("sidebar-scroll-position", 0);
@@ -11,17 +11,57 @@ export function useSidebarScroll() {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const isRestoringRef = useRef(false);
+  const hasRestoredRef = useRef(false);
 
-  // Immediate scroll restoration
+  // Immediate scroll restoration using layoutEffect
   useLayoutEffect(() => {
-    if (scrollContainerRef.current && !isRestoringRef.current) {
+    if (
+      scrollContainerRef.current &&
+      !isRestoringRef.current &&
+      !hasRestoredRef.current
+    ) {
       isRestoringRef.current = true;
-      scrollContainerRef.current.scrollTop = scrollPosition;
-      // Reset flag after a short delay
-      setTimeout(() => {
-        isRestoringRef.current = false;
-      }, 50);
+
+      // Use requestAnimationFrame to ensure DOM is ready
+      requestAnimationFrame(() => {
+        if (scrollContainerRef.current) {
+          scrollContainerRef.current.scrollTop = scrollPosition;
+          hasRestoredRef.current = true;
+
+          // Reset restoring flag after a short delay
+          setTimeout(() => {
+            isRestoringRef.current = false;
+          }, 100);
+        }
+      });
     }
+  }, [scrollPosition]);
+
+  // Additional effect to handle route changes and ensure restoration
+  useEffect(() => {
+    // Reset the restoration flag when the component mounts or route changes
+    hasRestoredRef.current = false;
+
+    // Attempt restoration after a short delay to handle route transitions
+    const restoreTimeout = setTimeout(() => {
+      if (
+        scrollContainerRef.current &&
+        scrollPosition > 0 &&
+        !hasRestoredRef.current
+      ) {
+        isRestoringRef.current = true;
+        scrollContainerRef.current.scrollTop = scrollPosition;
+        hasRestoredRef.current = true;
+
+        setTimeout(() => {
+          isRestoringRef.current = false;
+        }, 100);
+      }
+    }, 50);
+
+    return () => {
+      clearTimeout(restoreTimeout);
+    };
   }, [scrollPosition]);
 
   // Optimized scroll handler with throttling
@@ -39,7 +79,7 @@ export function useSidebarScroll() {
 
       scrollTimeoutRef.current = setTimeout(() => {
         setScrollPosition(scrollTop);
-      }, 100);
+      }, 150); // Slightly longer throttle to be more conservative
     },
     [setScrollPosition]
   );
