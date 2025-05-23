@@ -1,273 +1,242 @@
-# try-error
+# try-error Documentation Website
 
-> Lightweight, progressive, type-safe error handling for TypeScript
+A comprehensive documentation website for the try-error TypeScript library, built with Next.js 15, React Server Components, and shadcn/ui.
 
-[![npm version](https://badge.fury.io/js/try-error.svg)](https://badge.fury.io/js/try-error)
-[![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue.svg)](https://www.typescriptlang.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+## 🎯 Documentation Structure
 
-## 🚧 Prototype Status
+### **Core Documentation Pages**
 
-This is an early prototype to validate the core concepts. Not ready for production use.
+#### **1. Getting Started**
 
-## Why try-error?
+- **Introduction** - What is try-error, why use it, key benefits
+- **Installation** - Package installation, setup instructions
+- **Quick Start** - 5-minute tutorial with basic examples
+- **Migration Guide** - From try-catch to try-error patterns
 
-**try-error** bridges the gap between traditional try/catch and heavy functional programming approaches. It provides **errors as values** with **zero-overhead success paths**, **progressive adoption**, and **developer-first experience**.
+#### **2. Core Concepts**
 
-### The Problem
+- **Error Handling Philosophy** - Progressive adoption, type safety, zero overhead
+- **TryResult vs Exceptions** - When to use each approach
+- **Error Types** - Built-in types, custom error types, discriminated unions
+- **Success vs Error Paths** - Handling both cases effectively
 
-Current TypeScript error handling solutions have significant gaps:
+#### **3. API Reference**
 
-- **Traditional try/catch**: Verbose, error-prone, poor composability
-- **Heavy FP libraries**: Foreign feel, runtime overhead, steep learning curve
-- **Existing Result libraries**: Missing async support, poor DX, limited real-world patterns
+##### **Synchronous Operations**
 
-### The Solution
+- `trySync()` - Basic sync error handling
+- `trySyncTuple()` - Go-style tuple returns
+- `tryCall()` - Function call wrapping
+- `unwrap()` / `unwrapOr()` / `unwrapOrElse()` - Result extraction
+- `isOk()` / `isErr()` - Type guards
+- `tryAll()` / `tryAny()` - Multiple operations
 
-```typescript
-// Before: Traditional try/catch
-try {
-  const response = await fetch("/api/user");
-  const user = await response.json();
-  return user;
-} catch (error) {
-  console.error("Something failed:", error);
-  return null;
-}
+##### **Asynchronous Operations**
 
-// After: try-error
-const result = await tryAsync(async () => {
-  const response = await fetch("/api/user");
-  return response.json();
-});
+- `tryAsync()` - Basic async error handling
+- `tryAsyncTuple()` - Async tuple returns
+- `tryAwait()` - Promise wrapping
+- `tryAllAsync()` / `tryAnyAsync()` - Parallel operations
+- `tryAnySequential()` - Sequential fallback
+- `withTimeout()` - Timeout handling
+- `retry()` - Retry mechanisms
 
-if (isErr(result)) {
-  console.error("API call failed:", result.message, result.context);
-  return null;
-}
+##### **Error Creation & Management**
 
-return result; // Type-safe success value
-```
+- `createError()` - Error creation
+- `wrapError()` - Error wrapping
+- `fromThrown()` - Exception conversion
+- `isTryError()` - Type checking
+- Error context and metadata
 
-## Quick Start
+##### **Utilities**
 
-### Installation
+- `transformResult()` - Result transformation
+- `withDefault()` / `withDefaultFn()` - Default values
+- `filterSuccess()` / `filterErrors()` - Array filtering
+- `partitionResults()` - Result separation
+- `combineErrors()` - Error aggregation
+
+#### **4. React Integration**
+
+- **Installation** - `@try-error/react` setup
+- **Hooks**
+  - `useTry()` - Async state management
+  - `useTrySync()` - Sync operations
+  - `useTryCallback()` - Memoized callbacks
+  - `useFormSubmitCallback()` - Form handling
+- **Components**
+  - `TryErrorBoundary` - Error boundaries
+  - `withTryErrorBoundary()` - HOC wrapper
+- **Types** - React-specific TypeScript types
+
+#### **5. Advanced Patterns**
+
+##### **Custom Error Types**
+
+- Defining domain-specific errors
+- Error factories and builders
+- Error chaining and context
+- Validation error patterns
+
+##### **Error Factories**
+
+- `createErrorFactory()` - Factory functions
+- Domain-specific error creation
+- Entity, Amount, External, Validation errors
+- Error inheritance patterns
+
+##### **Performance & Best Practices**
+
+- Zero-overhead success paths
+- Memory management
+- Error context optimization
+- Bundle size considerations
+
+#### **6. Examples & Tutorials**
+
+##### **Basic Examples**
+
+- Simple error handling
+- Form validation
+- API calls and data fetching
+- File operations
+
+##### **Real-World Scenarios**
+
+- E-commerce checkout flow
+- User authentication
+- Data processing pipelines
+- External API integration
+
+##### **React Examples**
+
+- Component error handling
+- Form validation with hooks
+- Async data loading
+- Error boundary implementation
+
+#### **7. Guides**
+
+##### **Migration Guides**
+
+- From try-catch blocks
+- From Result/Either libraries
+- From Promise.catch()
+- From error-first callbacks
+
+##### **Integration Guides**
+
+- Express.js middleware
+- Next.js applications
+- React applications
+- Node.js services
+- Testing strategies
+
+#### **8. Reference**
+
+##### **TypeScript Types**
+
+- Complete type definitions
+- Generic constraints
+- Utility types
+- Type inference examples
+
+##### **Error Codes**
+
+- Built-in error types
+- Error severity levels
+- Context field standards
+- Debugging information
+
+##### **Configuration**
+
+- Environment variables
+- Build-time options
+- Runtime configuration
+- Development vs production
+
+## 🏗️ Technical Implementation
+
+### **Content Management**
+
+- **MDX Files** - Markdown with React components for rich content
+- **File-based Routing** - Next.js app router for automatic page generation
+- **Static Generation** - Pre-rendered pages for optimal performance
+- **Syntax Highlighting** - PrismJS for code examples
+
+### **UI Components**
+
+- **shadcn/ui** - Consistent, accessible component library
+- **Responsive Design** - Mobile-first approach
+- **Dark/Light Mode** - Theme switching support
+- **Search** - Full-text search across documentation
+
+### **Features**
+
+- **Interactive Examples** - Live code playground
+- **Copy-to-Clipboard** - Easy code copying
+- **Navigation** - Sidebar, breadcrumbs, next/prev links
+- **Table of Contents** - Auto-generated from headings
+- **SEO Optimized** - Meta tags, structured data
+
+### **Development**
+
+- **TypeScript** - Full type safety
+- **ESLint** - Code quality
+- **Prettier** - Code formatting
+- **Hot Reload** - Fast development iteration
+
+## 🚀 Getting Started
 
 ```bash
-npm install try-error
+# Install dependencies
+pnpm install
+
+# Start development server
+pnpm dev
+
+# Build for production
+pnpm build
+
+# Start production server
+pnpm start
 ```
 
-### Basic Usage
+## 📁 Project Structure
 
-```typescript
-import { trySync, tryAsync, isOk, isErr } from "try-error";
-
-// Synchronous operations
-const parseResult = trySync(() => JSON.parse(jsonString));
-if (isOk(parseResult)) {
-  console.log("Parsed:", parseResult);
-} else {
-  console.error("Parse failed:", parseResult.message);
-}
-
-// Asynchronous operations
-const fetchResult = await tryAsync(async () => {
-  const response = await fetch("/api/data");
-  return response.json();
-});
-
-if (isErr(fetchResult)) {
-  console.error("Fetch failed:", fetchResult.message);
-  return;
-}
-
-console.log("Data:", fetchResult);
+```
+src/
+├── app/                    # Next.js app router
+│   ├── (docs)/            # Documentation routes
+│   ├── api/               # API routes (search, etc.)
+│   ├── globals.css        # Global styles
+│   ├── layout.tsx         # Root layout
+│   └── page.tsx           # Homepage
+├── components/            # React components
+│   ├── ui/                # shadcn/ui components
+│   ├── docs/              # Documentation-specific components
+│   └── layout/            # Layout components
+├── content/               # MDX documentation files
+│   ├── docs/              # Main documentation
+│   ├── examples/          # Code examples
+│   └── guides/            # Tutorial guides
+├── lib/                   # Utility functions
+└── types/                 # TypeScript type definitions
 ```
 
-### Go-Style Error Handling
+## 🎨 Design System
 
-```typescript
-import { trySyncTuple, tryAsyncTuple } from "try-error";
+- **Typography** - Clear hierarchy with proper contrast
+- **Color Palette** - Accessible colors with dark mode support
+- **Spacing** - Consistent spacing scale
+- **Components** - Reusable, composable UI elements
+- **Icons** - Lucide React icon library
 
-// Synchronous
-const [result, error] = trySyncTuple(() => JSON.parse(jsonString));
-if (error) {
-  console.error("Parse failed:", error.message);
-  return;
-}
+## 📝 Content Guidelines
 
-// Asynchronous
-const [data, error] = await tryAsyncTuple(async () => {
-  const response = await fetch("/api/data");
-  return response.json();
-});
-```
-
-## Core Features
-
-### 1. Errors as Values (Not Abstractions)
-
-```typescript
-// Simple union types, not complex monads
-type TryResult<T, E> = T | E;
-
-// Zero overhead for success path
-const result = trySync(() => JSON.parse(data));
-// result is either the parsed object OR a TryError
-```
-
-### 2. Rich Error Context
-
-```typescript
-if (isErr(result)) {
-  console.log(result.type); // "SyntaxError"
-  console.log(result.message); // "Unexpected token"
-  console.log(result.source); // "api.ts:42:15"
-  console.log(result.context); // Custom context
-  console.log(result.timestamp); // When error occurred
-}
-```
-
-### 3. Composable Operations
-
-```typescript
-// Chain operations with automatic error propagation
-const result = await tryChainAsync(
-  tryAsync(() => fetch("/api/user")),
-  async (response) => tryAsync(() => response.json())
-);
-
-// Transform success values
-const upperResult = tryMap(parseResult, (obj) => obj.name.toUpperCase());
-
-// Combine multiple operations
-const allResults = await tryAllAsync([
-  tryAsync(() => fetch("/api/users")),
-  tryAsync(() => fetch("/api/posts")),
-]);
-```
-
-### 4. Advanced Async Utilities
-
-```typescript
-// Timeout support
-const result = await withTimeout(
-  tryAsync(() => slowOperation()),
-  5000,
-  "Operation timed out"
-);
-
-// Retry with exponential backoff
-const result = await retry(() => tryAsync(() => unreliableOperation()), {
-  attempts: 3,
-  baseDelay: 1000,
-});
-
-// Try multiple strategies
-const result = await tryAnyAsync([
-  tryAsync(() => primaryEndpoint()),
-  tryAsync(() => fallbackEndpoint()),
-]);
-```
-
-## API Reference
-
-### Core Functions
-
-- `trySync<T>(fn: () => T): TryResult<T, TryError>` - Wrap sync operations
-- `tryAsync<T>(fn: () => Promise<T>): Promise<TryResult<T, TryError>>` - Wrap async operations
-- `isOk<T, E>(result: TryResult<T, E>): result is T` - Type guard for success
-- `isErr<T, E>(result: TryResult<T, E>): result is E` - Type guard for errors
-
-### Transformation Functions
-
-- `tryMap<T, U>(result, mapper)` - Transform success values
-- `tryChain<T, U>(result, chainer)` - Chain operations
-- `tryMapAsync<T, U>(resultPromise, mapper)` - Async transformation
-- `tryChainAsync<T, U>(resultPromise, chainer)` - Async chaining
-
-### Collection Utilities
-
-- `tryAll(results)` - All must succeed
-- `tryAllAsync(resultPromises)` - All async must succeed
-- `tryAny(results)` - First success wins
-- `tryAnyAsync(resultPromises)` - First async success wins
-
-### Advanced Utilities
-
-- `withTimeout(resultPromise, timeoutMs)` - Add timeout
-- `retry(fn, options)` - Retry with backoff
-- `unwrap(result)` - Extract value or throw
-- `unwrapOr(result, defaultValue)` - Extract value or default
-
-## Real-World Examples
-
-### API Client with Error Recovery
-
-```typescript
-class ApiClient {
-  async fetchUserWithFallback(id: number) {
-    const result = await tryAnyAsync([
-      tryAsync(() => this.fetchFromPrimary(id)),
-      tryAsync(() => this.fetchFromSecondary(id)),
-      tryAsync(() => this.fetchFromCache(id)),
-    ]);
-
-    if (isErr(result)) {
-      console.error("All fetch attempts failed:", result.message);
-      return null;
-    }
-
-    return result;
-  }
-}
-```
-
-### File Processing Pipeline
-
-```typescript
-async function processConfigFile(filePath: string) {
-  const result = await tryChainAsync(
-    tryAsync(() => fs.readFile(filePath, "utf8")),
-    async (content) => Promise.resolve(trySync(() => JSON.parse(content)))
-  );
-
-  return unwrapOr(result, getDefaultConfig());
-}
-```
-
-## Performance
-
-try-error is designed for **zero-overhead success paths**:
-
-- Success values are returned directly (no wrapping)
-- Error objects are only created when needed
-- Minimal runtime overhead
-- Tree-shakeable exports
-
-## TypeScript Support
-
-Built with TypeScript-first design:
-
-- Full type inference
-- Discriminated unions for error types
-- Generic type parameters
-- Strict null checks compatible
-
-```typescript
-const result = trySync(() => JSON.parse(jsonString));
-// result: { [key: string]: any } | TryError
-
-if (isOk(result)) {
-  // result is automatically narrowed to { [key: string]: any }
-  console.log(result.someProperty);
-}
-```
-
-## Contributing
-
-We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
-
-## License
-
-MIT © [Your Name](https://github.com/yourusername/try-error)
+- **Clear Examples** - Every concept includes working code
+- **Progressive Complexity** - Start simple, build up
+- **Real-World Focus** - Practical, applicable examples
+- **TypeScript First** - Full type safety demonstrated
+- **Performance Aware** - Highlight zero-overhead benefits
