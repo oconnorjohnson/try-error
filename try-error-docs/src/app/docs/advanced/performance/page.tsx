@@ -6,7 +6,8 @@ export default function PerformancePage() {
           Performance & Best Practices
         </h1>
         <p className="text-xl text-slate-600">
-          Optimize try-error for performance and follow best practices for robust error handling
+          Optimize try-error for performance and follow best practices for
+          robust error handling
         </p>
       </div>
 
@@ -18,14 +19,18 @@ export default function PerformancePage() {
           </h2>
 
           <p className="text-slate-600 mb-6">
-            try-error is designed to be lightweight and performant, but there are several ways to optimize it further for your specific use case.
+            try-error is designed to be lightweight and performant, but there
+            are several ways to optimize it further for your specific use case.
           </p>
 
           <div className="space-y-6">
             <div className="border border-slate-200 rounded-lg p-6">
-              <h3 className="text-lg font-semibold text-slate-900 mb-3">Stack Trace Optimization</h3>
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">
+                Stack Trace Optimization
+              </h3>
               <p className="text-slate-600 mb-3">
-                Stack trace capture can be expensive. Optimize based on your environment.
+                Stack trace capture can be expensive. Optimize based on your
+                environment.
               </p>
               <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-3">
                 <pre>
@@ -43,17 +48,23 @@ configureTryError({
                 </pre>
               </div>
               <div className="bg-green-50 border border-green-200 rounded-lg p-3">
-                <h4 className="font-semibold text-green-800 text-sm mb-1">Performance Impact</h4>
+                <h4 className="font-semibold text-green-800 text-sm mb-1">
+                  Performance Impact
+                </h4>
                 <p className="text-green-700 text-sm">
-                  Disabling stack traces can improve error creation performance by 60-80% in production.
+                  Disabling stack traces can improve error creation performance
+                  by 60-80% in production.
                 </p>
               </div>
             </div>
 
             <div className="border border-slate-200 rounded-lg p-6">
-              <h3 className="text-lg font-semibold text-slate-900 mb-3">Context Size Management</h3>
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">
+                Context Size Management
+              </h3>
               <p className="text-slate-600 mb-3">
-                Large error contexts can impact memory usage and serialization performance.
+                Large error contexts can impact memory usage and serialization
+                performance.
               </p>
               <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-3">
                 <pre>
@@ -86,9 +97,12 @@ function createOptimizedError(type: string, message: string, context: any) {
             </div>
 
             <div className="border border-slate-200 rounded-lg p-6">
-              <h3 className="text-lg font-semibold text-slate-900 mb-3">Error Object Pooling</h3>
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">
+                Error Object Pooling
+              </h3>
               <p className="text-slate-600 mb-3">
-                For high-frequency error scenarios, consider object pooling to reduce GC pressure.
+                For high-frequency error scenarios, consider object pooling to
+                reduce GC pressure.
               </p>
               <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-3">
                 <pre>
@@ -143,9 +157,12 @@ const errorPool = new ErrorPool();`}</code>
 
           <div className="space-y-6">
             <div className="border border-slate-200 rounded-lg p-6">
-              <h3 className="text-lg font-semibold text-slate-900 mb-3">Error Type Consistency</h3>
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">
+                Error Type Consistency
+              </h3>
               <p className="text-slate-600 mb-3">
-                Use consistent error types across your application for better error handling.
+                Use consistent error types across your application for better
+                error handling.
               </p>
               <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-3">
                 <pre>
@@ -189,9 +206,12 @@ function handleApiError(error: TryError): ApiResponse {
             </div>
 
             <div className="border border-slate-200 rounded-lg p-6">
-              <h3 className="text-lg font-semibold text-slate-900 mb-3">Context Best Practices</h3>
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">
+                Context Best Practices
+              </h3>
               <p className="text-slate-600 mb-3">
-                Include relevant context while avoiding sensitive or excessive data.
+                Include relevant context while avoiding sensitive or excessive
+                data.
               </p>
               <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-3">
                 <pre>
@@ -244,9 +264,12 @@ function sanitizeContext(context: Record<string, any>): Record<string, any> {
             </div>
 
             <div className="border border-slate-200 rounded-lg p-6">
-              <h3 className="text-lg font-semibold text-slate-900 mb-3">Error Propagation</h3>
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">
+                Error Propagation
+              </h3>
               <p className="text-slate-600 mb-3">
-                Handle errors at the appropriate level and avoid swallowing important errors.
+                Handle errors at the appropriate level and avoid swallowing
+                important errors.
               </p>
               <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-3">
                 <pre>
@@ -545,11 +568,15 @@ describe('Error Performance', () => {
             <div className="space-y-3">
               <label className="flex items-center space-x-3">
                 <input type="checkbox" className="rounded" />
-                <span className="text-sm">Disable stack traces in production</span>
+                <span className="text-sm">
+                  Disable stack traces in production
+                </span>
               </label>
               <label className="flex items-center space-x-3">
                 <input type="checkbox" className="rounded" />
-                <span className="text-sm">Limit error context size (< 5KB)</span>
+                <span className="text-sm">
+                  Limit error context size (&lt; 5KB)
+                </span>
               </label>
               <label className="flex items-center space-x-3">
                 <input type="checkbox" className="rounded" />
@@ -557,15 +584,21 @@ describe('Error Performance', () => {
               </label>
               <label className="flex items-center space-x-3">
                 <input type="checkbox" className="rounded" />
-                <span className="text-sm">Sanitize sensitive data from context</span>
+                <span className="text-sm">
+                  Sanitize sensitive data from context
+                </span>
               </label>
               <label className="flex items-center space-x-3">
                 <input type="checkbox" className="rounded" />
-                <span className="text-sm">Configure appropriate logging levels</span>
+                <span className="text-sm">
+                  Configure appropriate logging levels
+                </span>
               </label>
               <label className="flex items-center space-x-3">
                 <input type="checkbox" className="rounded" />
-                <span className="text-sm">Set up error monitoring and alerting</span>
+                <span className="text-sm">
+                  Set up error monitoring and alerting
+                </span>
               </label>
               <label className="flex items-center space-x-3">
                 <input type="checkbox" className="rounded" />
@@ -573,15 +606,21 @@ describe('Error Performance', () => {
               </label>
               <label className="flex items-center space-x-3">
                 <input type="checkbox" className="rounded" />
-                <span className="text-sm">Monitor memory usage in long-running processes</span>
+                <span className="text-sm">
+                  Monitor memory usage in long-running processes
+                </span>
               </label>
               <label className="flex items-center space-x-3">
                 <input type="checkbox" className="rounded" />
-                <span className="text-sm">Use error pooling for high-frequency scenarios</span>
+                <span className="text-sm">
+                  Use error pooling for high-frequency scenarios
+                </span>
               </label>
               <label className="flex items-center space-x-3">
                 <input type="checkbox" className="rounded" />
-                <span className="text-sm">Configure environment-specific error handling</span>
+                <span className="text-sm">
+                  Configure environment-specific error handling
+                </span>
               </label>
             </div>
           </div>
@@ -595,7 +634,9 @@ describe('Error Performance', () => {
 
           <div className="grid md:grid-cols-3 gap-4">
             <div className="border border-slate-200 rounded-lg p-4">
-              <h3 className="font-semibold text-slate-900 mb-2">Configuration</h3>
+              <h3 className="font-semibold text-slate-900 mb-2">
+                Configuration
+              </h3>
               <p className="text-slate-600 text-sm mb-3">
                 Detailed configuration options for optimization
               </p>
@@ -608,7 +649,9 @@ describe('Error Performance', () => {
             </div>
 
             <div className="border border-slate-200 rounded-lg p-4">
-              <h3 className="font-semibold text-slate-900 mb-2">Integration Guides</h3>
+              <h3 className="font-semibold text-slate-900 mb-2">
+                Integration Guides
+              </h3>
               <p className="text-slate-600 text-sm mb-3">
                 Framework-specific optimization tips
               </p>
@@ -637,4 +680,4 @@ describe('Error Performance', () => {
       </div>
     </div>
   );
-} 
+}
