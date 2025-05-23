@@ -50,7 +50,11 @@ Form validation and user input handling:
 2. **Run the examples** in your React app:
 
    ```tsx
-   import { SimpleCounter } from "@try-error/react/examples/basic-usage/SimpleCounter";
+   // Import try-error functions from the React package
+   import { trySync, isTryError, createError } from "@try-error/react";
+
+   // Or copy the example components directly into your project
+   import { SimpleCounter } from "./components/SimpleCounter";
 
    function App() {
      return <SimpleCounter />;
