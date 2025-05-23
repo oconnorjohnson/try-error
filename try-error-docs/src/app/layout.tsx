@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/layout/app-sidebar";
+import { Provider } from "jotai";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,20 +31,22 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <SidebarProvider>
-          <AppSidebar />
-          <main className="flex-1">
-            <div className="flex h-14 items-center border-b px-4 lg:px-6">
-              <SidebarTrigger />
-              <div className="ml-4">
-                <h1 className="text-lg font-semibold">
-                  try-error Documentation
-                </h1>
+        <Provider>
+          <SidebarProvider>
+            <AppSidebar />
+            <main className="flex-1">
+              <div className="flex h-14 items-center border-b px-4 lg:px-6">
+                <SidebarTrigger />
+                <div className="ml-4">
+                  <h1 className="text-lg font-semibold">
+                    try-error Documentation
+                  </h1>
+                </div>
               </div>
-            </div>
-            <div className="flex-1 space-y-4 p-4 lg:p-6">{children}</div>
-          </main>
-        </SidebarProvider>
+              <div className="flex-1 space-y-4 p-4 lg:p-6">{children}</div>
+            </main>
+          </SidebarProvider>
+        </Provider>
       </body>
     </html>
   );

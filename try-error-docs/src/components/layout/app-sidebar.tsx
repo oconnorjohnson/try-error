@@ -1,3 +1,4 @@
+"use client";
 import {
   BookOpen,
   Code,
@@ -10,6 +11,7 @@ import {
   Settings,
   Zap,
 } from "lucide-react";
+import { useEffect } from "react";
 
 import {
   Sidebar,
@@ -23,6 +25,7 @@ import {
   SidebarHeader,
   SidebarFooter,
 } from "@/components/ui/sidebar";
+import { useSidebarScroll } from "@/lib/atoms";
 
 // Documentation navigation structure
 const navigation = [
@@ -204,6 +207,13 @@ const navigation = [
 ];
 
 export function AppSidebar() {
+  const { scrollContainerRef, handleScroll, cleanup } = useSidebarScroll();
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return cleanup;
+  }, [cleanup]);
+
   return (
     <Sidebar>
       <SidebarHeader className="border-b px-6 py-4">
@@ -218,7 +228,7 @@ export function AppSidebar() {
         </div>
       </SidebarHeader>
 
-      <SidebarContent>
+      <SidebarContent ref={scrollContainerRef} onScroll={handleScroll}>
         {navigation.map((section) => (
           <SidebarGroup key={section.title}>
             <SidebarGroupLabel>{section.title}</SidebarGroupLabel>
