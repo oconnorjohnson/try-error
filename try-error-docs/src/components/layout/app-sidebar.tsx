@@ -208,8 +208,7 @@ const navigation = [
 ];
 
 export function AppSidebar() {
-  const { scrollContainerRef, handleScroll, cleanup, isScrollReady } =
-    useSidebarScroll();
+  const { scrollContainerRef, handleScroll, cleanup } = useSidebarScroll();
   const pathname = usePathname();
 
   // Cleanup on unmount
@@ -250,16 +249,7 @@ export function AppSidebar() {
         </div>
       </SidebarHeader>
 
-      <SidebarContent
-        ref={scrollContainerRef}
-        onScroll={handleScroll}
-        className={`transition-opacity duration-150 ${
-          isScrollReady ? "opacity-100" : "opacity-30"
-        }`}
-        style={{
-          pointerEvents: isScrollReady ? "auto" : "none",
-        }}
-      >
+      <SidebarContent ref={scrollContainerRef} onScroll={handleScroll}>
         {navigation.map((section) => (
           <SidebarGroup key={section.title}>
             <SidebarGroupLabel>{section.title}</SidebarGroupLabel>
