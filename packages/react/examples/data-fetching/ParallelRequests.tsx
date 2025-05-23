@@ -4,6 +4,7 @@ import {
   tryAnyAsync,
   isTryError,
   createError,
+  tryAsync,
 } from "../../../../src";
 
 interface Post {
@@ -107,9 +108,9 @@ export function ParallelRequests() {
     if (strategy === "all") {
       // Load all data in parallel - all must succeed
       const result = await tryAllAsync([
-        () => fetchPost(postId),
-        () => fetchComments(postId),
-        () => fetchUser(Math.floor(Math.random() * 5) + 1), // Random user
+        tryAsync(() => fetchPost(postId)),
+        tryAsync(() => fetchComments(postId)),
+        tryAsync(() => fetchUser(Math.floor(Math.random() * 5) + 1)), // Random user
       ]);
 
       setLoading(false);
@@ -123,9 +124,9 @@ export function ParallelRequests() {
     } else {
       // Try multiple sources - first success wins
       const result = await tryAnyAsync([
-        () => fetchPost(postId),
-        () => fetchPost(postId + 1), // Fallback post
-        () => fetchPost(postId + 2), // Another fallback
+        tryAsync(() => fetchPost(postId)),
+        tryAsync(() => fetchPost(postId + 1)), // Fallback post
+        tryAsync(() => fetchPost(postId + 2)), // Another fallback
       ]);
 
       setLoading(false);
