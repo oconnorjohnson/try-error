@@ -193,11 +193,74 @@ function processValidResults<T>(results: TryResult<T, TryError>[]) {
               </h3>
               <p className="text-slate-600 mb-3">
                 Narrow errors by their specific type for targeted error
-                handling.
+                handling. The <code>hasErrorType</code> guard works with custom
+                error types that you define in your application.
               </p>
+
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                <h4 className="font-semibold text-blue-800 mb-2">
+                  📝 Custom Error Types
+                </h4>
+                <p className="text-blue-700 text-sm mb-2">
+                  The error types shown below (<code>ValidationError</code>,{" "}
+                  <code>AuthenticationError</code>, <code>NetworkError</code>)
+                  are examples of custom error types you would define in your
+                  application. try-error doesn't provide these types built-in -
+                  you create them based on your domain needs.
+                </p>
+                <div className="flex gap-2 text-sm">
+                  <a
+                    href="/docs/advanced/custom-errors"
+                    className="text-blue-600 hover:text-blue-800 font-medium"
+                  >
+                    Learn about Custom Errors →
+                  </a>
+                  <span className="text-blue-500">•</span>
+                  <a
+                    href="/docs/concepts/error-types"
+                    className="text-blue-600 hover:text-blue-800 font-medium"
+                  >
+                    Error Types Guide →
+                  </a>
+                </div>
+              </div>
+
               <CodeBlock
                 language="typescript"
-                title="hasErrorType Type Guard"
+                title="Defining Custom Error Types"
+                showLineNumbers={true}
+                className="mb-4"
+              >
+                {`import { createTryError } from 'try-error';
+
+// Define your custom error types
+export const createValidationError = (message: string, field: string) =>
+  createTryError('ValidationError', message, { field });
+
+export const createAuthenticationError = (message: string) =>
+  createTryError('AuthenticationError', message);
+
+export const createNetworkError = (message: string, status: number, url: string) =>
+  createTryError('NetworkError', message, { status, url });
+
+// Use them in your functions
+async function performUserOperation(userId: string) {
+  if (!userId) {
+    throw createValidationError('User ID is required', 'userId');
+  }
+  
+  const authResult = await checkAuthentication();
+  if (!authResult.valid) {
+    throw createAuthenticationError('Invalid credentials');
+  }
+  
+  // ... rest of operation
+}`}
+              </CodeBlock>
+
+              <CodeBlock
+                language="typescript"
+                title="hasErrorType Type Guard Usage"
                 showLineNumbers={true}
                 className="mb-4"
               >
@@ -232,7 +295,7 @@ async function handleUserOperation(userId: string) {
       };
     }
     
-    // Generic error handling
+    // Generic error handling for unknown types
     return {
       status: 'unknown_error',
       message: result.message
@@ -369,6 +432,8 @@ async function handleUserFetch(userId: string) {
 }
 
 // Advanced match with error type handling
+// Note: Uses the same custom error types (ValidationError, NetworkError, AuthenticationError)
+// defined in the hasErrorType section above
 function matchWithErrorTypes<T, R>(
   result: TryResult<T, TryError>,
   handlers: {
@@ -692,7 +757,7 @@ async function fetchUserMultiSource(userId: string) {
           <h2 className="text-2xl font-semibold text-slate-900 mb-4">
             Related Pages
           </h2>
-          <div className="grid md:grid-cols-2 gap-4">
+          <div className="grid md:grid-cols-3 gap-4">
             <div className="border border-slate-200 rounded-lg p-4">
               <h3 className="font-semibold text-slate-900 mb-2">Error Types</h3>
               <p className="text-slate-600 text-sm mb-3">
@@ -703,6 +768,21 @@ async function fetchUserMultiSource(userId: string) {
                 className="text-blue-600 hover:text-blue-800 text-sm font-medium"
               >
                 View Error Types →
+              </a>
+            </div>
+
+            <div className="border border-slate-200 rounded-lg p-4">
+              <h3 className="font-semibold text-slate-900 mb-2">
+                Custom Errors
+              </h3>
+              <p className="text-slate-600 text-sm mb-3">
+                Create domain-specific error types for better error handling
+              </p>
+              <a
+                href="/docs/advanced/custom-errors"
+                className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+              >
+                View Custom Errors →
               </a>
             </div>
 
