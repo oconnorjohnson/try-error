@@ -20,8 +20,9 @@ export default function SuccessVsErrorPage() {
           </h2>
 
           <p className="text-slate-600 mb-4">
-            try-error uses a union type approach where functions return either a successful value or a TryError. 
-            This eliminates the need for try/catch blocks and makes error handling explicit and type-safe.
+            try-error uses a union type approach where functions return either a
+            successful value or a TryError. This eliminates the need for
+            try/catch blocks and makes error handling explicit and type-safe.
           </p>
 
           <CodeBlock
@@ -51,10 +52,22 @@ if (isTryError(result)) {
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
             <h4 className="font-semibold text-blue-800 mb-2">Key Benefits</h4>
             <ul className="space-y-1 text-blue-700 text-sm">
-              <li>• <strong>Type Safety:</strong> TypeScript knows exactly which type you're working with</li>
-              <li>• <strong>Explicit Handling:</strong> You must handle both success and error cases</li>
-              <li>• <strong>No Exceptions:</strong> Errors are values, not thrown exceptions</li>
-              <li>• <strong>Composable:</strong> Easy to chain and transform operations</li>
+              <li>
+                • <strong>Type Safety:</strong> TypeScript knows exactly which
+                type you're working with
+              </li>
+              <li>
+                • <strong>Explicit Handling:</strong> You must handle both
+                success and error cases
+              </li>
+              <li>
+                • <strong>No Exceptions:</strong> Errors are values, not thrown
+                exceptions
+              </li>
+              <li>
+                • <strong>Composable:</strong> Easy to chain and transform
+                operations
+              </li>
             </ul>
           </div>
         </section>
@@ -66,15 +79,19 @@ if (isTryError(result)) {
           </h2>
 
           <p className="text-slate-600 mb-4">
-            Type guards are essential for narrowing union types and enabling TypeScript to understand 
-            which path you're on. try-error provides several type guards for different scenarios.
+            Type guards are essential for narrowing union types and enabling
+            TypeScript to understand which path you're on. try-error provides
+            several type guards for different scenarios.
           </p>
 
           <div className="space-y-6">
             <div>
-              <h3 className="text-lg font-semibold text-slate-900 mb-3">isTryError Guard</h3>
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">
+                isTryError Guard
+              </h3>
               <p className="text-slate-600 mb-3">
-                The primary type guard for distinguishing between success and error results.
+                The primary type guard for distinguishing between success and
+                error results.
               </p>
               <CodeBlock
                 language="typescript"
@@ -122,9 +139,12 @@ function processResult<T>(result: TryResult<T, TryError>) {
             </div>
 
             <div>
-              <h3 className="text-lg font-semibold text-slate-900 mb-3">isTrySuccess Guard</h3>
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">
+                isTrySuccess Guard
+              </h3>
               <p className="text-slate-600 mb-3">
-                Alternative guard that checks for successful results, useful for filtering operations.
+                Alternative guard that checks for successful results, useful for
+                filtering operations.
               </p>
               <CodeBlock
                 language="typescript"
@@ -168,9 +188,12 @@ function processValidResults<T>(results: TryResult<T, TryError>[]) {
             </div>
 
             <div>
-              <h3 className="text-lg font-semibold text-slate-900 mb-3">hasErrorType Guard</h3>
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">
+                hasErrorType Guard
+              </h3>
               <p className="text-slate-600 mb-3">
-                Narrow errors by their specific type for targeted error handling.
+                Narrow errors by their specific type for targeted error
+                handling.
               </p>
               <CodeBlock
                 language="typescript"
@@ -233,12 +256,15 @@ async function handleUserOperation(userId: string) {
           </h2>
 
           <p className="text-slate-600 mb-4">
-            Different ways to handle success and error cases based on your coding style and requirements.
+            Different ways to handle success and error cases based on your
+            coding style and requirements.
           </p>
 
           <div className="space-y-6">
             <div>
-              <h3 className="text-lg font-semibold text-slate-900 mb-3">Early Return Pattern</h3>
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">
+                Early Return Pattern
+              </h3>
               <p className="text-slate-600 mb-3">
                 Handle errors early and continue with the success case.
               </p>
@@ -293,9 +319,12 @@ async function processUserWithErrorHandling(userId: string) {
             </div>
 
             <div>
-              <h3 className="text-lg font-semibold text-slate-900 mb-3">Match Expression Pattern</h3>
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">
+                Match Expression Pattern
+              </h3>
               <p className="text-slate-600 mb-3">
-                Create a match function for more functional-style error handling.
+                Create a match function for more functional-style error
+                handling.
               </p>
               <CodeBlock
                 language="typescript"
@@ -368,7 +397,9 @@ function matchWithErrorTypes<T, R>(
             </div>
 
             <div>
-              <h3 className="text-lg font-semibold text-slate-900 mb-3">Chain Pattern</h3>
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">
+                Chain Pattern
+              </h3>
               <p className="text-slate-600 mb-3">
                 Chain operations while preserving error information.
               </p>
@@ -444,12 +475,15 @@ async function processUserPipeline(userId: string) {
           </h2>
 
           <p className="text-slate-600 mb-4">
-            Different approaches for recovering from errors and providing fallback behavior.
+            Different approaches for recovering from errors and providing
+            fallback behavior.
           </p>
 
           <div className="space-y-6">
             <div>
-              <h3 className="text-lg font-semibold text-slate-900 mb-3">Fallback Values</h3>
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">
+                Fallback Values
+              </h3>
               <CodeBlock
                 language="typescript"
                 title="Fallback Value Strategies"
@@ -491,7 +525,7 @@ async function getUserWithComputedFallback(userId: string) {
   const result = await tryAsync(() => fetchUser(userId));
   
   if (isTryError(result)) {
-    console.warn(\`Failed to fetch user \${userId}:`, result.message);
+    console.warn(\`Failed to fetch user \${userId}:\`, result.message);
     
     // Try to get from cache
     const cacheResult = await tryAsync(() => getCachedUser(userId));
@@ -514,7 +548,9 @@ async function getUserWithComputedFallback(userId: string) {
             </div>
 
             <div>
-              <h3 className="text-lg font-semibold text-slate-900 mb-3">Retry Strategies</h3>
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">
+                Retry Strategies
+              </h3>
               <CodeBlock
                 language="typescript"
                 title="Retry Strategies"
@@ -611,7 +647,9 @@ async function fetchUserMultiSource(userId: string) {
                 <li>• Provide meaningful fallback values when appropriate</li>
                 <li>• Log errors with sufficient context for debugging</li>
                 <li>• Use specific error type guards for targeted handling</li>
-                <li>• Chain operations using flatMapResult for dependent calls</li>
+                <li>
+                  • Chain operations using flatMapResult for dependent calls
+                </li>
               </ul>
             </div>
 
@@ -624,17 +662,25 @@ async function fetchUserMultiSource(userId: string) {
                 <li>• Retry operations that will never succeed</li>
                 <li>• Create deeply nested if/else chains</li>
                 <li>• Mix try/catch with try-error patterns</li>
-                <li>• Return undefined or null instead of proper error handling</li>
+                <li>
+                  • Return undefined or null instead of proper error handling
+                </li>
               </ul>
             </div>
 
             <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
               <h4 className="font-semibold text-yellow-800 mb-2">💡 Tips</h4>
               <ul className="space-y-1 text-yellow-700 text-sm">
-                <li>• Use match expressions for complex error handling logic</li>
-                <li>• Consider creating domain-specific error handling utilities</li>
+                <li>
+                  • Use match expressions for complex error handling logic
+                </li>
+                <li>
+                  • Consider creating domain-specific error handling utilities
+                </li>
                 <li>• Use mapResult for transforming successful values</li>
-                <li>• Implement circuit breaker patterns for external services</li>
+                <li>
+                  • Implement circuit breaker patterns for external services
+                </li>
                 <li>• Create error recovery strategies based on error types</li>
               </ul>
             </div>
@@ -661,7 +707,9 @@ async function fetchUserMultiSource(userId: string) {
             </div>
 
             <div className="border border-slate-200 rounded-lg p-4">
-              <h3 className="font-semibold text-slate-900 mb-2">Utilities API</h3>
+              <h3 className="font-semibold text-slate-900 mb-2">
+                Utilities API
+              </h3>
               <p className="text-slate-600 text-sm mb-3">
                 Type guards, transformers, and utility functions
               </p>
