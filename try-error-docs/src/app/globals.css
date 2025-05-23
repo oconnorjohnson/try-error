@@ -135,3 +135,154 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Dark theme overrides for existing light theme classes */
+@layer utilities {
+  .dark .text-slate-900 {
+    @apply text-foreground;
+  }
+
+  .dark .text-slate-800 {
+    @apply text-foreground;
+  }
+
+  .dark .text-slate-700 {
+    @apply text-muted-foreground;
+  }
+
+  .dark .text-slate-600 {
+    @apply text-muted-foreground;
+  }
+
+  .dark .bg-slate-50 {
+    @apply bg-muted;
+  }
+
+  .dark .bg-slate-100 {
+    @apply bg-muted;
+  }
+
+  .dark .border-slate-200 {
+    @apply border-border;
+  }
+
+  .dark .border-slate-300 {
+    @apply border-border;
+  }
+
+  /* Color-specific overrides for callout boxes */
+  .dark .bg-blue-50 {
+    @apply bg-blue-950/20;
+  }
+
+  .dark .border-blue-200 {
+    @apply border-blue-800/30;
+  }
+
+  .dark .text-blue-900 {
+    @apply text-blue-100;
+  }
+
+  .dark .text-blue-800 {
+    @apply text-blue-200;
+  }
+
+  .dark .text-blue-700 {
+    @apply text-blue-300;
+  }
+
+  .dark .bg-blue-100 {
+    @apply bg-blue-900/30;
+  }
+
+  .dark .border-blue-300 {
+    @apply border-blue-700/50;
+  }
+
+  /* Green callouts */
+  .dark .bg-green-50 {
+    @apply bg-green-950/20;
+  }
+
+  .dark .border-green-200 {
+    @apply border-green-800/30;
+  }
+
+  .dark .text-green-900 {
+    @apply text-green-100;
+  }
+
+  .dark .text-green-800 {
+    @apply text-green-200;
+  }
+
+  .dark .text-green-700 {
+    @apply text-green-300;
+  }
+
+  .dark .bg-green-100 {
+    @apply bg-green-900/30;
+  }
+
+  .dark .border-green-300 {
+    @apply border-green-700/50;
+  }
+
+  /* Yellow/amber callouts */
+  .dark .bg-yellow-50 {
+    @apply bg-yellow-950/20;
+  }
+
+  .dark .bg-amber-50 {
+    @apply bg-amber-950/20;
+  }
+
+  .dark .border-yellow-200 {
+    @apply border-yellow-800/30;
+  }
+
+  .dark .border-amber-200 {
+    @apply border-amber-800/30;
+  }
+
+  .dark .text-yellow-800 {
+    @apply text-yellow-200;
+  }
+
+  .dark .text-yellow-700 {
+    @apply text-yellow-300;
+  }
+
+  .dark .text-amber-900 {
+    @apply text-amber-100;
+  }
+
+  .dark .text-amber-800 {
+    @apply text-amber-200;
+  }
+
+  .dark .text-amber-700 {
+    @apply text-amber-300;
+  }
+
+  /* Red callouts */
+  .dark .bg-red-50 {
+    @apply bg-red-950/20;
+  }
+
+  .dark .border-red-200 {
+    @apply border-red-800/30;
+  }
+
+  .dark .text-red-900 {
+    @apply text-red-100;
+  }
+
+  .dark .text-red-800 {
+    @apply text-red-200;
+  }
+
+  .dark .text-red-700 {
+    @apply text-red-300;
+  }
+}
