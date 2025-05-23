@@ -1,4 +1,7 @@
-import { InstallCommand, CodeBlock } from "@/components/EnhancedCodeBlock";
+import {
+  InstallCommand,
+  CodeBlock,
+} from "../../../../components/EnhancedCodeBlock";
 
 export default function CodeBlockDemoPage() {
   return (
