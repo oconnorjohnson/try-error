@@ -1,3 +1,5 @@
+import { CodeBlock } from "../../../../components/EnhancedCodeBlock";
+
 export default function IntegrationGuidesPage() {
   return (
     <div className="max-w-4xl mx-auto py-8 px-6">
@@ -23,9 +25,13 @@ export default function IntegrationGuidesPage() {
             across your API routes.
           </p>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`import express from 'express';
+          <CodeBlock
+            language="typescript"
+            title="Express.js Error Handling Middleware"
+            showLineNumbers={true}
+            className="mb-4"
+          >
+            {`import express from 'express';
 import { tryAsync, isTryError } from 'try-error';
 
 const app = express();
@@ -90,9 +96,8 @@ app.post('/users', handleTryError(async (req, res) => {
   
   const newUser = await createUser(userData);
   res.status(201).json(newUser);
-}));`}</code>
-            </pre>
-          </div>
+}));`}
+          </CodeBlock>
         </section>
 
         {/* Next.js Integration */}
@@ -111,9 +116,12 @@ app.post('/users', handleTryError(async (req, res) => {
               <h3 className="text-lg font-semibold text-slate-900 mb-3">
                 API Routes
               </h3>
-              <div className="bg-slate-900 text-slate-100 p-4 rounded-lg">
-                <pre>
-                  <code>{`// pages/api/users/[id].ts
+              <CodeBlock
+                language="typescript"
+                title="Next.js API Route with try-error"
+                showLineNumbers={true}
+              >
+                {`// pages/api/users/[id].ts
 import { NextApiRequest, NextApiResponse } from 'next';
 import { tryAsync, isTryError } from 'try-error';
 
@@ -145,18 +153,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   res.json(result);
-}`}</code>
-                </pre>
-              </div>
+}`}
+              </CodeBlock>
             </div>
 
             <div>
               <h3 className="text-lg font-semibold text-slate-900 mb-3">
                 App Router (Next.js 13+)
               </h3>
-              <div className="bg-slate-900 text-slate-100 p-4 rounded-lg">
-                <pre>
-                  <code>{`// app/api/users/[id]/route.ts
+              <CodeBlock
+                language="typescript"
+                title="Next.js App Router with try-error"
+                showLineNumbers={true}
+              >
+                {`// app/api/users/[id]/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { tryAsync, isTryError } from 'try-error';
 
@@ -198,9 +208,8 @@ export default async function UserPage({ params }: { params: { id: string } }) {
       <p>{result.email}</p>
     </div>
   );
-}`}</code>
-                </pre>
-              </div>
+}`}
+              </CodeBlock>
             </div>
           </div>
         </section>
@@ -216,9 +225,13 @@ export default async function UserPage({ params }: { params: { id: string } }) {
             handling.
           </p>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`import { PrismaClient, Prisma } from '@prisma/client';
+          <CodeBlock
+            language="typescript"
+            title="Prisma Service with try-error"
+            showLineNumbers={true}
+            className="mb-4"
+          >
+            {`import { PrismaClient, Prisma } from '@prisma/client';
 import { tryAsync, isTryError, createTryError } from 'try-error';
 
 const prisma = new PrismaClient();
@@ -310,9 +323,8 @@ async function handleUserRequest(userId: string) {
   }
   
   return { status: 200, data: userResult };
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
         </section>
 
         {/* Zod Integration */}
@@ -326,9 +338,13 @@ async function handleUserRequest(userId: string) {
             handling.
           </p>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`import { z } from 'zod';
+          <CodeBlock
+            language="typescript"
+            title="Zod Validation with try-error"
+            showLineNumbers={true}
+            className="mb-4"
+          >
+            {`import { z } from 'zod';
 import { trySync, isTryError, createTryError } from 'try-error';
 
 // Schema definitions
@@ -400,24 +416,11 @@ function validateBody<T>(schema: z.ZodSchema<T>) {
       });
     }
     
-    req.body = validationResult; // Replace with validated data
+    req.body = validationResult;
     next();
   };
-}
-
-// Usage
-app.post('/users', validateBody(CreateUserSchema), async (req, res) => {
-  // req.body is now typed and validated
-  const result = await createUser(req.body);
-  
-  if (isTryError(result)) {
-    return res.status(500).json({ error: result.message });
-  }
-  
-  res.status(201).json(result);
-});`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
         </section>
 
         {/* Jest Testing Integration */}
@@ -436,9 +439,12 @@ app.post('/users', validateBody(CreateUserSchema), async (req, res) => {
               <h3 className="text-lg font-semibold text-slate-900 mb-3">
                 Custom Jest Matchers
               </h3>
-              <div className="bg-slate-900 text-slate-100 p-4 rounded-lg">
-                <pre>
-                  <code>{`// jest-setup.ts
+              <CodeBlock
+                language="typescript"
+                title="Jest Custom Matchers for try-error"
+                showLineNumbers={true}
+              >
+                {`// jest-setup.ts
 import { isTryError } from 'try-error';
 
 declare global {
@@ -532,18 +538,20 @@ expect.extend({
       };
     }
   },
-});`}</code>
-                </pre>
-              </div>
+});`}
+              </CodeBlock>
             </div>
 
             <div>
               <h3 className="text-lg font-semibold text-slate-900 mb-3">
                 Test Examples
               </h3>
-              <div className="bg-slate-900 text-slate-100 p-4 rounded-lg">
-                <pre>
-                  <code>{`// user.test.ts
+              <CodeBlock
+                language="typescript"
+                title="Jest Tests with try-error"
+                showLineNumbers={true}
+              >
+                {`// user.test.ts
 import { UserService } from './user-service';
 
 describe('UserService', () => {
@@ -624,9 +632,8 @@ describe('User validation', () => {
     expect(result).toHaveErrorType('ValidationError');
     expect(result.context?.validationErrors).toHaveLength(3);
   });
-});`}</code>
-                </pre>
-              </div>
+});`}
+              </CodeBlock>
             </div>
           </div>
         </section>
@@ -642,10 +649,13 @@ describe('User validation', () => {
             experience.
           </p>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`// tsconfig.json
-{
+          <CodeBlock
+            language="json"
+            title="Recommended tsconfig.json"
+            showLineNumbers={true}
+            className="mb-4"
+          >
+            {`{
   "compilerOptions": {
     "strict": true,
     "exactOptionalPropertyTypes": true,
@@ -677,9 +687,8 @@ describe('User validation', () => {
     "tests/**/*",
     "jest-setup.ts"
   ]
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
 
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
             <h4 className="font-semibold text-blue-800 mb-2">

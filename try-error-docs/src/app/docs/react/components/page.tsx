@@ -1,3 +1,5 @@
+import { CodeBlock } from "../../../../components/EnhancedCodeBlock";
+
 export default function ReactComponentsPage() {
   return (
     <div className="max-w-4xl mx-auto py-8 px-6">
@@ -23,9 +25,12 @@ export default function ReactComponentsPage() {
             providing enhanced error information and recovery options.
           </p>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`interface TryErrorBoundaryProps {
+          <CodeBlock
+            language="typescript"
+            title="TryErrorBoundary Props Interface"
+            className="mb-4"
+          >
+            {`interface TryErrorBoundaryProps {
   fallback: React.ComponentType<{
     error: TryError;
     resetError: () => void;
@@ -33,15 +38,18 @@ export default function ReactComponentsPage() {
   }>;
   onError?: (error: TryError, errorInfo: React.ErrorInfo) => void;
   children: React.ReactNode;
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
 
           <h3 className="text-lg font-semibold text-slate-900 mb-3">Example</h3>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`import { TryErrorBoundary } from '@try-error/react';
+          <CodeBlock
+            language="tsx"
+            title="TryErrorBoundary Usage"
+            showLineNumbers={true}
+            className="mb-4"
+          >
+            {`import { TryErrorBoundary } from '@try-error/react';
 
 function ErrorFallback({ error, resetError, retry }) {
   return (
@@ -92,9 +100,8 @@ function App() {
       <UserDashboard />
     </TryErrorBoundary>
   );
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
         </section>
 
         {/* AsyncComponent */}
@@ -108,23 +115,29 @@ function App() {
             error, and success states.
           </p>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`interface AsyncComponentProps<T> {
+          <CodeBlock
+            language="typescript"
+            title="AsyncComponent Props Interface"
+            className="mb-4"
+          >
+            {`interface AsyncComponentProps<T> {
   asyncFn: () => Promise<T>;
   deps?: React.DependencyList;
   loadingComponent?: React.ComponentType;
   errorComponent?: React.ComponentType<{ error: TryError; retry: () => void }>;
   children: (data: T) => React.ReactNode;
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
 
           <h3 className="text-lg font-semibold text-slate-900 mb-3">Example</h3>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`import { AsyncComponent } from '@try-error/react';
+          <CodeBlock
+            language="tsx"
+            title="AsyncComponent Usage"
+            showLineNumbers={true}
+            className="mb-4"
+          >
+            {`import { AsyncComponent } from '@try-error/react';
 
 function UserProfile({ userId }: { userId: string }) {
   return (
@@ -155,9 +168,8 @@ function UserProfile({ userId }: { userId: string }) {
       )}
     </AsyncComponent>
   );
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
         </section>
 
         {/* TryForm Component */}
@@ -171,9 +183,12 @@ function UserProfile({ userId }: { userId: string }) {
             automatic loading states and error handling.
           </p>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`interface TryFormProps<T> {
+          <CodeBlock
+            language="typescript"
+            title="TryForm Props Interface"
+            className="mb-4"
+          >
+            {`interface TryFormProps<T> {
   onSubmit: (data: FormData) => Promise<T>;
   onSuccess?: (result: T) => void;
   onError?: (error: TryError) => void;
@@ -182,15 +197,18 @@ function UserProfile({ userId }: { userId: string }) {
     error: TryError | null;
     submit: (e: React.FormEvent) => void;
   }) => React.ReactNode;
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
 
           <h3 className="text-lg font-semibold text-slate-900 mb-3">Example</h3>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`import { TryForm } from '@try-error/react';
+          <CodeBlock
+            language="tsx"
+            title="TryForm Usage"
+            showLineNumbers={true}
+            className="mb-4"
+          >
+            {`import { TryForm } from '@try-error/react';
 
 function CreateUserForm() {
   return (
@@ -252,9 +270,8 @@ function CreateUserForm() {
       )}
     </TryForm>
   );
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
         </section>
 
         {/* RetryButton Component */}
@@ -268,23 +285,29 @@ function CreateUserForm() {
             and loading states.
           </p>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`interface RetryButtonProps {
+          <CodeBlock
+            language="typescript"
+            title="RetryButton Props Interface"
+            className="mb-4"
+          >
+            {`interface RetryButtonProps {
   onRetry: () => Promise<void>;
   maxRetries?: number;
   backoffMs?: number;
   children?: React.ReactNode;
   className?: string;
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
 
           <h3 className="text-lg font-semibold text-slate-900 mb-3">Example</h3>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`import { RetryButton } from '@try-error/react';
+          <CodeBlock
+            language="tsx"
+            title="RetryButton Usage"
+            showLineNumbers={true}
+            className="mb-4"
+          >
+            {`import { RetryButton } from '@try-error/react';
 
 function DataFetcher() {
   const [data, setData] = useState(null);
@@ -317,9 +340,8 @@ function DataFetcher() {
   }
 
   return data ? <DataDisplay data={data} /> : <LoadingSpinner />;
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
         </section>
 
         {/* ErrorDisplay Component */}
@@ -333,24 +355,30 @@ function DataFetcher() {
             debugging information.
           </p>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`interface ErrorDisplayProps {
+          <CodeBlock
+            language="typescript"
+            title="ErrorDisplay Props Interface"
+            className="mb-4"
+          >
+            {`interface ErrorDisplayProps {
   error: TryError;
   showStack?: boolean;
   showContext?: boolean;
   showTimestamp?: boolean;
   onDismiss?: () => void;
   className?: string;
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
 
           <h3 className="text-lg font-semibold text-slate-900 mb-3">Example</h3>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`import { ErrorDisplay } from '@try-error/react';
+          <CodeBlock
+            language="tsx"
+            title="ErrorDisplay Usage"
+            showLineNumbers={true}
+            className="mb-4"
+          >
+            {`import { ErrorDisplay } from '@try-error/react';
 
 function UserProfile({ userId }: { userId: string }) {
   const { data: user, error } = useTryAsync(
@@ -372,9 +400,8 @@ function UserProfile({ userId }: { userId: string }) {
   }
 
   return user ? <UserDetails user={user} /> : <LoadingSpinner />;
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
         </section>
 
         {/* Best Practices */}
@@ -400,11 +427,12 @@ function UserProfile({ userId }: { userId: string }) {
             <div className="bg-red-50 border border-red-200 rounded-lg p-4">
               <h4 className="font-semibold text-red-800 mb-2">❌ Don't</h4>
               <ul className="space-y-1 text-red-700 text-sm">
-                <li>• Show sensitive error information to end users</li>
                 <li>• Ignore error states in your components</li>
+                <li>• Show technical error details to end users</li>
+                <li>
+                  • Forget to provide retry mechanisms for transient errors
+                </li>
                 <li>• Use generic error messages without context</li>
-                <li>• Forget to handle loading states</li>
-                <li>• Nest error boundaries too deeply</li>
               </ul>
             </div>
           </div>
@@ -420,7 +448,7 @@ function UserProfile({ userId }: { userId: string }) {
             <div className="border border-slate-200 rounded-lg p-4">
               <h3 className="font-semibold text-slate-900 mb-2">React Hooks</h3>
               <p className="text-slate-600 text-sm mb-3">
-                Learn about the hooks that power these components
+                Powerful hooks for async operations and error handling
               </p>
               <a
                 href="/docs/react/hooks"
@@ -435,13 +463,13 @@ function UserProfile({ userId }: { userId: string }) {
                 React Examples
               </h3>
               <p className="text-slate-600 text-sm mb-3">
-                See these components in action
+                Real-world usage examples and patterns
               </p>
               <a
                 href="/docs/examples/react"
                 className="text-blue-600 hover:text-blue-800 text-sm font-medium"
               >
-                View Examples →
+                See Examples →
               </a>
             </div>
           </div>
