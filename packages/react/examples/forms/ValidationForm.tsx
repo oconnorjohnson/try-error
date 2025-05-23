@@ -229,7 +229,11 @@ export function ValidationForm() {
         validateAge(formData.age),
         validateTerms(formData.terms),
       ].forEach((result) => {
-        if (isTryError(result) && result.context?.field) {
+        if (
+          isTryError(result) &&
+          result.context?.field &&
+          typeof result.context.field === "string"
+        ) {
           errors[result.context.field] = result.message;
         }
       });
