@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { ChevronDown, Check, Copy, Package } from "lucide-react";
-import { CodeBlock } from "./CodeBlock";
 
 type PackageManager = "pnpm" | "npm" | "yarn";
 
