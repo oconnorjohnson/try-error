@@ -1,3 +1,5 @@
+import { CodeBlock } from "../../../../components/EnhancedCodeBlock";
+
 export default function TypeScriptTypesPage() {
   return (
     <div className="max-w-4xl mx-auto py-8 px-6">
@@ -27,9 +29,12 @@ export default function TypeScriptTypesPage() {
                 The main error interface that extends the standard Error with
                 additional context and metadata.
               </p>
-              <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-3">
-                <pre>
-                  <code>{`interface TryError<T = any> extends Error {
+              <CodeBlock
+                language="typescript"
+                title="TryError Interface"
+                className="mb-3"
+              >
+                {`interface TryError<T = any> extends Error {
   readonly type: string;
   readonly message: string;
   readonly stack?: string;
@@ -37,9 +42,8 @@ export default function TypeScriptTypesPage() {
   readonly timestamp: number;
   readonly context?: T;
   readonly cause?: Error | TryError;
-}`}</code>
-                </pre>
-              </div>
+}`}
+              </CodeBlock>
               <div className="bg-slate-50 border border-slate-200 rounded-lg p-4">
                 <h4 className="font-semibold text-slate-700 mb-2">
                   Properties
@@ -80,11 +84,13 @@ export default function TypeScriptTypesPage() {
               <p className="text-slate-600 mb-3">
                 Union type representing either a successful result or an error.
               </p>
-              <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-3">
-                <pre>
-                  <code>{`type TryResult<T, E extends TryError = TryError> = T | E;`}</code>
-                </pre>
-              </div>
+              <CodeBlock
+                language="typescript"
+                title="TryResult Type"
+                className="mb-3"
+              >
+                {`type TryResult<T, E extends TryError = TryError> = T | E;`}
+              </CodeBlock>
               <div className="bg-slate-50 border border-slate-200 rounded-lg p-4">
                 <h4 className="font-semibold text-slate-700 mb-2">
                   Type Parameters
@@ -108,25 +114,29 @@ export default function TypeScriptTypesPage() {
                 Go-style tuple return type for functions that prefer tuple
                 destructuring.
               </p>
-              <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-3">
-                <pre>
-                  <code>{`type TryTuple<T, E extends TryError = TryError> = [T, null] | [null, E];`}</code>
-                </pre>
-              </div>
+              <CodeBlock
+                language="typescript"
+                title="TryTuple Type"
+                className="mb-3"
+              >
+                {`type TryTuple<T, E extends TryError = TryError> = [T, null] | [null, E];`}
+              </CodeBlock>
               <div className="bg-slate-50 border border-slate-200 rounded-lg p-4">
                 <h4 className="font-semibold text-slate-700 mb-2">
                   Usage Example
                 </h4>
-                <div className="bg-slate-900 text-slate-100 p-3 rounded text-sm">
-                  <pre>
-                    <code>{`const [user, error] = await tryAsyncTuple(() => fetchUser('123'));
+                <CodeBlock
+                  language="typescript"
+                  title="TryTuple Usage"
+                  className="text-sm"
+                >
+                  {`const [user, error] = await tryAsyncTuple(() => fetchUser('123'));
 if (error) {
   console.error('Failed:', error.message);
 } else {
   console.log('Success:', user.name);
-}`}</code>
-                  </pre>
-                </div>
+}`}
+                </CodeBlock>
               </div>
             </div>
           </div>
@@ -146,11 +156,9 @@ if (error) {
               <p className="text-slate-600 mb-3">
                 Type alias for successful results, excluding error types.
               </p>
-              <div className="bg-slate-900 text-slate-100 p-4 rounded-lg">
-                <pre>
-                  <code>{`type TrySuccess<T> = T extends TryError ? never : T;`}</code>
-                </pre>
-              </div>
+              <CodeBlock language="typescript" title="TrySuccess Type">
+                {`type TrySuccess<T> = T extends TryError ? never : T;`}
+              </CodeBlock>
             </div>
 
             <div>
@@ -160,11 +168,9 @@ if (error) {
               <p className="text-slate-600 mb-3">
                 Type alias for error results, excluding success types.
               </p>
-              <div className="bg-slate-900 text-slate-100 p-4 rounded-lg">
-                <pre>
-                  <code>{`type TryFailure<E extends TryError = TryError> = E;`}</code>
-                </pre>
-              </div>
+              <CodeBlock language="typescript" title="TryFailure Type">
+                {`type TryFailure<E extends TryError = TryError> = E;`}
+              </CodeBlock>
             </div>
 
             <div>
@@ -175,19 +181,23 @@ if (error) {
                 Extracts the success type from a TryResult, useful for type
                 inference.
               </p>
-              <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-3">
-                <pre>
-                  <code>{`type UnwrapTry<T> = T extends TryResult<infer U, any> ? U : T;`}</code>
-                </pre>
-              </div>
+              <CodeBlock
+                language="typescript"
+                title="UnwrapTry Type"
+                className="mb-3"
+              >
+                {`type UnwrapTry<T> = T extends TryResult<infer U, any> ? U : T;`}
+              </CodeBlock>
               <div className="bg-slate-50 border border-slate-200 rounded-lg p-4">
                 <h4 className="font-semibold text-slate-700 mb-2">Example</h4>
-                <div className="bg-slate-900 text-slate-100 p-3 rounded text-sm">
-                  <pre>
-                    <code>{`type UserResult = TryResult<User, TryError>;
-type UserType = UnwrapTry<UserResult>; // User`}</code>
-                  </pre>
-                </div>
+                <CodeBlock
+                  language="typescript"
+                  title="UnwrapTry Example"
+                  className="text-sm"
+                >
+                  {`type UserResult = TryResult<User, TryError>;
+type UserType = UnwrapTry<UserResult>; // User`}
+                </CodeBlock>
               </div>
             </div>
 
@@ -198,11 +208,9 @@ type UserType = UnwrapTry<UserResult>; // User`}</code>
               <p className="text-slate-600 mb-3">
                 Extracts the error type from a TryResult.
               </p>
-              <div className="bg-slate-900 text-slate-100 p-4 rounded-lg">
-                <pre>
-                  <code>{`type UnwrapTryError<T> = T extends TryResult<any, infer E> ? E : never;`}</code>
-                </pre>
-              </div>
+              <CodeBlock language="typescript" title="UnwrapTryError Type">
+                {`type UnwrapTryError<T> = T extends TryResult<any, infer E> ? E : never;`}
+              </CodeBlock>
             </div>
           </div>
         </section>
