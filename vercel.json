@@ -1,5 +1,0 @@
-{
-  "buildCommand": "cd try-error-docs && pnpm build",
-  "installCommand": "pnpm install",
-  "outputDirectory": "try-error-docs/.next"
-}
