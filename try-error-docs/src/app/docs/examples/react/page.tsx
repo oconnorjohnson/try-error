@@ -1,3 +1,5 @@
+import { CodeBlock } from "../../../../components/EnhancedCodeBlock";
+
 export default function ReactExamplesPage() {
   return (
     <div className="max-w-4xl mx-auto py-8 px-6">
@@ -22,9 +24,13 @@ export default function ReactExamplesPage() {
             with different error handling strategies.
           </p>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`import { useTryAsync, TryErrorBoundary } from '@try-error/react';
+          <CodeBlock
+            language="tsx"
+            title="User Dashboard Component"
+            showLineNumbers={true}
+            className="mb-4"
+          >
+            {`import { useTryAsync, TryErrorBoundary } from '@try-error/react';
 import { tryAsync, isTryError } from 'try-error';
 
 interface User {
@@ -210,9 +216,8 @@ function App() {
       <UserDashboard userId="123" />
     </TryErrorBoundary>
   );
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
         </section>
 
         {/* Form with Validation Example */}
@@ -226,9 +231,13 @@ function App() {
             states using try-error patterns.
           </p>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`import { useTryMutation, useTryCallback } from '@try-error/react';
+          <CodeBlock
+            language="tsx"
+            title="Form with Validation Component"
+            showLineNumbers={true}
+            className="mb-4"
+          >
+            {`import { useTryMutation, useTryCallback } from '@try-error/react';
 import { trySync, isTryError } from 'try-error';
 import { useState } from 'react';
 
@@ -452,9 +461,8 @@ function FormField({
       )}
     </div>
   );
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
         </section>
 
         {/* Data Fetching with Retry Example */}
@@ -468,9 +476,13 @@ function FormField({
             transient failures.
           </p>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`import { useTryAsync } from '@try-error/react';
+          <CodeBlock
+            language="tsx"
+            title="Data Fetcher with Retry Logic"
+            showLineNumbers={true}
+            className="mb-4"
+          >
+            {`import { useTryAsync } from '@try-error/react';
 import { tryAsync, isTryError } from 'try-error';
 import { useState, useCallback } from 'react';
 
@@ -630,9 +642,8 @@ function DataFetcherWithRetry({ endpoint }: { endpoint: string }) {
       )}
     </div>
   );
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
         </section>
 
         {/* Best Practices Summary */}
