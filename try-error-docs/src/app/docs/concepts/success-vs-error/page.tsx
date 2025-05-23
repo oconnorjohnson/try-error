@@ -1,3 +1,5 @@
+import { CodeBlock } from "../../../../components/EnhancedCodeBlock";
+
 export default function SuccessVsErrorPage() {
   return (
     <div className="max-w-4xl mx-auto py-8 px-6">
@@ -11,24 +13,635 @@ export default function SuccessVsErrorPage() {
       </div>
 
       <div className="space-y-8">
+        {/* Core Concept */}
         <section>
           <h2 className="text-2xl font-semibold text-slate-900 mb-4">
-            Coming Soon
+            Core Concept
           </h2>
+
           <p className="text-slate-600 mb-4">
-            This page will cover how try-error distinguishes between success and
-            error cases, type narrowing, and best practices for handling both
-            paths.
+            try-error uses a union type approach where functions return either a successful value or a TryError. 
+            This eliminates the need for try/catch blocks and makes error handling explicit and type-safe.
           </p>
 
+          <CodeBlock
+            language="typescript"
+            title="Basic Success vs Error Pattern"
+            showLineNumbers={true}
+            className="mb-4"
+          >
+            {`import { tryAsync, isTryError } from 'try-error';
+
+// Function returns either User or TryError
+const result = await tryAsync(() => fetchUser('123'));
+
+if (isTryError(result)) {
+  // Error path - TypeScript knows result is TryError
+  console.error('Failed to fetch user:', result.message);
+  console.error('Error type:', result.type);
+  console.error('Context:', result.context);
+} else {
+  // Success path - TypeScript knows result is User
+  console.log('User loaded:', result.name);
+  console.log('Email:', result.email);
+  console.log('ID:', result.id);
+}`}
+          </CodeBlock>
+
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-            <p className="text-blue-800">
-              📚 This documentation page is under development. Check back soon
-              for detailed content about success vs error handling patterns.
-            </p>
+            <h4 className="font-semibold text-blue-800 mb-2">Key Benefits</h4>
+            <ul className="space-y-1 text-blue-700 text-sm">
+              <li>• <strong>Type Safety:</strong> TypeScript knows exactly which type you're working with</li>
+              <li>• <strong>Explicit Handling:</strong> You must handle both success and error cases</li>
+              <li>• <strong>No Exceptions:</strong> Errors are values, not thrown exceptions</li>
+              <li>• <strong>Composable:</strong> Easy to chain and transform operations</li>
+            </ul>
           </div>
         </section>
 
+        {/* Type Narrowing */}
+        <section>
+          <h2 className="text-2xl font-semibold text-slate-900 mb-4">
+            Type Narrowing with Guards
+          </h2>
+
+          <p className="text-slate-600 mb-4">
+            Type guards are essential for narrowing union types and enabling TypeScript to understand 
+            which path you're on. try-error provides several type guards for different scenarios.
+          </p>
+
+          <div className="space-y-6">
+            <div>
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">isTryError Guard</h3>
+              <p className="text-slate-600 mb-3">
+                The primary type guard for distinguishing between success and error results.
+              </p>
+              <CodeBlock
+                language="typescript"
+                title="isTryError Type Guard"
+                showLineNumbers={true}
+                className="mb-4"
+              >
+                {`import { tryAsync, isTryError, TryResult } from 'try-error';
+
+async function handleUserFetch(userId: string) {
+  const result = await tryAsync(() => fetchUser(userId));
+  
+  // Type guard narrows the union type
+  if (isTryError(result)) {
+    // result is TryError here
+    return {
+      success: false,
+      error: result.message,
+      errorType: result.type
+    };
+  }
+  
+  // result is User here
+  return {
+    success: true,
+    user: {
+      id: result.id,
+      name: result.name,
+      email: result.email
+    }
+  };
+}
+
+// Generic handling function
+function processResult<T>(result: TryResult<T, TryError>) {
+  if (isTryError(result)) {
+    console.error(\`Operation failed: \${result.message}\`);
+    return null;
+  }
+  
+  console.log('Operation succeeded');
+  return result;
+}`}
+              </CodeBlock>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">isTrySuccess Guard</h3>
+              <p className="text-slate-600 mb-3">
+                Alternative guard that checks for successful results, useful for filtering operations.
+              </p>
+              <CodeBlock
+                language="typescript"
+                title="isTrySuccess Type Guard"
+                showLineNumbers={true}
+                className="mb-4"
+              >
+                {`import { tryAsync, isTrySuccess, isTryError } from 'try-error';
+
+async function fetchMultipleUsers(userIds: string[]) {
+  const results = await Promise.all(
+    userIds.map(id => tryAsync(() => fetchUser(id)))
+  );
+  
+  // Filter successful results
+  const successfulUsers = results.filter(isTrySuccess);
+  // TypeScript knows successfulUsers is User[]
+  
+  // Filter failed results
+  const failedResults = results.filter(isTryError);
+  // TypeScript knows failedResults is TryError[]
+  
+  return {
+    users: successfulUsers,
+    errors: failedResults,
+    successCount: successfulUsers.length,
+    errorCount: failedResults.length
+  };
+}
+
+// Processing with success guard
+function processValidResults<T>(results: TryResult<T, TryError>[]) {
+  return results
+    .filter(isTrySuccess)
+    .map(result => {
+      // TypeScript knows result is T, not TryResult<T, TryError>
+      return processSuccessfulResult(result);
+    });
+}`}
+              </CodeBlock>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">hasErrorType Guard</h3>
+              <p className="text-slate-600 mb-3">
+                Narrow errors by their specific type for targeted error handling.
+              </p>
+              <CodeBlock
+                language="typescript"
+                title="hasErrorType Type Guard"
+                showLineNumbers={true}
+                className="mb-4"
+              >
+                {`import { tryAsync, isTryError, hasErrorType } from 'try-error';
+
+async function handleUserOperation(userId: string) {
+  const result = await tryAsync(() => performUserOperation(userId));
+  
+  if (isTryError(result)) {
+    // Handle different error types specifically
+    if (hasErrorType(result, 'ValidationError')) {
+      // TypeScript knows result.type is 'ValidationError'
+      return {
+        status: 'validation_failed',
+        field: result.context?.field,
+        message: result.message
+      };
+    }
+    
+    if (hasErrorType(result, 'AuthenticationError')) {
+      return {
+        status: 'auth_required',
+        redirectTo: '/login'
+      };
+    }
+    
+    if (hasErrorType(result, 'NetworkError')) {
+      return {
+        status: 'network_error',
+        retryable: true,
+        retryAfter: 5000
+      };
+    }
+    
+    // Generic error handling
+    return {
+      status: 'unknown_error',
+      message: result.message
+    };
+  }
+  
+  return {
+    status: 'success',
+    data: result
+  };
+}`}
+              </CodeBlock>
+            </div>
+          </div>
+        </section>
+
+        {/* Pattern Matching */}
+        <section>
+          <h2 className="text-2xl font-semibold text-slate-900 mb-4">
+            Pattern Matching Approaches
+          </h2>
+
+          <p className="text-slate-600 mb-4">
+            Different ways to handle success and error cases based on your coding style and requirements.
+          </p>
+
+          <div className="space-y-6">
+            <div>
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">Early Return Pattern</h3>
+              <p className="text-slate-600 mb-3">
+                Handle errors early and continue with the success case.
+              </p>
+              <CodeBlock
+                language="typescript"
+                title="Early Return Pattern"
+                showLineNumbers={true}
+                className="mb-4"
+              >
+                {`async function processUser(userId: string) {
+  // Fetch user
+  const userResult = await tryAsync(() => fetchUser(userId));
+  if (isTryError(userResult)) {
+    console.error('Failed to fetch user:', userResult.message);
+    return null;
+  }
+  
+  // Validate user
+  const validationResult = await tryAsync(() => validateUser(userResult));
+  if (isTryError(validationResult)) {
+    console.error('User validation failed:', validationResult.message);
+    return null;
+  }
+  
+  // Process user
+  const processResult = await tryAsync(() => processUserData(validationResult));
+  if (isTryError(processResult)) {
+    console.error('Processing failed:', processResult.message);
+    return null;
+  }
+  
+  // Success path
+  console.log('User processed successfully');
+  return processResult;
+}
+
+// Alternative with explicit error handling
+async function processUserWithErrorHandling(userId: string) {
+  const userResult = await tryAsync(() => fetchUser(userId));
+  if (isTryError(userResult)) {
+    await logError(userResult);
+    await notifyAdmins(userResult);
+    return { success: false, error: userResult };
+  }
+  
+  const user = userResult; // TypeScript knows this is User
+  
+  // Continue processing...
+  return { success: true, data: user };
+}`}
+              </CodeBlock>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">Match Expression Pattern</h3>
+              <p className="text-slate-600 mb-3">
+                Create a match function for more functional-style error handling.
+              </p>
+              <CodeBlock
+                language="typescript"
+                title="Match Expression Pattern"
+                showLineNumbers={true}
+                className="mb-4"
+              >
+                {`// Match utility function
+function match<T, E extends TryError, R>(
+  result: TryResult<T, E>,
+  handlers: {
+    success: (value: T) => R;
+    error: (error: E) => R;
+  }
+): R {
+  if (isTryError(result)) {
+    return handlers.error(result);
+  }
+  return handlers.success(result);
+}
+
+// Usage
+async function handleUserFetch(userId: string) {
+  const result = await tryAsync(() => fetchUser(userId));
+  
+  return match(result, {
+    success: (user) => ({
+      status: 'success',
+      data: {
+        id: user.id,
+        name: user.name,
+        email: user.email
+      }
+    }),
+    error: (error) => ({
+      status: 'error',
+      message: error.message,
+      type: error.type,
+      retryable: isRetryableError(error)
+    })
+  });
+}
+
+// Advanced match with error type handling
+function matchWithErrorTypes<T, R>(
+  result: TryResult<T, TryError>,
+  handlers: {
+    success: (value: T) => R;
+    validationError?: (error: TryError) => R;
+    networkError?: (error: TryError) => R;
+    authError?: (error: TryError) => R;
+    defaultError: (error: TryError) => R;
+  }
+): R {
+  if (isTryError(result)) {
+    if (hasErrorType(result, 'ValidationError') && handlers.validationError) {
+      return handlers.validationError(result);
+    }
+    if (hasErrorType(result, 'NetworkError') && handlers.networkError) {
+      return handlers.networkError(result);
+    }
+    if (hasErrorType(result, 'AuthenticationError') && handlers.authError) {
+      return handlers.authError(result);
+    }
+    return handlers.defaultError(result);
+  }
+  return handlers.success(result);
+}`}
+              </CodeBlock>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">Chain Pattern</h3>
+              <p className="text-slate-600 mb-3">
+                Chain operations while preserving error information.
+              </p>
+              <CodeBlock
+                language="typescript"
+                title="Chain Pattern"
+                showLineNumbers={true}
+                className="mb-4"
+              >
+                {`import { mapResult, flatMapResult } from 'try-error';
+
+// Chain transformations
+async function processUserChain(userId: string) {
+  const userResult = await tryAsync(() => fetchUser(userId));
+  
+  // Transform user to profile data
+  const profileResult = mapResult(userResult, user => ({
+    id: user.id,
+    displayName: \`\${user.firstName} \${user.lastName}\`,
+    avatar: user.avatarUrl,
+    isActive: user.status === 'active'
+  }));
+  
+  // Chain dependent operation
+  const enrichedResult = await (async () => {
+    if (isTryError(profileResult)) {
+      return profileResult;
+    }
+    
+    return tryAsync(() => enrichProfile(profileResult));
+  })();
+  
+  return enrichedResult;
+}
+
+// Using flatMapResult for cleaner chaining
+async function processUserFlatMap(userId: string) {
+  const userResult = await tryAsync(() => fetchUser(userId));
+  
+  const profileResult = flatMapResult(userResult, user =>
+    tryAsync(() => createProfile(user))
+  );
+  
+  const enrichedResult = flatMapResult(profileResult, profile =>
+    tryAsync(() => enrichProfile(profile))
+  );
+  
+  return enrichedResult;
+}
+
+// Pipeline pattern
+async function processUserPipeline(userId: string) {
+  return tryAsync(() => fetchUser(userId))
+    .then(result => flatMapResult(result, user =>
+      tryAsync(() => validateUser(user))
+    ))
+    .then(result => flatMapResult(result, user =>
+      tryAsync(() => enrichUser(user))
+    ))
+    .then(result => flatMapResult(result, user =>
+      tryAsync(() => saveUser(user))
+    ));
+}`}
+              </CodeBlock>
+            </div>
+          </div>
+        </section>
+
+        {/* Error Recovery */}
+        <section>
+          <h2 className="text-2xl font-semibold text-slate-900 mb-4">
+            Error Recovery Strategies
+          </h2>
+
+          <p className="text-slate-600 mb-4">
+            Different approaches for recovering from errors and providing fallback behavior.
+          </p>
+
+          <div className="space-y-6">
+            <div>
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">Fallback Values</h3>
+              <CodeBlock
+                language="typescript"
+                title="Fallback Value Strategies"
+                showLineNumbers={true}
+                className="mb-4"
+              >
+                {`import { unwrapOr } from 'try-error';
+
+// Simple fallback
+async function getUserWithFallback(userId: string) {
+  const result = await tryAsync(() => fetchUser(userId));
+  
+  // Provide default user if fetch fails
+  return unwrapOr(result, {
+    id: userId,
+    name: 'Unknown User',
+    email: 'unknown@example.com',
+    status: 'inactive'
+  });
+}
+
+// Conditional fallback
+function getUserOrGuest(userId: string) {
+  const result = trySync(() => getCachedUser(userId));
+  
+  if (isTryError(result)) {
+    if (hasErrorType(result, 'NotFoundError')) {
+      return createGuestUser();
+    }
+    // For other errors, return null
+    return null;
+  }
+  
+  return result;
+}
+
+// Computed fallback
+async function getUserWithComputedFallback(userId: string) {
+  const result = await tryAsync(() => fetchUser(userId));
+  
+  if (isTryError(result)) {
+    console.warn(\`Failed to fetch user \${userId}:`, result.message);
+    
+    // Try to get from cache
+    const cacheResult = await tryAsync(() => getCachedUser(userId));
+    if (!isTryError(cacheResult)) {
+      return cacheResult;
+    }
+    
+    // Create minimal user
+    return {
+      id: userId,
+      name: 'User',
+      email: '',
+      status: 'unknown'
+    };
+  }
+  
+  return result;
+}`}
+              </CodeBlock>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">Retry Strategies</h3>
+              <CodeBlock
+                language="typescript"
+                title="Retry Strategies"
+                showLineNumbers={true}
+                className="mb-4"
+              >
+                {`// Simple retry
+async function fetchUserWithRetry(userId: string, maxAttempts = 3) {
+  let lastError: TryError;
+  
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    const result = await tryAsync(() => fetchUser(userId));
+    
+    if (!isTryError(result)) {
+      return result;
+    }
+    
+    lastError = result;
+    
+    // Don't retry on certain error types
+    if (hasErrorType(result, 'ValidationError') || 
+        hasErrorType(result, 'AuthenticationError')) {
+      break;
+    }
+    
+    // Wait before retry
+    if (attempt < maxAttempts) {
+      await sleep(1000 * attempt); // Exponential backoff
+    }
+  }
+  
+  return lastError!;
+}
+
+// Conditional retry
+async function fetchWithConditionalRetry(userId: string) {
+  const result = await tryAsync(() => fetchUser(userId));
+  
+  if (isTryError(result)) {
+    // Only retry network errors
+    if (hasErrorType(result, 'NetworkError')) {
+      console.log('Network error, retrying...');
+      return tryAsync(() => fetchUser(userId));
+    }
+    
+    // Don't retry other errors
+    return result;
+  }
+  
+  return result;
+}
+
+// Multiple fallback sources
+async function fetchUserMultiSource(userId: string) {
+  // Try primary source
+  const primaryResult = await tryAsync(() => fetchUserFromPrimary(userId));
+  if (!isTryError(primaryResult)) {
+    return primaryResult;
+  }
+  
+  // Try secondary source
+  const secondaryResult = await tryAsync(() => fetchUserFromSecondary(userId));
+  if (!isTryError(secondaryResult)) {
+    return secondaryResult;
+  }
+  
+  // Try cache
+  const cacheResult = await tryAsync(() => fetchUserFromCache(userId));
+  if (!isTryError(cacheResult)) {
+    return cacheResult;
+  }
+  
+  // All sources failed
+  return primaryResult; // Return the first error
+}`}
+              </CodeBlock>
+            </div>
+          </div>
+        </section>
+
+        {/* Best Practices */}
+        <section>
+          <h2 className="text-2xl font-semibold text-slate-900 mb-4">
+            Best Practices
+          </h2>
+
+          <div className="space-y-4">
+            <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+              <h4 className="font-semibold text-green-800 mb-2">✅ Do</h4>
+              <ul className="space-y-1 text-green-700 text-sm">
+                <li>• Always use type guards to narrow union types</li>
+                <li>• Handle errors explicitly rather than ignoring them</li>
+                <li>• Use early returns for cleaner error handling</li>
+                <li>• Provide meaningful fallback values when appropriate</li>
+                <li>• Log errors with sufficient context for debugging</li>
+                <li>• Use specific error type guards for targeted handling</li>
+                <li>• Chain operations using flatMapResult for dependent calls</li>
+              </ul>
+            </div>
+
+            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+              <h4 className="font-semibold text-red-800 mb-2">❌ Don't</h4>
+              <ul className="space-y-1 text-red-700 text-sm">
+                <li>• Access properties without type guards</li>
+                <li>• Ignore errors or fail silently</li>
+                <li>• Use generic error handling for all error types</li>
+                <li>• Retry operations that will never succeed</li>
+                <li>• Create deeply nested if/else chains</li>
+                <li>• Mix try/catch with try-error patterns</li>
+                <li>• Return undefined or null instead of proper error handling</li>
+              </ul>
+            </div>
+
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+              <h4 className="font-semibold text-yellow-800 mb-2">💡 Tips</h4>
+              <ul className="space-y-1 text-yellow-700 text-sm">
+                <li>• Use match expressions for complex error handling logic</li>
+                <li>• Consider creating domain-specific error handling utilities</li>
+                <li>• Use mapResult for transforming successful values</li>
+                <li>• Implement circuit breaker patterns for external services</li>
+                <li>• Create error recovery strategies based on error types</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        {/* Related Pages */}
         <section>
           <h2 className="text-2xl font-semibold text-slate-900 mb-4">
             Related Pages
@@ -48,15 +661,15 @@ export default function SuccessVsErrorPage() {
             </div>
 
             <div className="border border-slate-200 rounded-lg p-4">
-              <h3 className="font-semibold text-slate-900 mb-2">Quick Start</h3>
+              <h3 className="font-semibold text-slate-900 mb-2">Utilities API</h3>
               <p className="text-slate-600 text-sm mb-3">
-                Get started with basic try-error patterns
+                Type guards, transformers, and utility functions
               </p>
               <a
-                href="/docs/quick-start"
+                href="/docs/api/utils"
                 className="text-blue-600 hover:text-blue-800 text-sm font-medium"
               >
-                Get Started →
+                View Utils API →
               </a>
             </div>
           </div>
