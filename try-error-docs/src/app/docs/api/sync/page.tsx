@@ -1,3 +1,5 @@
+import { CodeBlock } from "../../../../components/EnhancedCodeBlock";
+
 export default function SyncAPIPage() {
   return (
     <div className="max-w-4xl mx-auto py-8 px-6">
@@ -17,11 +19,13 @@ export default function SyncAPIPage() {
             trySync
           </h2>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`function trySync<T>(fn: () => T): TryResult<T, TryError>`}</code>
-            </pre>
-          </div>
+          <CodeBlock
+            language="typescript"
+            title="Function Signature"
+            className="mb-4"
+          >
+            {`function trySync<T>(fn: () => T): TryResult<T, TryError>`}
+          </CodeBlock>
 
           <p className="text-slate-600 mb-4">
             Executes a synchronous function and returns either the result or a
@@ -56,9 +60,13 @@ export default function SyncAPIPage() {
             Examples
           </h3>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`import { trySync, isTryError } from 'try-error';
+          <CodeBlock
+            language="typescript"
+            title="trySync Examples"
+            showLineNumbers={true}
+            className="mb-4"
+          >
+            {`import { trySync, isTryError } from 'try-error';
 
 // JSON parsing
 const parseResult = trySync(() => JSON.parse('{"name": "John"}'));
@@ -87,9 +95,8 @@ const numberResult = trySync(() => {
   const num = parseInt(value, 10);
   if (isNaN(num)) throw new Error('Invalid number');
   return num;
-});`}</code>
-            </pre>
-          </div>
+});`}
+          </CodeBlock>
         </section>
 
         {/* Type Guards */}
@@ -102,20 +109,25 @@ const numberResult = trySync(() => {
             isTryError
           </h3>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`function isTryError(value: unknown): value is TryError`}</code>
-            </pre>
-          </div>
+          <CodeBlock
+            language="typescript"
+            title="isTryError Signature"
+            className="mb-4"
+          >
+            {`function isTryError(value: unknown): value is TryError`}
+          </CodeBlock>
 
           <p className="text-slate-600 mb-4">
             Type guard function to check if a value is a TryError. This provides
             type narrowing in TypeScript.
           </p>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`const result = trySync(() => JSON.parse(jsonString));
+          <CodeBlock
+            language="typescript"
+            title="isTryError Usage"
+            className="mb-4"
+          >
+            {`const result = trySync(() => JSON.parse(jsonString));
 
 if (isTryError(result)) {
   // TypeScript knows result is TryError here
@@ -125,28 +137,32 @@ if (isTryError(result)) {
 } else {
   // TypeScript knows result is the parsed value here
   console.log(result.someProperty);
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
 
           <h3 className="text-lg font-semibold text-slate-900 mb-3">
             isTrySuccess
           </h3>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`function isTrySuccess<T>(value: TryResult<T, TryError>): value is T`}</code>
-            </pre>
-          </div>
+          <CodeBlock
+            language="typescript"
+            title="isTrySuccess Signature"
+            className="mb-4"
+          >
+            {`function isTrySuccess<T>(value: TryResult<T, TryError>): value is T`}
+          </CodeBlock>
 
           <p className="text-slate-600 mb-4">
             Type guard function to check if a value is a successful result (not
             a TryError).
           </p>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`const result = trySync(() => JSON.parse(jsonString));
+          <CodeBlock
+            language="typescript"
+            title="isTrySuccess Usage"
+            className="mb-4"
+          >
+            {`const result = trySync(() => JSON.parse(jsonString));
 
 if (isTrySuccess(result)) {
   // TypeScript knows result is the parsed value here
@@ -154,9 +170,8 @@ if (isTrySuccess(result)) {
 } else {
   // TypeScript knows result is TryError here
   console.error('Error:', result.message);
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
         </section>
 
         {/* Common Patterns */}
@@ -169,26 +184,31 @@ if (isTrySuccess(result)) {
             Default Values
           </h3>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`// Provide default value on error
+          <CodeBlock
+            language="typescript"
+            title="Default Value Patterns"
+            className="mb-4"
+          >
+            {`// Provide default value on error
 function parseConfigWithDefault(jsonString: string) {
   const result = trySync(() => JSON.parse(jsonString));
   return isTryError(result) ? { defaultConfig: true } : result;
 }
 
 // Using ternary operator
-const config = isTryError(parseResult) ? defaultConfig : parseResult;`}</code>
-            </pre>
-          </div>
+const config = isTryError(parseResult) ? defaultConfig : parseResult;`}
+          </CodeBlock>
 
           <h3 className="text-lg font-semibold text-slate-900 mb-3">
             Error Transformation
           </h3>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`function parseWithCustomError(jsonString: string) {
+          <CodeBlock
+            language="typescript"
+            title="Error Transformation"
+            className="mb-4"
+          >
+            {`function parseWithCustomError(jsonString: string) {
   const result = trySync(() => JSON.parse(jsonString));
   
   if (isTryError(result)) {
@@ -200,17 +220,19 @@ const config = isTryError(parseResult) ? defaultConfig : parseResult;`}</code>
   }
   
   return result;
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
 
           <h3 className="text-lg font-semibold text-slate-900 mb-3">
             Chaining Operations
           </h3>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`function processData(input: string) {
+          <CodeBlock
+            language="typescript"
+            title="Chaining Operations"
+            className="mb-4"
+          >
+            {`function processData(input: string) {
   // Parse JSON
   const parseResult = trySync(() => JSON.parse(input));
   if (isTryError(parseResult)) return parseResult;
@@ -222,17 +244,19 @@ const config = isTryError(parseResult) ? defaultConfig : parseResult;`}</code>
   // Transform data
   const transformResult = trySync(() => transformData(validateResult));
   return transformResult;
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
 
           <h3 className="text-lg font-semibold text-slate-900 mb-3">
             Multiple Operations
           </h3>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`function processMultipleInputs(inputs: string[]) {
+          <CodeBlock
+            language="typescript"
+            title="Processing Multiple Inputs"
+            className="mb-4"
+          >
+            {`function processMultipleInputs(inputs: string[]) {
   const results = [];
   const errors = [];
   
@@ -246,9 +270,8 @@ const config = isTryError(parseResult) ? defaultConfig : parseResult;`}</code>
   }
   
   return { results, errors };
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
         </section>
 
         {/* Error Handling Best Practices */}
@@ -300,9 +323,13 @@ const config = isTryError(parseResult) ? defaultConfig : parseResult;`}</code>
             </p>
           </div>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`// Performance comparison
+          <CodeBlock
+            language="typescript"
+            title="Performance Comparison"
+            showLineNumbers={true}
+            className="mb-4"
+          >
+            {`// Performance comparison
 console.time('trySync');
 for (let i = 0; i < 1000000; i++) {
   const result = trySync(() => JSON.parse('{"test": true}'));
@@ -321,9 +348,8 @@ for (let i = 0; i < 1000000; i++) {
     // Handle error
   }
 }
-console.timeEnd('try/catch'); // ~50ms (same for success cases)`}</code>
-            </pre>
-          </div>
+console.timeEnd('try/catch'); // ~50ms (same for success cases)`}
+          </CodeBlock>
         </section>
 
         {/* Related APIs */}
