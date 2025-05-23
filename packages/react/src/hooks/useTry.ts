@@ -6,7 +6,6 @@ import {
   tryAsync,
   trySync,
   isTryError,
-  TryResult,
   TryError,
   createError,
 } from "try-error";
@@ -224,7 +223,7 @@ export function useTrySync<T>(
         isError: false,
       });
     }
-  }, [syncFn, resetOnExecute]);
+  }, [syncFn, resetOnExecute, ...deps]);
 
   const reset = useCallback(() => {
     setState({
