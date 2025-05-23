@@ -13,6 +13,39 @@ export default function ConfigurationPage() {
         </p>
       </div>
 
+      {/* When is configuration needed */}
+      <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
+        <h2 className="text-lg font-semibold text-blue-900 mb-3">
+          💡 Do I need to configure try-error?
+        </h2>
+        <div className="space-y-3">
+          <p className="text-blue-800 text-sm">
+            <strong>Short answer:</strong> No! try-error works perfectly out of
+            the box without any configuration.
+          </p>
+          <p className="text-blue-700 text-sm">
+            Configuration is <strong>optional</strong> and only needed when you
+            want to:
+          </p>
+          <ul className="text-blue-700 text-sm space-y-1 ml-4">
+            <li>
+              • Optimize performance for production (disable stack traces, etc.)
+            </li>
+            <li>• Set up error monitoring and reporting</li>
+            <li>• Customize error behavior for your specific needs</li>
+            <li>• Use environment-specific settings</li>
+          </ul>
+          <div className="bg-blue-100 border border-blue-300 rounded-lg p-3 mt-3">
+            <p className="text-blue-800 text-sm">
+              <strong>Getting started?</strong> Just import and use{" "}
+              <code>trySync()</code>, <code>tryAsync()</code>, and{" "}
+              <code>createTryError()</code> directly. Come back here when you
+              need customization!
+            </p>
+          </div>
+        </div>
+      </div>
+
       <div className="space-y-8">
         {/* Quick Setup */}
         <section>

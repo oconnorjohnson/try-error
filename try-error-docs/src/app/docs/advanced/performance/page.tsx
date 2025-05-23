@@ -171,6 +171,50 @@ const errorPool = new ErrorPool();`}
             of projects.
           </p>
 
+          {/* When is initialization needed */}
+          <div className="bg-amber-50 border border-amber-200 rounded-lg p-6 mb-8">
+            <h3 className="text-lg font-semibold text-amber-900 mb-3">
+              🤔 When is initialization necessary?
+            </h3>
+            <div className="space-y-4">
+              <div>
+                <h4 className="font-semibold text-amber-800 mb-2">
+                  ✅ Initialization IS needed when:
+                </h4>
+                <ul className="text-amber-700 text-sm space-y-1 ml-4">
+                  <li>
+                    • You want to customize error behavior (stack traces,
+                    logging, etc.)
+                  </li>
+                  <li>• You need performance optimizations for production</li>
+                  <li>• You want to set up error monitoring/reporting</li>
+                  <li>• You need environment-specific configurations</li>
+                  <li>• You want to use the setup utilities for convenience</li>
+                </ul>
+              </div>
+              <div>
+                <h4 className="font-semibold text-amber-800 mb-2">
+                  ❌ Initialization is NOT needed when:
+                </h4>
+                <ul className="text-amber-700 text-sm space-y-1 ml-4">
+                  <li>
+                    • You're just using basic <code>trySync()</code>,{" "}
+                    <code>tryAsync()</code>, and <code>createTryError()</code>
+                  </li>
+                  <li>• You're happy with the default behavior</li>
+                  <li>• You're prototyping or in early development</li>
+                </ul>
+              </div>
+              <div className="bg-amber-100 border border-amber-300 rounded-lg p-3 mt-4">
+                <p className="text-amber-800 text-sm">
+                  <strong>TL;DR:</strong> try-error works out of the box without
+                  any setup. Initialization is only needed when you want to
+                  customize its behavior or optimize for production.
+                </p>
+              </div>
+            </div>
+          </div>
+
           {/* Quick Setup */}
           <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-6 mb-8">
             <h3 className="text-lg font-semibold text-blue-900 mb-3">
