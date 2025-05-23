@@ -16,6 +16,7 @@ import {
   Zap,
   Shield,
 } from "lucide-react";
+import { CodeBlock } from "../../components/EnhancedCodeBlock";
 
 export default function DocsIntroduction() {
   return (
@@ -163,7 +164,10 @@ export default function DocsIntroduction() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <pre className="bg-muted p-4 rounded-md text-sm overflow-x-auto">
+              <CodeBlock
+                language="typescript"
+                title="Traditional Error Handling"
+              >
                 {`try {
   const response = await fetch("/api/user");
   const user = await response.json();
@@ -172,7 +176,7 @@ export default function DocsIntroduction() {
   console.error("Something failed:", error);
   return null;
 }`}
-              </pre>
+              </CodeBlock>
               <div className="mt-3 text-sm text-muted-foreground">
                 Issues: Easy to forget, unclear error types, poor composability
               </div>
@@ -187,7 +191,7 @@ export default function DocsIntroduction() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <pre className="bg-muted p-4 rounded-md text-sm overflow-x-auto">
+              <CodeBlock language="typescript" title="try-error Approach">
                 {`const result = await tryAsync(async () => {
   const response = await fetch("/api/user");
   return response.json();
@@ -199,7 +203,7 @@ if (isTryError(result)) {
 }
 
 return result; // Type-safe success value`}
-              </pre>
+              </CodeBlock>
               <div className="mt-3 text-sm text-muted-foreground">
                 Benefits: Explicit, type-safe, composable, rich error context
               </div>
