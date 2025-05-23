@@ -116,6 +116,158 @@ setupTesting(); // ✨ Test-friendly configuration`}
             </div>
           </div>
 
+          {/* What happens under the hood */}
+          <div className="bg-slate-50 border border-slate-200 rounded-lg p-6 mb-6">
+            <h3 className="text-lg font-semibold text-slate-900 mb-3">
+              🔍 What happens under the hood?
+            </h3>
+            <p className="text-slate-600 mb-4">
+              Here's exactly what each setup function does when you call it:
+            </p>
+
+            <div className="space-y-4">
+              <div>
+                <h4 className="font-semibold text-slate-800 mb-2">
+                  setupNode()
+                </h4>
+                <CodeBlock
+                  language="typescript"
+                  title="What setupNode() actually does"
+                  showLineNumbers={true}
+                  className="mb-2"
+                >
+                  {`// Equivalent manual configuration:
+configure({
+  captureStackTrace: process.env.NODE_ENV !== 'production',
+  stackTraceLimit: process.env.NODE_ENV === 'production' ? 5 : 50,
+  developmentMode: process.env.NODE_ENV === 'development',
+  
+  onError: (error) => {
+    if (process.env.NODE_ENV === 'production') {
+      // Minimal production logging
+      console.error(\`[ERROR] \${error.type}: \${error.message}\`);
+    } else {
+      // Detailed development logging
+      console.group(\`🚨 TryError: \${error.type}\`);
+      console.error('Message:', error.message);
+      console.error('Context:', error.context);
+      console.error('Stack:', error.stack);
+      console.groupEnd();
+    }
+    return error;
+  },
+  
+  serializer: (error) => ({
+    type: error.type,
+    message: error.message,
+    timestamp: error.timestamp,
+    ...(process.env.NODE_ENV === 'development' && {
+      context: error.context,
+      stack: error.stack
+    })
+  })
+});`}
+                </CodeBlock>
+              </div>
+
+              <div>
+                <h4 className="font-semibold text-slate-800 mb-2">
+                  setupReact()
+                </h4>
+                <CodeBlock
+                  language="typescript"
+                  title="What setupReact() actually does"
+                  showLineNumbers={true}
+                  className="mb-2"
+                >
+                  {`// Equivalent manual configuration:
+configure({
+  captureStackTrace: import.meta.env.DEV, // Vite
+  stackTraceLimit: import.meta.env.PROD ? 3 : 20,
+  developmentMode: import.meta.env.DEV,
+  
+  onError: (error) => {
+    if (import.meta.env.PROD) {
+      // Send to analytics in production
+      window.gtag?.('event', 'exception', {
+        description: \`\${error.type}: \${error.message}\`,
+        fatal: false
+      });
+    } else {
+      // Development console logging
+      console.group(\`🚨 TryError: \${error.type}\`);
+      console.error('Message:', error.message);
+      console.error('Context:', error.context);
+      console.groupEnd();
+    }
+    return error;
+  },
+  
+  serializer: (error) => ({
+    type: error.type,
+    message: error.message,
+    url: window.location.href,
+    userAgent: navigator.userAgent,
+    timestamp: error.timestamp
+  })
+});`}
+                </CodeBlock>
+              </div>
+
+              <div>
+                <h4 className="font-semibold text-slate-800 mb-2">
+                  setupPerformance()
+                </h4>
+                <CodeBlock
+                  language="typescript"
+                  title="What setupPerformance() actually does"
+                  showLineNumbers={true}
+                  className="mb-2"
+                >
+                  {`// Equivalent manual configuration:
+configure({
+  captureStackTrace: false,        // Disabled for max performance
+  stackTraceLimit: 0,             // No stack traces
+  developmentMode: false,         // Production mode
+  
+  onError: (error) => {
+    // Minimal logging only
+    console.error(\`Error: \${error.type}\`);
+    return error;
+  },
+  
+  serializer: (error) => ({
+    type: error.type,
+    message: error.message,
+    timestamp: error.timestamp
+    // No context or stack for performance
+  })
+});
+
+// Also configures performance optimizations:
+configurePerformance({
+  errorCreation: {
+    cacheConstructors: true,
+    lazyStackTrace: true,
+    objectPooling: true,
+    poolSize: 100
+  },
+  contextCapture: {
+    maxContextSize: 1024 * 5, // 5KB limit
+    deepClone: false,
+    timeout: 50
+  },
+  memory: {
+    maxErrorHistory: 50,
+    useWeakRefs: true,
+    gcHints: true
+  }
+});`}
+                </CodeBlock>
+              </div>
+            </div>
+          </div>
+
           <div className="space-y-6">
             <div>
               <h3 className="text-lg font-semibold text-slate-900 mb-3">
@@ -190,6 +342,312 @@ const setupMyApp = createCustomSetup({
 setupMyApp(); // Uses your defaults
 setupMyApp({ developmentMode: true }); // Override specific options`}
               </CodeBlock>
+            </div>
+          </div>
+        </section>
+
+        {/* Manual Configuration Guide */}
+        <section>
+          <h2 className="text-2xl font-semibold text-slate-900 mb-4">
+            Manual Configuration Guide
+          </h2>
+
+          <p className="text-slate-600 mb-4">
+            Want complete control? Here's how to configure try-error manually
+            with all available options.
+          </p>
+
+          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+            <h3 className="font-semibold text-yellow-800 mb-2">
+              💡 When to use manual configuration
+            </h3>
+            <ul className="text-yellow-700 text-sm space-y-1">
+              <li>
+                • You need very specific behavior not covered by setup utilities
+              </li>
+              <li>
+                • You're integrating with custom monitoring/logging systems
+              </li>
+              <li>• You want to understand exactly what's happening</li>
+              <li>
+                • You're building a library that uses try-error internally
+              </li>
+            </ul>
+          </div>
+
+          <div className="space-y-6">
+            <div>
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">
+                Complete Configuration Interface
+              </h3>
+              <CodeBlock
+                language="typescript"
+                title="TryErrorConfig Interface"
+                showLineNumbers={true}
+                className="mb-3"
+              >
+                {`interface TryErrorConfig {
+  /**
+   * Whether to capture stack traces (expensive operation)
+   * @default true in development, false in production
+   */
+  captureStackTrace?: boolean;
+
+  /**
+   * Maximum stack trace depth to capture
+   * @default 10
+   */
+  stackTraceLimit?: number;
+
+  /**
+   * Include source location in errors
+   * @default true
+   */
+  includeSource?: boolean;
+
+  /**
+   * Default error type for untyped errors
+   * @default "Error"
+   */
+  defaultErrorType?: string;
+
+  /**
+   * Enable development mode features (verbose logging, etc.)
+   * @default false
+   */
+  developmentMode?: boolean;
+
+  /**
+   * Custom error serialization function
+   * Called when converting errors to JSON or for logging
+   */
+  serializer?: (error: TryError) => Record<string, unknown>;
+
+  /**
+   * Global error transformation hook
+   * Called for every error created, allows modification
+   */
+  onError?: (error: TryError) => TryError;
+}`}
+              </CodeBlock>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">
+                Step-by-Step Manual Setup
+              </h3>
+              <CodeBlock
+                language="typescript"
+                title="Manual Configuration Example"
+                showLineNumbers={true}
+                className="mb-3"
+              >
+                {`import { configure } from 'try-error';
+
+// Step 1: Basic configuration
+configure({
+  // Performance settings
+  captureStackTrace: process.env.NODE_ENV !== 'production',
+  stackTraceLimit: process.env.NODE_ENV === 'production' ? 5 : 50,
+  includeSource: true,
+  
+  // Behavior settings
+  defaultErrorType: 'ApplicationError',
+  developmentMode: process.env.NODE_ENV === 'development',
+  
+  // Custom serialization for logging/monitoring
+  serializer: (error) => {
+    const base = {
+      type: error.type,
+      message: error.message,
+      timestamp: error.timestamp,
+      source: error.source
+    };
+    
+    // Include sensitive data only in development
+    if (process.env.NODE_ENV === 'development') {
+      return {
+        ...base,
+        context: error.context,
+        stack: error.stack,
+        cause: error.cause
+      };
+    }
+    
+    // Production: minimal data
+    return base;
+  },
+  
+  // Global error handling
+  onError: (error) => {
+    // Log to console
+    if (process.env.NODE_ENV === 'development') {
+      console.group(\`🚨 \${error.type}\`);
+      console.error('Message:', error.message);
+      console.error('Context:', error.context);
+      console.error('Stack:', error.stack);
+      console.groupEnd();
+    } else {
+      console.error(\`[\${error.type}] \${error.message}\`);
+    }
+    
+    // Send to monitoring services
+    if (process.env.NODE_ENV === 'production') {
+      // Example integrations
+      sendToSentry(error);
+      sendToDatadog(error);
+      sendToNewRelic(error);
+    }
+    
+    // Analytics tracking
+    if (typeof window !== 'undefined' && window.gtag) {
+      window.gtag('event', 'exception', {
+        description: \`\${error.type}: \${error.message}\`,
+        fatal: false
+      });
+    }
+    
+    // Must return the error (can be modified)
+    return error;
+  }
+});`}
+              </CodeBlock>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">
+                Configuration Option Details
+              </h3>
+              <div className="space-y-4">
+                <div className="border border-slate-200 rounded-lg p-4">
+                  <h4 className="font-semibold text-slate-800 mb-2">
+                    captureStackTrace
+                  </h4>
+                  <p className="text-slate-600 text-sm mb-2">
+                    Controls whether stack traces are captured when errors are
+                    created.
+                  </p>
+                  <ul className="text-slate-600 text-sm space-y-1">
+                    <li>
+                      • <strong>true:</strong> Full stack traces (useful for
+                      debugging)
+                    </li>
+                    <li>
+                      • <strong>false:</strong> No stack traces (better
+                      performance)
+                    </li>
+                    <li>
+                      • <strong>Recommendation:</strong> true in development,
+                      false in production
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="border border-slate-200 rounded-lg p-4">
+                  <h4 className="font-semibold text-slate-800 mb-2">
+                    stackTraceLimit
+                  </h4>
+                  <p className="text-slate-600 text-sm mb-2">
+                    Maximum number of stack frames to capture.
+                  </p>
+                  <ul className="text-slate-600 text-sm space-y-1">
+                    <li>
+                      • <strong>Higher values:</strong> More detailed traces,
+                      slower performance
+                    </li>
+                    <li>
+                      • <strong>Lower values:</strong> Less detail, better
+                      performance
+                    </li>
+                    <li>
+                      • <strong>Recommendation:</strong> 50 in development, 5 in
+                      production
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="border border-slate-200 rounded-lg p-4">
+                  <h4 className="font-semibold text-slate-800 mb-2">
+                    serializer
+                  </h4>
+                  <p className="text-slate-600 text-sm mb-2">
+                    Function that converts TryError objects to plain objects for
+                    logging/JSON.
+                  </p>
+                  <CodeBlock
+                    language="typescript"
+                    title="Custom Serializer Example"
+                    showLineNumbers={true}
+                    className="mt-2"
+                  >
+                    {`serializer: (error) => ({
+  // Always include these
+  type: error.type,
+  message: error.message,
+  timestamp: error.timestamp,
+  
+  // Conditional fields
+  ...(error.context && { context: error.context }),
+  ...(error.source && { source: error.source }),
+  ...(error.stack && { stack: error.stack }),
+  
+  // Custom fields
+  severity: getSeverityLevel(error.type),
+  userId: getCurrentUserId(),
+  sessionId: getSessionId()
+})`}
+                  </CodeBlock>
+                </div>
+
+                <div className="border border-slate-200 rounded-lg p-4">
+                  <h4 className="font-semibold text-slate-800 mb-2">onError</h4>
+                  <p className="text-slate-600 text-sm mb-2">
+                    Global hook called for every error. Use for logging,
+                    monitoring, and analytics.
+                  </p>
+                  <CodeBlock
+                    language="typescript"
+                    title="Advanced onError Handler"
+                    showLineNumbers={true}
+                    className="mt-2"
+                  >
+                    {`onError: (error) => {
+  // Rate limiting to prevent spam
+  if (shouldRateLimit(error.type)) {
+    return error;
+  }
+  
+  // Error categorization
+  const severity = categorizeError(error);
+  
+  // Different handling based on severity
+  switch (severity) {
+    case 'critical':
+      sendToSlack(error);
+      sendToSentry(error);
+      break;
+    case 'warning':
+      sendToSentry(error);
+      break;
+    case 'info':
+      logToFile(error);
+      break;
+  }
+  
+  // Enrich error with additional context
+  return {
+    ...error,
+    context: {
+      ...error.context,
+      severity,
+      environment: process.env.NODE_ENV,
+      version: process.env.APP_VERSION
+    }
+  };
+}`}
+                  </CodeBlock>
+                </div>
+              </div>
             </div>
           </div>
         </section>
