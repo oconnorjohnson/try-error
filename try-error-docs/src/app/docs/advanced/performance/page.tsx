@@ -537,7 +537,7 @@ describe('Error Performance', () => {
 
         {/* Performance Checklist */}
         <section>
-          <h2 className="text-2xl font-semibent text-slate-900 mb-4">
+          <h2 className="text-2xl font-semibold text-slate-900 mb-4">
             Performance Checklist
           </h2>
 
