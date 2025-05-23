@@ -216,6 +216,25 @@ export function AppSidebar() {
     return cleanup;
   }, [cleanup]);
 
+  // Additional effect to ensure scroll restoration after route changes
+  useEffect(() => {
+    // Small delay to ensure the sidebar content has rendered after route change
+    const timer = setTimeout(() => {
+      if (scrollContainerRef.current) {
+        // Get the stored scroll position from localStorage directly as a fallback
+        const storedPosition = localStorage.getItem("sidebar-scroll-position");
+        if (storedPosition) {
+          const position = JSON.parse(storedPosition);
+          if (typeof position === "number" && position > 0) {
+            scrollContainerRef.current.scrollTop = position;
+          }
+        }
+      }
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, [pathname]); // Re-run when pathname changes
+
   return (
     <Sidebar>
       <SidebarHeader className="border-b px-6 py-4">
