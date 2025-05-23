@@ -137,3 +137,43 @@ We're now at 76% completion with 121+ code blocks updated! Nearly all the major 
 ## Remaining Work
 
 Only 6 pages remain, mostly reference documentation and advanced topics. The heavy lifting is done!
+
+## 📝 PLACEHOLDER PAGES NEEDING CONTENT
+
+The following pages currently have placeholder content and need comprehensive documentation:
+
+### **API Reference (2 pages)**
+
+- [ ] `/docs/api/errors` - Error creation API (createTryError, error factories, utilities)
+- [ ] `/docs/api/utils` - Utility functions (type guards, result transformers, helpers)
+
+### **Examples (1 page)**
+
+- [ ] `/docs/examples/real-world` - Real-world production examples and case studies
+
+### **Concepts (1 page)**
+
+- [ ] `/docs/concepts/success-vs-error` - Success vs error path handling, type narrowing
+
+### **Advanced Topics (2 pages)**
+
+- [ ] `/docs/advanced/custom-errors` - Custom error types, hierarchies, domain-specific errors
+- [ ] `/docs/advanced/factories` - Error factory patterns, composable builders
+
+### **Reference Documentation Status**
+
+- ✅ `/docs/reference/types` - Has comprehensive content (17 code blocks) - PARTIALLY MIGRATED
+- ✅ `/docs/reference/error-codes` - Has comprehensive content (9 code blocks) - NEEDS MIGRATION
+- ✅ `/docs/reference/configuration` - Has comprehensive content (12 code blocks) - NEEDS MIGRATION
+
+## 🎯 NEXT STEPS
+
+1. **Complete Code Block Migration** for reference pages with existing content
+2. **Create Content** for the 6 placeholder pages listed above
+3. **Add Enhanced Code Blocks** to new content as it's created
+
+## Content Creation Priority
+
+1. **High Priority**: API reference pages (errors, utils) - core functionality
+2. **Medium Priority**: Concepts (success-vs-error) - fundamental understanding
+3. **Lower Priority**: Advanced topics and real-world examples - specialized use cases
