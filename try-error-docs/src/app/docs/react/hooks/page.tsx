@@ -1,3 +1,5 @@
+import { CodeBlock } from "../../../../components/EnhancedCodeBlock";
+
 export default function ReactHooksPage() {
   return (
     <div className="max-w-4xl mx-auto py-8 px-6">
@@ -15,9 +17,12 @@ export default function ReactHooksPage() {
             useTryAsync
           </h2>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`function useTryAsync<T>(
+          <CodeBlock
+            language="typescript"
+            title="useTryAsync Hook Signature"
+            className="mb-4"
+          >
+            {`function useTryAsync<T>(
   asyncFn: () => Promise<T>,
   deps?: React.DependencyList
 ): {
@@ -25,9 +30,8 @@ export default function ReactHooksPage() {
   error: TryError | null;
   loading: boolean;
   refetch: () => void;
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
 
           <p className="text-slate-600 mb-4">
             Hook for handling asynchronous operations with automatic loading
@@ -36,9 +40,13 @@ export default function ReactHooksPage() {
 
           <h3 className="text-lg font-semibold text-slate-900 mb-3">Example</h3>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`import { useTryAsync } from '@try-error/react';
+          <CodeBlock
+            language="tsx"
+            title="useTryAsync Example"
+            showLineNumbers={true}
+            className="mb-4"
+          >
+            {`import { useTryAsync } from '@try-error/react';
 
 function UserProfile({ userId }: { userId: string }) {
   const { data: user, error, loading, refetch } = useTryAsync(
@@ -76,9 +84,8 @@ function UserProfile({ userId }: { userId: string }) {
       <button onClick={refetch}>Refresh</button>
     </div>
   );
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
 
           <h3 className="text-lg font-semibold text-slate-900 mb-3">
             Parameters
@@ -103,18 +110,20 @@ function UserProfile({ userId }: { userId: string }) {
             useTrySync
           </h2>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`function useTrySync<T>(
+          <CodeBlock
+            language="typescript"
+            title="useTrySync Hook Signature"
+            className="mb-4"
+          >
+            {`function useTrySync<T>(
   syncFn: () => T,
   deps?: React.DependencyList
 ): {
   data: T | null;
   error: TryError | null;
   execute: () => void;
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
 
           <p className="text-slate-600 mb-4">
             Hook for handling synchronous operations that might throw errors.
@@ -122,9 +131,13 @@ function UserProfile({ userId }: { userId: string }) {
 
           <h3 className="text-lg font-semibold text-slate-900 mb-3">Example</h3>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`import { useTrySync } from '@try-error/react';
+          <CodeBlock
+            language="tsx"
+            title="useTrySync Example"
+            showLineNumbers={true}
+            className="mb-4"
+          >
+            {`import { useTrySync } from '@try-error/react';
 
 function ConfigDisplay({ configString }: { configString: string }) {
   const { data: config, error, execute } = useTrySync(
@@ -146,9 +159,8 @@ function ConfigDisplay({ configString }: { configString: string }) {
       {JSON.stringify(config, null, 2)}
     </pre>
   );
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
         </section>
 
         {/* useTryMutation Hook */}
@@ -157,9 +169,12 @@ function ConfigDisplay({ configString }: { configString: string }) {
             useTryMutation
           </h2>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`function useTryMutation<T, TVariables = void>(
+          <CodeBlock
+            language="typescript"
+            title="useTryMutation Hook Signature"
+            className="mb-4"
+          >
+            {`function useTryMutation<T, TVariables = void>(
   mutationFn: (variables: TVariables) => Promise<T>
 ): {
   mutate: (variables: TVariables) => Promise<void>;
@@ -167,9 +182,8 @@ function ConfigDisplay({ configString }: { configString: string }) {
   error: TryError | null;
   loading: boolean;
   reset: () => void;
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
 
           <p className="text-slate-600 mb-4">
             Hook for handling mutations (create, update, delete operations) with
@@ -178,9 +192,13 @@ function ConfigDisplay({ configString }: { configString: string }) {
 
           <h3 className="text-lg font-semibold text-slate-900 mb-3">Example</h3>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`import { useTryMutation } from '@try-error/react';
+          <CodeBlock
+            language="tsx"
+            title="useTryMutation Example"
+            showLineNumbers={true}
+            className="mb-4"
+          >
+            {`import { useTryMutation } from '@try-error/react';
 
 function CreateUserForm() {
   const { mutate: createUser, loading, error, data } = useTryMutation(
@@ -218,9 +236,8 @@ function CreateUserForm() {
       {error && <p className="text-red-600">Error: {error.message}</p>}
     </form>
   );
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
         </section>
 
         {/* useTryCallback Hook */}
@@ -229,17 +246,19 @@ function CreateUserForm() {
             useTryCallback
           </h2>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`function useTryCallback<T extends (...args: any[]) => any>(
+          <CodeBlock
+            language="typescript"
+            title="useTryCallback Hook Signature"
+            className="mb-4"
+          >
+            {`function useTryCallback<T extends (...args: any[]) => any>(
   callback: T,
   deps: React.DependencyList
 ): T & {
   error: TryError | null;
   clearError: () => void;
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
 
           <p className="text-slate-600 mb-4">
             Hook that wraps a callback function with error handling, similar to
@@ -248,9 +267,13 @@ function CreateUserForm() {
 
           <h3 className="text-lg font-semibold text-slate-900 mb-3">Example</h3>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`import { useTryCallback } from '@try-error/react';
+          <CodeBlock
+            language="tsx"
+            title="useTryCallback Example"
+            showLineNumbers={true}
+            className="mb-4"
+          >
+            {`import { useTryCallback } from '@try-error/react';
 
 function FileUploader() {
   const handleFileUpload = useTryCallback(
@@ -290,9 +313,8 @@ function FileUploader() {
       )}
     </div>
   );
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
         </section>
 
         {/* Best Practices */}
