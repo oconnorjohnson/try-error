@@ -9,7 +9,10 @@ export function SimpleCounter() {
   const increment = () => {
     const result = trySync(() => {
       if (count >= 10) {
-        throw createError("LIMIT_EXCEEDED", "Counter cannot exceed 10");
+        throw createError({
+          type: "LIMIT_EXCEEDED",
+          message: "Counter cannot exceed 10",
+        });
       }
       return count + 1;
     });
@@ -25,7 +28,10 @@ export function SimpleCounter() {
   const decrement = () => {
     const result = trySync(() => {
       if (count <= 0) {
-        throw createError("LIMIT_EXCEEDED", "Counter cannot go below 0");
+        throw createError({
+          type: "LIMIT_EXCEEDED",
+          message: "Counter cannot go below 0",
+        });
       }
       return count - 1;
     });
