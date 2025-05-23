@@ -1,3 +1,5 @@
+import { InstallCommand, CodeBlock } from "@/components/EnhancedCodeBlock";
+
 export default function ReactInstallationPage() {
   return (
     <div className="max-w-4xl mx-auto py-8 px-6">
@@ -18,15 +20,20 @@ export default function ReactInstallationPage() {
             Package Installation
           </h2>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>
-                # Install the core library and React integration pnpm add
-                try-error @try-error/react # Or with npm npm install try-error
-                @try-error/react # Or with yarn yarn add try-error
-                @try-error/react
-              </code>
-            </pre>
+          <div className="space-y-4">
+            <div>
+              <h3 className="text-lg font-semibold text-slate-900 mb-2">
+                Core Library
+              </h3>
+              <InstallCommand packageName="try-error" className="mb-4" />
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold text-slate-900 mb-2">
+                React Integration (Optional)
+              </h3>
+              <InstallCommand packageName="@try-error/react" className="mb-4" />
+            </div>
           </div>
 
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
@@ -48,9 +55,13 @@ export default function ReactInstallationPage() {
             library:
           </p>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg">
-            <pre>
-              <code>{`import { useTryAsync, useTrySync } from '@try-error/react';
+          <CodeBlock
+            language="tsx"
+            title="UserProfile.tsx"
+            showLineNumbers={true}
+            className="mb-4"
+          >
+            {`import { useTryAsync, useTrySync } from '@try-error/react';
 import { tryAsync, isTryError } from 'try-error';
 
 function UserProfile({ userId }: { userId: string }) {
@@ -70,9 +81,8 @@ function UserProfile({ userId }: { userId: string }) {
       <p>{user.email}</p>
     </div>
   );
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
         </section>
 
         {/* TypeScript Configuration */}
@@ -89,9 +99,8 @@ function UserProfile({ userId }: { userId: string }) {
             includes:
           </p>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg">
-            <pre>
-              <code>{`{
+          <CodeBlock language="json" title="tsconfig.json" className="mb-4">
+            {`{
   "compilerOptions": {
     "strict": true,
     "jsx": "react-jsx",
@@ -101,9 +110,8 @@ function UserProfile({ userId }: { userId: string }) {
   "include": [
     "src/**/*"
   ]
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
         </section>
 
         {/* Error Boundary Integration */}
@@ -117,9 +125,13 @@ function UserProfile({ userId }: { userId: string }) {
             error handling:
           </p>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg">
-            <pre>
-              <code>{`import { ErrorBoundary } from 'react-error-boundary';
+          <CodeBlock
+            language="tsx"
+            title="App.tsx"
+            showLineNumbers={true}
+            className="mb-4"
+          >
+            {`import { ErrorBoundary } from 'react-error-boundary';
 import { TryErrorBoundary } from '@try-error/react';
 
 function App() {
@@ -136,9 +148,8 @@ function App() {
       <UserProfile userId="123" />
     </TryErrorBoundary>
   );
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
         </section>
 
         {/* Next Steps */}

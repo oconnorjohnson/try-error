@@ -1,3 +1,5 @@
+import { InstallCommand, CodeBlock } from "@/components/EnhancedCodeBlock";
+
 export default function InstallationPage() {
   return (
     <div className="max-w-4xl mx-auto py-8 px-6">
@@ -15,14 +17,7 @@ export default function InstallationPage() {
             Package Installation
           </h2>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>
-                # Using pnpm (recommended) pnpm add try-error # Using npm npm
-                install try-error # Using yarn yarn add try-error
-              </code>
-            </pre>
-          </div>
+          <InstallCommand packageName="try-error" className="mb-4" />
 
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
             <p className="text-blue-800">
@@ -46,17 +41,15 @@ export default function InstallationPage() {
             has strict mode enabled:
           </p>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg">
-            <pre>
-              <code>{`{
+          <CodeBlock language="json" title="tsconfig.json" className="mb-4">
+            {`{
   "compilerOptions": {
     "strict": true,
     "exactOptionalPropertyTypes": true,
     "noUncheckedIndexedAccess": true
   }
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
         </section>
 
         {/* Basic Usage */}
@@ -69,9 +62,13 @@ export default function InstallationPage() {
             Import the functions you need and start handling errors safely:
           </p>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg">
-            <pre>
-              <code>{`import { trySync, tryAsync, isTryError } from 'try-error';
+          <CodeBlock
+            language="typescript"
+            title="Basic Example"
+            showLineNumbers={true}
+            className="mb-4"
+          >
+            {`import { trySync, tryAsync, isTryError } from 'try-error';
 
 // Synchronous operations
 const result = trySync(() => JSON.parse(jsonString));
@@ -87,9 +84,8 @@ if (isTryError(asyncResult)) {
   console.error('Fetch failed:', asyncResult.message);
 } else {
   const data = await asyncResult.json();
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
         </section>
 
         {/* Next Steps */}
