@@ -1,3 +1,8 @@
+import {
+  CodeBlock,
+  InstallCommand,
+} from "../../../../components/EnhancedCodeBlock";
+
 export default function MigrationGuidesPage() {
   return (
     <div className="max-w-4xl mx-auto py-8 px-6">
@@ -27,9 +32,12 @@ export default function MigrationGuidesPage() {
             <h3 className="font-semibold text-slate-900 mb-2">
               Before (try/catch)
             </h3>
-            <div className="bg-slate-900 text-slate-100 p-4 rounded-lg">
-              <pre>
-                <code>{`async function fetchUser(id: string): Promise<User | null> {
+            <CodeBlock
+              language="typescript"
+              title="Traditional try/catch Approach"
+              showLineNumbers={true}
+            >
+              {`async function fetchUser(id: string): Promise<User | null> {
   try {
     const response = await fetch(\`/api/users/\${id}\`);
     if (!response.ok) {
@@ -47,18 +55,20 @@ const user = await fetchUser('123');
 if (!user) {
   // Can't tell if user doesn't exist or if there was an error
   console.log('No user found or error occurred');
-}`}</code>
-              </pre>
-            </div>
+}`}
+            </CodeBlock>
           </div>
 
           <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
             <h3 className="font-semibold text-green-800 mb-2">
               After (try-error)
             </h3>
-            <div className="bg-slate-900 text-slate-100 p-4 rounded-lg">
-              <pre>
-                <code>{`import { tryAsync, isTryError } from 'try-error';
+            <CodeBlock
+              language="typescript"
+              title="try-error Approach"
+              showLineNumbers={true}
+            >
+              {`import { tryAsync, isTryError } from 'try-error';
 
 async function fetchUser(id: string): Promise<TryResult<User, TryError>> {
   return tryAsync(async () => {
@@ -78,9 +88,8 @@ if (isTryError(result)) {
   console.log('Error details:', result.context);
 } else {
   console.log('User found:', result.name);
-}`}</code>
-              </pre>
-            </div>
+}`}
+            </CodeBlock>
           </div>
 
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
@@ -112,9 +121,12 @@ if (isTryError(result)) {
             <h3 className="font-semibold text-slate-900 mb-2">
               Before (neverthrow)
             </h3>
-            <div className="bg-slate-900 text-slate-100 p-4 rounded-lg">
-              <pre>
-                <code>{`import { Result, ok, err } from 'neverthrow';
+            <CodeBlock
+              language="typescript"
+              title="neverthrow Result Pattern"
+              showLineNumbers={true}
+            >
+              {`import { Result, ok, err } from 'neverthrow';
 
 async function fetchUser(id: string): Promise<Result<User, Error>> {
   try {
@@ -134,18 +146,20 @@ const result = await fetchUser('123');
 result.match(
   (user) => console.log('User:', user),
   (error) => console.error('Error:', error.message)
-);`}</code>
-              </pre>
-            </div>
+);`}
+            </CodeBlock>
           </div>
 
           <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
             <h3 className="font-semibold text-green-800 mb-2">
               After (try-error)
             </h3>
-            <div className="bg-slate-900 text-slate-100 p-4 rounded-lg">
-              <pre>
-                <code>{`import { tryAsync, isTryError } from 'try-error';
+            <CodeBlock
+              language="typescript"
+              title="try-error Equivalent"
+              showLineNumbers={true}
+            >
+              {`import { tryAsync, isTryError } from 'try-error';
 
 async function fetchUser(id: string): Promise<TryResult<User, TryError>> {
   return tryAsync(async () => {
@@ -163,9 +177,8 @@ if (isTryError(result)) {
   console.error('Error:', result.message);
 } else {
   console.log('User:', result);
-}`}</code>
-              </pre>
-            </div>
+}`}
+            </CodeBlock>
           </div>
 
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
@@ -197,9 +210,12 @@ if (isTryError(result)) {
             <h3 className="font-semibold text-slate-900 mb-2">
               Before (fp-ts)
             </h3>
-            <div className="bg-slate-900 text-slate-100 p-4 rounded-lg">
-              <pre>
-                <code>{`import { Either, left, right, fold } from 'fp-ts/Either';
+            <CodeBlock
+              language="typescript"
+              title="fp-ts Either Pattern"
+              showLineNumbers={true}
+            >
+              {`import { Either, left, right, fold } from 'fp-ts/Either';
 import { pipe } from 'fp-ts/function';
 import { TaskEither, tryCatch } from 'fp-ts/TaskEither';
 
@@ -216,18 +232,16 @@ pipe(
     (error) => console.error('Error:', error.message),
     (user) => console.log('User:', user)
   )
-);`}</code>
-              </pre>
-            </div>
+);`}
+            </CodeBlock>
           </div>
 
           <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
             <h3 className="font-semibold text-green-800 mb-2">
               After (try-error)
             </h3>
-            <div className="bg-slate-900 text-slate-100 p-4 rounded-lg">
-              <pre>
-                <code>{`import { tryAsync, isTryError } from 'try-error';
+            <CodeBlock language="typescript" title="try-error Equivalent">
+              {`import { tryAsync, isTryError } from 'try-error';
 
 const fetchUser = (id: string) =>
   tryAsync(() => fetch(\`/api/users/\${id}\`).then(r => r.json()));
@@ -238,9 +252,8 @@ if (isTryError(result)) {
   console.error('Error:', result.message);
 } else {
   console.log('User:', result);
-}`}</code>
-              </pre>
-            </div>
+}`}
+            </CodeBlock>
           </div>
         </section>
 
@@ -255,9 +268,7 @@ if (isTryError(result)) {
               <h3 className="font-semibold text-slate-900 mb-2">
                 1. Install try-error
               </h3>
-              <div className="bg-slate-900 text-slate-100 p-3 rounded">
-                <code>pnpm add try-error</code>
-              </div>
+              <InstallCommand packageName="try-error" />
             </div>
 
             <div className="border border-slate-200 rounded-lg p-4">
@@ -289,13 +300,16 @@ if (isTryError(result)) {
               <h3 className="font-semibold text-slate-900 mb-2">
                 4. Update Function Signatures
               </h3>
-              <div className="bg-slate-900 text-slate-100 p-3 rounded text-sm">
-                <code>{`// Before
+              <CodeBlock
+                language="typescript"
+                title="Function Signature Updates"
+              >
+                {`// Before
 function parseJson(str: string): any | null
 
 // After  
-function parseJson(str: string): TryResult<any, TryError>`}</code>
-              </div>
+function parseJson(str: string): TryResult<any, TryError>`}
+              </CodeBlock>
             </div>
 
             <div className="border border-slate-200 rounded-lg p-4">
@@ -335,27 +349,23 @@ function parseJson(str: string): TryResult<any, TryError>`}</code>
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
                   <h4 className="font-medium text-slate-700 mb-2">Before</h4>
-                  <div className="bg-slate-900 text-slate-100 p-3 rounded text-sm">
-                    <pre>
-                      <code>{`function findUser(id: string): User | null {
+                  <CodeBlock language="typescript" title="Null Return Pattern">
+                    {`function findUser(id: string): User | null {
   try {
     return database.findById(id);
   } catch {
     return null;
   }
-}`}</code>
-                    </pre>
-                  </div>
+}`}
+                  </CodeBlock>
                 </div>
                 <div>
                   <h4 className="font-medium text-slate-700 mb-2">After</h4>
-                  <div className="bg-slate-900 text-slate-100 p-3 rounded text-sm">
-                    <pre>
-                      <code>{`function findUser(id: string): TryResult<User, TryError> {
+                  <CodeBlock language="typescript" title="TryResult Pattern">
+                    {`function findUser(id: string): TryResult<User, TryError> {
   return trySync(() => database.findById(id));
-}`}</code>
-                    </pre>
-                  </div>
+}`}
+                  </CodeBlock>
                 </div>
               </div>
             </div>
@@ -367,28 +377,27 @@ function parseJson(str: string): TryResult<any, TryError>`}</code>
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
                   <h4 className="font-medium text-slate-700 mb-2">Before</h4>
-                  <div className="bg-slate-900 text-slate-100 p-3 rounded text-sm">
-                    <pre>
-                      <code>{`function saveUser(user: User): boolean {
+                  <CodeBlock
+                    language="typescript"
+                    title="Boolean Success Pattern"
+                  >
+                    {`function saveUser(user: User): boolean {
   try {
     database.save(user);
     return true;
   } catch {
     return false;
   }
-}`}</code>
-                    </pre>
-                  </div>
+}`}
+                  </CodeBlock>
                 </div>
                 <div>
                   <h4 className="font-medium text-slate-700 mb-2">After</h4>
-                  <div className="bg-slate-900 text-slate-100 p-3 rounded text-sm">
-                    <pre>
-                      <code>{`function saveUser(user: User): TryResult<void, TryError> {
+                  <CodeBlock language="typescript" title="TryResult Pattern">
+                    {`function saveUser(user: User): TryResult<void, TryError> {
   return trySync(() => database.save(user));
-}`}</code>
-                    </pre>
-                  </div>
+}`}
+                  </CodeBlock>
                 </div>
               </div>
             </div>
