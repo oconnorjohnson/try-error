@@ -1,3 +1,5 @@
+import { CodeBlock } from "../../../components/EnhancedCodeBlock";
+
 export default function QuickStartPage() {
   return (
     <div className="max-w-4xl mx-auto py-8 px-6">
@@ -20,9 +22,12 @@ export default function QuickStartPage() {
             for operations that might throw:
           </p>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`import { trySync, isTryError } from 'try-error';
+          <CodeBlock
+            language="typescript"
+            title="Synchronous Examples"
+            className="mb-4"
+          >
+            {`import { trySync, isTryError } from 'try-error';
 
 // JSON parsing
 const parseResult = trySync(() => JSON.parse(jsonString));
@@ -38,9 +43,8 @@ if (isTryError(fileResult)) {
   console.error('File read failed:', fileResult.message);
   return defaultConfig;
 }
-return JSON.parse(fileResult);`}</code>
-            </pre>
-          </div>
+return JSON.parse(fileResult);`}
+          </CodeBlock>
         </section>
 
         {/* Asynchronous Operations */}
@@ -54,9 +58,12 @@ return JSON.parse(fileResult);`}</code>
             for async operations:
           </p>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`import { tryAsync, isTryError } from 'try-error';
+          <CodeBlock
+            language="typescript"
+            title="Async Examples"
+            className="mb-4"
+          >
+            {`import { tryAsync, isTryError } from 'try-error';
 
 // API calls
 const fetchUser = async (id: string) => {
@@ -83,9 +90,8 @@ const saveUser = async (user: User) => {
     throw new Error('Failed to save user');
   }
   return result;
-};`}</code>
-            </pre>
-          </div>
+};`}
+          </CodeBlock>
         </section>
 
         {/* Error Handling Patterns */}
@@ -97,9 +103,12 @@ const saveUser = async (user: User) => {
           <h3 className="text-lg font-semibold text-slate-900 mb-3">
             Early Returns
           </h3>
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`function processData(input: string) {
+          <CodeBlock
+            language="typescript"
+            title="Early Return Pattern"
+            className="mb-4"
+          >
+            {`function processData(input: string) {
   const parseResult = trySync(() => JSON.parse(input));
   if (isTryError(parseResult)) {
     return { error: 'Invalid JSON', data: null };
@@ -111,16 +120,18 @@ const saveUser = async (user: User) => {
   }
   
   return { error: null, data: validateResult };
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
 
           <h3 className="text-lg font-semibold text-slate-900 mb-3">
             Default Values
           </h3>
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`function getConfig() {
+          <CodeBlock
+            language="typescript"
+            title="Default Values Pattern"
+            className="mb-4"
+          >
+            {`function getConfig() {
   const result = trySync(() => JSON.parse(configString));
   return isTryError(result) ? defaultConfig : result;
 }
@@ -129,16 +140,18 @@ const saveUser = async (user: User) => {
 async function getUserPreferences(userId: string) {
   const result = await tryAsync(() => fetchPreferences(userId));
   return isTryError(result) ? defaultPreferences : result;
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
 
           <h3 className="text-lg font-semibold text-slate-900 mb-3">
             Error Aggregation
           </h3>
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`async function validateForm(data: FormData) {
+          <CodeBlock
+            language="typescript"
+            title="Error Aggregation Pattern"
+            className="mb-4"
+          >
+            {`async function validateForm(data: FormData) {
   const errors: string[] = [];
   
   const emailResult = trySync(() => validateEmail(data.email));
@@ -152,9 +165,8 @@ async function getUserPreferences(userId: string) {
   }
   
   return errors.length > 0 ? { valid: false, errors } : { valid: true, errors: [] };
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
         </section>
 
         {/* Type Safety */}
@@ -168,9 +180,13 @@ async function getUserPreferences(userId: string) {
             inference:
           </p>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`// Return type is automatically inferred
+          <CodeBlock
+            language="typescript"
+            title="Type Safety Examples"
+            showLineNumbers={true}
+            className="mb-4"
+          >
+            {`// Return type is automatically inferred
 const result = trySync(() => JSON.parse(jsonString));
 // result: TryResult<any, TryError>
 
@@ -191,9 +207,8 @@ interface User {
 const userResult = trySync((): User => {
   return JSON.parse(userJson);
 });
-// userResult: TryResult<User, TryError>`}</code>
-            </pre>
-          </div>
+// userResult: TryResult<User, TryError>`}
+          </CodeBlock>
         </section>
 
         {/* Next Steps */}
