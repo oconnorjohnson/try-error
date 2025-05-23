@@ -68,3 +68,18 @@ export * from "./types";
 export * from "./hooks/useTry";
 export * from "./hooks/useTryCallback";
 export * from "./components/TryErrorBoundary";
+
+// Re-export specific types for convenience
+export type {
+  TryState,
+  TryHookReturn,
+  AsyncTryHookReturn,
+  FormTryHookReturn,
+  ReactTryError,
+  ReactErrorType,
+  TryReactConfig,
+  AsyncTryConfig,
+  FormTryConfig,
+  ErrorBoundaryProps,
+  ErrorBoundaryState,
+} from "./types";
