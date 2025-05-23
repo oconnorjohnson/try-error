@@ -20,12 +20,12 @@ Replace ALL code blocks across the entire try-error documentation with enhanced 
 - [x] `/docs/react/installation` - ✅ Already updated
 - [x] `/docs/demo/code-blocks` - ✅ Demo page
 - [x] `/docs/quick-start` - ✅ Just completed (6 code blocks)
+- [x] `/docs` (page.tsx) - ✅ Just completed (2 code blocks)
 
 ### 🔄 IN PROGRESS / TODO PAGES
 
 #### Core Documentation
 
-- [ ] `/docs` (page.tsx) - Main docs intro page
 - [ ] `/docs/migration` - Migration guide
 
 #### Concepts (4 pages)
@@ -75,7 +75,7 @@ Replace ALL code blocks across the entire try-error documentation with enhanced 
 
 1. **High Priority** (user-facing, frequently accessed):
 
-   - `/docs` (main intro)
+   - ✅ `/docs` (main intro) - COMPLETED
    - `/docs/concepts/philosophy`
    - `/docs/concepts/tryresult-vs-exceptions`
    - `/docs/examples/basic`
@@ -109,6 +109,6 @@ Based on grep search results: **100+ code blocks** across all pages
 ## Progress Tracking
 
 - Total Pages: ~25 pages
-- Completed: 4 pages (16%)
-- Remaining: 21 pages (84%)
+- Completed: 5 pages (20%)
+- Remaining: 20 pages (80%)
 - Estimated Code Blocks: 100+
