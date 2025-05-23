@@ -1,3 +1,5 @@
+import { CodeBlock } from "../../../components/EnhancedCodeBlock";
+
 export default function MigrationPage() {
   return (
     <div className="max-w-4xl mx-auto py-8 px-6">
@@ -45,9 +47,8 @@ export default function MigrationPage() {
               <h4 className="text-sm font-semibold text-red-600 mb-2">
                 ❌ Before (try/catch)
               </h4>
-              <div className="bg-slate-900 text-slate-100 p-4 rounded-lg">
-                <pre>
-                  <code>{`function parseConfig(jsonString: string) {
+              <CodeBlock language="typescript" title="Traditional try/catch">
+                {`function parseConfig(jsonString: string) {
   try {
     const config = JSON.parse(jsonString);
     return config;
@@ -55,27 +56,24 @@ export default function MigrationPage() {
     console.error('Parse failed:', error);
     return null;
   }
-}`}</code>
-                </pre>
-              </div>
+}`}
+              </CodeBlock>
             </div>
 
             <div>
               <h4 className="text-sm font-semibold text-green-600 mb-2">
                 ✅ After (try-error)
               </h4>
-              <div className="bg-slate-900 text-slate-100 p-4 rounded-lg">
-                <pre>
-                  <code>{`function parseConfig(jsonString: string) {
+              <CodeBlock language="typescript" title="try-error Approach">
+                {`function parseConfig(jsonString: string) {
   const result = trySync(() => JSON.parse(jsonString));
   if (isTryError(result)) {
     console.error('Parse failed:', result.message);
     return null;
   }
   return result;
-}`}</code>
-                </pre>
-              </div>
+}`}
+              </CodeBlock>
             </div>
           </div>
 
@@ -88,9 +86,8 @@ export default function MigrationPage() {
               <h4 className="text-sm font-semibold text-red-600 mb-2">
                 ❌ Before (try/catch)
               </h4>
-              <div className="bg-slate-900 text-slate-100 p-4 rounded-lg">
-                <pre>
-                  <code>{`async function fetchUser(id: string) {
+              <CodeBlock language="typescript" title="Traditional async/await">
+                {`async function fetchUser(id: string) {
   try {
     const response = await fetch(\`/api/users/\${id}\`);
     const user = await response.json();
@@ -99,18 +96,16 @@ export default function MigrationPage() {
     console.error('Fetch failed:', error);
     throw error;
   }
-}`}</code>
-                </pre>
-              </div>
+}`}
+              </CodeBlock>
             </div>
 
             <div>
               <h4 className="text-sm font-semibold text-green-600 mb-2">
                 ✅ After (try-error)
               </h4>
-              <div className="bg-slate-900 text-slate-100 p-4 rounded-lg">
-                <pre>
-                  <code>{`async function fetchUser(id: string) {
+              <CodeBlock language="typescript" title="tryAsync Approach">
+                {`async function fetchUser(id: string) {
   const response = await tryAsync(() => 
     fetch(\`/api/users/\${id}\`)
   );
@@ -121,9 +116,8 @@ export default function MigrationPage() {
   
   const user = await tryAsync(() => response.json());
   return user; // Could be success or error
-}`}</code>
-                </pre>
-              </div>
+}`}
+              </CodeBlock>
             </div>
           </div>
         </section>
@@ -150,9 +144,12 @@ export default function MigrationPage() {
             test and have fewer dependencies.
           </p>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`// Easy migration target
+          <CodeBlock
+            language="typescript"
+            title="Easy Migration Target"
+            className="mb-4"
+          >
+            {`// Easy migration target
 function safeParseInt(value: string) {
   const result = trySync(() => {
     const num = parseInt(value, 10);
@@ -160,9 +157,8 @@ function safeParseInt(value: string) {
     return num;
   });
   return isTryError(result) ? 0 : result;
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
 
           <h3 className="text-lg font-semibold text-slate-900 mb-3">
             3. Migrate API Boundaries
@@ -191,9 +187,13 @@ function safeParseInt(value: string) {
             try-error functions can easily work with traditional try/catch code:
           </p>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`// try-error function called from try/catch code
+          <CodeBlock
+            language="typescript"
+            title="Interoperability Examples"
+            showLineNumbers={true}
+            className="mb-4"
+          >
+            {`// try-error function called from try/catch code
 function legacyFunction() {
   try {
     const result = newTryErrorFunction();
@@ -215,9 +215,8 @@ async function newFunction() {
     return null;
   }
   return result;
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
         </section>
 
         {/* Common Patterns */}
@@ -234,9 +233,11 @@ async function newFunction() {
               <h4 className="text-sm font-semibold text-slate-600 mb-2">
                 Before
               </h4>
-              <div className="bg-slate-900 text-slate-100 p-4 rounded-lg">
-                <pre>
-                  <code>{`async function processData() {
+              <CodeBlock
+                language="typescript"
+                title="Traditional Error Propagation"
+              >
+                {`async function processData() {
   try {
     const data = await fetchData();
     const processed = await processStep1(data);
@@ -245,18 +246,19 @@ async function newFunction() {
   } catch (error) {
     throw error; // Re-throw
   }
-}`}</code>
-                </pre>
-              </div>
+}`}
+              </CodeBlock>
             </div>
 
             <div>
               <h4 className="text-sm font-semibold text-slate-600 mb-2">
                 After
               </h4>
-              <div className="bg-slate-900 text-slate-100 p-4 rounded-lg">
-                <pre>
-                  <code>{`async function processData() {
+              <CodeBlock
+                language="typescript"
+                title="try-error Error Propagation"
+              >
+                {`async function processData() {
   const data = await tryAsync(() => fetchData());
   if (isTryError(data)) return data;
   
@@ -265,9 +267,8 @@ async function newFunction() {
   
   const result = await tryAsync(() => processStep2(processed));
   return result; // Success or error
-}`}</code>
-                </pre>
-              </div>
+}`}
+              </CodeBlock>
             </div>
           </div>
 
@@ -279,31 +280,30 @@ async function newFunction() {
               <h4 className="text-sm font-semibold text-slate-600 mb-2">
                 Before
               </h4>
-              <div className="bg-slate-900 text-slate-100 p-4 rounded-lg">
-                <pre>
-                  <code>{`function getConfig() {
+              <CodeBlock
+                language="typescript"
+                title="Traditional Default Values"
+              >
+                {`function getConfig() {
   try {
     return JSON.parse(configString);
   } catch {
     return defaultConfig;
   }
-}`}</code>
-                </pre>
-              </div>
+}`}
+              </CodeBlock>
             </div>
 
             <div>
               <h4 className="text-sm font-semibold text-slate-600 mb-2">
                 After
               </h4>
-              <div className="bg-slate-900 text-slate-100 p-4 rounded-lg">
-                <pre>
-                  <code>{`function getConfig() {
+              <CodeBlock language="typescript" title="try-error Default Values">
+                {`function getConfig() {
   const result = trySync(() => JSON.parse(configString));
   return isTryError(result) ? defaultConfig : result;
-}`}</code>
-                </pre>
-              </div>
+}`}
+              </CodeBlock>
             </div>
           </div>
         </section>
@@ -319,9 +319,13 @@ async function newFunction() {
             test both success and error cases:
           </p>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`describe('parseConfig', () => {
+          <CodeBlock
+            language="typescript"
+            title="Testing try-error Functions"
+            showLineNumbers={true}
+            className="mb-4"
+          >
+            {`describe('parseConfig', () => {
   it('should parse valid JSON', () => {
     const result = parseConfig('{"key": "value"}');
     expect(isTryError(result)).toBe(false);
@@ -337,9 +341,8 @@ async function newFunction() {
       expect(result.message).toContain('JSON');
     }
   });
-});`}</code>
-            </pre>
-          </div>
+});`}
+          </CodeBlock>
         </section>
 
         {/* Next Steps */}
