@@ -14,23 +14,182 @@ export default function ConfigurationPage() {
       </div>
 
       <div className="space-y-8">
-        {/* Global Configuration */}
+        {/* Quick Setup */}
         <section>
           <h2 className="text-2xl font-semibold text-slate-900 mb-4">
-            Global Configuration
+            Quick Setup (Recommended)
           </h2>
 
           <p className="text-slate-600 mb-4">
-            Configure global settings for try-error behavior across your
-            application.
+            Use our one-liner setup utilities for instant optimization with
+            sensible defaults. These functions automatically configure try-error
+            for your environment.
           </p>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <CodeBlock>
-              {`import { configureTryError } from 'try-error';
+          <div className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-lg p-6 mb-6">
+            <h3 className="text-lg font-semibold text-green-900 mb-3">
+              ⚡ Environment-Specific Setup
+            </h3>
+            <CodeBlock
+              language="typescript"
+              title="One-Liner Setup for Any Environment"
+              showLineNumbers={true}
+              className="mb-4"
+            >
+              {`// Import setup utilities (tree-shakeable)
+import { setupNode, setupReact, setupNextJs, autoSetup } from 'try-error/setup';
+
+// Node.js/Express - Automatic environment detection
+setupNode(); // ✨ Optimized for dev/prod automatically
+
+// React/Vite - Browser-optimized configuration  
+setupReact(); // ✨ Perfect for client-side apps
+
+// Next.js - Handles both SSR and client-side
+setupNextJs(); // ✨ Works for both server and client
+
+// Auto-detect environment (works everywhere)
+autoSetup(); // ✨ Detects Node.js, React, Next.js, etc.
+
+// High-performance (for critical applications)
+import { setupPerformance } from 'try-error/setup';
+setupPerformance(); // ✨ Maximum performance, minimal overhead
+
+// Testing environment
+import { setupTesting } from 'try-error/setup';
+setupTesting(); // ✨ Test-friendly configuration`}
+            </CodeBlock>
+            <div className="bg-green-100 border border-green-300 rounded-lg p-3">
+              <h4 className="font-semibold text-green-900 text-sm mb-1">
+                🎯 Benefits of Quick Setup
+              </h4>
+              <ul className="text-green-800 text-sm space-y-1">
+                <li>
+                  • <strong>Zero boilerplate:</strong> One line replaces 20+
+                  lines of configuration
+                </li>
+                <li>
+                  • <strong>Environment-aware:</strong> Automatically optimizes
+                  for dev/prod/test
+                </li>
+                <li>
+                  • <strong>Best practices:</strong> Includes performance
+                  optimizations by default
+                </li>
+                <li>
+                  • <strong>Tree-shakeable:</strong> Only includes what you use
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="space-y-6">
+            <div>
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">
+                Setup with Custom Options
+              </h3>
+              <p className="text-slate-600 mb-3">
+                All setup functions accept custom options to override defaults.
+              </p>
+              <CodeBlock
+                language="typescript"
+                title="Custom Setup Options"
+                showLineNumbers={true}
+                className="mb-3"
+              >
+                {`// Setup with custom error reporting
+setupNode({
+  onError: (error) => {
+    // Send to your monitoring service
+    sendToSentry(error);
+    sendToDatadog(error);
+    return error;
+  }
+});
+
+// React setup with analytics
+setupReact({
+  onError: (error) => {
+    // Send to analytics
+    gtag('event', 'exception', {
+      description: \`\${error.type}: \${error.message}\`,
+      fatal: false
+    });
+    return error;
+  }
+});
+
+// Next.js with custom serialization
+setupNextJs({
+  serializer: (error) => ({
+    type: error.type,
+    message: error.message,
+    url: typeof window !== 'undefined' ? window.location.href : 'server',
+    timestamp: error.timestamp
+  })
+});`}
+              </CodeBlock>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">
+                Custom Setup Function
+              </h3>
+              <p className="text-slate-600 mb-3">
+                Create your own setup function with organizational defaults.
+              </p>
+              <CodeBlock
+                language="typescript"
+                title="Organization-Specific Setup"
+                showLineNumbers={true}
+                className="mb-3"
+              >
+                {`import { createCustomSetup } from 'try-error/setup';
+
+// Create your organization's standard setup
+const setupMyApp = createCustomSetup({
+  onError: (error) => sendToMyMonitoringService(error),
+  serializer: (error) => myCustomSerializer(error),
+  captureStackTrace: process.env.NODE_ENV !== 'production'
+});
+
+// Use in your applications
+setupMyApp(); // Uses your defaults
+setupMyApp({ developmentMode: true }); // Override specific options`}
+              </CodeBlock>
+            </div>
+          </div>
+        </section>
+
+        {/* Configuration API */}
+        <section>
+          <h2 className="text-2xl font-semibold text-slate-900 mb-4">
+            Configuration API
+          </h2>
+
+          <p className="text-slate-600 mb-4">
+            For advanced use cases, you can use the configuration API directly
+            to customize try-error behavior.
+          </p>
+
+          <div className="space-y-6">
+            <div>
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">
+                configure()
+              </h3>
+              <p className="text-slate-600 mb-3">
+                Configure global settings for try-error behavior.
+              </p>
+              <CodeBlock
+                language="typescript"
+                title="Global Configuration"
+                showLineNumbers={true}
+                className="mb-3"
+              >
+                {`import { configure, TryErrorConfig } from 'try-error';
 
 // Configure global settings
-configureTryError({
+configure({
   // Enable/disable stack trace capture
   captureStackTrace: true,
   
@@ -65,42 +224,249 @@ configureTryError({
     }
     return error;
   }
-});`}
-            </CodeBlock>
-          </div>
+});
 
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-            <h4 className="font-semibold text-blue-800 mb-2">
-              Configuration Options
-            </h4>
-            <ul className="space-y-1 text-blue-700 text-sm">
-              <li>
-                • <code>captureStackTrace</code> - Whether to capture stack
-                traces (default: true)
-              </li>
-              <li>
-                • <code>stackTraceLimit</code> - Maximum stack trace depth
-                (default: 10)
-              </li>
-              <li>
-                • <code>includeSource</code> - Include source location in errors
-                (default: true)
-              </li>
-              <li>
-                • <code>defaultErrorType</code> - Default type for untyped
-                errors (default: 'Error')
-              </li>
-              <li>
-                • <code>developmentMode</code> - Enable development features
-                (default: false)
-              </li>
-              <li>
-                • <code>serializer</code> - Custom error serialization function
-              </li>
-              <li>
-                • <code>onError</code> - Global error transformation hook
-              </li>
-            </ul>
+// Or use a preset
+configure('production'); // Uses ConfigPresets.production()
+configure('development'); // Uses ConfigPresets.development()`}
+              </CodeBlock>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">
+                Configuration Presets
+              </h3>
+              <p className="text-slate-600 mb-3">
+                Pre-built configurations for common environments.
+              </p>
+              <CodeBlock
+                language="typescript"
+                title="Configuration Presets"
+                showLineNumbers={true}
+                className="mb-3"
+              >
+                {`import { ConfigPresets, configure } from 'try-error';
+
+// Use built-in presets
+configure(ConfigPresets.development()); // Full debugging features
+configure(ConfigPresets.production());  // Performance optimized
+configure(ConfigPresets.test());        // Test-friendly configuration
+configure(ConfigPresets.performance()); // Maximum performance
+
+// Customize presets
+const customConfig = {
+  ...ConfigPresets.production(),
+  onError: (error) => sendToMyService(error)
+};
+configure(customConfig);
+
+// Environment-based configuration
+import { createEnvConfig } from 'try-error';
+
+configure(createEnvConfig({
+  development: ConfigPresets.development(),
+  production: ConfigPresets.production(),
+  test: ConfigPresets.test()
+}));`}
+              </CodeBlock>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">
+                Scoped Configuration
+              </h3>
+              <p className="text-slate-600 mb-3">
+                Create isolated configurations that don't affect global state.
+              </p>
+              <CodeBlock
+                language="typescript"
+                title="Scoped Configuration"
+                showLineNumbers={true}
+                className="mb-3"
+              >
+                {`import { createScope } from 'try-error';
+
+// Create a scoped configuration
+const { config, createError } = createScope({
+  captureStackTrace: false,
+  defaultErrorType: 'CustomError',
+  onError: (error) => {
+    console.log('Scoped error:', error.message);
+    return error;
+  }
+});
+
+// Use scoped error creation
+const error = await createError({
+  message: 'This uses scoped config',
+  context: { scope: 'isolated' }
+});
+
+// Global config remains unchanged
+const globalError = createTryError('GlobalError', 'Uses global config');`}
+              </CodeBlock>
+            </div>
+          </div>
+        </section>
+
+        {/* Configuration Options */}
+        <section>
+          <h2 className="text-2xl font-semibold text-slate-900 mb-4">
+            Configuration Options
+          </h2>
+
+          <p className="text-slate-600 mb-4">
+            Complete reference for all configuration options available in
+            try-error.
+          </p>
+
+          <div className="space-y-6">
+            <div className="border border-slate-200 rounded-lg p-6">
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">
+                TryErrorConfig Interface
+              </h3>
+              <CodeBlock
+                language="typescript"
+                title="Configuration Interface"
+                showLineNumbers={true}
+                className="mb-3"
+              >
+                {`interface TryErrorConfig {
+  /**
+   * Whether to capture stack traces (expensive operation)
+   * @default true in development, false in production
+   */
+  captureStackTrace?: boolean;
+
+  /**
+   * Maximum stack trace depth to capture
+   * @default 10
+   */
+  stackTraceLimit?: number;
+
+  /**
+   * Include source location in errors
+   * @default true
+   */
+  includeSource?: boolean;
+
+  /**
+   * Default error type for untyped errors
+   * @default "Error"
+   */
+  defaultErrorType?: string;
+
+  /**
+   * Enable development mode features (verbose logging, etc.)
+   * @default false
+   */
+  developmentMode?: boolean;
+
+  /**
+   * Custom error serialization function
+   */
+  serializer?: (error: TryError) => Record<string, unknown>;
+
+  /**
+   * Global error transformation hook
+   */
+  onError?: (error: TryError) => TryError;
+}`}
+              </CodeBlock>
+            </div>
+
+            <div className="border border-slate-200 rounded-lg p-6">
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">
+                Performance Configuration
+              </h3>
+              <p className="text-slate-600 mb-3">
+                Advanced performance optimization settings for high-throughput
+                applications.
+              </p>
+              <CodeBlock
+                language="typescript"
+                title="Performance Configuration"
+                showLineNumbers={true}
+                className="mb-3"
+              >
+                {`interface PerformanceConfig {
+  /**
+   * Error creation optimization settings
+   */
+  errorCreation?: {
+    /**
+     * Cache error constructors for reuse
+     * @default false
+     */
+    cacheConstructors?: boolean;
+
+    /**
+     * Only capture stack trace when accessed (lazy)
+     * @default false
+     */
+    lazyStackTrace?: boolean;
+
+    /**
+     * Enable experimental object pooling
+     * @default false
+     */
+    objectPooling?: boolean;
+
+    /**
+     * Object pool size when pooling is enabled
+     * @default 50
+     */
+    poolSize?: number;
+  };
+
+  /**
+   * Context capture optimization settings
+   */
+  contextCapture?: {
+    /**
+     * Maximum context size in bytes
+     * @default 10240 (10KB)
+     */
+    maxContextSize?: number;
+
+    /**
+     * Whether to deep clone context objects
+     * @default true
+     */
+    deepClone?: boolean;
+
+    /**
+     * Timeout for async context capture in milliseconds
+     * @default 100
+     */
+    timeout?: number;
+  };
+
+  /**
+   * Memory management settings
+   */
+  memory?: {
+    /**
+     * Maximum number of errors to keep in history
+     * @default 100
+     */
+    maxErrorHistory?: number;
+
+    /**
+     * Use weak references for large contexts
+     * @default false
+     */
+    useWeakRefs?: boolean;
+
+    /**
+     * Provide garbage collection hints
+     * @default false
+     */
+    gcHints?: boolean;
+  };
+}`}
+              </CodeBlock>
+            </div>
           </div>
         </section>
 
@@ -120,12 +486,16 @@ configureTryError({
               <h3 className="text-lg font-semibold text-slate-900 mb-3">
                 Development Configuration
               </h3>
-              <div className="bg-slate-900 text-slate-100 p-4 rounded-lg">
-                <CodeBlock>
-                  {`// config/development.ts
-import { configureTryError } from 'try-error';
+              <CodeBlock
+                language="typescript"
+                title="Development Setup"
+                showLineNumbers={true}
+                className="mb-3"
+              >
+                {`// config/development.ts
+import { configure } from 'try-error';
 
-configureTryError({
+configure({
   captureStackTrace: true,
   stackTraceLimit: 50, // More detailed stack traces
   includeSource: true,
@@ -152,20 +522,23 @@ configureTryError({
     return error;
   }
 });`}
-                </CodeBlock>
-              </div>
+              </CodeBlock>
             </div>
 
             <div>
               <h3 className="text-lg font-semibold text-slate-900 mb-3">
                 Production Configuration
               </h3>
-              <div className="bg-slate-900 text-slate-100 p-4 rounded-lg">
-                <CodeBlock>
-                  {`// config/production.ts
-import { configureTryError } from 'try-error';
+              <CodeBlock
+                language="typescript"
+                title="Production Setup"
+                showLineNumbers={true}
+                className="mb-3"
+              >
+                {`// config/production.ts
+import { configure } from 'try-error';
 
-configureTryError({
+configure({
   captureStackTrace: false, // Disable for performance
   stackTraceLimit: 5,
   includeSource: false, // Don't expose source paths
@@ -188,20 +561,26 @@ configureTryError({
     return error;
   }
 });`}
-                </CodeBlock>
-              </div>
+              </CodeBlock>
             </div>
 
             <div>
               <h3 className="text-lg font-semibold text-slate-900 mb-3">
                 Testing Configuration
               </h3>
-              <div className="bg-slate-900 text-slate-100 p-4 rounded-lg">
-                <CodeBlock>
-                  {`// config/test.ts
-import { configureTryError } from 'try-error';
+              <CodeBlock
+                language="typescript"
+                title="Testing Setup"
+                showLineNumbers={true}
+                className="mb-3"
+              >
+                {`// config/testing.ts
+import { configure } from 'try-error';
 
-configureTryError({
+// Collect errors for test assertions
+const testErrors: TryError[] = [];
+
+configure({
   captureStackTrace: true,
   stackTraceLimit: 10,
   includeSource: true,
@@ -211,443 +590,159 @@ configureTryError({
     type: error.type,
     message: error.message,
     context: error.context,
-    // Include enough info for test debugging
+    source: error.source,
+    stack: error.stack
   }),
   
   onError: (error) => {
-    // Store errors for test assertions
-    if (global.testErrorCollector) {
-      global.testErrorCollector.push(error);
-    }
+    testErrors.push(error);
     return error;
   }
-});`}
-                </CodeBlock>
-              </div>
-            </div>
-          </div>
-        </section>
+});
 
-        {/* Error Context Configuration */}
-        <section>
-          <h2 className="text-2xl font-semibold text-slate-900 mb-4">
-            Error Context Configuration
-          </h2>
+// Helper for tests
+export function getTestErrors(): TryError[] {
+  return [...testErrors];
+}
 
-          <p className="text-slate-600 mb-4">
-            Configure how error context is captured and included in errors.
-          </p>
-
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <CodeBlock>
-              {`import { configureErrorContext } from 'try-error';
-
-configureErrorContext({
-  // Automatically include request context in web applications
-  includeRequestContext: true,
-  
-  // Include user context when available
-  includeUserContext: true,
-  
-  // Include performance metrics
-  includePerformanceMetrics: true,
-  
-  // Custom context providers
-  contextProviders: [
-    // Request context provider
-    () => ({
-      requestId: getCurrentRequestId(),
-      userAgent: getCurrentUserAgent(),
-      ip: getCurrentIP(),
-      url: getCurrentURL()
-    }),
-    
-    // User context provider
-    () => ({
-      userId: getCurrentUserId(),
-      userRole: getCurrentUserRole(),
-      sessionId: getCurrentSessionId()
-    }),
-    
-    // Application context provider
-    () => ({
-      version: process.env.APP_VERSION,
-      environment: process.env.NODE_ENV,
-      buildId: process.env.BUILD_ID
-    })
-  ],
-  
-  // Context sanitization
-  sanitizer: (context) => {
-    // Remove sensitive information
-    const sanitized = { ...context };
-    delete sanitized.password;
-    delete sanitized.token;
-    delete sanitized.apiKey;
-    return sanitized;
-  }
-});`}
-            </CodeBlock>
-          </div>
-        </section>
-
-        {/* Logging Configuration */}
-        <section>
-          <h2 className="text-2xl font-semibold text-slate-900 mb-4">
-            Logging Configuration
-          </h2>
-
-          <p className="text-slate-600 mb-4">
-            Configure how errors are logged and where they are sent.
-          </p>
-
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <CodeBlock>
-              {`import { configureLogging } from 'try-error';
-
-configureLogging({
-  // Log levels
-  logLevel: 'error', // 'debug', 'info', 'warn', 'error'
-  
-  // Console logging
-  console: {
-    enabled: true,
-    format: 'json', // 'json' | 'pretty' | 'minimal'
-    colors: true
-  },
-  
-  // File logging
-  file: {
-    enabled: process.env.NODE_ENV === 'production',
-    path: './logs/errors.log',
-    maxSize: '10MB',
-    maxFiles: 5,
-    format: 'json'
-  },
-  
-  // External services
-  services: [
-    // Sentry integration
-    {
-      name: 'sentry',
-      enabled: !!process.env.SENTRY_DSN,
-      config: {
-        dsn: process.env.SENTRY_DSN,
-        environment: process.env.NODE_ENV,
-        release: process.env.APP_VERSION
-      },
-      filter: (error) => error.type !== 'ValidationError' // Don't send validation errors
-    },
-    
-    // Custom webhook
-    {
-      name: 'webhook',
-      enabled: !!process.env.ERROR_WEBHOOK_URL,
-      config: {
-        url: process.env.ERROR_WEBHOOK_URL,
-        headers: {
-          'Authorization': \`Bearer \${process.env.ERROR_WEBHOOK_TOKEN}\`
-        }
-      },
-      filter: (error) => error.type === 'CriticalError'
-    }
-  ]
-});`}
-            </CodeBlock>
-          </div>
-        </section>
-
-        {/* Performance Configuration */}
-        <section>
-          <h2 className="text-2xl font-semibold text-slate-900 mb-4">
-            Performance Configuration
-          </h2>
-
-          <p className="text-slate-600 mb-4">
-            Configure performance-related settings to optimize try-error for
-            your use case.
-          </p>
-
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <CodeBlock>
-              {`import { configurePerformance } from 'try-error';
-
-configurePerformance({
-  // Error creation optimization
-  errorCreation: {
-    // Cache error constructors
-    cacheConstructors: true,
-    
-    // Lazy stack trace capture
-    lazyStackTrace: true,
-    
-    // Pool error objects for reuse
-    objectPooling: false // Experimental
-  },
-  
-  // Context capture optimization
-  contextCapture: {
-    // Maximum context size (bytes)
-    maxContextSize: 1024 * 10, // 10KB
-    
-    // Deep clone context objects
-    deepClone: false,
-    
-    // Async context capture timeout
-    timeout: 100 // ms
-  },
-  
-  // Serialization optimization
-  serialization: {
-    // Use fast JSON serialization
-    fastJson: true,
-    
-    // Maximum serialization depth
-    maxDepth: 5,
-    
-    // Circular reference handling
-    handleCircular: true
-  },
-  
-  // Memory management
-  memory: {
-    // Maximum number of errors to keep in memory
-    maxErrorHistory: 100,
-    
-    // Garbage collection hints
-    gcHints: true,
-    
-    // Weak references for large contexts
-    useWeakRefs: true
-  }
-});`}
-            </CodeBlock>
-          </div>
-        </section>
-
-        {/* Framework-Specific Configuration */}
-        <section>
-          <h2 className="text-2xl font-semibold text-slate-900 mb-4">
-            Framework-Specific Configuration
-          </h2>
-
-          <div className="space-y-6">
-            <div>
-              <h3 className="text-lg font-semibold text-slate-900 mb-3">
-                Express.js Configuration
-              </h3>
-              <div className="bg-slate-900 text-slate-100 p-4 rounded-lg">
-                <CodeBlock>
-                  {`// config/express.ts
-import { configureExpress } from '@try-error/express';
-
-configureExpress({
-  // Automatic request context capture
-  captureRequestContext: true,
-  
-  // Error response format
-  errorResponse: {
-    includeStack: process.env.NODE_ENV === 'development',
-    includeContext: process.env.NODE_ENV === 'development',
-    format: 'json'
-  },
-  
-  // Status code mapping
-  statusCodeMapping: {
-    ValidationError: 400,
-    AuthenticationError: 401,
-    AuthorizationError: 403,
-    NotFoundError: 404,
-    ConflictError: 409,
-    RateLimitError: 429
-  },
-  
-  // Middleware options
-  middleware: {
-    // Skip certain routes
-    skip: (req) => req.path.startsWith('/health'),
-    
-    // Custom error handler
-    errorHandler: (error, req, res, next) => {
-      // Custom logic before default handling
-      logError(error, req);
-      next(error);
-    }
-  }
-});`}
-                </CodeBlock>
-              </div>
-            </div>
-
-            <div>
-              <h3 className="text-lg font-semibold text-slate-900 mb-3">
-                Next.js Configuration
-              </h3>
-              <div className="bg-slate-900 text-slate-100 p-4 rounded-lg">
-                <CodeBlock>
-                  {`// config/nextjs.ts
-import { configureNextJs } from '@try-error/nextjs';
-
-configureNextJs({
-  // API route error handling
-  apiRoutes: {
-    captureRequestContext: true,
-    includeQueryParams: true,
-    sanitizeHeaders: true
-  },
-  
-  // Server-side rendering
-  ssr: {
-    captureRenderContext: true,
-    fallbackToClientSide: true,
-    errorBoundary: true
-  },
-  
-  // Client-side configuration
-  client: {
-    captureUserAgent: true,
-    captureUrl: true,
-    reportToApi: '/api/errors'
-  }
-});`}
-                </CodeBlock>
-              </div>
-            </div>
-
-            <div>
-              <h3 className="text-lg font-semibold text-slate-900 mb-3">
-                React Configuration
-              </h3>
-              <div className="bg-slate-900 text-slate-100 p-4 rounded-lg">
-                <CodeBlock>
-                  {`// config/react.ts
-import { configureReact } from '@try-error/react';
-
-configureReact({
-  // Error boundary configuration
-  errorBoundary: {
-    fallbackComponent: ErrorFallback,
-    onError: (error, errorInfo) => {
-      logError(error, errorInfo);
-    },
-    resetOnPropsChange: true
-  },
-  
-  // Hook configuration
-  hooks: {
-    // Default retry configuration
-    defaultRetry: {
-      attempts: 3,
-      delay: 1000,
-      backoff: 'exponential'
-    },
-    
-    // Loading state management
-    loadingStates: {
-      showSpinner: true,
-      minimumDuration: 200 // ms
-    }
-  },
-  
-  // Development tools
-  devTools: {
-    enabled: process.env.NODE_ENV === 'development',
-    showErrorOverlay: true,
-    logToConsole: true
-  }
-});`}
-                </CodeBlock>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Configuration File Examples */}
-        <section>
-          <h2 className="text-2xl font-semibold text-slate-900 mb-4">
-            Configuration File Examples
-          </h2>
-
-          <div className="space-y-6">
-            <div>
-              <h3 className="text-lg font-semibold text-slate-900 mb-3">
-                JSON Configuration
-              </h3>
-              <div className="bg-slate-900 text-slate-100 p-4 rounded-lg">
-                <CodeBlock>
-                  {`// try-error.config.json
-{
-  "captureStackTrace": true,
-  "stackTraceLimit": 10,
-  "includeSource": true,
-  "defaultErrorType": "Error",
-  "developmentMode": false,
-  "logging": {
-    "logLevel": "error",
-    "console": {
-      "enabled": true,
-      "format": "json"
-    },
-    "file": {
-      "enabled": true,
-      "path": "./logs/errors.log"
-    }
-  },
-  "performance": {
-    "errorCreation": {
-      "cacheConstructors": true,
-      "lazyStackTrace": true
-    },
-    "contextCapture": {
-      "maxContextSize": 10240
-    }
-  }
+export function clearTestErrors(): void {
+  testErrors.length = 0;
 }`}
-                </CodeBlock>
-              </div>
+              </CodeBlock>
+            </div>
+          </div>
+        </section>
+
+        {/* Performance Optimization */}
+        <section>
+          <h2 className="text-2xl font-semibold text-slate-900 mb-4">
+            Performance Optimization
+          </h2>
+
+          <p className="text-slate-600 mb-4">
+            Advanced configuration for high-performance applications.
+          </p>
+
+          <div className="space-y-6">
+            <div>
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">
+                High-Performance Configuration
+              </h3>
+              <CodeBlock
+                language="typescript"
+                title="Performance Optimization"
+                showLineNumbers={true}
+                className="mb-3"
+              >
+                {`import { configure, ConfigPresets } from 'try-error';
+
+// Use the performance preset
+configure(ConfigPresets.performance());
+
+// Or configure manually
+configure({
+  captureStackTrace: false,
+  stackTraceLimit: 0,
+  includeSource: false,
+  developmentMode: false,
+  
+  // Performance optimizations
+  performance: {
+    errorCreation: {
+      cacheConstructors: true,
+      lazyStackTrace: true,
+      objectPooling: true,
+      poolSize: 100
+    },
+    contextCapture: {
+      maxContextSize: 1024 * 5, // 5KB limit
+      deepClone: false,
+      timeout: 50
+    },
+    memory: {
+      maxErrorHistory: 50,
+      useWeakRefs: true,
+      gcHints: true
+    }
+  }
+});`}
+              </CodeBlock>
             </div>
 
             <div>
               <h3 className="text-lg font-semibold text-slate-900 mb-3">
-                TypeScript Configuration
+                Performance Monitoring
               </h3>
-              <div className="bg-slate-900 text-slate-100 p-4 rounded-lg">
-                <CodeBlock>
-                  {`// try-error.config.ts
-import { TryErrorConfig } from 'try-error';
+              <CodeBlock
+                language="typescript"
+                title="Performance Monitoring"
+                showLineNumbers={true}
+                className="mb-3"
+              >
+                {`import { Performance } from 'try-error';
 
-const config: TryErrorConfig = {
-  captureStackTrace: process.env.NODE_ENV !== 'production',
-  stackTraceLimit: process.env.NODE_ENV === 'development' ? 50 : 5,
-  includeSource: process.env.NODE_ENV === 'development',
-  defaultErrorType: 'Error',
-  developmentMode: process.env.NODE_ENV === 'development',
-  
+// Measure error creation performance
+const metrics = Performance.measureErrorCreation(1000);
+console.log(\`Average error creation time: \${metrics.averageTime}ms\`);
+
+// Monitor memory usage (Node.js only)
+const memoryUsage = Performance.getMemoryUsage();
+if (memoryUsage) {
+  console.log('Memory usage:', memoryUsage);
+}
+
+// Set up performance monitoring
+configure({
   onError: (error) => {
-    // Environment-specific error handling
-    if (process.env.NODE_ENV === 'production') {
-      sendToMonitoring(error);
-    } else {
-      console.error('TryError:', error);
+    // Track error creation time
+    const creationTime = Date.now() - error.timestamp;
+    if (creationTime > 10) { // Log slow error creation
+      console.warn(\`Slow error creation: \${creationTime}ms for \${error.type}\`);
     }
     return error;
-  },
-  
-  serializer: (error) => ({
-    type: error.type,
-    message: error.message,
-    timestamp: error.timestamp,
-    ...(process.env.NODE_ENV === 'development' && {
-      stack: error.stack,
-      context: error.context,
-      source: error.source
-    })
-  })
-};
+  }
+});`}
+              </CodeBlock>
+            </div>
+          </div>
+        </section>
 
-export default config;`}
-                </CodeBlock>
-              </div>
+        {/* Best Practices */}
+        <section>
+          <h2 className="text-2xl font-semibold text-slate-900 mb-4">
+            Configuration Best Practices
+          </h2>
+
+          <div className="space-y-4">
+            <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+              <h4 className="font-semibold text-green-800 mb-2">✅ Do</h4>
+              <ul className="space-y-1 text-green-700 text-sm">
+                <li>
+                  • Use setup utilities for quick, optimized configuration
+                </li>
+                <li>• Configure try-error early in your application startup</li>
+                <li>• Use environment-specific configurations</li>
+                <li>• Disable stack traces in production for performance</li>
+                <li>• Set up error monitoring and reporting</li>
+                <li>• Use scoped configurations for isolated components</li>
+                <li>• Test your error handling configuration</li>
+              </ul>
+            </div>
+
+            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+              <h4 className="font-semibold text-red-800 mb-2">❌ Don't</h4>
+              <ul className="space-y-1 text-red-700 text-sm">
+                <li>
+                  • Configure try-error multiple times in the same application
+                </li>
+                <li>• Include sensitive data in error contexts</li>
+                <li>• Use development configuration in production</li>
+                <li>
+                  • Ignore performance implications of stack trace capture
+                </li>
+                <li>• Set overly large context size limits</li>
+                <li>• Forget to handle errors in your onError hook</li>
+              </ul>
             </div>
           </div>
         </section>
@@ -657,48 +752,35 @@ export default config;`}
           <h2 className="text-2xl font-semibold text-slate-900 mb-4">
             Related Pages
           </h2>
-
-          <div className="grid md:grid-cols-3 gap-4">
-            <div className="border border-slate-200 rounded-lg p-4">
-              <h3 className="font-semibold text-slate-900 mb-2">
-                Integration Guides
-              </h3>
-              <p className="text-slate-600 text-sm mb-3">
-                Framework-specific integration examples
-              </p>
-              <a
-                href="/docs/guides/integration"
-                className="text-blue-600 hover:text-blue-800 text-sm font-medium"
-              >
-                View Integration →
-              </a>
-            </div>
-
+          <div className="grid md:grid-cols-2 gap-4">
             <div className="border border-slate-200 rounded-lg p-4">
               <h3 className="font-semibold text-slate-900 mb-2">
                 Performance Guide
               </h3>
               <p className="text-slate-600 text-sm mb-3">
-                Optimize try-error for your use case
+                Detailed performance optimization strategies and implementation
+                examples
               </p>
               <a
                 href="/docs/advanced/performance"
                 className="text-blue-600 hover:text-blue-800 text-sm font-medium"
               >
-                View Performance →
+                View Performance Guide →
               </a>
             </div>
 
             <div className="border border-slate-200 rounded-lg p-4">
-              <h3 className="font-semibold text-slate-900 mb-2">Error Codes</h3>
+              <h3 className="font-semibold text-slate-900 mb-2">
+                Utilities API
+              </h3>
               <p className="text-slate-600 text-sm mb-3">
-                Reference for standard error types
+                API reference for result manipulation and utility functions
               </p>
               <a
-                href="/docs/reference/error-codes"
+                href="/docs/api/utils"
                 className="text-blue-600 hover:text-blue-800 text-sm font-medium"
               >
-                View Error Codes →
+                View Utilities API →
               </a>
             </div>
           </div>
