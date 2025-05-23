@@ -5,7 +5,7 @@ import {
   createError,
   retry,
   withTimeout,
-} from "try-error";
+} from "../../../../src";
 
 interface User {
   id: number;
@@ -29,7 +29,10 @@ const fetchUser = async (userId: number): Promise<User> => {
 
   // Simulate user not found
   if (userId === 404) {
-    throw createError("USER_NOT_FOUND", `User with ID ${userId} not found`);
+    throw createError({
+      type: "USER_NOT_FOUND",
+      message: `User with ID ${userId} not found`,
+    });
   }
 
   return {
