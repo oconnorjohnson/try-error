@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { trySync, isTryError, createError } from "try-error";
+import { trySync, isTryError, createError } from "../../../../src";
 
 // Simple counter with validation that demonstrates basic try-error usage
 export function SimpleCounter() {
