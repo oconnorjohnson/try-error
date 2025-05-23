@@ -1,12 +1,12 @@
-export default function SuccessVsErrorPage() {
+export default function RealWorldExamplesPage() {
   return (
     <div className="max-w-4xl mx-auto py-8 px-6">
       <div className="mb-8">
         <h1 className="text-4xl font-bold text-slate-900 mb-4">
-          Success vs Error Paths
+          Real-World Examples
         </h1>
         <p className="text-xl text-slate-600">
-          Understanding how try-error handles success and error cases
+          Complex scenarios and production-ready patterns using try-error
         </p>
       </div>
 
@@ -16,15 +16,15 @@ export default function SuccessVsErrorPage() {
             Coming Soon
           </h2>
           <p className="text-slate-600 mb-4">
-            This page will cover how try-error distinguishes between success and
-            error cases, type narrowing, and best practices for handling both
-            paths.
+            This page will showcase real-world applications of try-error in
+            production scenarios, including microservices, web applications, CLI
+            tools, and more.
           </p>
 
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
             <p className="text-blue-800">
-              📚 This documentation page is under development. Check back soon
-              for detailed content about success vs error handling patterns.
+              📚 Real-world examples are being prepared. Check back soon for
+              production-ready patterns and case studies.
             </p>
           </div>
         </section>
@@ -35,28 +35,32 @@ export default function SuccessVsErrorPage() {
           </h2>
           <div className="grid md:grid-cols-2 gap-4">
             <div className="border border-slate-200 rounded-lg p-4">
-              <h3 className="font-semibold text-slate-900 mb-2">Error Types</h3>
+              <h3 className="font-semibold text-slate-900 mb-2">
+                Basic Examples
+              </h3>
               <p className="text-slate-600 text-sm mb-3">
-                Learn about TryError structure and custom error types
+                Start with fundamental patterns and use cases
               </p>
               <a
-                href="/docs/concepts/error-types"
+                href="/docs/examples/basic"
                 className="text-blue-600 hover:text-blue-800 text-sm font-medium"
               >
-                View Error Types →
+                View Basic Examples →
               </a>
             </div>
 
             <div className="border border-slate-200 rounded-lg p-4">
-              <h3 className="font-semibold text-slate-900 mb-2">Quick Start</h3>
+              <h3 className="font-semibold text-slate-900 mb-2">
+                Migration Guide
+              </h3>
               <p className="text-slate-600 text-sm mb-3">
-                Get started with basic try-error patterns
+                Learn how to adopt try-error in existing projects
               </p>
               <a
-                href="/docs/quick-start"
+                href="/docs/migration"
                 className="text-blue-600 hover:text-blue-800 text-sm font-medium"
               >
-                Get Started →
+                View Migration Guide →
               </a>
             </div>
           </div>

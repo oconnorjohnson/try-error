@@ -1,12 +1,12 @@
-export default function SuccessVsErrorPage() {
+export default function UtilsAPIPage() {
   return (
     <div className="max-w-4xl mx-auto py-8 px-6">
       <div className="mb-8">
         <h1 className="text-4xl font-bold text-slate-900 mb-4">
-          Success vs Error Paths
+          Utilities API
         </h1>
         <p className="text-xl text-slate-600">
-          Understanding how try-error handles success and error cases
+          API reference for try-error utility functions and helpers
         </p>
       </div>
 
@@ -16,15 +16,15 @@ export default function SuccessVsErrorPage() {
             Coming Soon
           </h2>
           <p className="text-slate-600 mb-4">
-            This page will cover how try-error distinguishes between success and
-            error cases, type narrowing, and best practices for handling both
-            paths.
+            This page will document utility functions for working with try-error
+            results, including type guards, result transformers, and helper
+            functions.
           </p>
 
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
             <p className="text-blue-800">
-              📚 This documentation page is under development. Check back soon
-              for detailed content about success vs error handling patterns.
+              📚 This API reference is under development. Check back soon for
+              complete documentation.
             </p>
           </div>
         </section>
@@ -35,28 +35,32 @@ export default function SuccessVsErrorPage() {
           </h2>
           <div className="grid md:grid-cols-2 gap-4">
             <div className="border border-slate-200 rounded-lg p-4">
-              <h3 className="font-semibold text-slate-900 mb-2">Error Types</h3>
+              <h3 className="font-semibold text-slate-900 mb-2">
+                Synchronous API
+              </h3>
               <p className="text-slate-600 text-sm mb-3">
-                Learn about TryError structure and custom error types
+                API reference for trySync and related functions
               </p>
               <a
-                href="/docs/concepts/error-types"
+                href="/docs/api/sync"
                 className="text-blue-600 hover:text-blue-800 text-sm font-medium"
               >
-                View Error Types →
+                View Sync API →
               </a>
             </div>
 
             <div className="border border-slate-200 rounded-lg p-4">
-              <h3 className="font-semibold text-slate-900 mb-2">Quick Start</h3>
+              <h3 className="font-semibold text-slate-900 mb-2">
+                Asynchronous API
+              </h3>
               <p className="text-slate-600 text-sm mb-3">
-                Get started with basic try-error patterns
+                API reference for tryAsync and async patterns
               </p>
               <a
-                href="/docs/quick-start"
+                href="/docs/api/async"
                 className="text-blue-600 hover:text-blue-800 text-sm font-medium"
               >
-                Get Started →
+                View Async API →
               </a>
             </div>
           </div>

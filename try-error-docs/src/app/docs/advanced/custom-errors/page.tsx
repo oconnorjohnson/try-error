@@ -1,12 +1,12 @@
-export default function SuccessVsErrorPage() {
+export default function CustomErrorsPage() {
   return (
     <div className="max-w-4xl mx-auto py-8 px-6">
       <div className="mb-8">
         <h1 className="text-4xl font-bold text-slate-900 mb-4">
-          Success vs Error Paths
+          Custom Error Types
         </h1>
         <p className="text-xl text-slate-600">
-          Understanding how try-error handles success and error cases
+          Advanced patterns for creating and managing custom error types
         </p>
       </div>
 
@@ -16,15 +16,15 @@ export default function SuccessVsErrorPage() {
             Coming Soon
           </h2>
           <p className="text-slate-600 mb-4">
-            This page will cover how try-error distinguishes between success and
-            error cases, type narrowing, and best practices for handling both
-            paths.
+            This page will cover advanced patterns for creating custom error
+            types, error hierarchies, domain-specific errors, and error
+            composition patterns.
           </p>
 
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
             <p className="text-blue-800">
-              📚 This documentation page is under development. Check back soon
-              for detailed content about success vs error handling patterns.
+              📚 This advanced guide is under development. Check back soon for
+              detailed patterns and examples.
             </p>
           </div>
         </section>
@@ -37,7 +37,7 @@ export default function SuccessVsErrorPage() {
             <div className="border border-slate-200 rounded-lg p-4">
               <h3 className="font-semibold text-slate-900 mb-2">Error Types</h3>
               <p className="text-slate-600 text-sm mb-3">
-                Learn about TryError structure and custom error types
+                Basic error types and TryError structure
               </p>
               <a
                 href="/docs/concepts/error-types"
@@ -48,15 +48,17 @@ export default function SuccessVsErrorPage() {
             </div>
 
             <div className="border border-slate-200 rounded-lg p-4">
-              <h3 className="font-semibold text-slate-900 mb-2">Quick Start</h3>
+              <h3 className="font-semibold text-slate-900 mb-2">
+                Error Factories
+              </h3>
               <p className="text-slate-600 text-sm mb-3">
-                Get started with basic try-error patterns
+                Patterns for creating error factory functions
               </p>
               <a
-                href="/docs/quick-start"
+                href="/docs/advanced/factories"
                 className="text-blue-600 hover:text-blue-800 text-sm font-medium"
               >
-                Get Started →
+                Learn Factories →
               </a>
             </div>
           </div>
