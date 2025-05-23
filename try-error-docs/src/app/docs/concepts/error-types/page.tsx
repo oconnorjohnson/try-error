@@ -1,3 +1,5 @@
+import { CodeBlock } from "../../../../components/EnhancedCodeBlock";
+
 export default function ErrorTypesPage() {
   return (
     <div className="max-w-4xl mx-auto py-8 px-6">
@@ -20,9 +22,12 @@ export default function ErrorTypesPage() {
             rich context and debugging information:
           </p>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`interface TryError {
+          <CodeBlock
+            language="typescript"
+            title="TryError Interface"
+            className="mb-4"
+          >
+            {`interface TryError {
   readonly type: 'TryError';
   readonly message: string;
   readonly stack?: string;
@@ -30,9 +35,8 @@ export default function ErrorTypesPage() {
   readonly timestamp: number;
   readonly context?: Record<string, unknown>;
   readonly cause?: Error | TryError;
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
 
           <h3 className="text-lg font-semibold text-slate-900 mb-3">
             Properties
@@ -108,9 +112,13 @@ export default function ErrorTypesPage() {
             function to create custom errors with additional context:
           </p>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`import { createTryError } from 'try-error';
+          <CodeBlock
+            language="typescript"
+            title="Creating Custom Errors"
+            showLineNumbers={true}
+            className="mb-4"
+          >
+            {`import { createTryError } from 'try-error';
 
 // Basic custom error
 const validationError = createTryError(
@@ -136,24 +144,25 @@ const parseError = createTryError(
   'Failed to parse configuration file',
   { filePath: './config.json' },
   originalError // The original Error that was caught
-);`}</code>
-            </pre>
-          </div>
+);`}
+          </CodeBlock>
 
           <h3 className="text-lg font-semibold text-slate-900 mb-3">
             createTryError Signature
           </h3>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`function createTryError(
+          <CodeBlock
+            language="typescript"
+            title="createTryError Function Signature"
+            className="mb-4"
+          >
+            {`function createTryError(
   source: string,
   message: string,
   context?: Record<string, unknown>,
   cause?: Error | TryError
-): TryError`}</code>
-            </pre>
-          </div>
+): TryError`}
+          </CodeBlock>
         </section>
 
         {/* Error Categories */}
@@ -166,9 +175,13 @@ const parseError = createTryError(
             Here are some common patterns for categorizing errors:
           </p>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`// Network errors
+          <CodeBlock
+            language="typescript"
+            title="Common Error Categories"
+            showLineNumbers={true}
+            className="mb-4"
+          >
+            {`// Network errors
 const networkError = createTryError(
   'NETWORK_ERROR',
   'Request timeout after 5000ms',
@@ -209,9 +222,8 @@ const systemError = createTryError(
     host: 'db.example.com',
     port: 5432
   }
-);`}</code>
-            </pre>
-          </div>
+);`}
+          </CodeBlock>
         </section>
 
         {/* Error Factories */}
@@ -225,9 +237,13 @@ const systemError = createTryError(
             application:
           </p>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`// Error factory for validation errors
+          <CodeBlock
+            language="typescript"
+            title="Error Factory Functions"
+            showLineNumbers={true}
+            className="mb-4"
+          >
+            {`// Error factory for validation errors
 export function createValidationError(
   field: string,
   value: unknown,
@@ -276,9 +292,8 @@ const emailError = createValidationError(
 
 const apiError = createApiError('/api/users', 404, 'Not Found');
 
-const dbError = createDatabaseError('INSERT', 'users', originalError);`}</code>
-            </pre>
-          </div>
+const dbError = createDatabaseError('INSERT', 'users', originalError);`}
+          </CodeBlock>
         </section>
 
         {/* Error Matching */}
@@ -291,9 +306,13 @@ const dbError = createDatabaseError('INSERT', 'users', originalError);`}</code>
             Use the source property to handle different types of errors:
           </p>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`import { tryAsync, isTryError } from 'try-error';
+          <CodeBlock
+            language="typescript"
+            title="Error Matching and Handling"
+            showLineNumbers={true}
+            className="mb-4"
+          >
+            {`import { tryAsync, isTryError } from 'try-error';
 
 async function handleUserOperation(userId: string) {
   const result = await tryAsync(() => fetchUser(userId));
@@ -337,9 +356,8 @@ function handleError(error: TryError) {
   }
   
   return 'An unexpected error occurred';
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
         </section>
 
         {/* Best Practices */}

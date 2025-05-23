@@ -1,3 +1,5 @@
+import { CodeBlock } from "../../../../components/EnhancedCodeBlock";
+
 export default function AsyncAPIPage() {
   return (
     <div className="max-w-4xl mx-auto py-8 px-6">
@@ -17,11 +19,13 @@ export default function AsyncAPIPage() {
             tryAsync
           </h2>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`function tryAsync<T>(fn: () => Promise<T>): Promise<TryResult<T, TryError>>`}</code>
-            </pre>
-          </div>
+          <CodeBlock
+            language="typescript"
+            title="Function Signature"
+            className="mb-4"
+          >
+            {`function tryAsync<T>(fn: () => Promise<T>): Promise<TryResult<T, TryError>>`}
+          </CodeBlock>
 
           <p className="text-slate-600 mb-4">
             Executes an asynchronous function and returns a Promise that
@@ -56,9 +60,13 @@ export default function AsyncAPIPage() {
             Examples
           </h3>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`import { tryAsync, isTryError } from 'try-error';
+          <CodeBlock
+            language="typescript"
+            title="tryAsync Examples"
+            showLineNumbers={true}
+            className="mb-4"
+          >
+            {`import { tryAsync, isTryError } from 'try-error';
 
 // API calls
 const fetchUser = async (id: string) => {
@@ -92,9 +100,8 @@ const saveUser = async (user: User) => {
     throw new Error('Failed to save user');
   }
   return result;
-};`}</code>
-            </pre>
-          </div>
+};`}
+          </CodeBlock>
         </section>
 
         {/* Common Async Patterns */}
@@ -107,9 +114,12 @@ const saveUser = async (user: User) => {
             Sequential Operations
           </h3>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`async function processUserData(userId: string) {
+          <CodeBlock
+            language="typescript"
+            title="Sequential Operations"
+            className="mb-4"
+          >
+            {`async function processUserData(userId: string) {
   // Step 1: Fetch user
   const userResult = await tryAsync(() => fetchUser(userId));
   if (isTryError(userResult)) return userResult;
@@ -121,17 +131,20 @@ const saveUser = async (user: User) => {
   // Step 3: Combine data
   const combinedResult = trySync(() => combineUserData(userResult, prefsResult));
   return combinedResult;
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
 
           <h3 className="text-lg font-semibold text-slate-900 mb-3">
             Parallel Operations
           </h3>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`async function fetchUserProfile(userId: string) {
+          <CodeBlock
+            language="typescript"
+            title="Parallel Operations"
+            showLineNumbers={true}
+            className="mb-4"
+          >
+            {`async function fetchUserProfile(userId: string) {
   // Start all operations in parallel
   const [userResult, prefsResult, postsResult] = await Promise.all([
     tryAsync(() => fetchUser(userId)),
@@ -160,17 +173,20 @@ const saveUser = async (user: User) => {
     preferences: isTryError(prefsResult) ? defaultPrefs : prefsResult,
     posts: isTryError(postsResult) ? [] : postsResult
   };
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
 
           <h3 className="text-lg font-semibold text-slate-900 mb-3">
             Retry Logic
           </h3>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`async function fetchWithRetry<T>(
+          <CodeBlock
+            language="typescript"
+            title="Retry Logic Implementation"
+            showLineNumbers={true}
+            className="mb-4"
+          >
+            {`async function fetchWithRetry<T>(
   operation: () => Promise<T>,
   maxRetries: number = 3
 ): Promise<TryResult<T, TryError>> {
@@ -191,17 +207,19 @@ const saveUser = async (user: User) => {
   
   // This should never be reached, but TypeScript requires it
   return createTryError('RETRY_EXHAUSTED', 'All retry attempts failed');
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
 
           <h3 className="text-lg font-semibold text-slate-900 mb-3">
             Timeout Handling
           </h3>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`async function fetchWithTimeout<T>(
+          <CodeBlock
+            language="typescript"
+            title="Timeout Handling"
+            className="mb-4"
+          >
+            {`async function fetchWithTimeout<T>(
   operation: () => Promise<T>,
   timeoutMs: number = 5000
 ): Promise<TryResult<T, TryError>> {
@@ -214,9 +232,8 @@ const saveUser = async (user: User) => {
   );
   
   return result;
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
         </section>
 
         {/* Error Handling Strategies */}
@@ -229,9 +246,13 @@ const saveUser = async (user: User) => {
             Graceful Degradation
           </h3>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`async function loadDashboard(userId: string) {
+          <CodeBlock
+            language="typescript"
+            title="Graceful Degradation Pattern"
+            showLineNumbers={true}
+            className="mb-4"
+          >
+            {`async function loadDashboard(userId: string) {
   // Critical data - must succeed
   const userResult = await tryAsync(() => fetchUser(userId));
   if (isTryError(userResult)) {
@@ -253,17 +274,20 @@ const saveUser = async (user: User) => {
       ...(isTryError(analyticsResult) ? ['Failed to load analytics'] : [])
     ]
   };
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
 
           <h3 className="text-lg font-semibold text-slate-900 mb-3">
             Circuit Breaker Pattern
           </h3>
 
-          <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
-            <pre>
-              <code>{`class CircuitBreaker {
+          <CodeBlock
+            language="typescript"
+            title="Circuit Breaker Implementation"
+            showLineNumbers={true}
+            className="mb-4"
+          >
+            {`class CircuitBreaker {
   private failures = 0;
   private lastFailureTime = 0;
   private readonly threshold = 5;
@@ -299,9 +323,8 @@ const saveUser = async (user: User) => {
     this.failures = 0;
     this.lastFailureTime = 0;
   }
-}`}</code>
-            </pre>
-          </div>
+}`}
+          </CodeBlock>
         </section>
 
         {/* Best Practices */}
