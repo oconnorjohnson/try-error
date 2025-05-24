@@ -151,7 +151,7 @@ if (isTryError(result)) {
 
         {/* Navigation */}
         <div className="grid md:grid-cols-2 gap-6 max-w-2xl mx-auto">
-          <div className="h-auto p-4 flex flex-col items-start bg-slate-800 border border-slate-700 rounded-lg hover:bg-slate-750 transition-colors">
+          <div className="h-auto p-4 flex flex-col items-start bg-slate-800 border border-slate-700 rounded-lg hover:bg-slate-700 transition-colors">
             <Link href="/docs" className="w-full">
               <div className="text-left">
                 <h3 className="font-semibold text-slate-100 mb-2">
@@ -164,7 +164,7 @@ if (isTryError(result)) {
             </Link>
           </div>
 
-          <div className="h-auto p-4 flex flex-col items-start bg-slate-800 border border-slate-700 rounded-lg hover:bg-slate-750 transition-colors">
+          <div className="h-auto p-4 flex flex-col items-start bg-slate-800 border border-slate-700 rounded-lg hover:bg-slate-700 transition-colors">
             <Link
               href="https://github.com/danieljohnson/try-error"
               className="w-full"
