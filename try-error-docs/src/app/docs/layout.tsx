@@ -16,7 +16,7 @@ export default function DocsLayout({
             <h1 className="text-lg font-semibold">try-error Documentation</h1>
           </div>
         </div>
-        <div className="flex-1 space-y-4 p-2 lg:p-6">{children}</div>
+        <div className="flex-1 space-y-4 p-4 lg:p-6">{children}</div>
       </main>
     </SidebarProvider>
   );
