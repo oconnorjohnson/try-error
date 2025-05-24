@@ -8,23 +8,24 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight, CheckCircle, Code, Zap } from "lucide-react";
+import { CodeBlock } from "@/components/EnhancedCodeBlock";
 
 export default function HomePage() {
   return (
     <div className="container mx-auto max-w-6xl p-8">
       {/* Hero Section */}
       <div className="flex flex-col items-center text-center space-y-6 py-12">
-        <div className="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm">
+        <div className="px-3 py-1 bg-yellow-900/50 text-yellow-200 rounded-full text-sm border border-yellow-700">
           🚧 Alpha Version - Not Production Ready
         </div>
 
-        <h1 className="text-4xl font-bold tracking-tight sm:text-6xl">
+        <h1 className="text-4xl font-bold tracking-tight sm:text-6xl text-slate-100">
           Type-Safe Error Handling
           <br />
-          <span className="text-blue-600">Made Simple</span>
+          <span className="text-blue-400">Made Simple</span>
         </h1>
 
-        <p className="text-xl text-gray-600 max-w-3xl">
+        <p className="text-xl text-slate-300 max-w-3xl">
           Lightweight, progressive, type-safe error handling for TypeScript.
           Bridge the gap between try/catch and heavy functional programming with
           <strong> zero-overhead success paths</strong>.
@@ -39,7 +40,7 @@ export default function HomePage() {
           </a>
           <a
             href="/docs"
-            className="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+            className="px-6 py-3 border border-slate-600 text-slate-200 rounded-lg hover:bg-slate-800 transition-colors"
           >
             View Documentation
           </a>
@@ -48,82 +49,84 @@ export default function HomePage() {
 
       {/* Features Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 py-12">
-        <div className="p-6 border rounded-lg">
+        <div className="p-6 border border-slate-700 bg-slate-800 rounded-lg">
           <div className="flex items-center gap-2 mb-4">
-            <div className="w-8 h-8 bg-yellow-100 rounded-lg flex items-center justify-center">
+            <div className="w-8 h-8 bg-yellow-900/50 rounded-lg flex items-center justify-center">
               ⚡
             </div>
-            <h3 className="text-lg font-semibold">Zero Overhead</h3>
+            <h3 className="text-lg font-semibold text-slate-100">
+              Zero Overhead
+            </h3>
           </div>
-          <p className="text-gray-600">
+          <p className="text-slate-300 mb-4">
             Success values are returned directly with no wrapping. Error objects
             only created when needed.
           </p>
-          <div className="mt-4 bg-gray-100 p-3 rounded text-sm font-mono">
-            <div className="text-green-600">// Success: Direct return</div>
-            <div>const result = trySync(() =&gt; parse(data));</div>
-            <div className="text-green-600">
-              // result is ParsedData | TryError
-            </div>
-          </div>
+          <CodeBlock language="typescript" className="text-sm">
+            {`// Success: Direct return
+const result = trySync(() => parse(data));
+// result is ParsedData | TryError`}
+          </CodeBlock>
         </div>
 
-        <div className="p-6 border rounded-lg">
+        <div className="p-6 border border-slate-700 bg-slate-800 rounded-lg">
           <div className="flex items-center gap-2 mb-4">
-            <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+            <div className="w-8 h-8 bg-green-900/50 rounded-lg flex items-center justify-center">
               ✅
             </div>
-            <h3 className="text-lg font-semibold">Progressive Adoption</h3>
+            <h3 className="text-lg font-semibold text-slate-100">
+              Progressive Adoption
+            </h3>
           </div>
-          <p className="text-gray-600">
+          <p className="text-slate-300 mb-4">
             Start simple with basic error handling, add complexity as needed. No
             need to rewrite existing code.
           </p>
-          <div className="mt-4 bg-gray-100 p-3 rounded text-sm font-mono">
-            <div className="text-green-600">// Start simple</div>
-            <div>const result = trySync(() =&gt; operation());</div>
-            <div className="text-green-600">
-              // Add retry, timeout, etc. later
-            </div>
-          </div>
+          <CodeBlock language="typescript" className="text-sm">
+            {`// Start simple
+const result = trySync(() => operation());
+// Add retry, timeout, etc. later`}
+          </CodeBlock>
         </div>
 
-        <div className="p-6 border rounded-lg">
+        <div className="p-6 border border-slate-700 bg-slate-800 rounded-lg">
           <div className="flex items-center gap-2 mb-4">
-            <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+            <div className="w-8 h-8 bg-blue-900/50 rounded-lg flex items-center justify-center">
               🛡️
             </div>
-            <h3 className="text-lg font-semibold">TypeScript First</h3>
+            <h3 className="text-lg font-semibold text-slate-100">
+              TypeScript First
+            </h3>
           </div>
-          <p className="text-gray-600">
+          <p className="text-slate-300 mb-4">
             Full type inference, discriminated unions, and strict null checks.
             Built for TypeScript developers.
           </p>
-          <div className="mt-4 bg-gray-100 p-3 rounded text-sm font-mono">
-            <div>if (isTryError(result)) &#123;</div>
-            <div className="ml-2 text-red-600">// result is TryError</div>
-            <div>&#125; else &#123;</div>
-            <div className="ml-2 text-green-600">// result is success type</div>
-            <div>&#125;</div>
-          </div>
+          <CodeBlock language="typescript" className="text-sm">
+            {`if (isTryError(result)) {
+  // result is TryError
+} else {
+  // result is success type
+}`}
+          </CodeBlock>
         </div>
       </div>
 
       {/* Code Example */}
       <div className="py-12">
-        <h2 className="text-3xl font-bold text-center mb-8">
+        <h2 className="text-3xl font-bold text-center mb-8 text-slate-100">
           See It In Action
         </h2>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="border rounded-lg">
-            <div className="p-4 border-b">
-              <h3 className="text-lg font-semibold text-red-600">
+          <div className="border border-slate-700 bg-slate-800 rounded-lg">
+            <div className="p-4 border-b border-slate-700">
+              <h3 className="text-lg font-semibold text-red-400">
                 ❌ Before: Traditional try/catch
               </h3>
             </div>
             <div className="p-4">
-              <pre className="bg-gray-100 p-4 rounded text-sm overflow-x-auto">
+              <CodeBlock language="typescript" className="text-sm">
                 {`try {
   const response = await fetch("/api/user");
   const user = await response.json();
@@ -132,18 +135,18 @@ export default function HomePage() {
   console.error("Something failed:", error);
   return null;
 }`}
-              </pre>
+              </CodeBlock>
             </div>
           </div>
 
-          <div className="border rounded-lg">
-            <div className="p-4 border-b">
-              <h3 className="text-lg font-semibold text-green-600">
+          <div className="border border-slate-700 bg-slate-800 rounded-lg">
+            <div className="p-4 border-b border-slate-700">
+              <h3 className="text-lg font-semibold text-green-400">
                 ✅ After: try-error
               </h3>
             </div>
             <div className="p-4">
-              <pre className="bg-gray-100 p-4 rounded text-sm overflow-x-auto">
+              <CodeBlock language="typescript" className="text-sm">
                 {`const result = await tryAsync(async () => {
   const response = await fetch("/api/user");
   return response.json();
@@ -155,47 +158,51 @@ if (isTryError(result)) {
 }
 
 return result; // Type-safe success value`}
-              </pre>
+              </CodeBlock>
             </div>
           </div>
         </div>
       </div>
 
       {/* Quick Links */}
-      <div className="py-12 border-t">
-        <h2 className="text-2xl font-bold text-center mb-8">Quick Links</h2>
+      <div className="py-12 border-t border-slate-700">
+        <h2 className="text-2xl font-bold text-center mb-8 text-slate-100">
+          Quick Links
+        </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <a
             href="/docs/installation"
-            className="p-4 border rounded-lg hover:bg-gray-50 transition-colors"
+            className="p-4 border border-slate-700 bg-slate-800 rounded-lg hover:bg-slate-700 transition-colors"
           >
-            <div className="font-semibold">Installation</div>
-            <div className="text-sm text-gray-600">Get up and running</div>
+            <div className="font-semibold text-slate-100">Installation</div>
+            <div className="text-sm text-slate-300">Get up and running</div>
           </a>
 
           <a
             href="/docs/api/sync"
-            className="p-4 border rounded-lg hover:bg-gray-50 transition-colors"
+            className="p-4 border border-slate-700 bg-slate-800 rounded-lg hover:bg-slate-700 transition-colors"
           >
-            <div className="font-semibold">API Reference</div>
-            <div className="text-sm text-gray-600">Complete function docs</div>
+            <div className="font-semibold text-slate-100">API Reference</div>
+            <div className="text-sm text-slate-300">Complete function docs</div>
           </a>
 
           <a
             href="/docs/react"
-            className="p-4 border rounded-lg hover:bg-gray-50 transition-colors"
+            className="p-4 border border-slate-700 bg-slate-800 rounded-lg hover:bg-slate-700 transition-colors"
           >
-            <div className="font-semibold">React Integration</div>
-            <div className="text-sm text-gray-600">Hooks and components</div>
+            <div className="font-semibold text-slate-100">
+              React Integration
+            </div>
+            <div className="text-sm text-slate-300">Hooks and components</div>
           </a>
 
           <a
             href="/docs/examples/basic"
-            className="p-4 border rounded-lg hover:bg-gray-50 transition-colors"
+            className="p-4 border border-slate-700 bg-slate-800 rounded-lg hover:bg-slate-700 transition-colors"
           >
-            <div className="font-semibold">Examples</div>
-            <div className="text-sm text-gray-600">Real-world usage</div>
+            <div className="font-semibold text-slate-100">Examples</div>
+            <div className="text-sm text-slate-300">Real-world usage</div>
           </a>
         </div>
       </div>
