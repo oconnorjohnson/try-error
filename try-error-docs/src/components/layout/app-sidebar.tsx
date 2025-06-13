@@ -209,6 +209,11 @@ const navigation = [
     title: "Reference",
     items: [
       {
+        title: "Error Factories",
+        url: "/docs/reference/error-factories",
+        icon: Code,
+      },
+      {
         title: "TypeScript Types",
         url: "/docs/reference/types",
         icon: Code,
