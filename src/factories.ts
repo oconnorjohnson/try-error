@@ -411,3 +411,143 @@ export function createValidationError<T extends string>(
     code,
   };
 }
+
+// ============================================================================
+// IMPROVED ERGONOMIC FACTORIES WITH BETTER PARAMETER ORDERS
+// ============================================================================
+
+/**
+ * IMPROVED: More intuitive validation error factory
+ *
+ * Common usage pattern with field and message as primary parameters
+ *
+ * @example
+ * ```typescript
+ * const error = validationError('email', 'invalid', 'Must be a valid email address', {
+ *   value: 'invalid-email',
+ *   pattern: /^\S+@\S+\.\S+$/
+ * });
+ * ```
+ */
+export function validationError<T extends string = "ValidationError">(
+  field: string,
+  code: string,
+  message: string,
+  context?: Record<string, unknown>
+): ValidationError<T> {
+  return createValidationError(
+    "ValidationError" as T,
+    message,
+    { [field]: [message] },
+    code,
+    { context }
+  );
+}
+
+/**
+ * IMPROVED: More intuitive amount error factory
+ *
+ * @example
+ * ```typescript
+ * const error = amountError(150, 100, 'insufficient', 'Insufficient funds available');
+ * ```
+ */
+export function amountError<T extends string = "AmountError">(
+  requestedAmount: number,
+  availableAmount: number,
+  errorCode: string,
+  message: string,
+  currency: string = "USD"
+): AmountError<T> {
+  return createAmountError(
+    requestedAmount,
+    currency,
+    "AmountError" as T,
+    message,
+    {
+      context: {
+        requestedAmount,
+        availableAmount,
+        errorCode,
+      },
+    }
+  );
+}
+
+/**
+ * IMPROVED: More intuitive external service error factory
+ *
+ * @example
+ * ```typescript
+ * const error = externalError('API', 'failed', 'Service unavailable', {
+ *   transactionId: 'tx_123',
+ *   statusCode: 503
+ * });
+ * ```
+ */
+export function externalError<T extends string = "ExternalError">(
+  service: string,
+  operation: string,
+  message: string,
+  context?: Record<string, unknown> & {
+    statusCode?: number;
+    externalId?: string;
+  }
+): ExternalError<T> {
+  return createExternalError(service, "ExternalError" as T, message, {
+    statusCode: context?.statusCode,
+    externalId: context?.externalId,
+    context: {
+      operation,
+      ...context,
+    },
+  });
+}
+
+/**
+ * IMPROVED: Quick entity error factory
+ *
+ * @example
+ * ```typescript
+ * const error = entityError('user', 'user_123', 'User not found');
+ * ```
+ */
+export function entityError<T extends string = "EntityError">(
+  entityType: string,
+  entityId: string,
+  message: string,
+  context?: Record<string, unknown>
+): EntityError<T> {
+  return createEntityError(entityType, entityId, "EntityError" as T, message, {
+    context,
+  });
+}
+
+/**
+ * IMPROVED: Multi-field validation error factory
+ *
+ * @example
+ * ```typescript
+ * const error = fieldValidationError({
+ *   email: ['Must be a valid email address'],
+ *   password: ['Must be at least 8 characters', 'Must contain a number']
+ * }, 'FORM_VALIDATION_ERROR');
+ * ```
+ */
+export function fieldValidationError<T extends string = "ValidationError">(
+  fields: Record<string, string[]>,
+  code: string = "VALIDATION_ERROR",
+  message?: string
+): ValidationError<T> {
+  const fieldCount = Object.keys(fields).length;
+  const defaultMessage =
+    message ||
+    `Validation failed for ${fieldCount} field${fieldCount === 1 ? "" : "s"}`;
+
+  return createValidationError(
+    "ValidationError" as T,
+    defaultMessage,
+    fields,
+    code
+  );
+}

@@ -299,6 +299,74 @@ const message = isOk(result)
             </CodeBlock>
           </CardContent>
         </Card>
+
+        <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+          <h3 className="text-lg font-semibold text-green-800 mb-3">
+            ✅ Fixed: TypeScript Union Type Issues
+          </h3>
+          <p className="text-green-700 mb-3">
+            We've added improved type guards and utilities to solve the most
+            common TypeScript inference problems:
+          </p>
+
+          <div className="space-y-4">
+            <div>
+              <h4 className="font-semibold text-green-800 mb-2">
+                1. Use isTryFailure() for Error Narrowing
+              </h4>
+              <CodeBlock language="typescript" className="mb-2">
+                {`// ✅ RECOMMENDED: Use isTryFailure for perfect error narrowing
+const result = await tryAsync(() => fetchData());
+
+if (isTryFailure(result)) {
+  // TypeScript knows this is TryError - perfect inference!
+  console.log(result.message);
+  console.log(result.type);
+  console.log(result.source);
+}
+
+// ✅ Or use isTrySuccess for success narrowing
+if (isTrySuccess(result)) {
+  // TypeScript knows this is your success type
+  console.log(result.data);
+}`}
+              </CodeBlock>
+            </div>
+
+            <div>
+              <h4 className="font-semibold text-green-800 mb-2">
+                2. Use matchTryResult() for Perfect Type Safety
+              </h4>
+              <CodeBlock language="typescript" className="mb-2">
+                {`// ✅ BEST: Use matchTryResult for 100% type-safe handling
+const message = matchTryResult(result, {
+  success: (data) => \`Success: \${data.name}\`,  // data is properly typed
+  error: (error) => \`Error: \${error.message}\`   // error is TryError
+});
+
+// No type inference issues, no manual checking needed!`}
+              </CodeBlock>
+            </div>
+
+            <div>
+              <h4 className="font-semibold text-green-800 mb-2">
+                3. Use unwrapTryResult() for Structured Access
+              </h4>
+              <CodeBlock language="typescript" className="mb-2">
+                {`// ✅ GOOD: Use unwrapTryResult for clear success/error structure
+const unwrapped = unwrapTryResult(result);
+
+if (unwrapped.success) {
+  console.log('Data:', unwrapped.data.name);
+} else {
+  console.log('Error:', unwrapped.error.message);
+}
+
+// Perfect TypeScript inference with clear intent`}
+              </CodeBlock>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

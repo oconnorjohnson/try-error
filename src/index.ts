@@ -12,7 +12,14 @@ export type {
   UnwrapTryError,
 } from "./types";
 
-export { isTryError, isTrySuccess } from "./types";
+// Core type guards and utilities
+export {
+  isTryError,
+  isTrySuccess,
+  isTryFailure,
+  matchTryResult,
+  unwrapTryResult,
+} from "./types";
 
 // Error creation utilities
 export type { CreateErrorOptions } from "./errors";
@@ -88,6 +95,11 @@ export {
   createAmountError,
   createExternalError,
   createValidationError,
+  validationError,
+  amountError,
+  externalError,
+  entityError,
+  fieldValidationError,
 } from "./factories";
 
 // Stage 1: Enhanced utilities for common patterns

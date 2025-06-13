@@ -11,6 +11,7 @@ export {
   type TryFailure,
   isTryError,
   isTrySuccess,
+  isTryFailure,
 
   // Error creation
   createError,
@@ -61,12 +62,21 @@ export {
   createAmountError,
   createExternalError,
   createValidationError,
+  // IMPROVED: More ergonomic error factories
+  validationError,
+  amountError,
+  externalError,
+  entityError,
+  fieldValidationError,
 } from "try-error";
 
-// Export React-specific APIs
-export * from "./types";
+// Export React-specific hooks
 export * from "./hooks/useTry";
 export * from "./hooks/useTryCallback";
+export * from "./hooks/useTryState";
+export * from "./hooks/useTryMutation";
+
+// Export React components
 export * from "./components/TryErrorBoundary";
 
 // Re-export specific types for convenience

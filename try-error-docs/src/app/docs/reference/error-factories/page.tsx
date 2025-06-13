@@ -28,6 +28,79 @@ export default function ErrorFactoriesPage() {
         </AlertDescription>
       </Alert>
 
+      <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+        <h3 className="text-lg font-semibold text-green-800 mb-3">
+          ✅ New: Improved Ergonomic Error Factories
+        </h3>
+        <p className="text-green-700 mb-3">
+          We've added more intuitive error factory functions with better
+          parameter orders:
+        </p>
+
+        <div className="space-y-4">
+          <div>
+            <h4 className="font-semibold text-green-800 mb-2">
+              Validation Errors (Simplified)
+            </h4>
+            <CodeBlock language="typescript" className="mb-2">
+              {`// ✅ NEW: Simple field validation
+const error = validationError('email', 'invalid', 'Must be a valid email address', { 
+  value: 'invalid-email' 
+});
+
+// ✅ NEW: Multi-field validation
+const formError = fieldValidationError({
+  email: ['Must be a valid email address'],
+  password: ['Must be at least 8 characters', 'Must contain a number']
+}, 'FORM_VALIDATION_ERROR');`}
+            </CodeBlock>
+          </div>
+
+          <div>
+            <h4 className="font-semibold text-green-800 mb-2">
+              Amount Errors (Simplified)
+            </h4>
+            <CodeBlock language="typescript" className="mb-2">
+              {`// ✅ NEW: Intuitive amount error with context
+const error = amountError(
+  150,        // requested amount
+  100,        // available amount  
+  'insufficient', 
+  'Insufficient funds available'
+);
+
+console.log(error.context.requestedAmount); // 150
+console.log(error.context.availableAmount); // 100`}
+            </CodeBlock>
+          </div>
+
+          <div>
+            <h4 className="font-semibold text-green-800 mb-2">
+              External Service Errors (Simplified)
+            </h4>
+            <CodeBlock language="typescript" className="mb-2">
+              {`// ✅ NEW: Clear service error creation
+const error = externalError('API', 'failed', 'Service unavailable', { 
+  transactionId: 'tx_123',
+  statusCode: 503 
+});
+
+// ✅ NEW: Quick entity errors
+const userError = entityError('user', 'user_123', 'User not found');`}
+            </CodeBlock>
+          </div>
+        </div>
+
+        <div className="bg-blue-50 border border-blue-200 rounded p-3 mt-4">
+          <p className="text-blue-800 text-sm">
+            <strong>Note:</strong> The original factory functions (
+            <code>createValidationError</code>, <code>createAmountError</code>,
+            etc.) are still available for backward compatibility. Use whichever
+            style you prefer!
+          </p>
+        </div>
+      </div>
+
       <div className="grid gap-6">
         <Card>
           <CardHeader>

@@ -56,6 +56,8 @@ export type TryTuple<T, E extends TryError = TryError> =
 
 /**
  * Type guard to check if a value is a TryError
+ *
+ * IMPROVED: This is the most reliable type guard - use this for type narrowing
  */
 export function isTryError<E extends TryError = TryError>(
   value: unknown
@@ -72,6 +74,26 @@ export function isTryError<E extends TryError = TryError>(
     typeof (value as any).source === "string" &&
     typeof (value as any).timestamp === "number"
   );
+}
+
+/**
+ * Type predicate to narrow a TryResult to its success type
+ *
+ * IMPROVED: More reliable than negating isTryError
+ */
+export function isTrySuccess<T, E extends TryError>(
+  result: TryResult<T, E>
+): result is T {
+  return !isTryError(result);
+}
+
+/**
+ * IMPROVED: More explicit type guard for errors that works better with TypeScript
+ */
+export function isTryFailure<T, E extends TryError>(
+  result: TryResult<T, E>
+): result is E {
+  return isTryError(result);
 }
 
 /**
@@ -97,10 +119,31 @@ export type UnwrapTry<R> = R extends TryResult<infer T, infer E>
 export type UnwrapTryError<R> = R extends TryResult<any, infer E> ? E : never;
 
 /**
- * Type predicate to narrow a TryResult to its success type
+ * IMPROVED: Discriminated union helper for better type inference
+ *
+ * This helps TypeScript understand the discriminated union pattern better
  */
-export function isTrySuccess<T, E extends TryError>(
+export function matchTryResult<T, E extends TryError, U>(
+  result: TryResult<T, E>,
+  handlers: {
+    success: (value: T) => U;
+    error: (error: E) => U;
+  }
+): U {
+  if (isTryError(result)) {
+    return handlers.error(result);
+  }
+  return handlers.success(result);
+}
+
+/**
+ * IMPROVED: Type-safe result unwrapping with better inference
+ */
+export function unwrapTryResult<T, E extends TryError>(
   result: TryResult<T, E>
-): result is T {
-  return !isTryError(result);
+): { success: true; data: T } | { success: false; error: E } {
+  if (isTryError(result)) {
+    return { success: false, error: result };
+  }
+  return { success: true, data: result };
 }

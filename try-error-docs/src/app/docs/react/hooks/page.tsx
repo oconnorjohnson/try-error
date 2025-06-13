@@ -514,6 +514,250 @@ function UsersList() {
             </div>
           </CardContent>
         </Card>
+
+        <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+          <h3 className="text-lg font-semibold text-green-800 mb-3">
+            ✅ New React Hooks Available
+          </h3>
+          <p className="text-green-700 mb-3">
+            We've added commonly requested React hooks for better integration:
+          </p>
+
+          <div className="grid gap-4 md:grid-cols-2">
+            <div className="bg-white rounded border p-3">
+              <h4 className="font-semibold text-green-800 mb-2">useTryState</h4>
+              <p className="text-sm text-green-700">
+                State management with built-in error handling
+              </p>
+            </div>
+            <div className="bg-white rounded border p-3">
+              <h4 className="font-semibold text-green-800 mb-2">
+                useTryMutation
+              </h4>
+              <p className="text-sm text-green-700">
+                Mutations with loading states (like React Query)
+              </p>
+            </div>
+            <div className="bg-white rounded border p-3">
+              <h4 className="font-semibold text-green-800 mb-2">
+                useFormMutation
+              </h4>
+              <p className="text-sm text-green-700">
+                Specialized hook for form submissions
+              </p>
+            </div>
+            <div className="bg-white rounded border p-3">
+              <h4 className="font-semibold text-green-800 mb-2">
+                useStateWithError
+              </h4>
+              <p className="text-sm text-green-700">
+                Simple state with error tracking
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>useTryState Hook</CardTitle>
+            <CardDescription>
+              State management with built-in error handling for state updates
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div>
+              <h4 className="font-semibold mb-2">Basic Usage</h4>
+              <CodeBlock language="typescript" title="useTryState example">
+                {`function UserProfile() {
+  const [user, setUser, error, clearError] = useTryState<User | null>(null);
+
+  const updateUser = useCallback((newUser: User) => {
+    setUser(() => {
+      // This can throw - error will be caught automatically
+      return validateAndTransformUser(newUser);
+    });
+  }, [setUser]);
+
+  return (
+    <div>
+      {error && (
+        <div className="error">
+          {error.message}
+          <button onClick={clearError}>Clear</button>
+        </div>
+      )}
+      
+      <UserForm 
+        user={user} 
+        onSubmit={updateUser}
+      />
+    </div>
+  );
+}`}
+              </CodeBlock>
+            </div>
+
+            <div>
+              <h4 className="font-semibold mb-2">API Reference</h4>
+              <CodeBlock
+                language="typescript"
+                title="useTryState type signature"
+              >
+                {`function useTryState<T>(
+  initialValue: T
+): [
+  T,                                              // current state value
+  (updater: T | ((current: T) => T)) => void,    // state setter with error handling
+  TryError | null,                               // current error (if any)
+  () => void                                     // clear error function
+]`}
+              </CodeBlock>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>useTryMutation Hook</CardTitle>
+            <CardDescription>
+              Mutation handling with loading states, similar to React Query
+              patterns
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div>
+              <h4 className="font-semibold mb-2">Basic Usage</h4>
+              <CodeBlock language="typescript" title="useTryMutation example">
+                {`function CreateUserForm() {
+  const { mutate, isLoading, error, data } = useTryMutation(
+    async (userData: CreateUserData) => {
+      const response = await fetch('/api/users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(userData)
+      });
+      
+      if (!response.ok) {
+        throw new Error(\`HTTP \${response.status}: \${response.statusText}\`);
+      }
+      
+      return response.json();
+    },
+    {
+      onSuccess: (user) => {
+        toast.success(\`User \${user.name} created!\`);
+        router.push(\`/users/\${user.id}\`);
+      },
+      onError: (error) => {
+        toast.error(error.message);
+      }
+    }
+  );
+
+  const handleSubmit = (formData: CreateUserData) => {
+    mutate(formData);
+  };
+
+  return (
+    <form onSubmit={(e) => {
+      e.preventDefault();
+      handleSubmit(getFormData(e.currentTarget));
+    }}>
+      {/* form fields */}
+      
+      <button type="submit" disabled={isLoading}>
+        {isLoading ? 'Creating...' : 'Create User'}
+      </button>
+      
+      {error && <div className="error">{error.message}</div>}
+      {data && <div className="success">User created: {data.name}</div>}
+    </form>
+  );
+}`}
+              </CodeBlock>
+            </div>
+
+            <div>
+              <h4 className="font-semibold mb-2">API Reference</h4>
+              <CodeBlock
+                language="typescript"
+                title="useTryMutation type signature"
+              >
+                {`function useTryMutation<T, TVariables = void>(
+  mutationFn: (variables: TVariables) => Promise<T>,
+  options?: {
+    onSuccess?: (data: T) => void;
+    onError?: (error: TryError) => void;
+    onSettled?: () => void;
+  }
+): {
+  data: T | null;
+  error: TryError | null;
+  isLoading: boolean;
+  isSuccess: boolean;
+  isError: boolean;
+  mutate: (variables: TVariables) => Promise<void>;
+  mutateAsync: (variables: TVariables) => Promise<TryResult<T, TryError>>;
+  reset: () => void;
+}`}
+              </CodeBlock>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>useFormMutation Hook</CardTitle>
+            <CardDescription>
+              Specialized hook for form submissions with automatic FormData
+              handling
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div>
+              <h4 className="font-semibold mb-2">Basic Usage</h4>
+              <CodeBlock language="typescript" title="useFormMutation example">
+                {`function ContactForm() {
+  const { submitForm, isSubmitting, submitError, submitData } = useFormMutation(
+    async (formData: FormData) => {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        body: formData
+      });
+      
+      return response.json();
+    },
+    {
+      onSuccess: () => {
+        toast.success('Message sent successfully!');
+      }
+    }
+  );
+
+  return (
+    <form onSubmit={submitForm}>
+      <input name="name" placeholder="Your name" required />
+      <input name="email" type="email" placeholder="Your email" required />
+      <textarea name="message" placeholder="Your message" required />
+      
+      <button type="submit" disabled={isSubmitting}>
+        {isSubmitting ? 'Sending...' : 'Send Message'}
+      </button>
+      
+      {submitError && (
+        <div className="error">{submitError.message}</div>
+      )}
+      
+      {submitData && (
+        <div className="success">Message sent! ID: {submitData.id}</div>
+      )}
+    </form>
+  );
+}`}
+              </CodeBlock>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
