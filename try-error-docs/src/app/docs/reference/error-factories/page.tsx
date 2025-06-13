@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
-import { CodeBlock } from "@/components/docs/code-block";
+import { CodeBlock } from "@/components/EnhancedCodeBlock";
 
 export default function ErrorFactoriesPage() {
   return (
