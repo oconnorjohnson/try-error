@@ -28,6 +28,247 @@ export default function ErrorFactoriesPage() {
         </AlertDescription>
       </Alert>
 
+      {/* Philosophy and Overview Section */}
+      <div className="space-y-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>Error Factory Philosophy</CardTitle>
+            <CardDescription>
+              Understanding the design principles behind try-error factories
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div>
+              <h4 className="font-semibold mb-2">Why Error Factories?</h4>
+              <p className="text-sm text-muted-foreground mb-3">
+                Error factories solve three core problems in JavaScript error
+                handling:
+              </p>
+              <div className="grid md:grid-cols-3 gap-4">
+                <div className="bg-blue-50 p-3 rounded-lg">
+                  <h5 className="font-semibold text-blue-800 mb-1">
+                    Consistency
+                  </h5>
+                  <p className="text-xs text-blue-700">
+                    Standardized error structure across your entire application
+                  </p>
+                </div>
+                <div className="bg-green-50 p-3 rounded-lg">
+                  <h5 className="font-semibold text-green-800 mb-1">
+                    Type Safety
+                  </h5>
+                  <p className="text-xs text-green-700">
+                    Full TypeScript support with discriminated unions
+                  </p>
+                </div>
+                <div className="bg-purple-50 p-3 rounded-lg">
+                  <h5 className="font-semibold text-purple-800 mb-1">
+                    Rich Context
+                  </h5>
+                  <p className="text-xs text-purple-700">
+                    Capture debugging information at the point of failure
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h4 className="font-semibold mb-2">Design Principles</h4>
+              <div className="bg-slate-50 p-4 rounded-lg">
+                <ul className="text-sm space-y-2">
+                  <li className="flex items-start gap-2">
+                    <span className="text-green-600 mt-0.5">✓</span>
+                    <span>
+                      <strong>Progressive Enhancement:</strong> Start simple,
+                      add complexity as needed
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-green-600 mt-0.5">✓</span>
+                    <span>
+                      <strong>Ergonomic API:</strong> Natural parameter order,
+                      intuitive naming
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-green-600 mt-0.5">✓</span>
+                    <span>
+                      <strong>Context-Rich:</strong> Capture relevant debugging
+                      information automatically
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-green-600 mt-0.5">✓</span>
+                    <span>
+                      <strong>Type-First:</strong> Leverage TypeScript's
+                      discriminated unions
+                    </span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Available Factory Methods</CardTitle>
+            <CardDescription>
+              Quick reference for all error factory functions
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid md:grid-cols-2 gap-6">
+              <div>
+                <h4 className="font-semibold mb-3 text-blue-600">
+                  Core Factories
+                </h4>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between items-center">
+                    <code className="text-xs bg-slate-100 px-2 py-1 rounded">
+                      createError()
+                    </code>
+                    <span className="text-muted-foreground">
+                      Primary factory function
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <code className="text-xs bg-slate-100 px-2 py-1 rounded">
+                      wrapError()
+                    </code>
+                    <span className="text-muted-foreground">
+                      Wrap existing errors
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <code className="text-xs bg-slate-100 px-2 py-1 rounded">
+                      fromThrown()
+                    </code>
+                    <span className="text-muted-foreground">
+                      Convert thrown exceptions
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h4 className="font-semibold mb-3 text-green-600">
+                  Domain-Specific Factories
+                </h4>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between items-center">
+                    <code className="text-xs bg-slate-100 px-2 py-1 rounded">
+                      validationError()
+                    </code>
+                    <span className="text-muted-foreground">
+                      Field validation failures
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <code className="text-xs bg-slate-100 px-2 py-1 rounded">
+                      amountError()
+                    </code>
+                    <span className="text-muted-foreground">
+                      Financial/quantity errors
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <code className="text-xs bg-slate-100 px-2 py-1 rounded">
+                      externalError()
+                    </code>
+                    <span className="text-muted-foreground">
+                      External service failures
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <code className="text-xs bg-slate-100 px-2 py-1 rounded">
+                      entityError()
+                    </code>
+                    <span className="text-muted-foreground">
+                      Entity not found/conflicts
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-6 p-4 bg-amber-50 border border-amber-200 rounded-lg">
+              <h5 className="font-semibold text-amber-800 mb-2">
+                Choosing the Right Factory
+              </h5>
+              <div className="text-sm text-amber-700 space-y-1">
+                <p>
+                  • <strong>Start with domain-specific factories</strong> for
+                  common use cases
+                </p>
+                <p>
+                  • <strong>Use createError()</strong> for custom error types
+                  and complex scenarios
+                </p>
+                <p>
+                  • <strong>Use wrapError()</strong> when you need to add
+                  context to existing errors
+                </p>
+                <p>
+                  • <strong>Use fromThrown()</strong> in try/catch blocks to
+                  convert exceptions
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Quick Start Examples</CardTitle>
+            <CardDescription>
+              Common patterns to get you started immediately
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div>
+              <h4 className="font-semibold mb-2">Simple Validation</h4>
+              <CodeBlock language="typescript" className="mb-2">
+                {`// Quick field validation
+const error = validationError('email', 'required', 'Email is required');
+
+// With additional context
+const error = validationError('age', 'range', 'Age must be 18-65', {
+  min: 18,
+  max: 65,
+  provided: 16
+});`}
+              </CodeBlock>
+            </div>
+
+            <div>
+              <h4 className="font-semibold mb-2">API Error Handling</h4>
+              <CodeBlock language="typescript" className="mb-2">
+                {`// External service failure
+const error = externalError('PaymentAPI', 'timeout', 'Payment service unavailable');
+
+// With request context
+const error = externalError('UserAPI', 'not_found', 'User not found', {
+  userId: '123',
+  endpoint: '/api/users/123'
+});`}
+              </CodeBlock>
+            </div>
+
+            <div>
+              <h4 className="font-semibold mb-2">Business Logic Errors</h4>
+              <CodeBlock language="typescript" className="mb-2">
+                {`// Insufficient funds
+const error = amountError(150, 100, 'insufficient', 'Insufficient balance');
+
+// Entity conflicts
+const error = entityError('user', 'john@example.com', 'User already exists');`}
+              </CodeBlock>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
       <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
         <h3 className="text-lg font-semibold text-green-800 mb-3">
           ✅ New: Improved Ergonomic Error Factories
