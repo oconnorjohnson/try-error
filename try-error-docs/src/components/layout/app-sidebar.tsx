@@ -259,7 +259,7 @@ export function AppSidebar() {
     }, 100);
 
     return () => clearTimeout(timer);
-  }, [pathname]); // Re-run when pathname changes
+  }, [pathname, scrollContainerRef]); // Re-run when pathname changes
 
   return (
     <Sidebar>
