@@ -228,7 +228,7 @@ export default function ErrorFactoriesPage() {
           <CardContent className="space-y-4">
             <div>
               <h4 className="font-semibold mb-2">Simple Validation</h4>
-              <CodeBlock language="typescript" className="mb-2">
+              <CodeBlock language="typescript" title="Quick field validation">
                 {`// Quick field validation
 const error = validationError('email', 'required', 'Email is required');
 
@@ -243,7 +243,7 @@ const error = validationError('age', 'range', 'Age must be 18-65', {
 
             <div>
               <h4 className="font-semibold mb-2">API Error Handling</h4>
-              <CodeBlock language="typescript" className="mb-2">
+              <CodeBlock language="typescript" title="External service errors">
                 {`// External service failure
 const error = externalError('PaymentAPI', 'timeout', 'Payment service unavailable');
 
@@ -257,7 +257,7 @@ const error = externalError('UserAPI', 'not_found', 'User not found', {
 
             <div>
               <h4 className="font-semibold mb-2">Business Logic Errors</h4>
-              <CodeBlock language="typescript" className="mb-2">
+              <CodeBlock language="typescript" title="Amount and entity errors">
                 {`// Insufficient funds
 const error = amountError(150, 100, 'insufficient', 'Insufficient balance');
 
@@ -283,7 +283,10 @@ const error = entityError('user', 'john@example.com', 'User already exists');`}
             <h4 className="font-semibold text-green-800 mb-2">
               Validation Errors (Simplified)
             </h4>
-            <CodeBlock language="typescript" className="mb-2">
+            <CodeBlock
+              language="typescript"
+              title="Simplified validation errors"
+            >
               {`// ✅ NEW: Simple field validation
 const error = validationError('email', 'invalid', 'Must be a valid email address', { 
   value: 'invalid-email' 
@@ -301,7 +304,7 @@ const formError = fieldValidationError({
             <h4 className="font-semibold text-green-800 mb-2">
               Amount Errors (Simplified)
             </h4>
-            <CodeBlock language="typescript" className="mb-2">
+            <CodeBlock language="typescript" title="Simplified amount errors">
               {`// ✅ NEW: Intuitive amount error with context
 const error = amountError(
   150,        // requested amount
@@ -319,7 +322,10 @@ console.log(error.context.availableAmount); // 100`}
             <h4 className="font-semibold text-green-800 mb-2">
               External Service Errors (Simplified)
             </h4>
-            <CodeBlock language="typescript" className="mb-2">
+            <CodeBlock
+              language="typescript"
+              title="Simplified external service errors"
+            >
               {`// ✅ NEW: Clear service error creation
 const error = externalError('API', 'failed', 'Service unavailable', { 
   transactionId: 'tx_123',
