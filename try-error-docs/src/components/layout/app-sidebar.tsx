@@ -10,6 +10,7 @@ import {
   Rocket,
   Settings,
   Zap,
+  Github,
 } from "lucide-react";
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
@@ -300,9 +301,22 @@ export function AppSidebar() {
       </SidebarContent>
 
       <SidebarFooter className="border-t p-4">
-        <div className="text-xs text-muted-foreground">
-          <p>Built with Next.js & shadcn/ui</p>
-          <p className="mt-1">© 2024 try-error</p>
+        <div className="text-xs text-muted-foreground space-y-3">
+          <div>
+            <p>Built with Next.js & shadcn/ui</p>
+            <p className="mt-1">© 2024 try-error</p>
+          </div>
+          <div className="pt-2 border-t border-border">
+            <a
+              href="https://github.com/oconnorjohnson/try-error"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <Github className="h-3 w-3" />
+              View on GitHub
+            </a>
+          </div>
         </div>
       </SidebarFooter>
     </Sidebar>

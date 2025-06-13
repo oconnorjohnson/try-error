@@ -1,13 +1,4 @@
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { ArrowRight, CheckCircle, Code, Zap } from "lucide-react";
+import { Github } from "lucide-react";
 import { CodeBlock } from "@/components/EnhancedCodeBlock";
 
 export default function HomePage() {
@@ -31,7 +22,7 @@ export default function HomePage() {
           <strong> zero-overhead success paths</strong>.
         </p>
 
-        <div className="flex gap-4">
+        <div className="flex gap-4 flex-wrap justify-center">
           <a
             href="/docs/quick-start"
             className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
@@ -43,6 +34,15 @@ export default function HomePage() {
             className="px-6 py-3 border border-slate-600 text-slate-200 rounded-lg hover:bg-slate-800 transition-colors"
           >
             View Documentation
+          </a>
+          <a
+            href="https://github.com/oconnorjohnson/try-error"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-6 py-3 border border-slate-600 text-slate-200 rounded-lg hover:bg-slate-800 transition-colors"
+          >
+            <Github className="h-4 w-4" />
+            GitHub
           </a>
         </div>
       </div>
