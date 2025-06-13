@@ -99,9 +99,29 @@ const navigation = [
         icon: Code,
       },
       {
+        title: "Error Factories",
+        url: "/docs/reference/error-factories",
+        icon: Code,
+      },
+      {
         title: "Utilities",
         url: "/docs/api/utils",
         icon: Code,
+      },
+    ],
+  },
+  {
+    title: "Troubleshooting",
+    items: [
+      {
+        title: "TypeScript Issues",
+        url: "/docs/troubleshooting",
+        icon: Settings,
+      },
+      {
+        title: "Common Pitfalls",
+        url: "/docs/common-pitfalls",
+        icon: Settings,
       },
     ],
   },

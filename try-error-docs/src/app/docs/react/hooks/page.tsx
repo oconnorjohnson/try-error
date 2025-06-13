@@ -1,394 +1,519 @@
-import { CodeBlock } from "../../../../components/EnhancedCodeBlock";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { CodeBlock } from "@/components/docs/code-block";
 
 export default function ReactHooksPage() {
   return (
-    <div className="max-w-4xl mx-auto py-8 px-6">
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold text-slate-900 mb-4">React Hooks</h1>
-        <p className="text-xl text-slate-600">
-          Powerful hooks for integrating try-error with React components
+    <div className="space-y-8">
+      <div>
+        <h1 className="text-4xl font-bold mb-4">React Hooks</h1>
+        <p className="text-xl text-muted-foreground">
+          Complete guide to using try-error hooks in React applications.
         </p>
       </div>
 
-      <div className="space-y-8">
-        {/* useTryAsync Hook */}
-        <section>
-          <h2 className="text-2xl font-semibold text-slate-900 mb-4">
-            useTryAsync
-          </h2>
+      <Alert>
+        <AlertDescription>
+          The @try-error/react package provides hooks that integrate seamlessly
+          with React's state management and lifecycle, making error handling
+          declarative and type-safe.
+        </AlertDescription>
+      </Alert>
 
-          <CodeBlock
-            language="typescript"
-            title="useTryAsync Hook Signature"
-            className="mb-4"
-          >
-            {`function useTryAsync<T>(
-  asyncFn: () => Promise<T>,
-  deps?: React.DependencyList
-): {
-  data: T | null;
-  error: TryError | null;
-  loading: boolean;
-  refetch: () => void;
-}`}
-          </CodeBlock>
-
-          <p className="text-slate-600 mb-4">
-            Hook for handling asynchronous operations with automatic loading
-            states and error handling.
-          </p>
-
-          <h3 className="text-lg font-semibold text-slate-900 mb-3">Example</h3>
-
-          <CodeBlock
-            language="tsx"
-            title="useTryAsync Example"
-            showLineNumbers={true}
-            className="mb-4"
-          >
-            {`import { useTryAsync } from '@try-error/react';
+      <div className="grid gap-6">
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Badge>useTry</Badge>
+              Async Operation Hook
+            </CardTitle>
+            <CardDescription>
+              Handle async operations with loading states and error handling
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div>
+              <h4 className="font-semibold mb-2">Basic Usage</h4>
+              <CodeBlock language="typescript" title="useTry basic example">
+                {`import { useTry } from '@try-error/react';
 
 function UserProfile({ userId }: { userId: string }) {
-  const { data: user, error, loading, refetch } = useTryAsync(
+  const { data, error, loading, execute, reset } = useTry(
     async () => {
       const response = await fetch(\`/api/users/\${userId}\`);
       if (!response.ok) throw new Error('Failed to fetch user');
       return response.json();
     },
-    [userId]
+    [userId] // Dependencies - will re-execute when userId changes
   );
 
-  if (loading) {
-    return <div className="animate-pulse">Loading user...</div>;
-  }
-
-  if (error) {
-    return (
-      <div className="text-red-600">
-        <p>Error: {error.message}</p>
-        <button onClick={refetch} className="mt-2 px-4 py-2 bg-blue-500 text-white rounded">
-          Retry
-        </button>
-      </div>
-    );
-  }
-
-  if (!user) {
-    return <div>No user found</div>;
-  }
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
+  if (!data) return <div>No user found</div>;
 
   return (
     <div>
-      <h1>{user.name}</h1>
-      <p>{user.email}</p>
-      <button onClick={refetch}>Refresh</button>
+      <h1>{data.name}</h1>
+      <p>{data.email}</p>
+      <button onClick={reset}>Refresh</button>
     </div>
   );
 }`}
-          </CodeBlock>
+              </CodeBlock>
+            </div>
 
-          <h3 className="text-lg font-semibold text-slate-900 mb-3">
-            Parameters
-          </h3>
-          <div className="bg-slate-50 border border-slate-200 rounded-lg p-4 mb-4">
-            <ul className="space-y-2">
-              <li>
-                <code className="bg-slate-200 px-2 py-1 rounded">asyncFn</code>{" "}
-                - The async function to execute
-              </li>
-              <li>
-                <code className="bg-slate-200 px-2 py-1 rounded">deps</code> -
-                Dependency array (optional)
-              </li>
-            </ul>
-          </div>
-        </section>
+            <div>
+              <h4 className="font-semibold mb-2">API Reference</h4>
+              <CodeBlock language="typescript" title="useTry type signature">
+                {`function useTry<T>(
+  operation: () => Promise<T>,
+  deps?: React.DependencyList,
+  options?: UseTryOptions
+): UseTryResult<T>
 
-        {/* useTrySync Hook */}
-        <section>
-          <h2 className="text-2xl font-semibold text-slate-900 mb-4">
-            useTrySync
-          </h2>
+interface UseTryOptions {
+  immediate?: boolean;        // Execute immediately on mount (default: true)
+  resetOnDepsChange?: boolean; // Reset state when deps change (default: true)
+  retryCount?: number;        // Number of automatic retries (default: 0)
+  retryDelay?: number;        // Delay between retries in ms (default: 1000)
+}
 
-          <CodeBlock
-            language="typescript"
-            title="useTrySync Hook Signature"
-            className="mb-4"
-          >
-            {`function useTrySync<T>(
-  syncFn: () => T,
-  deps?: React.DependencyList
-): {
-  data: T | null;
-  error: TryError | null;
-  execute: () => void;
+interface UseTryResult<T> {
+  data: T | null;            // Success result
+  error: TryError | null;    // Error result
+  loading: boolean;          // Loading state
+  execute: () => Promise<void>; // Manual execution function
+  reset: () => void;         // Reset state function
 }`}
-          </CodeBlock>
+              </CodeBlock>
+            </div>
 
-          <p className="text-slate-600 mb-4">
-            Hook for handling synchronous operations that might throw errors.
-          </p>
-
-          <h3 className="text-lg font-semibold text-slate-900 mb-3">Example</h3>
-
-          <CodeBlock
-            language="tsx"
-            title="useTrySync Example"
-            showLineNumbers={true}
-            className="mb-4"
-          >
-            {`import { useTrySync } from '@try-error/react';
-
-function ConfigDisplay({ configString }: { configString: string }) {
-  const { data: config, error, execute } = useTrySync(
-    () => JSON.parse(configString),
-    [configString]
-  );
-
-  if (error) {
-    return (
-      <div className="text-red-600">
-        <p>Invalid JSON: {error.message}</p>
-        <button onClick={execute}>Try Again</button>
-      </div>
-    );
-  }
-
-  return (
-    <pre className="bg-gray-100 p-4 rounded">
-      {JSON.stringify(config, null, 2)}
-    </pre>
-  );
-}`}
-          </CodeBlock>
-        </section>
-
-        {/* useTryMutation Hook */}
-        <section>
-          <h2 className="text-2xl font-semibold text-slate-900 mb-4">
-            useTryMutation
-          </h2>
-
-          <CodeBlock
-            language="typescript"
-            title="useTryMutation Hook Signature"
-            className="mb-4"
-          >
-            {`function useTryMutation<T, TVariables = void>(
-  mutationFn: (variables: TVariables) => Promise<T>
-): {
-  mutate: (variables: TVariables) => Promise<void>;
-  data: T | null;
-  error: TryError | null;
-  loading: boolean;
-  reset: () => void;
-}`}
-          </CodeBlock>
-
-          <p className="text-slate-600 mb-4">
-            Hook for handling mutations (create, update, delete operations) with
-            loading and error states.
-          </p>
-
-          <h3 className="text-lg font-semibold text-slate-900 mb-3">Example</h3>
-
-          <CodeBlock
-            language="tsx"
-            title="useTryMutation Example"
-            showLineNumbers={true}
-            className="mb-4"
-          >
-            {`import { useTryMutation } from '@try-error/react';
-
-function CreateUserForm() {
-  const { mutate: createUser, loading, error, data } = useTryMutation(
-    async (userData: { name: string; email: string }) => {
-      const response = await fetch('/api/users', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(userData),
-      });
-      if (!response.ok) throw new Error('Failed to create user');
-      return response.json();
+            <div>
+              <h4 className="font-semibold mb-2">Advanced Configuration</h4>
+              <CodeBlock language="typescript" title="useTry with options">
+                {`function DataFetcher() {
+  const { data, error, loading, execute } = useTry(
+    async () => {
+      const result = await tryAsync(() => fetchCriticalData());
+      if (isTryError(result)) {
+        throw result; // Re-throw to trigger retry logic
+      }
+      return result;
+    },
+    [], // No dependencies - manual execution only
+    {
+      immediate: false,    // Don't execute on mount
+      retryCount: 3,       // Retry up to 3 times
+      retryDelay: 2000,    // Wait 2 seconds between retries
     }
   );
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    await createUser({
-      name: formData.get('name') as string,
-      email: formData.get('email') as string,
-    });
-  };
-
-  if (data) {
-    return <div className="text-green-600">User created successfully!</div>;
-  }
-
-  return (
-    <form onSubmit={handleSubmit}>
-      <input name="name" placeholder="Name" required />
-      <input name="email" type="email" placeholder="Email" required />
-      <button type="submit" disabled={loading}>
-        {loading ? 'Creating...' : 'Create User'}
-      </button>
-      {error && <p className="text-red-600">Error: {error.message}</p>}
-    </form>
-  );
-}`}
-          </CodeBlock>
-        </section>
-
-        {/* useTryCallback Hook */}
-        <section>
-          <h2 className="text-2xl font-semibold text-slate-900 mb-4">
-            useTryCallback
-          </h2>
-
-          <CodeBlock
-            language="typescript"
-            title="useTryCallback Hook Signature"
-            className="mb-4"
-          >
-            {`function useTryCallback<T extends (...args: any[]) => any>(
-  callback: T,
-  deps: React.DependencyList
-): T & {
-  error: TryError | null;
-  clearError: () => void;
-}`}
-          </CodeBlock>
-
-          <p className="text-slate-600 mb-4">
-            Hook that wraps a callback function with error handling, similar to
-            useCallback but with try-error integration.
-          </p>
-
-          <h3 className="text-lg font-semibold text-slate-900 mb-3">Example</h3>
-
-          <CodeBlock
-            language="tsx"
-            title="useTryCallback Example"
-            showLineNumbers={true}
-            className="mb-4"
-          >
-            {`import { useTryCallback } from '@try-error/react';
-
-function FileUploader() {
-  const handleFileUpload = useTryCallback(
-    async (file: File) => {
-      if (file.size > 10 * 1024 * 1024) {
-        throw new Error('File too large (max 10MB)');
-      }
-      
-      const formData = new FormData();
-      formData.append('file', file);
-      
-      const response = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData,
-      });
-      
-      if (!response.ok) throw new Error('Upload failed');
-      return response.json();
-    },
-    []
-  );
-
   return (
     <div>
-      <input
-        type="file"
-        onChange={(e) => {
-          const file = e.target.files?.[0];
-          if (file) handleFileUpload(file);
-        }}
-      />
-      {handleFileUpload.error && (
-        <div className="text-red-600">
-          <p>Upload error: {handleFileUpload.error.message}</p>
-          <button onClick={handleFileUpload.clearError}>Clear Error</button>
-        </div>
-      )}
+      <button onClick={execute} disabled={loading}>
+        {loading ? 'Fetching...' : 'Fetch Data'}
+      </button>
+      {error && <ErrorDisplay error={error} />}
+      {data && <DataDisplay data={data} />}
     </div>
   );
 }`}
-          </CodeBlock>
-        </section>
+              </CodeBlock>
+            </div>
+          </CardContent>
+        </Card>
 
-        {/* Best Practices */}
-        <section>
-          <h2 className="text-2xl font-semibold text-slate-900 mb-4">
-            Best Practices
-          </h2>
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Badge>useTryCallback</Badge>
+              Event Handler Hook
+            </CardTitle>
+            <CardDescription>
+              Create error-safe event handlers with loading states
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div>
+              <h4 className="font-semibold mb-2">Basic Usage</h4>
+              <CodeBlock language="typescript" title="useTryCallback example">
+                {`import { useTryCallback } from '@try-error/react';
 
-          <div className="space-y-4">
-            <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-              <h4 className="font-semibold text-green-800 mb-2">✅ Do</h4>
-              <ul className="space-y-1 text-green-700 text-sm">
-                <li>• Use dependency arrays to control when effects re-run</li>
-                <li>• Handle loading states for better user experience</li>
-                <li>• Provide retry mechanisms for failed operations</li>
-                <li>• Use useTryMutation for state-changing operations</li>
-                <li>• Clear errors when appropriate</li>
-              </ul>
+function CreateUserForm() {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+
+  const { execute: createUser, loading, error } = useTryCallback(
+    async (formData: { name: string; email: string }) => {
+      const result = await tryAsync(() => 
+        fetch('/api/users', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        })
+      );
+
+      if (isTryError(result)) {
+        throw result;
+      }
+
+      if (!result.ok) {
+        throw createError({
+          type: 'ValidationError',
+          message: 'Failed to create user',
+          context: { status: result.status }
+        });
+      }
+
+      return result.json();
+    },
+    {
+      onSuccess: (user) => {
+        console.log('User created:', user);
+        setName('');
+        setEmail('');
+      },
+      onError: (error) => {
+        console.error('Failed to create user:', error);
+      }
+    }
+  );
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    createUser({ name, email });
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <input 
+        value={name} 
+        onChange={(e) => setName(e.target.value)}
+        placeholder="Name"
+        disabled={loading}
+      />
+      <input 
+        value={email} 
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder="Email"
+        disabled={loading}
+      />
+      <button type="submit" disabled={loading}>
+        {loading ? 'Creating...' : 'Create User'}
+      </button>
+      {error && <div className="error">{error.message}</div>}
+    </form>
+  );
+}`}
+              </CodeBlock>
             </div>
 
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-              <h4 className="font-semibold text-red-800 mb-2">❌ Don't</h4>
-              <ul className="space-y-1 text-red-700 text-sm">
-                <li>• Forget to handle error states in your UI</li>
-                <li>
-                  • Use useTryAsync for mutations (use useTryMutation instead)
-                </li>
-                <li>• Ignore loading states</li>
-                <li>
-                  • Create new functions on every render without memoization
-                </li>
-              </ul>
-            </div>
-          </div>
-        </section>
-
-        {/* Related Pages */}
-        <section>
-          <h2 className="text-2xl font-semibold text-slate-900 mb-4">
-            Related Pages
-          </h2>
-
-          <div className="grid md:grid-cols-2 gap-4">
-            <div className="border border-slate-200 rounded-lg p-4">
-              <h3 className="font-semibold text-slate-900 mb-2">
-                React Components
-              </h3>
-              <p className="text-slate-600 text-sm mb-3">
-                Pre-built components for common patterns
-              </p>
-              <a
-                href="/docs/react/components"
-                className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+            <div>
+              <h4 className="font-semibold mb-2">API Reference</h4>
+              <CodeBlock
+                language="typescript"
+                title="useTryCallback type signature"
               >
-                View Components →
-              </a>
+                {`function useTryCallback<TArgs extends any[], TResult>(
+  callback: (...args: TArgs) => Promise<TResult>,
+  options?: UseTryCallbackOptions<TResult>
+): UseTryCallbackResult<TArgs>
+
+interface UseTryCallbackOptions<T> {
+  onSuccess?: (result: T) => void;
+  onError?: (error: TryError) => void;
+  onSettled?: () => void;
+}
+
+interface UseTryCallbackResult<TArgs extends any[]> {
+  execute: (...args: TArgs) => Promise<void>;
+  loading: boolean;
+  error: TryError | null;
+  reset: () => void;
+}`}
+              </CodeBlock>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Badge>useTryState</Badge>
+              State Management Hook
+            </CardTitle>
+            <CardDescription>
+              Manage async state with built-in error handling
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div>
+              <h4 className="font-semibold mb-2">Basic Usage</h4>
+              <CodeBlock language="typescript" title="useTryState example">
+                {`import { useTryState } from '@try-error/react';
+
+interface User {
+  id: string;
+  name: string;
+  email: string;
+}
+
+function UserManager() {
+  const [users, setUsers, { loading, error, reset }] = useTryState<User[]>([]);
+
+  const loadUsers = async () => {
+    const result = await tryAsync(() => fetch('/api/users').then(r => r.json()));
+    setUsers(result); // Automatically handles success/error states
+  };
+
+  const addUser = async (newUser: Omit<User, 'id'>) => {
+    const result = await tryAsync(async () => {
+      const response = await fetch('/api/users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newUser)
+      });
+      return response.json();
+    });
+
+    if (isOk(result)) {
+      setUsers(prev => isOk(prev) ? [...prev, result] : [result]);
+    }
+  };
+
+  useEffect(() => {
+    loadUsers();
+  }, []);
+
+  if (loading) return <div>Loading users...</div>;
+  if (error) return <ErrorDisplay error={error} onRetry={reset} />;
+  if (!isOk(users)) return <div>No users</div>;
+
+  return (
+    <div>
+      <UserList users={users} />
+      <AddUserForm onAdd={addUser} />
+    </div>
+  );
+}`}
+              </CodeBlock>
             </div>
 
-            <div className="border border-slate-200 rounded-lg p-4">
-              <h3 className="font-semibold text-slate-900 mb-2">
-                React Examples
-              </h3>
-              <p className="text-slate-600 text-sm mb-3">
-                Real-world usage examples
-              </p>
-              <a
-                href="/docs/examples/react"
-                className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+            <div>
+              <h4 className="font-semibold mb-2">API Reference</h4>
+              <CodeBlock
+                language="typescript"
+                title="useTryState type signature"
               >
-                See Examples →
-              </a>
+                {`function useTryState<T>(
+  initialValue: T
+): [
+  TryResult<T>,
+  (value: TryResult<T> | ((prev: TryResult<T>) => TryResult<T>)) => void,
+  {
+    loading: boolean;
+    error: TryError | null;
+    reset: () => void;
+  }
+]`}
+              </CodeBlock>
             </div>
-          </div>
-        </section>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Badge>useTryMutation</Badge>
+              Mutation Hook
+            </CardTitle>
+            <CardDescription>
+              Handle mutations with optimistic updates and rollback
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div>
+              <h4 className="font-semibold mb-2">Optimistic Updates</h4>
+              <CodeBlock
+                language="typescript"
+                title="useTryMutation with optimistic updates"
+              >
+                {`import { useTryMutation } from '@try-error/react';
+
+function TodoList({ todos, setTodos }: { 
+  todos: Todo[], 
+  setTodos: (todos: Todo[]) => void 
+}) {
+  const { mutate: toggleTodo, loading } = useTryMutation({
+    mutationFn: async (todoId: string) => {
+      const result = await tryAsync(() => 
+        fetch(\`/api/todos/\${todoId}/toggle\`, { method: 'PUT' })
+      );
+      
+      if (isTryError(result)) throw result;
+      return result.json();
+    },
+    onMutate: async (todoId) => {
+      // Optimistic update
+      const previousTodos = todos;
+      setTodos(todos.map(todo => 
+        todo.id === todoId 
+          ? { ...todo, completed: !todo.completed }
+          : todo
+      ));
+      return { previousTodos };
+    },
+    onError: (error, todoId, context) => {
+      // Rollback on error
+      if (context?.previousTodos) {
+        setTodos(context.previousTodos);
+      }
+    },
+    onSuccess: (data, todoId) => {
+      // Sync with server response
+      setTodos(prev => prev.map(todo => 
+        todo.id === todoId ? data : todo
+      ));
+    }
+  });
+
+  return (
+    <div>
+      {todos.map(todo => (
+        <TodoItem 
+          key={todo.id}
+          todo={todo}
+          onToggle={() => toggleTodo(todo.id)}
+          disabled={loading}
+        />
+      ))}
+    </div>
+  );
+}`}
+              </CodeBlock>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Best Practices</CardTitle>
+            <CardDescription>
+              Recommended patterns for using try-error hooks effectively
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div>
+              <h4 className="font-semibold mb-2">
+                1. Error Boundaries Integration
+              </h4>
+              <CodeBlock
+                language="typescript"
+                title="Combining hooks with error boundaries"
+              >
+                {`import { TryErrorBoundary } from '@try-error/react';
+
+function App() {
+  return (
+    <TryErrorBoundary
+      fallback={(error, errorInfo, retry) => (
+        <ErrorPage 
+          error={error} 
+          onRetry={retry}
+          details={errorInfo}
+        />
+      )}
+    >
+      <Router>
+        <Routes>
+          <Route path="/users" element={<UsersPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
+        </Routes>
+      </Router>
+    </TryErrorBoundary>
+  );
+}`}
+              </CodeBlock>
+            </div>
+
+            <div>
+              <h4 className="font-semibold mb-2">2. Custom Hook Composition</h4>
+              <CodeBlock
+                language="typescript"
+                title="Creating reusable custom hooks"
+              >
+                {`// Custom hook for API operations
+function useApi<T>(endpoint: string) {
+  return useTry(
+    async () => {
+      const result = await tryAsync(() => 
+        fetch(endpoint).then(r => {
+          if (!r.ok) throw new Error(\`HTTP \${r.status}\`);
+          return r.json();
+        })
+      );
+      
+      if (isTryError(result)) throw result;
+      return result;
+    },
+    [endpoint],
+    { retryCount: 2, retryDelay: 1000 }
+  );
+}
+
+// Usage
+function UsersList() {
+  const { data: users, error, loading } = useApi<User[]>('/api/users');
+  
+  // Component logic...
+}`}
+              </CodeBlock>
+            </div>
+
+            <div>
+              <h4 className="font-semibold mb-2">3. Form Validation Pattern</h4>
+              <CodeBlock
+                language="typescript"
+                title="Form handling with try-error"
+              >
+                {`function useFormValidation<T>(validationSchema: (data: T) => TryResult<T>) {
+  const [data, setData] = useState<T>({} as T);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const { execute: validate, loading } = useTryCallback(
+    async (formData: T) => {
+      const result = validationSchema(formData);
+      
+      if (isTryError(result)) {
+        setErrors({ general: result.message });
+        throw result;
+      }
+      
+      setErrors({});
+      return result;
+    },
+    {
+      onError: (error) => {
+        if (error.context && typeof error.context === 'object') {
+          setErrors(error.context as Record<string, string>);
+        }
+      }
+    }
+  );
+
+  return { data, setData, errors, validate, loading };
+}`}
+              </CodeBlock>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
