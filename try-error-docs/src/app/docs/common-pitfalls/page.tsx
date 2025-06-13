@@ -514,6 +514,160 @@ async function updateUserProfile(userId: string, data: UserUpdate) {
 
         <Card>
           <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Badge variant="destructive">Critical</Badge>
+              Unsafe Error Context Access
+            </CardTitle>
+            <CardDescription>
+              Error context is typed as `unknown` for type safety - here's how
+              to handle it properly
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div>
+              <h4 className="font-semibold text-red-600 mb-2">
+                ❌ Unsafe Context Access
+              </h4>
+              <CodeBlock
+                language="typescript"
+                title="Direct context property access"
+              >
+                {`const result = await tryAsync(() => validateUserInput(data));
+
+if (isTryError(result)) {
+  // ❌ TypeScript Error: Property 'field' does not exist on type 'unknown'
+  console.log(result.context.field);
+  
+  // ❌ Runtime Error: Cannot read properties of undefined
+  console.log(result.context.validationRules);
+}`}
+              </CodeBlock>
+            </div>
+
+            <div>
+              <h4 className="font-semibold text-green-600 mb-2">
+                ✅ Type-Safe Context Access
+              </h4>
+              <CodeBlock
+                language="typescript"
+                title="Proper context validation"
+              >
+                {`// Define your context interface
+interface ValidationContext {
+  field: string;
+  value: unknown;
+  rule: string;
+}
+
+// Type guard for validation
+function isValidationContext(context: unknown): context is ValidationContext {
+  return typeof context === 'object' && 
+         context !== null && 
+         'field' in context &&
+         'rule' in context &&
+         typeof (context as any).field === 'string';
+}
+
+const result = await tryAsync(() => validateUserInput(data));
+
+if (isTryError(result)) {
+  // ✅ Safe context access with type checking
+  if (isValidationContext(result.context)) {
+    console.log(\`Validation failed for field: \${result.context.field}\`);
+    console.log(\`Rule: \${result.context.rule}\`);
+    console.log(\`Value: \${result.context.value}\`);
+  } else {
+    console.log('Error occurred but context format is unknown');
+  }
+}`}
+              </CodeBlock>
+            </div>
+
+            <div>
+              <h4 className="font-semibold text-green-600 mb-2">
+                ✅ Simplified Pattern for Known Context
+              </h4>
+              <CodeBlock
+                language="typescript"
+                title="Quick type assertion with validation"
+              >
+                {`const result = await tryAsync(() => validateUserInput(data));
+
+if (isTryError(result)) {
+  // ✅ Quick check with fallback
+  const context = result.context as { field?: string; rule?: string } | undefined;
+  
+  if (context?.field && context?.rule) {
+    console.log(\`Validation failed: \${context.field} (\${context.rule})\`);
+  } else {
+    console.log(\`Validation failed: \${result.message}\`);
+  }
+}`}
+              </CodeBlock>
+            </div>
+
+            <div>
+              <h4 className="font-semibold text-green-600 mb-2">
+                ✅ Generic Context Helper
+              </h4>
+              <CodeBlock
+                language="typescript"
+                title="Reusable context extraction"
+              >
+                {`// Utility function for safe context access
+function getContextValue<T>(
+  error: TryError, 
+  key: string, 
+  defaultValue: T
+): T {
+  if (typeof error.context === 'object' && 
+      error.context !== null && 
+      key in error.context) {
+    return (error.context as any)[key] ?? defaultValue;
+  }
+  return defaultValue;
+}
+
+// Usage
+const result = await tryAsync(() => validateUserInput(data));
+
+if (isTryError(result)) {
+  const field = getContextValue(result, 'field', 'unknown');
+  const rule = getContextValue(result, 'rule', 'unknown');
+  
+  console.log(\`Validation failed for \${field} (rule: \${rule})\`);
+}`}
+              </CodeBlock>
+            </div>
+
+            <div className="bg-blue-50 p-4 rounded-lg">
+              <p className="text-sm text-blue-800">
+                <strong>Why context is unknown:</strong> Error context is
+                intentionally typed as <code>unknown</code> because it can
+                contain any data structure depending on where the error
+                originated. This forces you to validate the shape before
+                accessing properties, preventing runtime errors from unexpected
+                context structures.
+              </p>
+            </div>
+
+            <div className="bg-yellow-50 p-4 rounded-lg">
+              <p className="text-sm text-yellow-800">
+                <strong>Best practices for context:</strong>
+                <br />• Always validate context structure before accessing
+                properties
+                <br />• Create type guards for your common context patterns
+                <br />• Provide fallback values when context is missing or
+                malformed
+                <br />• Document your error context interfaces for team
+                consistency
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
             <CardTitle>Quick Checklist</CardTitle>
             <CardDescription>
               Avoid these common mistakes for better try-error usage
@@ -537,6 +691,7 @@ async function updateUserProfile(userId: string, data: UserUpdate) {
                   <li>• Always show loading states in UI components</li>
                   <li>• Handle partial failures gracefully when possible</li>
                   <li>• Include rich context in error objects</li>
+                  <li>• Validate error context before accessing properties</li>
                   <li>• Use error boundaries for unexpected errors</li>
                   <li>• Provide retry mechanisms for transient failures</li>
                 </ul>
@@ -553,6 +708,7 @@ async function updateUserProfile(userId: string, data: UserUpdate) {
                   <li>• Forgetting to handle loading states</li>
                   <li>• Using all-or-nothing error handling</li>
                   <li>• Creating generic, unhelpful error messages</li>
+                  <li>• Accessing error context without type validation</li>
                   <li>• Not testing error paths in your code</li>
                   <li>• Ignoring TypeScript strict mode warnings</li>
                 </ul>

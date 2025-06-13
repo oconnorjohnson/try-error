@@ -388,6 +388,208 @@ const validationError = createValidationError('email', 'Invalid format', 'The em
             </div>
           </CardContent>
         </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Badge variant="outline">Important</Badge>
+              Working with Error Context
+            </CardTitle>
+            <CardDescription>
+              Understanding and safely accessing error context data
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div>
+              <h4 className="font-semibold mb-2">
+                Why Context is Typed as `unknown`
+              </h4>
+              <p className="text-sm text-muted-foreground mb-3">
+                Error context is intentionally typed as `unknown` for type
+                safety. Since errors can originate from anywhere in your
+                application with different context structures, TypeScript can't
+                guarantee the shape of the context data.
+              </p>
+
+              <div className="bg-blue-50 border border-blue-200 rounded p-3 mb-4">
+                <p className="text-blue-800 text-sm">
+                  <strong>Design Decision:</strong> This forces you to validate
+                  context before accessing properties, preventing runtime errors
+                  from unexpected context structures.
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <h4 className="font-semibold mb-2">
+                Type-Safe Context Access Patterns
+              </h4>
+              <CodeBlock
+                language="typescript"
+                title="1. Type guards for known context"
+              >
+                {`// Define your expected context structure
+interface ValidationContext {
+  field: string;
+  value: unknown;
+  rule: string;
+}
+
+// Create a type guard
+function isValidationContext(context: unknown): context is ValidationContext {
+  return typeof context === 'object' && 
+         context !== null && 
+         'field' in context &&
+         'rule' in context &&
+         typeof (context as any).field === 'string';
+}
+
+// Safe usage
+const result = trySync(() => validateEmail(email));
+if (isTryError(result) && isValidationContext(result.context)) {
+  // ✅ Now context is properly typed
+  console.log(\`Field \${result.context.field} failed rule: \${result.context.rule}\`);
+}`}
+              </CodeBlock>
+
+              <CodeBlock
+                language="typescript"
+                title="2. Type assertion with validation"
+              >
+                {`// Quick check with optional properties
+function handleValidationError(error: TryError) {
+  const context = error.context as { field?: string; rule?: string } | undefined;
+  
+  if (context?.field && context?.rule) {
+    return \`Validation failed for \${context.field}: \${context.rule}\`;
+  }
+  
+  return \`Validation failed: \${error.message}\`;
+}`}
+              </CodeBlock>
+
+              <CodeBlock
+                language="typescript"
+                title="3. Generic context utility"
+              >
+                {`// Reusable helper for safe context access
+function getContextValue<T>(
+  error: TryError, 
+  key: string, 
+  defaultValue: T
+): T {
+  if (typeof error.context === 'object' && 
+      error.context !== null && 
+      key in error.context) {
+    return (error.context as any)[key] ?? defaultValue;
+  }
+  return defaultValue;
+}
+
+// Usage
+const field = getContextValue(error, 'field', 'unknown');
+const status = getContextValue(error, 'status', 500);`}
+              </CodeBlock>
+            </div>
+
+            <div>
+              <h4 className="font-semibold mb-2">
+                Best Practices for Context Design
+              </h4>
+              <div className="grid md:grid-cols-2 gap-4">
+                <div>
+                  <h5 className="text-sm font-semibold text-green-600 mb-2">
+                    ✅ Do
+                  </h5>
+                  <ul className="text-sm space-y-1">
+                    <li>• Use consistent context structure within domains</li>
+                    <li>• Document your context interfaces</li>
+                    <li>• Include debug-relevant information</li>
+                    <li>• Create type guards for validation</li>
+                    <li>• Provide fallback values</li>
+                  </ul>
+                </div>
+                <div>
+                  <h5 className="text-sm font-semibold text-red-600 mb-2">
+                    ❌ Don't
+                  </h5>
+                  <ul className="text-sm space-y-1">
+                    <li>• Access context properties directly</li>
+                    <li>• Assume context structure without validation</li>
+                    <li>• Include sensitive data in context</li>
+                    <li>• Create overly complex context structures</li>
+                    <li>• Ignore context validation errors</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h4 className="font-semibold mb-2">
+                Domain-Specific Context Patterns
+              </h4>
+              <CodeBlock
+                language="typescript"
+                title="Consistent context interfaces"
+              >
+                {`// Define context interfaces for your domain
+export interface ApiErrorContext {
+  endpoint: string;
+  method: 'GET' | 'POST' | 'PUT' | 'DELETE';
+  status?: number;
+  requestId?: string;
+}
+
+export interface ValidationErrorContext {
+  field: string;
+  value: unknown;
+  rule: string;
+  constraints?: Record<string, unknown>;
+}
+
+export interface BusinessErrorContext {
+  entity: string;
+  operation: string;
+  businessRule: string;
+  metadata?: Record<string, unknown>;
+}
+
+// Create factory functions with typed context
+export function createApiError(
+  message: string, 
+  context: ApiErrorContext
+): TryError<'ApiError'> {
+  return createError({
+    type: 'ApiError' as const,
+    message,
+    context
+  });
+}
+
+// Type guards for each context type
+export function isApiErrorContext(context: unknown): context is ApiErrorContext {
+  return typeof context === 'object' && 
+         context !== null && 
+         'endpoint' in context &&
+         'method' in context;
+}
+
+// Usage
+const error = createApiError('Failed to fetch user', {
+  endpoint: '/api/users/123',
+  method: 'GET',
+  status: 404,
+  requestId: 'req_abc123'
+});
+
+if (isTryError(error) && isApiErrorContext(error.context)) {
+  // ✅ Fully typed access to context
+  console.log(\`\${error.context.method} \${error.context.endpoint} failed\`);
+}`}
+              </CodeBlock>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

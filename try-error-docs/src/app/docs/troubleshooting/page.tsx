@@ -156,6 +156,130 @@ function processData<T>(data: T): TryResult<ProcessedData, ValidationError> {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
+              <Badge variant="destructive">Critical</Badge>
+              Error Context Access Issues
+            </CardTitle>
+            <CardDescription>
+              Property does not exist on type 'unknown' when accessing error
+              context
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div>
+              <h4 className="font-semibold text-red-600 mb-2">
+                ❌ Common Problem
+              </h4>
+              <CodeBlock
+                language="typescript"
+                title="Problem: Direct context property access"
+              >
+                {`const result = await tryAsync(() => validateForm(data));
+if (isTryError(result)) {
+  // ❌ TypeScript Error: Property 'field' does not exist on type 'unknown'
+  console.log(result.context.field);
+  console.log(result.context.rule);
+}`}
+              </CodeBlock>
+            </div>
+
+            <div>
+              <h4 className="font-semibold text-green-600 mb-2">
+                ✅ Solution 1: Type Guards
+              </h4>
+              <CodeBlock
+                language="typescript"
+                title="Solution: Create type guards for context"
+              >
+                {`interface ValidationContext {
+  field: string;
+  rule: string;
+  value: unknown;
+}
+
+function isValidationContext(context: unknown): context is ValidationContext {
+  return typeof context === 'object' && 
+         context !== null && 
+         'field' in context &&
+         'rule' in context;
+}
+
+const result = await tryAsync(() => validateForm(data));
+if (isTryError(result) && isValidationContext(result.context)) {
+  // ✅ Type-safe access to context properties
+  console.log(\`Field: \${result.context.field}\`);
+  console.log(\`Rule: \${result.context.rule}\`);
+}`}
+              </CodeBlock>
+            </div>
+
+            <div>
+              <h4 className="font-semibold text-green-600 mb-2">
+                ✅ Solution 2: Safe Type Assertion
+              </h4>
+              <CodeBlock
+                language="typescript"
+                title="Solution: Type assertion with validation"
+              >
+                {`const result = await tryAsync(() => validateForm(data));
+if (isTryError(result)) {
+  // ✅ Safe assertion with optional properties
+  const context = result.context as { field?: string; rule?: string } | undefined;
+  
+  if (context?.field && context?.rule) {
+    console.log(\`Validation failed: \${context.field} (\${context.rule})\`);
+  } else {
+    console.log(\`Validation failed: \${result.message}\`);
+  }
+}`}
+              </CodeBlock>
+            </div>
+
+            <div>
+              <h4 className="font-semibold text-green-600 mb-2">
+                ✅ Solution 3: Context Helper Utility
+              </h4>
+              <CodeBlock
+                language="typescript"
+                title="Solution: Reusable context extraction"
+              >
+                {`function getContextValue<T>(
+  error: TryError, 
+  key: string, 
+  defaultValue: T
+): T {
+  if (typeof error.context === 'object' && 
+      error.context !== null && 
+      key in error.context) {
+    return (error.context as any)[key] ?? defaultValue;
+  }
+  return defaultValue;
+}
+
+const result = await tryAsync(() => validateForm(data));
+if (isTryError(result)) {
+  const field = getContextValue(result, 'field', 'unknown');
+  const rule = getContextValue(result, 'rule', 'general');
+  
+  console.log(\`Validation failed for \${field} (rule: \${rule})\`);
+}`}
+              </CodeBlock>
+            </div>
+
+            <div className="bg-blue-50 p-4 rounded-lg">
+              <p className="text-sm text-blue-800">
+                <strong>Why this happens:</strong> Error context is typed as{" "}
+                <code>unknown</code> by design to enforce type safety. Since
+                errors can originate from anywhere with different context
+                structures, TypeScript requires you to validate the shape before
+                accessing properties.
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
               <Badge variant="secondary">Common</Badge>
               React Component Type Issues
             </CardTitle>
