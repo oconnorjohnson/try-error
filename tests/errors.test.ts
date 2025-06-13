@@ -39,7 +39,7 @@ describe("Error Creation Utilities", () => {
 
     it("should include stack trace in development", () => {
       const originalEnv = process.env.NODE_ENV;
-      process.env.NODE_ENV = "development";
+      (process.env as any).NODE_ENV = "development";
 
       const error = createError({
         type: "TestError",
@@ -49,12 +49,12 @@ describe("Error Creation Utilities", () => {
       expect(error.stack).toBeDefined();
       expect(error.stack).toContain("Test with stack");
 
-      process.env.NODE_ENV = originalEnv;
+      (process.env as any).NODE_ENV = originalEnv;
     });
 
     it("should not include stack trace in production", () => {
       const originalEnv = process.env.NODE_ENV;
-      process.env.NODE_ENV = "production";
+      (process.env as any).NODE_ENV = "production";
 
       const error = createError({
         type: "TestError",
@@ -63,7 +63,7 @@ describe("Error Creation Utilities", () => {
 
       expect(error.stack).toBeUndefined();
 
-      process.env.NODE_ENV = originalEnv;
+      (process.env as any).NODE_ENV = originalEnv;
     });
 
     it("should preserve generic type parameter", () => {
