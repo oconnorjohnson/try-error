@@ -1,3 +1,6 @@
+# Ignore all markdown guides 
+markdown/
+
 # Dependencies
 node_modules/
 
