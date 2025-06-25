@@ -188,9 +188,32 @@ function getSourceLocation(stackOffset: number = 2): string {
 
     const result = parser(targetLine);
     if (result) {
-      // Extract just the filename from the full path
-      const filename = result.file.split("/").pop() || result.file;
-      return `${filename}:${result.line}:${result.column}`;
+      // Handle file path based on configuration
+      const fullPath = result.file;
+      const filename = fullPath.split("/").pop() || fullPath;
+      const file = config.sourceLocation?.includeFullPath ? fullPath : filename;
+
+      // Format based on configuration
+      if (config.sourceLocation?.formatter) {
+        return config.sourceLocation.formatter(
+          file,
+          result.line,
+          result.column
+        );
+      }
+
+      const format = config.sourceLocation?.format || "file:line:column";
+      switch (format) {
+        case "full":
+          return `${fullPath}:${result.line}:${result.column}`;
+        case "file:line":
+          return `${file}:${result.line}`;
+        case "file":
+          return file;
+        case "file:line:column":
+        default:
+          return `${file}:${result.line}:${result.column}`;
+      }
     }
 
     return "unknown";
