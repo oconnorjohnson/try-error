@@ -239,7 +239,7 @@ async function runBenchmarks() {
     const beforeMem = process.memoryUsage();
 
     // Create many errors
-    const errors = [];
+    const errors: any[] = [];
     for (let i = 0; i < 10000; i++) {
       errors.push(
         createError({
