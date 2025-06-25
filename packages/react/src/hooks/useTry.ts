@@ -161,7 +161,8 @@ export function useTry<T>(
     if (immediate) {
       execute();
     }
-  }, [immediate, execute, ...deps]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [immediate, ...deps]); // Intentionally omit execute to avoid infinite loop
 
   return {
     ...state,
