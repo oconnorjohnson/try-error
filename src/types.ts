@@ -1,7 +1,19 @@
 /**
+ * Private symbol for brand checking - prevents type guard spoofing
+ * Using Symbol.for() to ensure the same symbol across module boundaries
+ */
+export const TRY_ERROR_BRAND = Symbol.for("try-error.TryError");
+
+/**
  * Core error type with rich context for debugging and error handling
  */
 export interface TryError<T extends string = string> {
+  /**
+   * Brand for type guard checking - prevents spoofing
+   * @internal
+   */
+  readonly [TRY_ERROR_BRAND]: true;
+
   /**
    * The type of error - used for discriminated unions
    */
@@ -58,6 +70,7 @@ export type TryTuple<T, E extends TryError = TryError> =
  * Type guard to check if a value is a TryError
  *
  * IMPROVED: This is the most reliable type guard - use this for type narrowing
+ * Now uses Symbol branding to prevent spoofing
  */
 export function isTryError<E extends TryError = TryError>(
   value: unknown
@@ -65,6 +78,8 @@ export function isTryError<E extends TryError = TryError>(
   return (
     typeof value === "object" &&
     value !== null &&
+    TRY_ERROR_BRAND in value &&
+    (value as any)[TRY_ERROR_BRAND] === true &&
     "type" in value &&
     "message" in value &&
     "source" in value &&

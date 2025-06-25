@@ -1,4 +1,4 @@
-import { TryError } from "./types";
+import { TryError, TRY_ERROR_BRAND } from "./types";
 
 /**
  * Options for creating a TryError
@@ -122,6 +122,7 @@ export function createError<T extends string = string>(
   }
 
   return {
+    [TRY_ERROR_BRAND]: true,
     type: options.type,
     message: options.message,
     source,
