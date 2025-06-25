@@ -26,12 +26,11 @@ const assertType = <_T extends true>() => {};
 describe("Type Tests", () => {
   describe("TryError interface", () => {
     it("should have all required fields", () => {
-      const error: TryError = {
+      const error: TryError = createError({
         type: "TestError",
         message: "Test error message",
         source: "test.ts:10:5",
-        timestamp: Date.now(),
-      };
+      });
 
       expect(error.type).toBe("TestError");
       expect(error.message).toBe("Test error message");
