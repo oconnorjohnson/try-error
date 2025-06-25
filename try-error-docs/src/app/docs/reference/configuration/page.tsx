@@ -1260,7 +1260,7 @@ configure({
                 <ul className="space-y-1 text-orange-700 text-sm">
                   <li>• Default config: ~3-5% overhead ✅</li>
                   <li>• Production config: ~2-3% overhead ✅</li>
-                  <li>• Minimal config: <1% overhead 🚀</li>
+                  <li>• Minimal config: &lt;1% overhead 🚀</li>
                 </ul>
               </div>
               <div>
