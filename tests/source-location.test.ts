@@ -158,6 +158,7 @@ describe("Source Location Improvements", () => {
 
     it("should use custom formatter when provided", () => {
       configure({
+        includeSource: true,
         sourceLocation: {
           formatter: (file, line, column) =>
             `${file} at line ${line}, col ${column}`,
