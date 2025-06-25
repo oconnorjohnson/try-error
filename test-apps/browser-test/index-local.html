@@ -335,16 +335,17 @@
         });
 
         runner.test("tryAny", () => {
-          const results = [
-            trySync(() => {
-              throw new Error("fail1");
-            }),
-            trySync(() => {
-              throw new Error("fail2");
-            }),
-            trySync(() => "success"),
-          ];
-          const result = tryAny(results);
+          const result = tryAny([
+            () =>
+              trySync(() => {
+                throw new Error("fail1");
+              }),
+            () =>
+              trySync(() => {
+                throw new Error("fail2");
+              }),
+            () => trySync(() => "success"),
+          ]);
           console.assert(result === "success", "Should return first success");
         });
 
