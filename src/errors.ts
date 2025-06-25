@@ -378,7 +378,11 @@ export function createError<T extends string = string>(
 
   // Determine if we should capture stack trace
   const shouldCaptureStack =
-    options.captureStackTrace ?? config.captureStackTrace ?? !isProduction();
+    options.captureStackTrace !== undefined
+      ? options.captureStackTrace
+      : config.captureStackTrace !== undefined
+      ? config.captureStackTrace
+      : !isProduction();
 
   // Capture stack trace if enabled
   let stack: string | undefined;
