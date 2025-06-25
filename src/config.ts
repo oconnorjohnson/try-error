@@ -36,6 +36,24 @@ export interface TryErrorConfig {
   includeSource?: boolean;
 
   /**
+   * Enable minimal error mode for ultra-lightweight errors
+   * @default false
+   */
+  minimalErrors?: boolean;
+
+  /**
+   * Skip timestamp generation (Date.now() calls)
+   * @default false
+   */
+  skipTimestamp?: boolean;
+
+  /**
+   * Skip context processing
+   * @default false
+   */
+  skipContext?: boolean;
+
+  /**
    * Source location configuration
    */
   sourceLocation?: {
@@ -258,6 +276,19 @@ export const ConfigPresets = {
       },
     },
   }),
+
+  /**
+   * Minimal configuration for <50% overhead target
+   */
+  minimal: (): TryErrorConfig => ({
+    captureStackTrace: false,
+    stackTraceLimit: 0,
+    includeSource: false,
+    developmentMode: false,
+    minimalErrors: true,
+    skipTimestamp: true,
+    skipContext: true,
+  }),
 } as const;
 
 /**
@@ -288,6 +319,8 @@ export function configure(
   } else {
     globalConfig = { ...globalConfig, ...config };
   }
+  // Increment version to invalidate caches
+  (getConfig as any).version = ((getConfig as any).version || 0) + 1;
 }
 
 /**
@@ -314,6 +347,8 @@ export function getConfig(): TryErrorConfig {
  */
 export function resetConfig(): void {
   globalConfig = null;
+  // Increment version to invalidate caches
+  (getConfig as any).version = ((getConfig as any).version || 0) + 1;
 }
 
 /**

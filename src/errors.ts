@@ -75,19 +75,30 @@ export interface CreateErrorOptions<T extends string = string> {
  * Safely check if we're in a production environment (cached)
  */
 function isProduction(): boolean {
-  if (cachedIsProduction !== null) {
+  // Don't cache in test environment as tests change NODE_ENV
+  const isTest =
+    typeof process !== "undefined" &&
+    process.env &&
+    process.env.NODE_ENV === "test";
+
+  if (!isTest && cachedIsProduction !== null) {
     return cachedIsProduction;
   }
 
   // Check for Node.js environment
   if (typeof process !== "undefined" && process.env) {
-    cachedIsProduction = process.env.NODE_ENV === "production";
+    const isProd = process.env.NODE_ENV === "production";
+    if (!isTest) {
+      cachedIsProduction = isProd;
+    }
+    return isProd;
   } else {
     // Default to production for browsers to avoid exposing stack traces
-    cachedIsProduction = true;
+    if (!isTest) {
+      cachedIsProduction = true;
+    }
+    return true;
   }
-
-  return cachedIsProduction;
 }
 
 /**
@@ -198,7 +209,7 @@ const stackParsers = {
  * Returns format: "file:line:column" or "unknown" if not available
  */
 function getSourceLocation(stackOffset: number = 2): string {
-  const config = getConfig();
+  const config = getCachedConfig();
 
   // Check if source location is disabled
   if (!config.includeSource) {
@@ -218,6 +229,12 @@ function getSourceLocation(stackOffset: number = 2): string {
     if (!stack) return "unknown";
 
     const lines = stack.split("\n");
+
+    // Debug logging for tests
+    if (process.env.NODE_ENV === "test" && process.env.DEBUG_STACK) {
+      console.log("Stack trace lines:", lines);
+      console.log("Target offset:", stackOffset);
+    }
 
     // In test environments (like Jest), we might need to skip additional frames
     let targetLine = lines[stackOffset];
@@ -318,11 +335,43 @@ function getSourceLocation(stackOffset: number = 2): string {
 export function createError<T extends string = string>(
   options: CreateErrorOptions<T>
 ): TryError<T> {
-  const config = getConfig();
+  const config = getCachedConfig();
+
+  // Ultra-fast path for minimal mode
+  if (config.minimalErrors) {
+    return createMinimalError(
+      options.type,
+      options.message,
+      config.skipContext ? undefined : options.context
+    );
+  }
+
+  // Fast path for production with minimal features
+  if (isProduction() && !options.captureStackTrace && !config.includeSource) {
+    const error: TryError<T> = {
+      [TRY_ERROR_BRAND]: true,
+      type: options.type,
+      message: options.message,
+      source: options.source ?? "production",
+      timestamp: config.skipTimestamp ? 0 : options.timestamp ?? Date.now(),
+      stack: undefined,
+      context: config.skipContext ? undefined : options.context,
+      cause: options.cause,
+    };
+
+    // Apply global error transformation if configured
+    if (config.onError) {
+      return config.onError(error) as TryError<T>;
+    }
+
+    return error;
+  }
+
+  // Normal path with all features
   const stackOffset =
     options.stackOffset ?? config.sourceLocation?.defaultStackOffset ?? 3;
   const source = options.source ?? getSourceLocation(stackOffset);
-  const timestamp = options.timestamp ?? Date.now();
+  const timestamp = config.skipTimestamp ? 0 : options.timestamp ?? Date.now();
 
   // Determine if we should capture stack trace
   const shouldCaptureStack =
@@ -409,6 +458,29 @@ export function wrapError<T extends string = string>(
     cause,
     context,
   });
+}
+
+/**
+ * Create a minimal error for performance-critical paths
+ * This bypasses all expensive operations like stack trace capture
+ */
+export function createMinimalError<T extends string = string>(
+  type: T,
+  message: string,
+  context?: Record<string, unknown>
+): TryError<T> {
+  const config = getCachedConfig();
+
+  return {
+    [TRY_ERROR_BRAND]: true,
+    type,
+    message,
+    source: "minimal",
+    timestamp: config.skipTimestamp ? 0 : Date.now(),
+    stack: undefined,
+    context: config.skipContext ? undefined : context,
+    cause: undefined,
+  };
 }
 
 /**
