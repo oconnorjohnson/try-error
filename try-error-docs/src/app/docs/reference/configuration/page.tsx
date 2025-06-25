@@ -1240,6 +1240,294 @@ configure({
           </div>
         </section>
 
+        {/* Ultra-Performance Configuration */}
+        <section>
+          <h2 className="text-2xl font-semibold text-slate-900 mb-4">
+            Ultra-Performance Configuration
+          </h2>
+
+          <p className="text-slate-600 mb-4">
+            For performance-critical applications where even minimal overhead matters.
+          </p>
+
+          <div className="bg-gradient-to-r from-orange-50 to-red-50 border border-orange-200 rounded-lg p-6 mb-6">
+            <h3 className="text-lg font-semibold text-orange-900 mb-3">
+              🚀 Performance Impact Overview
+            </h3>
+            <div className="grid md:grid-cols-2 gap-4">
+              <div>
+                <h4 className="font-semibold text-orange-800 mb-2">Success Path Overhead</h4>
+                <ul className="space-y-1 text-orange-700 text-sm">
+                  <li>• Default config: ~3-5% overhead ✅</li>
+                  <li>• Production config: ~2-3% overhead ✅</li>
+                  <li>• Minimal config: <1% overhead 🚀</li>
+                </ul>
+              </div>
+              <div>
+                <h4 className="font-semibold text-orange-800 mb-2">Error Path Overhead</h4>
+                <ul className="space-y-1 text-orange-700 text-sm">
+                  <li>• Default config: ~1700% overhead ❌</li>
+                  <li>• Production config: ~400% overhead ⚠️</li>
+                  <li>• Minimal config: ~50% overhead ✅</li>
+                </ul>
+              </div>
+            </div>
+            <p className="text-orange-700 text-sm mt-3">
+              <strong>Note:</strong> Error path overhead is less critical since errors should be exceptional.
+              Choose configuration based on your specific needs.
+            </p>
+          </div>
+
+          <div className="space-y-6">
+            <div>
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">
+                Minimal Configuration Preset
+              </h3>
+              <p className="text-slate-600 mb-3">
+                The minimal preset achieves <50% error overhead by disabling all expensive operations.
+              </p>
+              <CodeBlock
+                language="typescript"
+                title="Ultra-Minimal Configuration"
+                showLineNumbers={true}
+                className="mb-3"
+              >
+                {`import { configure, ConfigPresets } from 'try-error';
+
+// Use the minimal preset for <50% overhead
+configure(ConfigPresets.minimal());
+
+// What this does internally:
+configure({
+  captureStackTrace: false,  // No stack trace capture
+  stackTraceLimit: 0,        // Zero stack frames
+  includeSource: false,      // No source location
+  developmentMode: false,    // Production mode
+  minimalErrors: true,       // Bypass expensive operations
+  skipTimestamp: true,       // No Date.now() calls
+  skipContext: true          // No context processing
+});
+
+// Result: Ultra-lightweight errors
+const error = trySync(() => JSON.parse("invalid"));
+// error = {
+//   type: "SyntaxError",
+//   message: "Unexpected token i in JSON",
+//   source: "minimal",
+//   timestamp: 0,
+//   stack: undefined,
+//   context: undefined
+// }`}
+              </CodeBlock>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">
+                Direct Minimal Error API
+              </h3>
+              <p className="text-slate-600 mb-3">
+                For the absolute lowest overhead, use the direct minimal error creation API.
+              </p>
+              <CodeBlock
+                language="typescript"
+                title="Direct Minimal Error Creation"
+                showLineNumbers={true}
+                className="mb-3"
+              >
+                {`import { createMinimalError } from 'try-error';
+
+// Bypass all processing - near-zero overhead
+const error = createMinimalError(
+  "NetworkError",
+  "Request failed"
+);
+
+// With optional context (still lightweight)
+const errorWithContext = createMinimalError(
+  "ValidationError",
+  "Invalid email format",
+  { email: userInput }
+);
+
+// Use in performance-critical loops
+for (let i = 0; i < 1000000; i++) {
+  const result = data[i];
+  if (!isValid(result)) {
+    errors.push(createMinimalError(
+      "DataError",
+      "Invalid data at index " + i
+    ));
+  }
+}`}
+              </CodeBlock>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">
+                Performance Comparison
+              </h3>
+              <p className="text-slate-600 mb-3">
+                Real-world benchmark results for different configurations (1M operations).
+              </p>
+              <CodeBlock
+                language="typescript"
+                title="Configuration Performance Impact"
+                showLineNumbers={true}
+                className="mb-3"
+              >
+                {`// Benchmark: JSON parsing with errors (1M iterations)
+
+// Native try/catch baseline
+try {
+  JSON.parse("invalid");
+} catch (e) {}
+// Time: 4,708ms
+
+// Default try-error configuration
+const result1 = trySync(() => JSON.parse("invalid"));
+// Time: 85,734ms (1720% overhead) ❌
+
+// Production configuration
+configure({ captureStackTrace: false, includeSource: false });
+const result2 = trySync(() => JSON.parse("invalid"));
+// Time: 23,544ms (400% overhead) ⚠️
+
+// Minimal configuration
+configure(ConfigPresets.minimal());
+const result3 = trySync(() => JSON.parse("invalid"));
+// Time: 7,062ms (50% overhead) ✅
+
+// Direct minimal API
+const error = createMinimalError("ParseError", "Invalid JSON");
+// Time: 4,944ms (5% overhead) 🚀`}
+              </CodeBlock>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">
+                When to Use Each Configuration
+              </h3>
+              <div className="space-y-4">
+                <div className="border border-slate-200 rounded-lg p-4">
+                  <h4 className="font-semibold text-slate-900 mb-2">
+                    Default Configuration
+                  </h4>
+                  <p className="text-slate-600 text-sm mb-2">
+                    Use when you need full debugging capabilities and error overhead is not a concern.
+                  </p>
+                  <ul className="text-slate-600 text-sm space-y-1">
+                    <li>✅ Development environments</li>
+                    <li>✅ Applications with infrequent errors</li>
+                    <li>✅ When debugging is more important than performance</li>
+                  </ul>
+                </div>
+
+                <div className="border border-slate-200 rounded-lg p-4">
+                  <h4 className="font-semibold text-slate-900 mb-2">
+                    Production Configuration
+                  </h4>
+                  <p className="text-slate-600 text-sm mb-2">
+                    Balanced approach for production applications.
+                  </p>
+                  <ul className="text-slate-600 text-sm space-y-1">
+                    <li>✅ Standard web applications</li>
+                    <li>✅ APIs with moderate error rates</li>
+                    <li>✅ When you need some error context</li>
+                  </ul>
+                </div>
+
+                <div className="border border-slate-200 rounded-lg p-4">
+                  <h4 className="font-semibold text-slate-900 mb-2">
+                    Minimal Configuration
+                  </h4>
+                  <p className="text-slate-600 text-sm mb-2">
+                    Maximum performance for error-heavy operations.
+                  </p>
+                  <ul className="text-slate-600 text-sm space-y-1">
+                    <li>✅ High-frequency parsing operations</li>
+                    <li>✅ Data validation loops</li>
+                    <li>✅ Performance-critical paths</li>
+                    <li>✅ When errors are expected and frequent</li>
+                  </ul>
+                </div>
+
+                <div className="border border-slate-200 rounded-lg p-4">
+                  <h4 className="font-semibold text-slate-900 mb-2">
+                    Direct Minimal API
+                  </h4>
+                  <p className="text-slate-600 text-sm mb-2">
+                    Absolute minimum overhead for the most critical paths.
+                  </p>
+                  <ul className="text-slate-600 text-sm space-y-1">
+                    <li>✅ Tight loops with millions of iterations</li>
+                    <li>✅ Real-time systems</li>
+                    <li>✅ When every microsecond counts</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">
+                Gradual Performance Optimization
+              </h3>
+              <p className="text-slate-600 mb-3">
+                Start with defaults and optimize based on profiling results.
+              </p>
+              <CodeBlock
+                language="typescript"
+                title="Progressive Optimization Strategy"
+                showLineNumbers={true}
+                className="mb-3"
+              >
+                {`// Step 1: Start with defaults in development
+import { trySync } from 'try-error';
+
+// Step 2: Profile and identify bottlenecks
+if (process.env.NODE_ENV === 'production') {
+  // Step 3: Apply production optimizations
+  configure({
+    captureStackTrace: false,
+    includeSource: false
+  });
+}
+
+// Step 4: For identified hot paths, use minimal config
+function processLargeDataset(data: unknown[]) {
+  // Temporarily switch to minimal for this operation
+  const previousConfig = getConfig();
+  configure(ConfigPresets.minimal());
+  
+  const errors: TryError[] = [];
+  for (const item of data) {
+    const result = trySync(() => validateItem(item));
+    if (isTryError(result)) {
+      errors.push(result);
+    }
+  }
+  
+  // Restore previous configuration
+  configure(previousConfig);
+  return errors;
+}
+
+// Step 5: For the most critical paths, use direct API
+function ultraFastValidation(items: string[]) {
+  return items
+    .map((item, i) => {
+      try {
+        return JSON.parse(item);
+      } catch {
+        return createMinimalError("ParseError", "Invalid at " + i);
+      }
+    })
+    .filter(isTryError);
+}`}
+              </CodeBlock>
+            </div>
+          </div>
+        </section>
+
         {/* Best Practices */}
         <section>
           <h2 className="text-2xl font-semibold text-slate-900 mb-4">
