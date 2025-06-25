@@ -1247,7 +1247,8 @@ configure({
           </h2>
 
           <p className="text-slate-600 mb-4">
-            For performance-critical applications where even minimal overhead matters.
+            For performance-critical applications where even minimal overhead
+            matters.
           </p>
 
           <div className="bg-gradient-to-r from-orange-50 to-red-50 border border-orange-200 rounded-lg p-6 mb-6">
@@ -1256,7 +1257,9 @@ configure({
             </h3>
             <div className="grid md:grid-cols-2 gap-4">
               <div>
-                <h4 className="font-semibold text-orange-800 mb-2">Success Path Overhead</h4>
+                <h4 className="font-semibold text-orange-800 mb-2">
+                  Success Path Overhead
+                </h4>
                 <ul className="space-y-1 text-orange-700 text-sm">
                   <li>• Default config: ~3-5% overhead ✅</li>
                   <li>• Production config: ~2-3% overhead ✅</li>
@@ -1264,7 +1267,9 @@ configure({
                 </ul>
               </div>
               <div>
-                <h4 className="font-semibold text-orange-800 mb-2">Error Path Overhead</h4>
+                <h4 className="font-semibold text-orange-800 mb-2">
+                  Error Path Overhead
+                </h4>
                 <ul className="space-y-1 text-orange-700 text-sm">
                   <li>• Default config: ~1700% overhead ❌</li>
                   <li>• Production config: ~400% overhead ⚠️</li>
@@ -1273,8 +1278,9 @@ configure({
               </div>
             </div>
             <p className="text-orange-700 text-sm mt-3">
-              <strong>Note:</strong> Error path overhead is less critical since errors should be exceptional.
-              Choose configuration based on your specific needs.
+              <strong>Note:</strong> Error path overhead is less critical since
+              errors should be exceptional. Choose configuration based on your
+              specific needs.
             </p>
           </div>
 
@@ -1284,7 +1290,8 @@ configure({
                 Minimal Configuration Preset
               </h3>
               <p className="text-slate-600 mb-3">
-                The minimal preset achieves <50% error overhead by disabling all expensive operations.
+                The minimal preset achieves &lt;50% error overhead by disabling
+                all expensive operations.
               </p>
               <CodeBlock
                 language="typescript"
@@ -1326,7 +1333,8 @@ const error = trySync(() => JSON.parse("invalid"));
                 Direct Minimal Error API
               </h3>
               <p className="text-slate-600 mb-3">
-                For the absolute lowest overhead, use the direct minimal error creation API.
+                For the absolute lowest overhead, use the direct minimal error
+                creation API.
               </p>
               <CodeBlock
                 language="typescript"
@@ -1367,7 +1375,8 @@ for (let i = 0; i < 1000000; i++) {
                 Performance Comparison
               </h3>
               <p className="text-slate-600 mb-3">
-                Real-world benchmark results for different configurations (1M operations).
+                Real-world benchmark results for different configurations (1M
+                operations).
               </p>
               <CodeBlock
                 language="typescript"
@@ -1413,12 +1422,15 @@ const error = createMinimalError("ParseError", "Invalid JSON");
                     Default Configuration
                   </h4>
                   <p className="text-slate-600 text-sm mb-2">
-                    Use when you need full debugging capabilities and error overhead is not a concern.
+                    Use when you need full debugging capabilities and error
+                    overhead is not a concern.
                   </p>
                   <ul className="text-slate-600 text-sm space-y-1">
                     <li>✅ Development environments</li>
                     <li>✅ Applications with infrequent errors</li>
-                    <li>✅ When debugging is more important than performance</li>
+                    <li>
+                      ✅ When debugging is more important than performance
+                    </li>
                   </ul>
                 </div>
 
