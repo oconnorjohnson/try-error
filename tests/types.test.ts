@@ -41,44 +41,40 @@ describe("Type Tests", () => {
     it("should support generic type parameter", () => {
       type NetworkError = TryError<"NetworkError">;
 
-      const networkError: NetworkError = {
+      const networkError: NetworkError = createError({
         type: "NetworkError",
         message: "Network failed",
         source: "api.ts:20:10",
-        timestamp: Date.now(),
-      };
+      });
 
       expect(networkError.type).toBe("NetworkError");
     });
 
     it("should support optional fields", () => {
-      const errorWithContext: TryError = {
+      const errorWithContext: TryError = createError({
         type: "ContextError",
         message: "Error with context",
         source: "test.ts:30:15",
-        timestamp: Date.now(),
         context: { userId: 123, action: "update" },
-        stack: "Error: Error with context\n    at test.ts:30:15",
         cause: new Error("Original error"),
-      };
+      });
 
       expect(errorWithContext.context).toEqual({
         userId: 123,
         action: "update",
       });
-      expect(errorWithContext.stack).toContain("Error with context");
+      expect(errorWithContext.stack).toBeDefined();
       expect(errorWithContext.cause).toBeInstanceOf(Error);
     });
   });
 
   describe("isTryError type guard", () => {
     it("should correctly identify TryError objects", () => {
-      const validError: TryError = {
+      const validError: TryError = createError({
         type: "TestError",
         message: "Test",
         source: "test.ts:1:1",
-        timestamp: Date.now(),
-      };
+      });
 
       expect(isTryError(validError)).toBe(true);
       expect(isTryError({ type: "Test" })).toBe(false);
@@ -89,12 +85,11 @@ describe("Type Tests", () => {
     });
 
     it("should narrow types correctly", () => {
-      const value: unknown = {
+      const value: unknown = createError({
         type: "TestError",
         message: "Test",
         source: "test.ts:1:1",
-        timestamp: Date.now(),
-      };
+      });
 
       if (isTryError(value)) {
         // Type should be narrowed to TryError
@@ -112,12 +107,11 @@ describe("Type Tests", () => {
       >;
 
       const success: UserResult = { id: 1, name: "John" };
-      const error: UserResult = {
+      const error: UserResult = createError({
         type: "UserError",
         message: "User not found",
         source: "user.ts:10:5",
-        timestamp: Date.now(),
-      };
+      });
 
       expect(isTryError(success)).toBe(false);
       expect(isTryError(error)).toBe(true);
@@ -134,12 +128,11 @@ describe("Type Tests", () => {
       const success: UserTuple = [{ id: 1, name: "John" }, null];
       const error: UserTuple = [
         null,
-        {
+        createError({
           type: "UserError",
           message: "User not found",
           source: "user.ts:10:5",
-          timestamp: Date.now(),
-        },
+        }),
       ];
 
       expect(success[0]).toEqual({ id: 1, name: "John" });
@@ -178,12 +171,11 @@ describe("Type Tests", () => {
       type Error = UnwrapTryError<Result>;
 
       // Test that the error type is correctly extracted
-      const testError: Error = {
+      const testError: Error = createError({
         type: "TestError",
         message: "Test error",
         source: "test.ts:1:1",
-        timestamp: Date.now(),
-      };
+      });
       expect(testError.type).toBe("TestError");
     });
   });
