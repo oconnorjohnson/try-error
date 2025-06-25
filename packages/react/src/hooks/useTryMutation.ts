@@ -143,6 +143,25 @@ export function useTryMutation<T, TVariables = void>(
         }
 
         if (isTryError(result)) {
+          // Check if this was an abort error
+          if (
+            result.cause instanceof Error &&
+            result.cause.name === "AbortError"
+          ) {
+            const abortError = createError({
+              type: "ABORTED",
+              message: abortMessage,
+              context: { reason: "manual_abort" },
+              cause: result.cause,
+            });
+            setError(abortError);
+            setData(null);
+            onError?.(abortError);
+            setIsLoading(false);
+            onSettled?.();
+            return abortError;
+          }
+
           setError(result);
           setData(null);
           onError?.(result);
