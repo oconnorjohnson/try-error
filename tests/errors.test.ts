@@ -56,6 +56,10 @@ describe("Error Creation Utilities", () => {
       const originalEnv = process.env.NODE_ENV;
       (process.env as any).NODE_ENV = "production";
 
+      // Force reset of cached production check
+      const { resetConfig } = require("../src/config");
+      resetConfig();
+
       const error = createError({
         type: "TestError",
         message: "Test without stack",
@@ -64,6 +68,7 @@ describe("Error Creation Utilities", () => {
       expect(error.stack).toBeUndefined();
 
       (process.env as any).NODE_ENV = originalEnv;
+      resetConfig();
     });
 
     it("should preserve generic type parameter", () => {
