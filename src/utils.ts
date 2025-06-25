@@ -70,6 +70,7 @@ export function createEnhancedError(
   };
 
   return {
+    [TRY_ERROR_BRAND]: true,
     type,
     message: options.message || message,
     source: "unknown", // Will be set by createError if needed
