@@ -150,12 +150,11 @@ describe("Error Factories", () => {
     });
 
     it("should handle errors without existing context", () => {
-      const error: TryError = {
+      const error: TryError = createError({
         type: "NetworkError",
         message: "Connection timeout",
         source: "network.ts:15:20",
-        timestamp: Date.now(),
-      };
+      });
 
       const wrappedError = wrapWithContext(error, {
         endpoint: "/api/users",
