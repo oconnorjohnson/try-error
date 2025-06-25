@@ -4,11 +4,12 @@ This directory contains a browser-based test suite for the try-error library.
 
 ## Prerequisites
 
-Before running the browser tests, make sure to build the browser bundle:
+Before running the browser tests, make sure to build and copy the browser bundle:
 
 ```bash
 # From the root directory
 pnpm build:browser
+cp dist/try-error.esm.js test-apps/browser-test/
 ```
 
 ## Running the Tests
