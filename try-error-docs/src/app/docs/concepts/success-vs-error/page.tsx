@@ -68,6 +68,10 @@ if (isTryError(result)) {
                 • <strong>Composable:</strong> Easy to chain and transform
                 operations
               </li>
+              <li>
+                • <strong>Performance:</strong> Success path has &lt;3%
+                overhead, error path overhead is configurable
+              </li>
             </ul>
           </div>
         </section>

@@ -67,13 +67,13 @@ export default function DocsIntroduction() {
             <CardHeader className="pb-3">
               <div className="flex items-center gap-2">
                 <Zap className="h-5 w-5 text-yellow-500" />
-                <CardTitle className="text-base">Zero Overhead</CardTitle>
+                <CardTitle className="text-base">Minimal Overhead</CardTitle>
               </div>
             </CardHeader>
             <CardContent>
               <CardDescription>
-                Success values are returned directly. Error objects only created
-                when needed.
+                Success path: &lt;3% overhead. Error path: configurable from 50%
+                to 1700% (stack traces, context capture).
               </CardDescription>
             </CardContent>
           </Card>
@@ -212,6 +212,84 @@ return result; // Type-safe success value`}
         </div>
       </section>
 
+      {/* Performance Characteristics */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-semibold">Performance Characteristics</h2>
+
+        <div className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-lg p-6">
+          <h3 className="text-lg font-semibold text-green-900 mb-3">
+            Real-World Performance Impact
+          </h3>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            <div>
+              <h4 className="font-semibold text-green-800 mb-2">
+                ✅ Success Path (Common Case)
+              </h4>
+              <ul className="space-y-2 text-green-700 text-sm">
+                <li>
+                  • <strong>&lt;3% overhead</strong> compared to raw try/catch
+                </li>
+                <li>• Direct value return, no wrapper objects</li>
+                <li>• No performance penalty for successful operations</li>
+                <li>• Ideal for hot paths and performance-critical code</li>
+              </ul>
+            </div>
+
+            <div>
+              <h4 className="font-semibold text-orange-800 mb-2">
+                ⚠️ Error Path (Exceptional Case)
+              </h4>
+              <ul className="space-y-2 text-orange-700 text-sm">
+                <li>
+                  • <strong>50% to 1700% overhead</strong> (configurable)
+                </li>
+                <li>• Stack trace capture: ~1200% of overhead</li>
+                <li>• Context cloning: ~300% of overhead</li>
+                <li>• Source location: ~200% of overhead</li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="mt-4 p-4 bg-blue-100 rounded-lg">
+            <h4 className="font-semibold text-blue-900 mb-2">
+              💡 Why the Error Overhead?
+            </h4>
+            <p className="text-blue-800 text-sm mb-2">
+              Error overhead is high because try-error captures rich debugging
+              information:
+            </p>
+            <ul className="space-y-1 text-blue-700 text-sm">
+              <li>
+                • <strong>Stack traces:</strong> Essential for debugging but
+                expensive to capture
+              </li>
+              <li>
+                • <strong>Source location:</strong> Shows exactly where errors
+                occurred
+              </li>
+              <li>
+                • <strong>Context objects:</strong> Preserves state at error
+                time
+              </li>
+              <li>
+                • <strong>Timestamps:</strong> Tracks when errors happened
+              </li>
+            </ul>
+            <p className="text-blue-800 text-sm mt-2">
+              <strong>
+                This is usually fine because errors should be exceptional!
+              </strong>{" "}
+              If you have high error rates, use{" "}
+              <code className="bg-blue-200 px-1 rounded">
+                ConfigPresets.minimal()
+              </code>
+              for &lt;50% overhead.
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* Key Benefits */}
       <section className="space-y-4">
         <h2 className="text-2xl font-semibold">Key Benefits</h2>
@@ -229,7 +307,8 @@ return result; // Type-safe success value`}
             <div className="flex items-start gap-3">
               <CheckCircle className="h-5 w-5 text-green-500 mt-0.5" />
               <div>
-                <strong>Zero Overhead:</strong> Success path has no runtime cost
+                <strong>Minimal Overhead:</strong> Success path &lt;3%, error
+                path configurable (50%-1700%)
               </div>
             </div>
 
