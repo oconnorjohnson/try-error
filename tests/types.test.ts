@@ -8,7 +8,10 @@ import {
   TryFailure,
   UnwrapTry,
   UnwrapTryError,
+  TRY_ERROR_BRAND,
 } from "../src/types";
+import { createError } from "../src/errors";
+import { trySync } from "../src/sync";
 
 // Helper type for testing type equality
 type Equal<T, U> = (<G>() => G extends T ? 1 : 2) extends <G>() => G extends U
