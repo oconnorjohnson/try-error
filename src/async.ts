@@ -1,4 +1,10 @@
-import { TryError, TryResult, TryTuple, isTryError } from "./types";
+import {
+  TryError,
+  TryResult,
+  TryTuple,
+  isTryError,
+  TRY_ERROR_BRAND,
+} from "./types";
 import { fromThrown } from "./errors";
 
 /**
