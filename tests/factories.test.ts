@@ -9,7 +9,8 @@ import {
   EntityError,
   AmountError,
 } from "../src/factories";
-import { TryError } from "../src/types";
+import { TryError, TRY_ERROR_BRAND } from "../src/types";
+import { createError } from "../src/errors";
 
 describe("Error Factories", () => {
   describe("createErrorFactory", () => {
