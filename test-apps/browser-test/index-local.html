@@ -413,7 +413,13 @@
       }
 
       // Start tests when page loads
-      window.addEventListener("load", runTests);
+      console.log("Script loaded, adding load event listener");
+      window.addEventListener("load", () => {
+        console.log("Page loaded, running tests");
+        runTests().catch((error) => {
+          console.error("Error running tests:", error);
+        });
+      });
     </script>
   </body>
 </html>
