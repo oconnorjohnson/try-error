@@ -3,9 +3,16 @@
 > Lightweight, progressive, type-safe error handling for TypeScript
 
 [![npm version](https://img.shields.io/npm/v/try-error.svg)](https://www.npmjs.com/package/try-error)
+[![npm downloads](https://img.shields.io/npm/dm/try-error.svg)](https://www.npmjs.com/package/try-error)
 [![Bundle Size](https://img.shields.io/bundlephobia/minzip/try-error)](https://bundlephobia.com/package/try-error)
+[![gzip size](https://img.badgesize.io/https://unpkg.com/try-error/dist/index.js?compression=gzip&label=gzip%20size)](https://unpkg.com/try-error/dist/index.js)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue.svg)](https://www.typescriptlang.org/)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/danieljohnson/try-error/blob/main/CONTRIBUTING.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![npm](https://img.shields.io/npm/v/try-error/alpha)](https://www.npmjs.com/package/try-error)
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/danieljohnson/try-error/graphs/commit-activity)
+[![Dependencies](https://img.shields.io/librariesio/release/npm/try-error)](https://libraries.io/npm/try-error)
 
 ⚠️ **Alpha Version**: This library is currently in alpha and APIs may change. Not recommended for production use yet.
 
