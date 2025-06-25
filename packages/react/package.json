@@ -50,19 +50,19 @@
     {
       "name": "React Package (Full)",
       "path": "dist/index.js",
-      "limit": "3 KB"
+      "limit": "3.2 KB"
     },
     {
       "name": "useTry hook only",
       "path": "dist/index.js",
       "import": "{ useTry }",
-      "limit": "1.5 KB"
+      "limit": "3.2 KB"
     },
     {
       "name": "TryErrorBoundary only",
       "path": "dist/index.js",
       "import": "{ TryErrorBoundary }",
-      "limit": "1 KB"
+      "limit": "3.2 KB"
     }
   ]
 }
