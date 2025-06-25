@@ -94,13 +94,12 @@ describe("Error Factories", () => {
 
   describe("chainError", () => {
     it("should chain errors while preserving context", () => {
-      const originalError: TryError = {
+      const originalError: TryError = createError({
         type: "DatabaseError",
         message: "Connection failed",
         source: "db.ts:10:5",
-        timestamp: Date.now(),
         context: { query: "SELECT * FROM users" },
-      };
+      });
 
       interface ServiceError extends TryError<"UserServiceError"> {
         readonly operation: string;
