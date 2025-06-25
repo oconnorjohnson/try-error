@@ -82,6 +82,7 @@ export async function tryAsync<T>(
   } catch (error) {
     if (options?.errorType) {
       return {
+        [TRY_ERROR_BRAND]: true,
         type: options.errorType,
         message:
           options.message ||
