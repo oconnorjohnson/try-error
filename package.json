@@ -9,7 +9,8 @@
   ],
   "scripts": {
     "build": "tsc",
-    "build:all": "tsc && pnpm -r build",
+    "build:browser": "esbuild src/index.ts --bundle --format=esm --outfile=dist/try-error.esm.js --platform=browser --target=es2020",
+    "build:all": "tsc && pnpm build:browser && pnpm -r build",
     "test": "jest && pnpm -r test",
     "test:watch": "jest --watch",
     "test:types": "tsc --noEmit",
@@ -17,7 +18,7 @@
     "benchmark": "ts-node benchmark/performance.ts",
     "clean": "rm -rf dist && pnpm -r clean",
     "pack": "pnpm build && pnpm pack",
-    "prepublishOnly": "pnpm build",
+    "prepublishOnly": "pnpm build && pnpm build:browser",
     "size": "size-limit",
     "analyze": "size-limit --why"
   },
