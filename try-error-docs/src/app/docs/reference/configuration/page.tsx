@@ -406,6 +406,27 @@ setupMyApp({ developmentMode: true }); // Override specific options`}
   includeSource?: boolean;
 
   /**
+   * Enable minimal error mode for ultra-lightweight errors
+   * Bypasses all expensive operations like stack trace capture
+   * @default false
+   */
+  minimalErrors?: boolean;
+
+  /**
+   * Skip timestamp generation (Date.now() calls)
+   * Useful for performance-critical paths
+   * @default false
+   */
+  skipTimestamp?: boolean;
+
+  /**
+   * Skip context processing
+   * Prevents deep cloning or processing of context objects
+   * @default false
+   */
+  skipContext?: boolean;
+
+  /**
    * Default error type for untyped errors
    * @default "Error"
    */
@@ -840,6 +861,27 @@ const globalError = createTryError('GlobalError', 'Uses global config');`}
    * @default true
    */
   includeSource?: boolean;
+
+  /**
+   * Enable minimal error mode for ultra-lightweight errors
+   * Bypasses all expensive operations like stack trace capture
+   * @default false
+   */
+  minimalErrors?: boolean;
+
+  /**
+   * Skip timestamp generation (Date.now() calls)
+   * Useful for performance-critical paths
+   * @default false
+   */
+  skipTimestamp?: boolean;
+
+  /**
+   * Skip context processing
+   * Prevents deep cloning or processing of context objects
+   * @default false
+   */
+  skipContext?: boolean;
 
   /**
    * Default error type for untyped errors
