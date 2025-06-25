@@ -17,7 +17,9 @@
     "benchmark": "ts-node benchmark/performance.ts",
     "clean": "rm -rf dist && pnpm -r clean",
     "pack": "pnpm build && pnpm pack",
-    "prepublishOnly": "pnpm build"
+    "prepublishOnly": "pnpm build",
+    "size": "size-limit",
+    "analyze": "size-limit --why"
   },
   "keywords": [
     "typescript",
@@ -35,6 +37,8 @@
     "url": "https://github.com/danieljohnson/try-error"
   },
   "devDependencies": {
+    "@size-limit/file": "^11.2.0",
+    "@size-limit/preset-small-lib": "^11.2.0",
     "@testing-library/jest-dom": "^6.0.0",
     "@testing-library/react": "^14.0.0",
     "@types/jest": "^29.5.0",
@@ -55,5 +59,30 @@
   },
   "dependencies": {
     "tsx": "4.19.4"
-  }
+  },
+  "size-limit": [
+    {
+      "name": "Core (ESM)",
+      "path": "dist/index.js",
+      "import": "{ trySync, tryAsync, isTryError }",
+      "limit": "5 KB"
+    },
+    {
+      "name": "Core (CJS)",
+      "path": "dist/index.js",
+      "limit": "6 KB"
+    },
+    {
+      "name": "Sync only",
+      "path": "dist/index.js",
+      "import": "{ trySync, isTryError }",
+      "limit": "3 KB"
+    },
+    {
+      "name": "Async only",
+      "path": "dist/index.js",
+      "import": "{ tryAsync, isTryError }",
+      "limit": "4 KB"
+    }
+  ]
 }
