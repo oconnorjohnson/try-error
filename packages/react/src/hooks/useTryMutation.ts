@@ -251,7 +251,7 @@ export function useTryMutation<T, TVariables = void>(
  * ```
  */
 export function useFormMutation<T>(
-  submitFn: (formData: FormData) => Promise<T>,
+  submitFn: (formData: FormData, signal: AbortSignal) => Promise<T>,
   options: UseTryMutationOptions<T> = {}
 ) {
   const mutation = useTryMutation(submitFn, options);
