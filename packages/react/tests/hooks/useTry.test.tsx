@@ -205,9 +205,16 @@ describe("useTry", () => {
     });
 
     it("should update data when calling mutate", () => {
-      const { result } = renderHook(() => useTry(async () => "initial"));
+      interface User {
+        id: number;
+        name: string;
+      }
 
-      const newData = { id: 1, name: "Mutated User" };
+      const { result } = renderHook(() =>
+        useTry<User>(async () => ({ id: 0, name: "initial" }))
+      );
+
+      const newData: User = { id: 1, name: "Mutated User" };
 
       act(() => {
         result.current.mutate(newData);
