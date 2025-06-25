@@ -100,9 +100,23 @@ const stackParsers = {
   // V8 (Chrome, Node.js, Edge)
   v8: (line: string): { file: string; line: string; column: string } | null => {
     // Format: "    at functionName (file:line:column)" or "    at file:line:column"
-    const match = line.match(/\s+at\s+(?:.*?\s+\()?(.+):(\d+):(\d+)\)?/);
-    if (match) {
-      return { file: match[1], line: match[2], column: match[3] };
+    // Updated regex to handle various V8 formats
+    const patterns = [
+      // "    at functionName (file:line:column)"
+      /\s+at\s+.*?\s+\((.+):(\d+):(\d+)\)/,
+      // "    at file:line:column"
+      /\s+at\s+(.+):(\d+):(\d+)$/,
+      // "    at async functionName (file:line:column)"
+      /\s+at\s+async\s+.*?\s+\((.+):(\d+):(\d+)\)/,
+      // "    at Object.<anonymous> (file:line:column)"
+      /\s+at\s+Object\.<anonymous>\s+\((.+):(\d+):(\d+)\)/,
+    ];
+
+    for (const pattern of patterns) {
+      const match = line.match(pattern);
+      if (match) {
+        return { file: match[1], line: match[2], column: match[3] };
+      }
     }
     return null;
   },
