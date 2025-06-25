@@ -5,7 +5,7 @@
  * and operations that developers frequently need.
  */
 
-import { TryError, TryResult, isTryError } from "./types";
+import { TryError, TryResult, isTryError, TRY_ERROR_BRAND } from "./types";
 
 // ============================================================================
 // STAGE 1 IMPROVEMENTS - BETTER ERROR HANDLING PATTERNS
