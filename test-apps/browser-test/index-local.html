@@ -335,7 +335,7 @@
         });
 
         runner.test("tryAny", () => {
-          const result = tryAny([
+          const results = [
             trySync(() => {
               throw new Error("fail1");
             }),
@@ -343,7 +343,8 @@
               throw new Error("fail2");
             }),
             trySync(() => "success"),
-          ]);
+          ];
+          const result = tryAny(results);
           console.assert(result === "success", "Should return first success");
         });
 
