@@ -11,6 +11,23 @@ export default function ConfigurationPage() {
           Configure try-error behavior and customize error handling for your
           application
         </p>
+        <div className="mt-4 bg-slate-100 border border-slate-300 rounded-lg p-4">
+          <p className="text-slate-700">
+            <strong>📌 Quick Start:</strong> try-error is configured in your
+            application code, not through config files. Call{" "}
+            <code className="bg-slate-200 px-1 rounded">setupNode()</code>,{" "}
+            <code className="bg-slate-200 px-1 rounded">setupReact()</code>, or{" "}
+            <code className="bg-slate-200 px-1 rounded">configure()</code> at
+            your app's entry point. See the{" "}
+            <a
+              href="#where-to-configure"
+              className="text-blue-600 hover:text-blue-800 font-medium"
+            >
+              Where to Configure
+            </a>{" "}
+            section below.
+          </p>
+        </div>
       </div>
 
       {/* When is configuration needed */}
@@ -47,6 +64,268 @@ export default function ConfigurationPage() {
       </div>
 
       <div className="space-y-8">
+        {/* Where to Configure */}
+        <section
+          id="where-to-configure"
+          className="bg-purple-50 border-2 border-purple-300 rounded-lg p-6 mb-8"
+        >
+          <h2 className="text-2xl font-semibold text-purple-900 mb-4">
+            📍 Where to Configure try-error
+          </h2>
+
+          <p className="text-purple-800 mb-4">
+            <strong>Important:</strong> try-error does NOT use configuration
+            files. Configuration happens in your application code at runtime.
+          </p>
+
+          <div className="space-y-6">
+            <div>
+              <h3 className="text-lg font-semibold text-purple-900 mb-3">
+                Option 1: Application Entry Point (Recommended)
+              </h3>
+              <p className="text-purple-700 mb-3">
+                Configure try-error once at your application's entry point,
+                before any other code runs.
+              </p>
+
+              <div className="grid md:grid-cols-2 gap-4">
+                <div>
+                  <h4 className="font-semibold text-purple-800 mb-2">
+                    Node.js/Express
+                  </h4>
+                  <CodeBlock
+                    language="typescript"
+                    title="index.ts or app.ts"
+                    showLineNumbers={true}
+                  >
+                    {`// At the very top of your entry file
+import { setupNode } from 'try-error/setup';
+
+// Configure before anything else
+setupNode();
+
+// Now import and use your app
+import express from 'express';
+const app = express();
+// ... rest of your app`}
+                  </CodeBlock>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold text-purple-800 mb-2">
+                    React/Vite
+                  </h4>
+                  <CodeBlock
+                    language="typescript"
+                    title="main.tsx or index.tsx"
+                    showLineNumbers={true}
+                  >
+                    {`// At the very top of your entry file
+import { setupReact } from 'try-error/setup';
+
+// Configure before React
+setupReact();
+
+// Now import React
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App';
+
+ReactDOM.createRoot(...).render(<App />);`}
+                  </CodeBlock>
+                </div>
+              </div>
+
+              <div className="mt-4">
+                <h4 className="font-semibold text-purple-800 mb-2">Next.js</h4>
+                <CodeBlock
+                  language="typescript"
+                  title="app/layout.tsx (App Router) or _app.tsx (Pages Router)"
+                  showLineNumbers={true}
+                >
+                  {`// For App Router: app/layout.tsx
+import { setupNextJs } from 'try-error/setup';
+
+// Configure at the top level
+setupNextJs();
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en">
+      <body>{children}</body>
+    </html>
+  );
+}
+
+// For Pages Router: pages/_app.tsx
+import { setupNextJs } from 'try-error/setup';
+
+// Configure before App component
+setupNextJs();
+
+export default function MyApp({ Component, pageProps }) {
+  return <Component {...pageProps} />;
+}`}
+                </CodeBlock>
+              </div>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold text-purple-900 mb-3">
+                Option 2: Dedicated Configuration Module
+              </h3>
+              <p className="text-purple-700 mb-3">
+                For more complex configurations, create a dedicated module and
+                import it early.
+              </p>
+
+              <CodeBlock
+                language="typescript"
+                title="config/try-error.config.ts"
+                showLineNumbers={true}
+                className="mb-3"
+              >
+                {`// Create a configuration module
+import { configure } from 'try-error';
+
+// Your custom configuration
+configure({
+  captureStackTrace: process.env.NODE_ENV !== 'production',
+  onError: (error) => {
+    // Custom error handling
+    if (process.env.NODE_ENV === 'production') {
+      sendToSentry(error);
+    }
+    return error;
+  },
+  serializer: (error) => ({
+    type: error.type,
+    message: error.message,
+    timestamp: error.timestamp,
+    // Custom serialization
+  })
+});
+
+// Export for testing or reconfiguration
+export const tryErrorConfig = {
+  isConfigured: true
+};`}
+              </CodeBlock>
+
+              <CodeBlock
+                language="typescript"
+                title="index.ts (entry point)"
+                showLineNumbers={true}
+              >
+                {`// Import configuration first
+import './config/try-error.config';
+
+// Then import everything else
+import express from 'express';
+import { routes } from './routes';
+
+const app = express();
+// ... rest of your app`}
+              </CodeBlock>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold text-purple-900 mb-3">
+                Option 3: Environment-Based Configuration
+              </h3>
+              <p className="text-purple-700 mb-3">
+                Use environment variables to switch between configurations.
+              </p>
+
+              <CodeBlock
+                language="typescript"
+                title="config/index.ts"
+                showLineNumbers={true}
+              >
+                {`import { configure, ConfigPresets } from 'try-error';
+
+// Configure based on environment
+switch (process.env.NODE_ENV) {
+  case 'production':
+    configure(ConfigPresets.production());
+    break;
+  case 'test':
+    configure(ConfigPresets.test());
+    break;
+  default:
+    configure(ConfigPresets.development());
+}
+
+// Or use the auto-setup
+import { autoSetup } from 'try-error/setup';
+autoSetup(); // Automatically detects environment`}
+              </CodeBlock>
+            </div>
+          </div>
+
+          <div className="bg-purple-100 border border-purple-400 rounded-lg p-4 mt-6">
+            <h3 className="font-semibold text-purple-900 mb-2">
+              ⚠️ Important Configuration Rules
+            </h3>
+            <ul className="space-y-2 text-purple-800">
+              <li>
+                <strong>1. Configure Once:</strong> Configure try-error only
+                once per application. Multiple configurations will override each
+                other.
+              </li>
+              <li>
+                <strong>2. Configure Early:</strong> Always configure before
+                using any try-error functions (trySync, tryAsync, etc.).
+              </li>
+              <li>
+                <strong>3. No Config Files:</strong> try-error doesn't read from
+                .tryerrorrc or similar files. All configuration is done in code.
+              </li>
+              <li>
+                <strong>4. Global Effect:</strong> Configuration affects all
+                try-error usage globally in your application.
+              </li>
+            </ul>
+          </div>
+
+          <div className="bg-yellow-50 border border-yellow-300 rounded-lg p-4 mt-4">
+            <h3 className="font-semibold text-yellow-800 mb-2">
+              💡 Testing Tip
+            </h3>
+            <p className="text-yellow-700">
+              For testing, you might want to reconfigure try-error. Use a test
+              setup file:
+            </p>
+            <CodeBlock
+              language="typescript"
+              title="test/setup.ts (Jest/Vitest)"
+              showLineNumbers={true}
+              className="mt-2"
+            >
+              {`import { configure } from 'try-error';
+
+beforeAll(() => {
+  configure({
+    captureStackTrace: true,
+    developmentMode: true,
+    onError: (error) => {
+      // Collect errors for assertions
+      global.testErrors.push(error);
+      return error;
+    }
+  });
+});
+
+// Add to jest.config.js or vitest.config.ts:
+// setupFilesAfterEnv: ['<rootDir>/test/setup.ts']`}
+            </CodeBlock>
+          </div>
+        </section>
+
         {/* Quick Setup */}
         <section>
           <h2 className="text-2xl font-semibold text-slate-900 mb-4">
