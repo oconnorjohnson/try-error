@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>try-error Browser Test Suite</title>
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        background: #f5f5f5;
+      }
+      h1,
+      h2 {
+        color: #333;
+      }
+      .test-section {
+        background: white;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      .test {
+        margin: 10px 0;
+        padding: 10px;
+        border-radius: 4px;
+      }
+      .test.pass {
+        background: #d4edda;
+        border: 1px solid #c3e6cb;
+        color: #155724;
+      }
+      .test.fail {
+        background: #f8d7da;
+        border: 1px solid #f5c6cb;
+        color: #721c24;
+      }
+      .test.pending {
+        background: #fff3cd;
+        border: 1px solid #ffeeba;
+        color: #856404;
+      }
+      .test-name {
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+      .test-result {
+        font-family: monospace;
+        font-size: 0.9em;
+      }
+      .summary {
+        position: sticky;
+        top: 20px;
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      .browser-info {
+        background: #e9ecef;
+        padding: 10px;
+        border-radius: 4px;
+        margin-bottom: 20px;
+      }
+      pre {
+        background: #f8f9fa;
+        padding: 10px;
+        border-radius: 4px;
+        overflow-x: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>try-error Browser Test Suite</h1>
+
+    <div class="browser-info" id="browser-info">
+      <strong>Browser:</strong> <span id="browser-name">Detecting...</span
+      ><br />
+      <strong>User Agent:</strong> <span id="user-agent"></span>
+    </div>
+
+    <div class="summary" id="summary">
+      <h2>Test Summary</h2>
+      <div>Total: <span id="total-tests">0</span></div>
+      <div>Passed: <span id="passed-tests">0</span></div>
+      <div>Failed: <span id="failed-tests">0</span></div>
+    </div>
+
+    <div id="test-results"></div>
+
+    <script type="module">
+      // Import try-error from unpkg CDN
+      import {
+        trySync,
+        tryAsync,
+        isTryError,
+        isOk,
+        isErr,
+        createError,
+        tryAll,
+        tryAny,
+        unwrap,
+        unwrapOr,
+        retry,
+        withTimeout,
+        tryAsyncTuple,
+        trySyncTuple,
+      } from "https://unpkg.com/try-error@0.0.1-alpha.1/dist/index.js";
+
+      // Test runner
+      class TestRunner {
+        constructor() {
+          this.tests = [];
+          this.results = { passed: 0, failed: 0 };
+        }
+
+        test(name, fn) {
+          this.tests.push({ name, fn });
+        }
+
+        async run() {
+          const resultsDiv = document.getElementById("test-results");
+
+          for (const test of this.tests) {
+            const section = document.createElement("div");
+            section.className = "test pending";
+
+            const nameDiv = document.createElement("div");
+            nameDiv.className = "test-name";
+            nameDiv.textContent = test.name;
+            section.appendChild(nameDiv);
+
+            const resultDiv = document.createElement("div");
+            resultDiv.className = "test-result";
+
+            try {
+              await test.fn();
+              section.className = "test pass";
+              resultDiv.textContent = "✓ Passed";
+              this.results.passed++;
+            } catch (error) {
+              section.className = "test fail";
+              resultDiv.textContent = `✗ Failed: ${error.message}`;
+              console.error(`Test "${test.name}" failed:`, error);
+              this.results.failed++;
+            }
+
+            section.appendChild(resultDiv);
+            resultsDiv.appendChild(section);
+
+            // Update summary
+            this.updateSummary();
+          }
+        }
+
+        updateSummary() {
+          document.getElementById("total-tests").textContent =
+            this.tests.length;
+          document.getElementById("passed-tests").textContent =
+            this.results.passed;
+          document.getElementById("failed-tests").textContent =
+            this.results.failed;
+        }
+      }
+
+      // Browser detection
+      function detectBrowser() {
+        const userAgent = navigator.userAgent;
+        document.getElementById("user-agent").textContent = userAgent;
+
+        let browserName = "Unknown";
+        if (userAgent.includes("Chrome")) browserName = "Chrome";
+        else if (userAgent.includes("Firefox")) browserName = "Firefox";
+        else if (userAgent.includes("Safari")) browserName = "Safari";
+        else if (userAgent.includes("Edge")) browserName = "Edge";
+
+        document.getElementById("browser-name").textContent = browserName;
+      }
+
+      // Run tests
+      async function runTests() {
+        detectBrowser();
+
+        const runner = new TestRunner();
+
+        // Basic sync tests
+        runner.test("trySync - success case", () => {
+          const result = trySync(() => 2 + 2);
+          console.assert(result === 4, "Expected 4");
+          console.assert(!isTryError(result), "Should not be error");
+        });
+
+        runner.test("trySync - error case", () => {
+          const result = trySync(() => JSON.parse("invalid"));
+          console.assert(isTryError(result), "Should be error");
+          console.assert(
+            result.type === "SyntaxError",
+            "Should be SyntaxError"
+          );
+        });
+
+        runner.test("trySyncTuple - success case", () => {
+          const [value, error] = trySyncTuple(() => "hello");
+          console.assert(value === "hello", "Value should be hello");
+          console.assert(error === null, "Error should be null");
+        });
+
+        runner.test("trySyncTuple - error case", () => {
+          const [value, error] = trySyncTuple(() => {
+            throw new Error("test");
+          });
+          console.assert(value === null, "Value should be null");
+          console.assert(isTryError(error), "Error should be TryError");
+        });
+
+        // Type guards
+        runner.test("Type guards", () => {
+          const success = trySync(() => 42);
+          const failure = trySync(() => {
+            throw new Error("fail");
+          });
+
+          console.assert(isOk(success), "isOk should be true for success");
+          console.assert(!isOk(failure), "isOk should be false for error");
+          console.assert(isErr(failure), "isErr should be true for error");
+          console.assert(!isErr(success), "isErr should be false for success");
+        });
+
+        // Async tests
+        runner.test("tryAsync - success case", async () => {
+          const result = await tryAsync(async () => {
+            await new Promise((resolve) => setTimeout(resolve, 10));
+            return "async result";
+          });
+          console.assert(
+            result === "async result",
+            "Should return async result"
+          );
+        });
+
+        runner.test("tryAsync - error case", async () => {
+          const result = await tryAsync(async () => {
+            await new Promise((resolve) => setTimeout(resolve, 10));
+            throw new Error("async error");
+          });
+          console.assert(isTryError(result), "Should be error");
+          console.assert(
+            result.message === "async error",
+            "Should have correct message"
+          );
+        });
+
+        runner.test("tryAsyncTuple", async () => {
+          const [value, error] = await tryAsyncTuple(async () => "async");
+          console.assert(value === "async", "Value should be async");
+          console.assert(error === null, "Error should be null");
+        });
+
+        // Error creation
+        runner.test("createError", () => {
+          const error = createError({
+            type: "CustomError",
+            message: "Custom error message",
+            context: { userId: 123 },
+          });
+          console.assert(isTryError(error), "Should be TryError");
+          console.assert(
+            error.type === "CustomError",
+            "Should have correct type"
+          );
+          console.assert(error.context.userId === 123, "Should have context");
+        });
+
+        // Utilities
+        runner.test("unwrap", () => {
+          const success = trySync(() => "value");
+          console.assert(unwrap(success) === "value", "Should unwrap value");
+
+          try {
+            const error = trySync(() => {
+              throw new Error("fail");
+            });
+            unwrap(error);
+            console.assert(false, "Should throw");
+          } catch (e) {
+            console.assert(true, "Should throw on error");
+          }
+        });
+
+        runner.test("unwrapOr", () => {
+          const success = trySync(() => "value");
+          const error = trySync(() => {
+            throw new Error("fail");
+          });
+
+          console.assert(
+            unwrapOr(success, "default") === "value",
+            "Should return value"
+          );
+          console.assert(
+            unwrapOr(error, "default") === "default",
+            "Should return default"
+          );
+        });
+
+        // Multiple operations
+        runner.test("tryAll", () => {
+          const results = tryAll([
+            trySync(() => 1),
+            trySync(() => 2),
+            trySync(() => 3),
+          ]);
+          console.assert(results.length === 3, "Should have 3 results");
+          console.assert(
+            results.every((r) => !isTryError(r)),
+            "All should succeed"
+          );
+        });
+
+        runner.test("tryAny", () => {
+          const result = tryAny([
+            trySync(() => {
+              throw new Error("fail1");
+            }),
+            trySync(() => {
+              throw new Error("fail2");
+            }),
+            trySync(() => "success"),
+          ]);
+          console.assert(result === "success", "Should return first success");
+        });
+
+        // Advanced features
+        runner.test("retry", async () => {
+          let attempts = 0;
+          const result = await retry(
+            async () => {
+              attempts++;
+              if (attempts < 3) throw new Error("retry");
+              return "success";
+            },
+            { attempts: 3, baseDelay: 10 }
+          );
+          console.assert(result === "success", "Should succeed after retries");
+          console.assert(attempts === 3, "Should have 3 attempts");
+        });
+
+        runner.test("withTimeout - success", async () => {
+          const result = await withTimeout(
+            tryAsync(async () => {
+              await new Promise((resolve) => setTimeout(resolve, 50));
+              return "done";
+            }),
+            100
+          );
+          console.assert(result === "done", "Should complete within timeout");
+        });
+
+        runner.test("withTimeout - timeout", async () => {
+          const result = await withTimeout(
+            tryAsync(async () => {
+              await new Promise((resolve) => setTimeout(resolve, 200));
+              return "done";
+            }),
+            50
+          );
+          console.assert(isTryError(result), "Should timeout");
+          console.assert(
+            result.type === "TimeoutError",
+            "Should be TimeoutError"
+          );
+        });
+
+        // Error context
+        runner.test("Error context and metadata", () => {
+          const result = trySync(() => {
+            throw new Error("test error");
+          });
+          console.assert(isTryError(result), "Should be error");
+          console.assert(
+            typeof result.timestamp === "number",
+            "Should have timestamp"
+          );
+          console.assert(
+            typeof result.source === "string",
+            "Should have source"
+          );
+          console.assert(
+            result.message === "test error",
+            "Should have message"
+          );
+        });
+
+        // Run all tests
+        await runner.run();
+      }
+
+      // Start tests when page loads
+      window.addEventListener("load", runTests);
+    </script>
+  </body>
+</html>
