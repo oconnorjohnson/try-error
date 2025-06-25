@@ -36,6 +36,18 @@ export interface CreateErrorOptions<T extends string = string> {
 }
 
 /**
+ * Safely check if we're in a production environment
+ */
+function isProduction(): boolean {
+  // Check for Node.js environment
+  if (typeof process !== "undefined" && process.env) {
+    return process.env.NODE_ENV === "production";
+  }
+  // Default to production for browsers to avoid exposing stack traces
+  return true;
+}
+
+/**
  * Extract source location from stack trace
  * Returns format: "file:line:column" or "unknown" if not available
  */
@@ -100,7 +112,7 @@ export function createError<T extends string = string>(
 
   // Capture stack trace if not in production
   let stack: string | undefined;
-  if (process.env.NODE_ENV !== "production") {
+  if (!isProduction()) {
     try {
       const error = new Error(options.message);
       stack = error.stack;
