@@ -4,7 +4,7 @@ import {
   useTryMutation,
   useFormMutation,
 } from "../../src/hooks/useTryMutation";
-import { createError } from "try-error";
+import { createError, isTryError } from "try-error";
 
 describe("useTryMutation", () => {
   beforeEach(() => {

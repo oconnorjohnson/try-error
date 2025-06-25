@@ -147,13 +147,32 @@ export function useTry<T>(
       }
 
       if (isTryError(result)) {
-        setState({
-          data: null,
-          error: result,
-          isLoading: false,
-          isSuccess: false,
-          isError: true,
-        });
+        // Check if this was an abort error
+        if (
+          result.cause instanceof Error &&
+          result.cause.name === "AbortError"
+        ) {
+          setState({
+            data: null,
+            error: createError({
+              type: "ABORTED",
+              message: abortMessage,
+              context: { reason: "manual_abort" },
+              cause: result.cause,
+            }),
+            isLoading: false,
+            isSuccess: false,
+            isError: true,
+          });
+        } else {
+          setState({
+            data: null,
+            error: result,
+            isLoading: false,
+            isSuccess: false,
+            isError: true,
+          });
+        }
       } else {
         setState({
           data: result,
@@ -164,28 +183,6 @@ export function useTry<T>(
         });
       }
     } catch (error) {
-      // Check if this was an abort
-      if (error instanceof Error && error.name === "AbortError") {
-        // Only update state if this is still the current execution
-        if (
-          isMountedRef.current &&
-          currentExecutionId === executionIdRef.current
-        ) {
-          setState({
-            data: null,
-            error: createError({
-              type: "ABORTED",
-              message: abortMessage,
-              context: { reason: "manual_abort" },
-            }),
-            isLoading: false,
-            isSuccess: false,
-            isError: true,
-          });
-        }
-        return;
-      }
-
       // This shouldn't happen with tryAsync, but just in case
       if (
         !isMountedRef.current ||
