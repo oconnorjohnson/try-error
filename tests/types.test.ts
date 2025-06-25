@@ -199,6 +199,83 @@ describe("Type Tests", () => {
       }
     });
   });
+
+  describe("Type guard hardening", () => {
+    it("should reject objects that look like TryError but lack the brand", () => {
+      const spoofedError = {
+        type: "Error",
+        message: "I'm not a real TryError",
+        source: "fake.ts:1:1",
+        timestamp: Date.now(),
+        stack: "fake stack",
+        context: {},
+        cause: null,
+      };
+
+      expect(isTryError(spoofedError)).toBe(false);
+    });
+
+    it("should reject objects with incorrect brand value", () => {
+      const spoofedError = {
+        [Symbol.for("try-error.TryError")]: "not true", // Wrong value
+        type: "Error",
+        message: "I'm not a real TryError",
+        source: "fake.ts:1:1",
+        timestamp: Date.now(),
+      };
+
+      expect(isTryError(spoofedError)).toBe(false);
+    });
+
+    it("should reject objects with different symbol", () => {
+      const differentSymbol = Symbol("try-error.TryError");
+      const spoofedError = {
+        [differentSymbol]: true,
+        type: "Error",
+        message: "I'm not a real TryError",
+        source: "fake.ts:1:1",
+        timestamp: Date.now(),
+      };
+
+      expect(isTryError(spoofedError)).toBe(false);
+    });
+
+    it("should accept genuine TryErrors created by library functions", () => {
+      const realError = createError({
+        type: "TestError",
+        message: "This is a real error",
+      });
+
+      expect(isTryError(realError)).toBe(true);
+    });
+
+    it("should accept TryErrors from trySync", () => {
+      const result = trySync(() => {
+        throw new Error("test");
+      });
+
+      if (isTryError(result)) {
+        expect(isTryError(result)).toBe(true);
+      } else {
+        fail("Expected an error");
+      }
+    });
+
+    it("should work with TypeScript discriminated unions", () => {
+      type AppError = TryError<"ValidationError"> | TryError<"NetworkError">;
+
+      const error: AppError = createError({
+        type: "ValidationError",
+        message: "Invalid input",
+      });
+
+      if (isTryError(error) && error.type === "ValidationError") {
+        // TypeScript should narrow this correctly
+        const narrowed: TryError<"ValidationError"> = error;
+        expect(narrowed.type).toBe("ValidationError");
+      }
+    });
+  });
 });
 
 // Additional compile-time type tests are covered in the runtime tests above
