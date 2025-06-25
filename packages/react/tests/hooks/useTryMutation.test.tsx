@@ -297,6 +297,230 @@ describe("useTryMutation", () => {
       expect(result.current.data).toBe("result");
     });
   });
+
+  describe("AbortController support", () => {
+    it("should pass AbortSignal to mutation function", async () => {
+      const mutationFn = jest.fn(async (data: string, signal: AbortSignal) => {
+        expect(signal).toBeInstanceOf(AbortSignal);
+        return { result: data };
+      });
+
+      const { result } = renderHook(() => useTryMutation(mutationFn));
+
+      await act(async () => {
+        await result.current.mutate("test");
+      });
+
+      expect(mutationFn).toHaveBeenCalledWith("test", expect.any(AbortSignal));
+      expect(result.current.data).toEqual({ result: "test" });
+    });
+
+    it("should abort mutation when abort is called", async () => {
+      let resolvePromise: (value: string) => void;
+      const promise = new Promise<string>((resolve) => {
+        resolvePromise = resolve;
+      });
+
+      const mutationFn = jest.fn(async (data: string, signal: AbortSignal) => {
+        await promise;
+        if (signal.aborted) {
+          throw new Error("AbortError");
+        }
+        return { result: data };
+      });
+
+      const { result } = renderHook(() => useTryMutation(mutationFn));
+
+      act(() => {
+        result.current.mutate("test");
+      });
+
+      expect(result.current.isLoading).toBe(true);
+
+      // Abort the mutation
+      act(() => {
+        result.current.abort();
+      });
+
+      // Resolve the promise after abort
+      await act(async () => {
+        resolvePromise!("data");
+      });
+
+      // Should not have success data
+      expect(result.current.data).toBeNull();
+      expect(result.current.isLoading).toBe(false);
+    });
+
+    it("should handle AbortError with custom message", async () => {
+      const mutationFn = jest.fn(async (data: string, signal: AbortSignal) => {
+        const error = new Error("Aborted");
+        error.name = "AbortError";
+        throw error;
+      });
+
+      const { result } = renderHook(() =>
+        useTryMutation(mutationFn, {
+          abortMessage: "Custom mutation abort",
+        })
+      );
+
+      await act(async () => {
+        await result.current.mutate("test");
+      });
+
+      expect(result.current.isError).toBe(true);
+      expect(result.current.error?.type).toBe("ABORTED");
+      expect(result.current.error?.message).toBe("Custom mutation abort");
+    });
+
+    it("should abort previous mutation when starting new one", async () => {
+      const abortedSignals: boolean[] = [];
+
+      const mutationFn = jest.fn(async (data: string, signal: AbortSignal) => {
+        await new Promise((resolve) => setTimeout(resolve, 50));
+        abortedSignals.push(signal.aborted);
+        return { result: `${data}-${abortedSignals.length}` };
+      });
+
+      const { result } = renderHook(() => useTryMutation(mutationFn));
+
+      // Start first mutation
+      act(() => {
+        result.current.mutate("first");
+      });
+
+      // Start second mutation immediately
+      act(() => {
+        result.current.mutate("second");
+      });
+
+      await waitFor(() => {
+        expect(result.current.isLoading).toBe(false);
+      });
+
+      // First signal should have been aborted
+      expect(abortedSignals[0]).toBe(true);
+      // Second signal should not have been aborted
+      expect(abortedSignals[1]).toBe(false);
+      // Should have the result from the second mutation
+      expect(result.current.data).toEqual({ result: "second-2" });
+    });
+
+    it("should abort mutation on unmount", async () => {
+      let signalAborted = false;
+
+      const mutationFn = jest.fn(async (data: string, signal: AbortSignal) => {
+        await new Promise((resolve) => setTimeout(resolve, 100));
+        signalAborted = signal.aborted;
+        return { result: data };
+      });
+
+      const { result, unmount } = renderHook(() => useTryMutation(mutationFn));
+
+      act(() => {
+        result.current.mutate("test");
+      });
+
+      // Unmount while mutation is in flight
+      unmount();
+
+      // Wait for the async operation to complete
+      await act(async () => {
+        await new Promise((resolve) => setTimeout(resolve, 150));
+      });
+
+      // Signal should have been aborted
+      expect(signalAborted).toBe(true);
+    });
+
+    it("should handle fetch API with AbortSignal", async () => {
+      const mockFetch = jest.fn().mockImplementation((url, options) => {
+        return Promise.resolve({
+          ok: true,
+          json: async () => ({ id: 1, name: "Created User" }),
+        });
+      });
+      global.fetch = mockFetch as any;
+
+      const { result } = renderHook(() =>
+        useTryMutation(
+          async (userData: { name: string }, signal: AbortSignal) => {
+            const response = await fetch("/api/users", {
+              method: "POST",
+              body: JSON.stringify(userData),
+              signal,
+            });
+            return response.json();
+          }
+        )
+      );
+
+      await act(async () => {
+        await result.current.mutate({ name: "John" });
+      });
+
+      expect(mockFetch).toHaveBeenCalledWith(
+        "/api/users",
+        expect.objectContaining({
+          method: "POST",
+          signal: expect.any(AbortSignal),
+        })
+      );
+
+      expect(result.current.data).toEqual({ id: 1, name: "Created User" });
+    });
+
+    it("should abort mutation on reset", async () => {
+      let signalAborted = false;
+
+      const mutationFn = jest.fn(async (data: string, signal: AbortSignal) => {
+        await new Promise((resolve) => setTimeout(resolve, 100));
+        signalAborted = signal.aborted;
+        return { result: data };
+      });
+
+      const { result } = renderHook(() => useTryMutation(mutationFn));
+
+      act(() => {
+        result.current.mutate("test");
+      });
+
+      // Reset while mutation is in flight
+      act(() => {
+        result.current.reset();
+      });
+
+      // Wait for the async operation to complete
+      await act(async () => {
+        await new Promise((resolve) => setTimeout(resolve, 150));
+      });
+
+      // Signal should have been aborted
+      expect(signalAborted).toBe(true);
+      expect(result.current.data).toBeNull();
+      expect(result.current.isLoading).toBe(false);
+    });
+
+    it("should handle component unmount before mutation starts", async () => {
+      const mutationFn = jest.fn(async (data: string, signal: AbortSignal) => {
+        return { result: data };
+      });
+
+      const { result, unmount } = renderHook(() => useTryMutation(mutationFn));
+
+      // Unmount immediately
+      unmount();
+
+      // Try to mutate after unmount
+      const mutateResult = await result.current.mutateAsync("test");
+
+      expect(isTryError(mutateResult)).toBe(true);
+      if (isTryError(mutateResult)) {
+        expect(mutateResult.type).toBe("COMPONENT_UNMOUNTED");
+      }
+    });
+  });
 });
 
 describe("useFormMutation", () => {
