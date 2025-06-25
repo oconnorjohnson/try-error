@@ -128,13 +128,12 @@ describe("Error Factories", () => {
 
   describe("wrapWithContext", () => {
     it("should add context to existing error", () => {
-      const error: TryError = {
+      const error: TryError = createError({
         type: "ValidationError",
         message: "Invalid input",
         source: "validation.ts:5:10",
-        timestamp: Date.now(),
         context: { field: "email" },
-      };
+      });
 
       const wrappedError = wrapWithContext(error, {
         requestId: "req_123",
