@@ -1,6 +1,28 @@
 import { TryError, TRY_ERROR_BRAND } from "./types";
 import { getConfig } from "./config";
 
+// Performance optimization: Cache environment detection
+let cachedEnvironment: string | null = null;
+let cachedIsProduction: boolean | null = null;
+let cachedConfig: ReturnType<typeof getConfig> | null = null;
+let configVersion = 0;
+
+// Track config changes
+const originalGetConfig = getConfig;
+(getConfig as any).version = 0;
+
+/**
+ * Get cached config or fetch new one if changed
+ */
+function getCachedConfig() {
+  const currentVersion = (getConfig as any).version || 0;
+  if (cachedConfig === null || configVersion !== currentVersion) {
+    cachedConfig = getConfig();
+    configVersion = currentVersion;
+  }
+  return cachedConfig;
+}
+
 /**
  * Options for creating a TryError
  */
@@ -50,19 +72,26 @@ export interface CreateErrorOptions<T extends string = string> {
 }
 
 /**
- * Safely check if we're in a production environment
+ * Safely check if we're in a production environment (cached)
  */
 function isProduction(): boolean {
+  if (cachedIsProduction !== null) {
+    return cachedIsProduction;
+  }
+
   // Check for Node.js environment
   if (typeof process !== "undefined" && process.env) {
-    return process.env.NODE_ENV === "production";
+    cachedIsProduction = process.env.NODE_ENV === "production";
+  } else {
+    // Default to production for browsers to avoid exposing stack traces
+    cachedIsProduction = true;
   }
-  // Default to production for browsers to avoid exposing stack traces
-  return true;
+
+  return cachedIsProduction;
 }
 
 /**
- * Detect the JavaScript environment
+ * Detect the JavaScript environment (cached)
  */
 function detectEnvironment():
   | "node"
@@ -71,12 +100,17 @@ function detectEnvironment():
   | "safari"
   | "edge"
   | "unknown" {
+  if (cachedEnvironment !== null) {
+    return cachedEnvironment as any;
+  }
+
   // Node.js
   if (
     typeof process !== "undefined" &&
     process.versions &&
     process.versions.node
   ) {
+    cachedEnvironment = "node";
     return "node";
   }
 
@@ -84,12 +118,25 @@ function detectEnvironment():
   if (typeof navigator !== "undefined" && navigator.userAgent) {
     const ua = navigator.userAgent.toLowerCase();
 
-    if (ua.includes("firefox")) return "firefox";
-    if (ua.includes("edg/")) return "edge";
-    if (ua.includes("chrome") && !ua.includes("edg/")) return "chrome";
-    if (ua.includes("safari") && !ua.includes("chrome")) return "safari";
+    if (ua.includes("firefox")) {
+      cachedEnvironment = "firefox";
+      return "firefox";
+    }
+    if (ua.includes("edg/")) {
+      cachedEnvironment = "edge";
+      return "edge";
+    }
+    if (ua.includes("chrome") && !ua.includes("edg/")) {
+      cachedEnvironment = "chrome";
+      return "chrome";
+    }
+    if (ua.includes("safari") && !ua.includes("chrome")) {
+      cachedEnvironment = "safari";
+      return "safari";
+    }
   }
 
+  cachedEnvironment = "unknown";
   return "unknown";
 }
 
