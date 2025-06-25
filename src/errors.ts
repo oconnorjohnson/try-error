@@ -241,7 +241,8 @@ export function createError<T extends string = string>(
   options: CreateErrorOptions<T>
 ): TryError<T> {
   const config = getConfig();
-  const stackOffset = options.stackOffset ?? 3;
+  const stackOffset =
+    options.stackOffset ?? config.sourceLocation?.defaultStackOffset ?? 3;
   const source = options.source ?? getSourceLocation(stackOffset);
   const timestamp = options.timestamp ?? Date.now();
 
