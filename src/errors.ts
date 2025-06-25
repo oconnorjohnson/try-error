@@ -241,23 +241,19 @@ function getSourceLocation(stackOffset: number = 2): string {
     let currentOffset = 1; // Start at 1 to skip the error message line
     let validFramesFound = 0;
 
-    // Find the nth valid frame (where n = stackOffset - 1)
-    // We subtract 1 because the first frame is the error message
-    const targetFrameIndex = stackOffset - 1;
-
-    while (
-      currentOffset < lines.length &&
-      validFramesFound <= targetFrameIndex
-    ) {
-      const line = lines[currentOffset];
+    // Count valid frames (non-node_modules .ts files)
+    const validFrames: string[] = [];
+    for (let i = 1; i < lines.length; i++) {
+      const line = lines[i];
       if (line && line.includes(".ts") && !line.includes("node_modules")) {
-        if (validFramesFound === targetFrameIndex) {
-          targetLine = line;
-          break;
-        }
-        validFramesFound++;
+        validFrames.push(line);
       }
-      currentOffset++;
+    }
+
+    // Use the requested frame or the last valid frame if offset is too high
+    const adjustedOffset = Math.min(stackOffset - 1, validFrames.length - 1);
+    if (adjustedOffset >= 0 && adjustedOffset < validFrames.length) {
+      targetLine = validFrames[adjustedOffset];
     }
 
     if (!targetLine) return "unknown";
