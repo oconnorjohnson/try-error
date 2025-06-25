@@ -2,6 +2,15 @@
 
 This directory contains a browser-based test suite for the try-error library.
 
+## Prerequisites
+
+Before running the browser tests, make sure to build the browser bundle:
+
+```bash
+# From the root directory
+pnpm build:browser
+```
+
 ## Running the Tests
 
 ### Option 1: Using a Local Server (Recommended)
