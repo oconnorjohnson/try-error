@@ -157,7 +157,24 @@ function getSourceLocation(stackOffset: number = 2): string {
     if (!stack) return "unknown";
 
     const lines = stack.split("\n");
-    const targetLine = lines[stackOffset];
+
+    // In test environments (like Jest), we might need to skip additional frames
+    let targetLine = lines[stackOffset];
+    if (!targetLine) return "unknown";
+
+    // Skip Jest internal frames
+    let adjustedOffset = stackOffset;
+    while (
+      adjustedOffset < lines.length &&
+      targetLine &&
+      (targetLine.includes("node_modules") ||
+        targetLine.includes("jest-circus") ||
+        targetLine.includes("jest-runner"))
+    ) {
+      adjustedOffset++;
+      targetLine = lines[adjustedOffset];
+    }
+
     if (!targetLine) return "unknown";
 
     // Detect environment and use appropriate parser
