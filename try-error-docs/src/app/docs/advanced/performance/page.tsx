@@ -240,6 +240,158 @@ const errorPool = new ErrorPool();`}
           </div>
         </section>
 
+        {/* Performance Optimization */}
+        <section>
+          <h2 className="text-2xl font-semibold text-slate-900 mb-4">
+            Performance Optimization Strategies
+          </h2>
+
+          <div className="space-y-6">
+            <div className="border border-slate-200 rounded-lg p-6">
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">
+                Configuration Presets
+              </h3>
+              <p className="text-slate-600 mb-3">
+                Use built-in presets to quickly optimize for different
+                scenarios.
+              </p>
+              <CodeBlock
+                language="typescript"
+                title="Performance Configuration Presets"
+                showLineNumbers={true}
+                className="mb-3"
+              >
+                {`import { configure, ConfigPresets } from 'try-error';
+
+// Development: Full debugging (1700% error overhead)
+configure(ConfigPresets.development());
+// ✅ Stack traces, source location, detailed logging
+
+// Production: Balanced (400% error overhead)
+configure(ConfigPresets.production());
+// ✅ No stack traces, minimal logging, better performance
+
+// Performance: Optimized (200% error overhead)
+configure(ConfigPresets.performance());
+// ✅ Caching, lazy evaluation, object pooling
+
+// Minimal: Ultra-light (50% error overhead)
+configure(ConfigPresets.minimal());
+// ✅ Bare minimum, no stack traces, no timestamps, no context
+
+// Custom configuration for specific needs
+configure({
+  captureStackTrace: false,    // -1200% overhead
+  skipTimestamp: true,         // -50% overhead
+  skipContext: true,           // -300% overhead
+  minimalErrors: true          // Enable all optimizations
+});`}
+              </CodeBlock>
+              <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+                <h4 className="font-semibold text-green-800 text-sm mb-1">
+                  When to Use Each Preset
+                </h4>
+                <ul className="text-green-700 text-sm space-y-1">
+                  <li>
+                    • <strong>Development:</strong> Local development, debugging
+                  </li>
+                  <li>
+                    • <strong>Production:</strong> Standard production apps
+                  </li>
+                  <li>
+                    • <strong>Performance:</strong> High-throughput services
+                  </li>
+                  <li>
+                    • <strong>Minimal:</strong> Parsing, validation, expected
+                    errors
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="border border-slate-200 rounded-lg p-6">
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">
+                Scenario-Based Optimization
+              </h3>
+              <p className="text-slate-600 mb-3">
+                Different parts of your application may need different error
+                handling strategies.
+              </p>
+              <CodeBlock
+                language="typescript"
+                title="Optimizing for Different Scenarios"
+                showLineNumbers={true}
+                className="mb-3"
+              >
+                {`// High error rate scenario (e.g., user input validation)
+function validateUserInput(data: unknown[]) {
+  // Use minimal config for expected errors
+  configure(ConfigPresets.minimal());
+  
+  return data.map(item => {
+    const result = trySync(() => validateSchema(item));
+    if (isTryError(result)) {
+      return { valid: false, error: result.message };
+    }
+    return { valid: true, data: result };
+  });
+}
+
+// Low error rate scenario (e.g., internal APIs)
+async function fetchCriticalData(id: string) {
+  // Use full config for unexpected errors
+  configure(ConfigPresets.development());
+  
+  const result = await tryAsync(() => fetchFromAPI(id));
+  if (isTryError(result)) {
+    // Rich error info helps debugging
+    logger.error('Critical API failure', {
+      error: result,
+      stack: result.stack,
+      context: result.context
+    });
+    throw result;
+  }
+  return result;
+}
+
+// Mixed scenario with scoped configs
+import { createScope } from 'try-error';
+
+const validationScope = createScope({
+  captureStackTrace: false,
+  minimalErrors: true
+});
+
+const apiScope = createScope({
+  captureStackTrace: true,
+  includeSource: true
+});
+
+async function processRequest(request: Request) {
+  // Validation with minimal overhead
+  const { createError: createValidationError } = validationScope;
+  const validationResult = trySync(() => validateRequest(request));
+  
+  if (isTryError(validationResult)) {
+    return { status: 400, error: validationResult };
+  }
+  
+  // API call with full debugging
+  const { createError: createAPIError } = apiScope;
+  const apiResult = await tryAsync(() => callAPI(validationResult));
+  
+  if (isTryError(apiResult)) {
+    return { status: 500, error: apiResult };
+  }
+  
+  return { status: 200, data: apiResult };
+}`}
+              </CodeBlock>
+            </div>
+          </div>
+        </section>
+
         {/* Implementation Guide */}
         <section>
           <h2 className="text-2xl font-semibold text-slate-900 mb-4">

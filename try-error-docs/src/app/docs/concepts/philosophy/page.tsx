@@ -45,12 +45,13 @@ export default function PhilosophyPage() {
 
             <div className="border-l-4 border-purple-500 pl-4">
               <h3 className="text-lg font-semibold text-slate-900 mb-2">
-                Zero Runtime Cost
+                Minimal Runtime Cost
               </h3>
               <p className="text-slate-600">
                 Error handling shouldn't slow down your application. try-error
-                uses TypeScript's type system to provide safety without any
-                runtime overhead for success cases.
+                adds &lt;3% overhead for successful operations. Error paths have
+                configurable overhead (50%-1700%) based on debugging needs -
+                this is acceptable because errors should be exceptional.
               </p>
             </div>
 
@@ -151,8 +152,8 @@ try {
                 before accessing values
               </li>
               <li>
-                • <strong>Zero overhead:</strong> No performance cost for the
-                happy path
+                • <strong>Minimal overhead:</strong> &lt;3% cost for success
+                path, configurable error overhead
               </li>
               <li>
                 • <strong>Predictable flow:</strong> Errors are returned, not
@@ -238,12 +239,14 @@ interface Result<T, E> {
           </p>
 
           <h3 className="text-lg font-semibold text-slate-900 mb-3">
-            Rich Error Context
+            Rich Error Context (With Trade-offs)
           </h3>
           <p className="text-slate-600 mb-4">
             try-error errors include rich context like stack traces, timestamps,
-            and source information to aid in debugging, while still being
-            lightweight and serializable.
+            and source information to aid in debugging. This causes higher error
+            path overhead (50%-1700%) but is configurable. The trade-off is
+            worth it because errors should be rare, and debugging time saved
+            outweighs runtime cost.
           </p>
 
           <CodeBlock

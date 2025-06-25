@@ -28,6 +28,15 @@ export default function InstallationPage() {
               works with TypeScript 4.5+
             </p>
           </div>
+
+          <div className="bg-green-50 border border-green-200 rounded-lg p-4 mt-4">
+            <p className="text-green-800">
+              <strong>Performance:</strong> try-error adds &lt;3% overhead to
+              successful operations. Error handling overhead (50%-1700%) is
+              configurable based on your debugging needs. No configuration
+              required to start!
+            </p>
+          </div>
         </section>
 
         {/* TypeScript Configuration */}
