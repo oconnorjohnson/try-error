@@ -270,7 +270,7 @@ export function useTry<T>(
 export function useTrySync<T>(
   syncFn: () => T,
   options: Omit<UseTryOptions, "immediate"> = {}
-): Omit<UseTryReturn<T>, "execute"> & { execute: () => void } {
+): Omit<UseTryReturn<T>, "execute" | "abort"> & { execute: () => void } {
   const { resetOnExecute = true, deps = [] } = options;
 
   const [state, setState] = useState<TryState<T>>({
