@@ -105,6 +105,7 @@ describe("Source Location Improvements", () => {
 
     it("should support file:line format", () => {
       configure({
+        includeSource: true,
         sourceLocation: {
           format: "file:line",
         },
@@ -123,6 +124,7 @@ describe("Source Location Improvements", () => {
 
     it("should support file only format", () => {
       configure({
+        includeSource: true,
         sourceLocation: {
           format: "file",
         },
@@ -139,6 +141,7 @@ describe("Source Location Improvements", () => {
 
     it("should support full path when configured", () => {
       configure({
+        includeSource: true,
         sourceLocation: {
           includeFullPath: true,
         },

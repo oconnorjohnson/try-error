@@ -236,25 +236,31 @@ function getSourceLocation(stackOffset: number = 2): string {
       console.log("Target offset:", stackOffset);
     }
 
-    // Look for the first line that contains actual source information
+    // Look for the correct stack frame
     let targetLine: string | undefined;
-    let adjustedOffset = 1; // Start at 1 to skip the error message line
+    let currentOffset = 1; // Start at 1 to skip the error message line
+    let validFramesFound = 0;
 
-    // Find the first line that's not from node_modules and contains source info
-    while (adjustedOffset < lines.length) {
-      const line = lines[adjustedOffset];
+    // Find the nth valid frame (where n = stackOffset - 1)
+    // We subtract 1 because the first frame is the error message
+    const targetFrameIndex = stackOffset - 1;
+
+    while (
+      currentOffset < lines.length &&
+      validFramesFound <= targetFrameIndex
+    ) {
+      const line = lines[currentOffset];
       if (line && line.includes(".ts") && !line.includes("node_modules")) {
-        targetLine = line;
-        break;
+        if (validFramesFound === targetFrameIndex) {
+          targetLine = line;
+          break;
+        }
+        validFramesFound++;
       }
-      adjustedOffset++;
+      currentOffset++;
     }
 
-    if (!targetLine) {
-      // Fallback to the original offset if we can't find a good line
-      targetLine = lines[stackOffset];
-      if (!targetLine) return "unknown";
-    }
+    if (!targetLine) return "unknown";
 
     // Detect environment and use appropriate parser
     const env = detectEnvironment();
@@ -392,6 +398,11 @@ export function createError<T extends string = string>(
         Error.stackTraceLimit = originalLimit;
       } else {
         stack = error.stack;
+      }
+
+      // Replace "Error:" with the actual error type in the stack trace
+      if (stack) {
+        stack = stack.replace(/^Error:/, `${options.type}:`);
       }
     } catch {
       // Stack trace capture failed, continue without it
