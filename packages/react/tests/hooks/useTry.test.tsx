@@ -332,7 +332,7 @@ describe("useTry", () => {
 
       expect(result.current.isError).toBe(true);
       expect(isTryError(result.current.error)).toBe(true);
-      expect(result.current.error?.message).toBe("Unknown error");
+      expect(result.current.error?.message).toBe("An unknown error occurred");
     });
   });
 
