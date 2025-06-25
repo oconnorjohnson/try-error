@@ -69,6 +69,9 @@ export function useTry<T>(
   // Ref to track if component is mounted (prevent state updates after unmount)
   const isMountedRef = useRef(true);
 
+  // Ref to track the current execution ID (handle race conditions)
+  const executionIdRef = useRef(0);
+
   // Cleanup on unmount
   useEffect(() => {
     return () => {
@@ -79,6 +82,9 @@ export function useTry<T>(
   // Execute the async function
   const execute = useCallback(async () => {
     if (!isMountedRef.current) return;
+
+    // Increment execution ID to handle race conditions
+    const currentExecutionId = ++executionIdRef.current;
 
     // Reset state if requested
     if (resetOnExecute) {
@@ -96,7 +102,13 @@ export function useTry<T>(
     try {
       const result = await tryAsync(asyncFn);
 
-      if (!isMountedRef.current) return;
+      // Check if this is still the latest execution and component is mounted
+      if (
+        !isMountedRef.current ||
+        currentExecutionId !== executionIdRef.current
+      ) {
+        return;
+      }
 
       if (isTryError(result)) {
         setState({
@@ -117,7 +129,12 @@ export function useTry<T>(
       }
     } catch (error) {
       // This shouldn't happen with tryAsync, but just in case
-      if (!isMountedRef.current) return;
+      if (
+        !isMountedRef.current ||
+        currentExecutionId !== executionIdRef.current
+      ) {
+        return;
+      }
 
       setState({
         data: null,
