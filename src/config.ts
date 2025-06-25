@@ -36,6 +36,35 @@ export interface TryErrorConfig {
   includeSource?: boolean;
 
   /**
+   * Source location configuration
+   */
+  sourceLocation?: {
+    /**
+     * Default stack offset for source detection
+     * Useful when wrapping error creation
+     * @default 3
+     */
+    defaultStackOffset?: number;
+
+    /**
+     * Format for source location string
+     * @default "file:line:column"
+     */
+    format?: "full" | "file:line:column" | "file:line" | "file";
+
+    /**
+     * Include full file path or just filename
+     * @default false (just filename)
+     */
+    includeFullPath?: boolean;
+
+    /**
+     * Custom source location formatter
+     */
+    formatter?: (file: string, line: string, column: string) => string;
+  };
+
+  /**
    * Default error type for untyped errors
    * @default "Error"
    */

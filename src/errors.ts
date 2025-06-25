@@ -1,4 +1,5 @@
 import { TryError, TRY_ERROR_BRAND } from "./types";
+import { getConfig } from "./config";
 
 /**
  * Options for creating a TryError
@@ -33,6 +34,19 @@ export interface CreateErrorOptions<T extends string = string> {
    * Override the automatically generated timestamp
    */
   timestamp?: number;
+
+  /**
+   * Stack offset for source location detection
+   * Useful when wrapping error creation in utility functions
+   * @default 3
+   */
+  stackOffset?: number;
+
+  /**
+   * Whether to capture stack trace for this specific error
+   * Overrides global configuration
+   */
+  captureStackTrace?: boolean;
 }
 
 /**
@@ -48,39 +62,135 @@ function isProduction(): boolean {
 }
 
 /**
+ * Detect the JavaScript environment
+ */
+function detectEnvironment():
+  | "node"
+  | "chrome"
+  | "firefox"
+  | "safari"
+  | "edge"
+  | "unknown" {
+  // Node.js
+  if (
+    typeof process !== "undefined" &&
+    process.versions &&
+    process.versions.node
+  ) {
+    return "node";
+  }
+
+  // Browser detection
+  if (typeof navigator !== "undefined" && navigator.userAgent) {
+    const ua = navigator.userAgent.toLowerCase();
+
+    if (ua.includes("firefox")) return "firefox";
+    if (ua.includes("edg/")) return "edge";
+    if (ua.includes("chrome") && !ua.includes("edg/")) return "chrome";
+    if (ua.includes("safari") && !ua.includes("chrome")) return "safari";
+  }
+
+  return "unknown";
+}
+
+/**
+ * Stack trace parsers for different environments
+ */
+const stackParsers = {
+  // V8 (Chrome, Node.js, Edge)
+  v8: (line: string): { file: string; line: string; column: string } | null => {
+    // Format: "    at functionName (file:line:column)" or "    at file:line:column"
+    const match = line.match(/\s+at\s+(?:.*?\s+\()?(.+):(\d+):(\d+)\)?/);
+    if (match) {
+      return { file: match[1], line: match[2], column: match[3] };
+    }
+    return null;
+  },
+
+  // Firefox
+  firefox: (
+    line: string
+  ): { file: string; line: string; column: string } | null => {
+    // Format: "functionName@file:line:column"
+    const match = line.match(/(?:.*@)?(.+):(\d+):(\d+)/);
+    if (match) {
+      return { file: match[1], line: match[2], column: match[3] };
+    }
+    return null;
+  },
+
+  // Safari
+  safari: (
+    line: string
+  ): { file: string; line: string; column: string } | null => {
+    // Format: "functionName@file:line:column" or "global code@file:line:column"
+    const match = line.match(/(?:.*@)?(.+):(\d+):(\d+)/);
+    if (match) {
+      return { file: match[1], line: match[2], column: match[3] };
+    }
+    return null;
+  },
+};
+
+/**
  * Extract source location from stack trace
  * Returns format: "file:line:column" or "unknown" if not available
  */
 function getSourceLocation(stackOffset: number = 2): string {
+  const config = getConfig();
+
+  // Check if source location is disabled
+  if (!config.includeSource) {
+    return "disabled";
+  }
+
   try {
-    const stack = new Error().stack;
+    // Create error to get stack trace
+    const error = new Error();
+
+    // Use Error.captureStackTrace if available (V8 only)
+    if (typeof Error.captureStackTrace === "function") {
+      Error.captureStackTrace(error, getSourceLocation);
+    }
+
+    const stack = error.stack;
     if (!stack) return "unknown";
 
     const lines = stack.split("\n");
-    // Skip Error constructor and this function
     const targetLine = lines[stackOffset];
     if (!targetLine) return "unknown";
 
-    // Extract file:line:column from various stack formats
-    // Chrome: "    at functionName (file:line:column)"
-    // Node: "    at functionName (file:line:column)"
-    // Firefox: "functionName@file:line:column"
-    const chromeMatch = targetLine.match(/\s+at\s+.*?\((.+):(\d+):(\d+)\)/);
-    if (chromeMatch && chromeMatch[1]) {
-      const [, file, line, column] = chromeMatch;
-      return `${file.split("/").pop()}:${line}:${column}`;
+    // Detect environment and use appropriate parser
+    const env = detectEnvironment();
+    let parser: (
+      line: string
+    ) => { file: string; line: string; column: string } | null;
+
+    switch (env) {
+      case "node":
+      case "chrome":
+      case "edge":
+        parser = stackParsers.v8;
+        break;
+      case "firefox":
+        parser = stackParsers.firefox;
+        break;
+      case "safari":
+        parser = stackParsers.safari;
+        break;
+      default:
+        // Try all parsers
+        parser = (line) =>
+          stackParsers.v8(line) ||
+          stackParsers.firefox(line) ||
+          stackParsers.safari(line);
     }
 
-    const nodeMatch = targetLine.match(/\s+at\s+(.+):(\d+):(\d+)/);
-    if (nodeMatch && nodeMatch[1]) {
-      const [, file, line, column] = nodeMatch;
-      return `${file.split("/").pop()}:${line}:${column}`;
-    }
-
-    const firefoxMatch = targetLine.match(/(.+)@(.+):(\d+):(\d+)/);
-    if (firefoxMatch && firefoxMatch[2]) {
-      const [, , file, line, column] = firefoxMatch;
-      return `${file.split("/").pop()}:${line}:${column}`;
+    const result = parser(targetLine);
+    if (result) {
+      // Extract just the filename from the full path
+      const filename = result.file.split("/").pop() || result.file;
+      return `${filename}:${result.line}:${result.column}`;
     }
 
     return "unknown";
@@ -107,21 +217,36 @@ function getSourceLocation(stackOffset: number = 2): string {
 export function createError<T extends string = string>(
   options: CreateErrorOptions<T>
 ): TryError<T> {
-  const source = options.source ?? getSourceLocation(3);
+  const config = getConfig();
+  const stackOffset = options.stackOffset ?? 3;
+  const source = options.source ?? getSourceLocation(stackOffset);
   const timestamp = options.timestamp ?? Date.now();
 
-  // Capture stack trace if not in production
+  // Determine if we should capture stack trace
+  const shouldCaptureStack =
+    options.captureStackTrace ?? config.captureStackTrace ?? !isProduction();
+
+  // Capture stack trace if enabled
   let stack: string | undefined;
-  if (!isProduction()) {
+  if (shouldCaptureStack) {
     try {
       const error = new Error(options.message);
-      stack = error.stack;
+
+      // Set stack trace limit if configured
+      if (config.stackTraceLimit && typeof Error.stackTraceLimit === "number") {
+        const originalLimit = Error.stackTraceLimit;
+        Error.stackTraceLimit = config.stackTraceLimit;
+        stack = error.stack;
+        Error.stackTraceLimit = originalLimit;
+      } else {
+        stack = error.stack;
+      }
     } catch {
       // Stack trace capture failed, continue without it
     }
   }
 
-  return {
+  const error: TryError<T> = {
     [TRY_ERROR_BRAND]: true,
     type: options.type,
     message: options.message,
@@ -131,6 +256,13 @@ export function createError<T extends string = string>(
     context: options.context,
     cause: options.cause,
   };
+
+  // Apply global error transformation if configured
+  if (config.onError) {
+    return config.onError(error) as TryError<T>;
+  }
+
+  return error;
 }
 
 /**
