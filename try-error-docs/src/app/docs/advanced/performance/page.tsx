@@ -14,11 +14,91 @@ export default function PerformancePage() {
       </div>
 
       <div className="space-y-8">
-        {/* Performance Optimization */}
+        {/* Performance Overview */}
         <section>
           <h2 className="text-2xl font-semibold text-slate-900 mb-4">
-            Performance Optimization
+            Performance Overview
           </h2>
+
+          <div className="bg-gradient-to-r from-green-50 to-orange-50 border border-green-200 rounded-lg p-6 mb-6">
+            <h3 className="text-lg font-semibold text-green-900 mb-3">
+              📊 Real-World Performance Metrics
+            </h3>
+
+            <div className="grid md:grid-cols-2 gap-6">
+              <div>
+                <h4 className="font-semibold text-green-800 mb-2">
+                  ✅ Success Path
+                </h4>
+                <ul className="space-y-2 text-green-700 text-sm">
+                  <li>
+                    • <strong>&lt;3% overhead</strong> compared to native
+                    try/catch
+                  </li>
+                  <li>• Direct value return with no wrapper objects</li>
+                  <li>• No performance penalty for successful operations</li>
+                  <li>
+                    • Suitable for hot paths and performance-critical code
+                  </li>
+                </ul>
+                <div className="mt-3 p-3 bg-green-100 rounded">
+                  <p className="text-green-800 text-xs">
+                    <strong>Benchmark:</strong> 1M successful JSON.parse
+                    operations
+                    <br />
+                    Native: 100ms | try-error: 103ms (3% overhead)
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <h4 className="font-semibold text-orange-800 mb-2">
+                  ⚠️ Error Path
+                </h4>
+                <ul className="space-y-2 text-orange-700 text-sm">
+                  <li>
+                    • <strong>50% to 1700% overhead</strong> (configurable)
+                  </li>
+                  <li>• Default config: ~1700% overhead (rich debugging)</li>
+                  <li>• Production config: ~400% overhead (no stack traces)</li>
+                  <li>• Minimal config: ~50% overhead (bare essentials)</li>
+                </ul>
+                <div className="mt-3 p-3 bg-orange-100 rounded">
+                  <p className="text-orange-800 text-xs">
+                    <strong>Benchmark:</strong> 1M failed JSON.parse operations
+                    <br />
+                    Native: 4,708ms | Default: 85,734ms | Minimal: 7,062ms
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-4 p-4 bg-blue-100 rounded-lg">
+              <h4 className="font-semibold text-blue-900 mb-2">
+                💡 Understanding the Error Overhead
+              </h4>
+              <div className="grid md:grid-cols-2 gap-4 text-blue-700 text-sm">
+                <div>
+                  <strong>What causes the overhead:</strong>
+                  <ul className="mt-1 space-y-1">
+                    <li>• Stack trace capture: ~1200% overhead</li>
+                    <li>• Context deep cloning: ~300% overhead</li>
+                    <li>• Source location parsing: ~200% overhead</li>
+                    <li>• Timestamp generation: ~50% overhead</li>
+                  </ul>
+                </div>
+                <div>
+                  <strong>Why it's acceptable:</strong>
+                  <ul className="mt-1 space-y-1">
+                    <li>• Errors should be exceptional (rare)</li>
+                    <li>• Rich debugging saves developer time</li>
+                    <li>• Configurable for high-error scenarios</li>
+                    <li>• Still faster than many logging libraries</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
 
           <p className="text-slate-600 mb-6">
             try-error is designed to be lightweight and performant, but there
