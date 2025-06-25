@@ -236,24 +236,25 @@ function getSourceLocation(stackOffset: number = 2): string {
       console.log("Target offset:", stackOffset);
     }
 
-    // In test environments (like Jest), we might need to skip additional frames
-    let targetLine = lines[stackOffset];
-    if (!targetLine) return "unknown";
+    // Look for the first line that contains actual source information
+    let targetLine: string | undefined;
+    let adjustedOffset = 1; // Start at 1 to skip the error message line
 
-    // Skip Jest internal frames
-    let adjustedOffset = stackOffset;
-    while (
-      adjustedOffset < lines.length &&
-      targetLine &&
-      (targetLine.includes("node_modules") ||
-        targetLine.includes("jest-circus") ||
-        targetLine.includes("jest-runner"))
-    ) {
+    // Find the first line that's not from node_modules and contains source info
+    while (adjustedOffset < lines.length) {
+      const line = lines[adjustedOffset];
+      if (line && line.includes(".ts") && !line.includes("node_modules")) {
+        targetLine = line;
+        break;
+      }
       adjustedOffset++;
-      targetLine = lines[adjustedOffset];
     }
 
-    if (!targetLine) return "unknown";
+    if (!targetLine) {
+      // Fallback to the original offset if we can't find a good line
+      targetLine = lines[stackOffset];
+      if (!targetLine) return "unknown";
+    }
 
     // Detect environment and use appropriate parser
     const env = detectEnvironment();
