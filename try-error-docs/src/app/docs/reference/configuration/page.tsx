@@ -2712,7 +2712,7 @@ configure({
                   Error Path Overhead
                 </h4>
                 <ul className="space-y-1 text-orange-700 text-sm">
-                  <li>• Default config: ~1700% overhead ❌</li>
+                  <li>• Default config: ~100-120% overhead ❌</li>
                   <li>• Production config: ~400% overhead ⚠️</li>
                   <li>• Minimal config: ~50% overhead ✅</li>
                 </ul>

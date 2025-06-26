@@ -296,9 +296,9 @@ configure(ConfigPresets.minimal());
 
 // Custom configuration for specific needs
 configure({
-  captureStackTrace: false,    // -1200% overhead
-  skipTimestamp: true,         // -50% overhead
-  skipContext: true,           // -300% overhead
+  captureStackTrace: false,    // -80% overhead
+  skipTimestamp: true,         // -5% overhead
+  skipContext: true,           // -30% overhead
   minimalErrors: true          // Enable all optimizations
 });`}
               </CodeBlock>
