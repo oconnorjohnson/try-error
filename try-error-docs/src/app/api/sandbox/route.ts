@@ -7,13 +7,21 @@ const activeSandboxes = new Map<string, { sandbox: Sandbox; code: string }>();
 
 export async function POST(request: NextRequest) {
   try {
-    const { code, language = "typescript" } = await request.json();
+    const { code } = await request.json();
 
     // Create a unique ID for this sandbox session
     const sandboxId = Math.random().toString(36).substring(7);
 
     // Create the sandbox using a minimal git repo as base
-    const sandboxConfig: any = {
+    const sandboxConfig: {
+      source: { type: string; url: string };
+      resources: { vcpus: number };
+      timeout: number;
+      runtime: string;
+      teamId?: string;
+      projectId?: string;
+      token?: string;
+    } = {
       source: {
         type: "git",
         url: "https://github.com/vercel/sandbox-example-node.git",
