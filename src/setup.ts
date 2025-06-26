@@ -6,7 +6,12 @@
  * while maintaining full customization options.
  */
 
-import { configure, createEnvConfig, TryErrorConfig } from "./config";
+import {
+  configure,
+  createEnvConfig,
+  TryErrorConfig,
+  ConfigPresets,
+} from "./config";
 
 /**
  * Quick setup for Node.js/Express applications
@@ -115,90 +120,50 @@ export function setupReact(options: TryErrorConfig = {}): void {
 
 /**
  * Quick setup for Next.js applications
- * Handles both server-side and client-side environments
+ * Uses runtime detection to automatically apply the correct configuration
  *
- * @param options - Optional custom configuration overrides or separate server/client configs
+ * @param options - Optional custom configuration overrides
  *
  * @example
  * ```typescript
- * // Simple setup (same config for both)
+ * // Simple setup with automatic runtime detection
  * setupNextJs();
  *
- * // With separate server/client configurations
+ * // With custom error handlers
  * setupNextJs({
- *   server: {
- *     onError: (error) => {
+ *   environmentHandlers: {
+ *     server: (error) => {
  *       logger.error('Server error', error);
- *     }
- *   },
- *   client: {
- *     onError: (error) => {
+ *       return error;
+ *     },
+ *     client: (error) => {
  *       Sentry.captureException(error);
+ *       return error;
  *     }
  *   }
  * });
  *
- * // Or with shared config + environment-specific overrides
+ * // Or override specific options
  * setupNextJs({
- *   includeSource: true,
- *   server: {
- *     captureStackTrace: false,
- *     onError: (error) => logger.error(error)
- *   },
- *   client: {
- *     captureStackTrace: false,
- *     onError: (error) => trackError(error)
- *   }
+ *   captureStackTrace: false,
+ *   includeSource: true
  * });
  * ```
  */
-export function setupNextJs(
-  options: TryErrorConfig & {
-    server?: Partial<TryErrorConfig>;
-    client?: Partial<TryErrorConfig>;
-  } = {}
-): void {
-  const isServer = typeof window === "undefined";
-  const isDev =
-    typeof process !== "undefined"
-      ? process.env.NODE_ENV === "development"
-      : false;
+export function setupNextJs(options: TryErrorConfig = {}): void {
+  const nextjsConfig = ConfigPresets.nextjs();
 
-  // Extract server/client specific configs
-  const { server, client, ...sharedConfig } = options;
-
-  // Base configuration
-  const baseConfig: TryErrorConfig = {
-    captureStackTrace: isDev,
-    stackTraceLimit: isDev ? (isServer ? 50 : 20) : isServer ? 5 : 3,
-    includeSource: isDev || isServer, // Keep source on server for logs
-    developmentMode: isDev,
-    ...sharedConfig, // Apply shared config
+  // Merge custom options with Next.js preset
+  const finalConfig: TryErrorConfig = {
+    ...nextjsConfig,
+    ...options,
   };
 
-  // Apply environment-specific config
-  const envConfig = isServer ? server : client;
-  const finalConfig = { ...baseConfig, ...envConfig };
-
-  // Default error handlers if not provided
-  if (!finalConfig.onError) {
-    finalConfig.onError = (error) => {
-      if (isDev && typeof console !== "undefined") {
-        const prefix = isServer ? "[SSR]" : "[Client]";
-        console.group(`🚨 ${prefix} TryError: ${error.type}`);
-        console.error("Message:", error.message);
-        console.error("Source:", error.source);
-        console.error("Context:", error.context);
-        if (error.stack) console.error("Stack:", error.stack);
-        console.groupEnd();
-      } else if (isServer) {
-        // Production server: Log errors (but not to stdout)
-        // Users should integrate their logger here
-      } else {
-        // Production client: No console output
-        // Users should integrate error tracking here
-      }
-      return error;
+  // If custom environment handlers are provided, merge them with defaults
+  if (options.environmentHandlers) {
+    finalConfig.environmentHandlers = {
+      ...nextjsConfig.environmentHandlers,
+      ...options.environmentHandlers,
     };
   }
 

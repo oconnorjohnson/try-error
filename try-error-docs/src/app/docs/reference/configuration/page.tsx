@@ -1060,10 +1060,11 @@ configure(ConfigPresets.test());        // Test-friendly configuration
 configure(ConfigPresets.performance()); // Maximum performance with caching
 configure(ConfigPresets.minimal());     // Ultra-lightweight (<50% overhead)
 
-// Environment-specific presets (NEW)
+// Environment-specific presets
 configure(ConfigPresets.serverProduction()); // Server with logging integration
 configure(ConfigPresets.clientProduction()); // Client with error tracking
 configure(ConfigPresets.edge());             // Edge/serverless optimized
+configure(ConfigPresets.nextjs());           // Next.js with runtime detection 🎯
 
 // Customize presets
 const customConfig = {
@@ -1260,6 +1261,37 @@ const globalError = createTryError('GlobalError', 'Uses global config');`}
                     </ul>
                   </CardContent>
                 </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-base">
+                      ConfigPresets.nextjs()
+                    </CardTitle>
+                    <CardDescription>
+                      Smart runtime detection for Next.js apps
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <ul className="text-sm space-y-1">
+                      <li>
+                        • Runtime detection: <strong>Enabled</strong>
+                      </li>
+                      <li>
+                        • Stack traces: <strong>Dev only</strong>
+                      </li>
+                      <li>
+                        • Source location: <strong>Included</strong>
+                      </li>
+                      <li>
+                        • Automatic environment handlers for server/client/edge
+                      </li>
+                      <li>• Best for: Next.js 13+ App Router & Pages Router</li>
+                      <li>
+                        • Solves: Global config conflicts in isomorphic apps
+                      </li>
+                    </ul>
+                  </CardContent>
+                </Card>
               </div>
             </div>
           </div>
@@ -1288,8 +1320,8 @@ const globalError = createTryError('GlobalError', 'Uses global config');`}
               <CardHeader>
                 <CardTitle>Basic Next.js Setup</CardTitle>
                 <CardDescription>
-                  The simplest approach - one configuration for both server and
-                  client
+                  The simplest approach - automatic runtime detection for
+                  server, client, and edge
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -1301,7 +1333,7 @@ const globalError = createTryError('GlobalError', 'Uses global config');`}
                   {`import { setupNextJs } from 'try-error/setup';
 
 // This runs on both server and client
-// setupNextJs() automatically detects the environment
+// try-error automatically detects the runtime environment for each error
 setupNextJs();
 
 export default function RootLayout({
@@ -1316,15 +1348,25 @@ export default function RootLayout({
   );
 }`}
                 </CodeBlock>
+
+                <Alert className="mt-4">
+                  <AlertDescription>
+                    <strong>How it works:</strong> Unlike traditional global
+                    configuration, try-error detects the runtime environment
+                    (server, client, or edge)
+                    <em>when each error is created</em>, not when configured.
+                    This solves the Next.js isomorphic challenge perfectly.
+                  </AlertDescription>
+                </Alert>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader>
-                <CardTitle>Advanced: Separate Server/Client Configs</CardTitle>
+                <CardTitle>Advanced: Custom Environment Handlers</CardTitle>
                 <CardDescription>
-                  Different error handling for server components, API routes,
-                  and client components
+                  Customize error handling for server components, API routes,
+                  client components, and edge runtime
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -1333,21 +1375,21 @@ export default function RootLayout({
                   title="app/layout.tsx - Production-Ready Setup"
                   showLineNumbers={true}
                 >
-                  {`import { setupNextJs, withErrorService } from 'try-error/setup';
+                  {`import { setupNextJs } from 'try-error/setup';
+import * as Sentry from '@sentry/nextjs';
+import { logger } from '@/lib/logger';
 
-// Configure with separate server and client settings
+// Configure with custom environment handlers
 setupNextJs({
-  // Shared configuration
+  // Base configuration (applies to all environments)
   includeSource: true,
-  developmentMode: process.env.NODE_ENV === 'development',
+  captureStackTrace: process.env.NODE_ENV === 'development',
   
-  // Server-specific (API routes, server components, server actions)
-  server: {
-    captureStackTrace: false, // Performance optimization
-    onError: (error) => {
-      // Log to your server-side logging service
+  // Environment-specific handlers (called based on runtime detection)
+  environmentHandlers: {
+    server: (error) => {
+      // Server-side: Log to your logging service
       if (process.env.NODE_ENV === 'production') {
-        // Example: Winston, Pino, or cloud logging
         logger.error({
           type: error.type,
           message: error.message,
@@ -1357,19 +1399,25 @@ setupNextJs({
         });
       }
       return error;
-    }
-  },
-  
-  // Client-specific (client components, browser code)
-  client: {
-    captureStackTrace: false, // Don't expose stack traces to users
-    skipContext: true, // Don't send sensitive context to client
-    onError: (error) => {
-      // Send to client-side error tracking
-      if (typeof window !== 'undefined' && window.Sentry) {
-        window.Sentry.captureException(error);
+    },
+    
+    client: (error) => {
+      // Client-side: Send to error tracking
+      if (process.env.NODE_ENV === 'production') {
+        Sentry.captureException(error);
+        // No console output in production
       }
-      // No console output in production
+      return error;
+    },
+    
+    edge: (error) => {
+      // Edge runtime: Minimal logging
+      console.log(JSON.stringify({
+        type: error.type,
+        message: error.message,
+        timestamp: error.timestamp,
+        runtime: 'edge'
+      }));
       return error;
     }
   }
@@ -1378,9 +1426,9 @@ setupNextJs({
 
                 <Alert>
                   <AlertDescription>
-                    <strong>Pro tip:</strong> The configuration runs once per
-                    environment. On the server, it runs when the server starts.
-                    On the client, it runs when the page loads.
+                    <strong>Runtime Detection:</strong> Each error automatically
+                    uses the correct handler based on where it's thrown - no
+                    more configuration conflicts between server and client!
                   </AlertDescription>
                 </Alert>
               </CardContent>
