@@ -18,9 +18,9 @@ describe("Modular imports", () => {
     expect(typeof syncModule.configure).toBe("function");
 
     // Should NOT have async functions (they shouldn't be imported)
-    expect(syncModule.tryAsync).toBeUndefined();
-    expect(syncModule.tryAsyncTuple).toBeUndefined();
-    expect(syncModule.tryAwait).toBeUndefined();
+    expect((syncModule as any).tryAsync).toBeUndefined();
+    expect((syncModule as any).tryAsyncTuple).toBeUndefined();
+    expect((syncModule as any).tryAwait).toBeUndefined();
   });
 
   test("async-only module exports async functions", async () => {
@@ -39,9 +39,9 @@ describe("Modular imports", () => {
     expect(typeof asyncModule.configure).toBe("function");
 
     // Should NOT have sync-specific functions
-    expect(asyncModule.trySync).toBeUndefined();
-    expect(asyncModule.trySyncTuple).toBeUndefined();
-    expect(asyncModule.tryCall).toBeUndefined();
+    expect((asyncModule as any).trySync).toBeUndefined();
+    expect((asyncModule as any).trySyncTuple).toBeUndefined();
+    expect((asyncModule as any).tryCall).toBeUndefined();
   });
 
   test("core module exports only core functionality", async () => {
