@@ -286,7 +286,7 @@ configure(ConfigPresets.development());
 configure(ConfigPresets.production());
 // ✅ No stack traces, minimal logging, better performance
 
-// Performance: Optimized (200% error overhead)
+// Performance: Optimized (30% error overhead)
 configure(ConfigPresets.performance());
 // ✅ Caching, lazy evaluation, object pooling
 
