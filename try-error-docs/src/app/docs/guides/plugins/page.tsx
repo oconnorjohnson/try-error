@@ -1,6 +1,12 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { EnhancedCodeBlock } from "@/components/EnhancedCodeBlock";
 
@@ -10,15 +16,17 @@ export default function PluginsPage() {
       <div>
         <h1 className="text-4xl font-bold mb-4">Plugin System</h1>
         <p className="text-xl text-muted-foreground">
-          Extend try-error with reusable plugins that add new capabilities, integrations, and error types
+          Extend try-error with reusable plugins that add new capabilities,
+          integrations, and error types
         </p>
       </div>
 
       <Alert>
         <AlertTitle>Extensible Architecture</AlertTitle>
         <AlertDescription>
-          The plugin system allows third-party packages to extend try-error without modifying its core.
-          Plugins can add configuration, middleware, custom error types, utilities, and more.
+          The plugin system allows third-party packages to extend try-error
+          without modifying its core. Plugins can add configuration, middleware,
+          custom error types, utilities, and more.
         </AlertDescription>
       </Alert>
 
@@ -26,11 +34,12 @@ export default function PluginsPage() {
         <section>
           <h2 className="text-3xl font-semibold mb-4">Plugin Architecture</h2>
           <p className="text-muted-foreground mb-6">
-            Plugins are self-contained modules that can hook into various aspects of try-error.
+            Plugins are self-contained modules that can hook into various
+            aspects of try-error.
           </p>
 
           <EnhancedCodeBlock language="typescript" showLineNumbers>
-{`import { Plugin, PluginMetadata, PluginHooks, PluginCapabilities } from 'try-error';
+            {`import { Plugin, PluginMetadata, PluginHooks, PluginCapabilities } from 'try-error';
 
 interface Plugin {
   // Plugin identification and dependencies
@@ -74,7 +83,7 @@ interface PluginCapabilities {
 
         <section>
           <h2 className="text-3xl font-semibold mb-4">Using Plugins</h2>
-          
+
           <Tabs defaultValue="install" className="mb-8">
             <TabsList>
               <TabsTrigger value="install">Installation</TabsTrigger>
@@ -84,7 +93,7 @@ interface PluginCapabilities {
 
             <TabsContent value="install">
               <EnhancedCodeBlock language="typescript" showLineNumbers>
-{`import { pluginManager } from 'try-error';
+                {`import { pluginManager } from 'try-error';
 import sentryPlugin from 'try-error-sentry';
 import datadogPlugin from 'try-error-datadog';
 
@@ -107,7 +116,7 @@ await pluginManager.install(advancedPlugin);`}
 
             <TabsContent value="manage">
               <EnhancedCodeBlock language="typescript" showLineNumbers>
-{`// List installed plugins
+                {`// List installed plugins
 const installed = pluginManager.getInstalled();
 console.log('Installed plugins:', installed);
 
@@ -138,7 +147,7 @@ console.log(sentryPlugin?.metadata);`}
 
             <TabsContent value="config">
               <EnhancedCodeBlock language="typescript" showLineNumbers>
-{`// Plugins can modify configuration
+                {`// Plugins can modify configuration
 const mergedConfig = pluginManager.getMergedConfig();
 // Returns combined config from all enabled plugins
 
@@ -164,7 +173,8 @@ await pluginManager.notifyConfigChange(newConfig);`}
         <section>
           <h2 className="text-3xl font-semibold mb-4">Creating a Plugin</h2>
           <p className="text-muted-foreground mb-6">
-            Build your own plugin to share functionality across projects or with the community.
+            Build your own plugin to share functionality across projects or with
+            the community.
           </p>
 
           <Tabs defaultValue="basic" className="mb-8">
@@ -176,7 +186,7 @@ await pluginManager.notifyConfigChange(newConfig);`}
 
             <TabsContent value="basic">
               <EnhancedCodeBlock language="typescript" showLineNumbers>
-{`// my-plugin.ts
+                {`// my-plugin.ts
 import { Plugin } from 'try-error';
 
 export const myPlugin: Plugin = {
@@ -238,7 +248,7 @@ export const myPlugin: Plugin = {
     // Add utility functions
     utilities: {
       customHelper: (value: any) => {
-        return `Processed: ${value}`;
+        return \`Processed: \${value}\`;
       }
     }
   }
@@ -248,7 +258,7 @@ export const myPlugin: Plugin = {
 
             <TabsContent value="helper">
               <EnhancedCodeBlock language="typescript" showLineNumbers>
-{`import { createPlugin } from 'try-error';
+                {`import { createPlugin } from 'try-error';
 
 // Use the helper function for better type safety
 export const myPlugin = createPlugin(
@@ -306,7 +316,7 @@ export const myPlugin = createPlugin(
 
             <TabsContent value="advanced">
               <EnhancedCodeBlock language="typescript" showLineNumbers>
-{`// Advanced plugin with external service integration
+                {`// Advanced plugin with external service integration
 import { Plugin, TryError, isTryError } from 'try-error';
 import { SentryClient } from '@sentry/node';
 
@@ -413,31 +423,36 @@ export default new SentryIntegrationPlugin();`}
 
         <section>
           <h2 className="text-3xl font-semibold mb-4">Example Plugins</h2>
-          
+
           <div className="grid gap-6">
             <Card>
               <CardHeader>
                 <CardTitle>Monitoring & Observability</CardTitle>
-                <CardDescription>Integrate with APM and monitoring services</CardDescription>
+                <CardDescription>
+                  Integrate with APM and monitoring services
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
                   <div>
                     <Badge className="mb-2">try-error-sentry</Badge>
                     <p className="text-sm text-muted-foreground">
-                      Full Sentry integration with error tracking, breadcrumbs, and user context
+                      Full Sentry integration with error tracking, breadcrumbs,
+                      and user context
                     </p>
                   </div>
                   <div>
                     <Badge className="mb-2">try-error-datadog</Badge>
                     <p className="text-sm text-muted-foreground">
-                      DataDog APM integration with custom metrics and distributed tracing
+                      DataDog APM integration with custom metrics and
+                      distributed tracing
                     </p>
                   </div>
                   <div>
                     <Badge className="mb-2">try-error-newrelic</Badge>
                     <p className="text-sm text-muted-foreground">
-                      New Relic integration with error insights and custom attributes
+                      New Relic integration with error insights and custom
+                      attributes
                     </p>
                   </div>
                 </div>
@@ -447,20 +462,24 @@ export default new SentryIntegrationPlugin();`}
             <Card>
               <CardHeader>
                 <CardTitle>Development Tools</CardTitle>
-                <CardDescription>Enhance development experience</CardDescription>
+                <CardDescription>
+                  Enhance development experience
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
                   <div>
                     <Badge className="mb-2">try-error-devtools</Badge>
                     <p className="text-sm text-muted-foreground">
-                      Browser DevTools extension for debugging try-error in development
+                      Browser DevTools extension for debugging try-error in
+                      development
                     </p>
                   </div>
                   <div>
                     <Badge className="mb-2">try-error-prettier</Badge>
                     <p className="text-sm text-muted-foreground">
-                      Pretty-print errors with syntax highlighting and formatting
+                      Pretty-print errors with syntax highlighting and
+                      formatting
                     </p>
                   </div>
                   <div>
@@ -476,7 +495,9 @@ export default new SentryIntegrationPlugin();`}
             <Card>
               <CardHeader>
                 <CardTitle>Framework Integrations</CardTitle>
-                <CardDescription>Seamless integration with popular frameworks</CardDescription>
+                <CardDescription>
+                  Seamless integration with popular frameworks
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
@@ -495,7 +516,8 @@ export default new SentryIntegrationPlugin();`}
                   <div>
                     <Badge className="mb-2">try-error-graphql</Badge>
                     <p className="text-sm text-muted-foreground">
-                      GraphQL resolver error handling with proper error formatting
+                      GraphQL resolver error handling with proper error
+                      formatting
                     </p>
                   </div>
                 </div>
@@ -505,8 +527,10 @@ export default new SentryIntegrationPlugin();`}
         </section>
 
         <section>
-          <h2 className="text-3xl font-semibold mb-4">Plugin Development Best Practices</h2>
-          
+          <h2 className="text-3xl font-semibold mb-4">
+            Plugin Development Best Practices
+          </h2>
+
           <div className="grid gap-6">
             <Card>
               <CardHeader>
@@ -514,7 +538,7 @@ export default new SentryIntegrationPlugin();`}
               </CardHeader>
               <CardContent>
                 <EnhancedCodeBlock language="typescript">
-{`// Declare peer dependencies in package.json
+                  {`// Declare peer dependencies in package.json
 {
   "peerDependencies": {
     "try-error": "^1.0.0"
@@ -538,7 +562,7 @@ if (!isCompatibleVersion(tryErrorVersion, '1.0.0')) {
               </CardHeader>
               <CardContent>
                 <EnhancedCodeBlock language="typescript">
-{`// Always handle errors gracefully
+                  {`// Always handle errors gracefully
 hooks: {
   onEnable: async () => {
     try {
@@ -574,7 +598,7 @@ middleware: [
               </CardHeader>
               <CardContent>
                 <EnhancedCodeBlock language="typescript">
-{`class MyPlugin implements Plugin {
+                  {`class MyPlugin implements Plugin {
   private resources: Resource[] = [];
   
   hooks = {
@@ -607,4 +631,4 @@ middleware: [
       </div>
     </div>
   );
-} 
+}

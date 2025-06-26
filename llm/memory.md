@@ -319,3 +319,91 @@ These implementations significantly enhance try-error's performance in high-thro
 3. **Better development experience** - DevTools integration and debugging utilities
 
 The React package has been significantly enhanced with production-ready error handling capabilities, including async error boundaries, telemetry integration, optimistic updates, and sophisticated error recovery strategies. The implementation follows React best practices and provides a comprehensive solution for error handling in modern React applications.
+
+## Documentation Updates for Performance & Extensibility Features
+
+### Comprehensive Documentation Added (2025-01-09)
+
+Added extensive documentation for all new performance optimization and extensibility features in the try-error-docs site:
+
+1. **Performance Optimization Guide** (`/docs/guides/performance-optimization`)
+
+   - Object pooling concepts and usage
+   - Lazy evaluation patterns
+   - Performance configuration options
+   - Real-world benchmarks and best practices
+   - Monitoring and debugging techniques
+
+2. **Middleware System Guide** (`/docs/guides/middleware`)
+
+   - Basic middleware concepts
+   - Pipeline creation and management
+   - Built-in middleware (logging, retry, transform, circuit breaker, rate limiting)
+   - Creating custom middleware
+   - Global registry patterns
+   - Best practices and examples
+
+3. **Plugin System Guide** (`/docs/guides/plugins`)
+
+   - Plugin architecture overview
+   - Installation and management
+   - Creating custom plugins
+   - Example plugin implementations
+   - Integration patterns
+   - Best practices for plugin development
+
+4. **API Reference Updates** (`/docs/api/utils`)
+
+   - Added Performance Optimization section
+     - Object pooling API
+     - Lazy evaluation API
+     - Configuration presets
+   - Added Middleware System section
+     - MiddlewarePipeline API
+     - Built-in middleware reference
+     - Global registry API
+   - Added Plugin System section
+     - Plugin manager API
+     - Plugin creation helpers
+
+5. **Configuration Reference Updates** (`/docs/reference/configuration`)
+
+   - Added performance configuration interface documentation
+   - Documented all performance optimization options
+   - Examples of performance-focused configurations
+
+6. **Main Documentation Updates**
+   - Added "Advanced Features" section to introduction page
+   - Updated sidebar navigation with new guide links
+   - Added feature cards highlighting performance, middleware, and plugins
+
+### Key Documentation Decisions
+
+- Used tabs to organize complex topics (basic/advanced usage)
+- Included real-world performance benchmarks and comparisons
+- Provided both conceptual explanations and practical code examples
+- Added visual indicators (cards, badges) for better information hierarchy
+- Maintained consistency with existing documentation style
+- Focused on progressive disclosure - simple examples first, advanced later
+
+### Documentation Coverage
+
+All new features are now fully documented with:
+
+- Conceptual explanations
+- API references
+- Usage examples
+- Best practices
+- Performance considerations
+- Integration patterns
+
+This completes the documentation requirements for the performance optimization and extensibility implementation.
+
+## Fixed Issues
+
+### Documentation TypeScript Errors (2024-01-XX)
+
+- Fixed TypeScript error in try-error-docs/src/app/docs/guides/plugins/page.tsx
+- Issue: Template literal with `${value}` inside JSX code block was causing parser errors
+- Solution: Escaped the template literal properly by using `\`Processed: \${value}\`` instead of `` `Processed: ${value}` ``
+- This ensures the template literal is treated as a string within the JSX context rather than being interpreted as JSX expression syntax
