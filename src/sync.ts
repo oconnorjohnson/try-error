@@ -112,8 +112,11 @@ export function trySyncTuple<T>(
  *
  * @example
  * ```typescript
+ * // Without options
  * const result = tryCall(parseInt, "123", 10);
- * const result2 = tryCall(JSON.parse, invalidJson);
+ *
+ * // With options
+ * const result2 = tryCall(JSON.parse, { errorType: "ParseError" }, invalidJson);
  * ```
  */
 export function tryCall<TArgs extends readonly unknown[], TReturn>(
@@ -128,23 +131,38 @@ export function tryCall<TArgs extends readonly unknown[], TReturn>(
 export function tryCall<TArgs extends readonly unknown[], TReturn>(
   fn: (...args: TArgs) => TReturn,
   optionsOrFirstArg?: TrySyncOptions | TArgs[0],
-  ...restArgs: TArgs extends readonly [unknown, ...infer Rest] ? Rest : TArgs
+  ...restArgs: unknown[]
 ): TryResult<TReturn, TryError> {
-  // Simplified options check
-  const isOptions =
-    optionsOrFirstArg &&
-    typeof optionsOrFirstArg === "object" &&
-    !Array.isArray(optionsOrFirstArg) &&
-    ("errorType" in optionsOrFirstArg ||
-      "context" in optionsOrFirstArg ||
-      "message" in optionsOrFirstArg);
+  // Helper to check if value is TrySyncOptions
+  const isTrySyncOptions = (value: unknown): value is TrySyncOptions => {
+    if (value === null || value === undefined) return false;
+    if (typeof value !== "object" || Array.isArray(value)) return false;
 
-  if (isOptions) {
-    const options = optionsOrFirstArg as TrySyncOptions;
-    return trySync(() => fn(...(restArgs as unknown as TArgs)), options);
+    // Check if it's a plain object (not a class instance)
+    if ((value as any).constructor !== Object) return false;
+
+    const obj = value as any;
+
+    // Must have at least one of the TrySyncOptions properties
+    const hasErrorType =
+      "errorType" in obj && typeof obj.errorType === "string";
+    const hasContext = "context" in obj && typeof obj.context === "object";
+    const hasMessage = "message" in obj && typeof obj.message === "string";
+
+    return hasErrorType || hasContext || hasMessage;
+  };
+
+  if (isTrySyncOptions(optionsOrFirstArg)) {
+    return trySync(
+      () => fn(...(restArgs as unknown as TArgs)),
+      optionsOrFirstArg
+    );
   } else {
-    const allArgs = [optionsOrFirstArg, ...restArgs] as unknown as TArgs;
-    return trySync(() => fn(...allArgs));
+    const allArgs =
+      optionsOrFirstArg !== undefined
+        ? [optionsOrFirstArg, ...restArgs]
+        : restArgs;
+    return trySync(() => fn(...(allArgs as unknown as TArgs)));
   }
 }
 

@@ -13,8 +13,52 @@ import { TryError } from "./types";
  */
 let globalConfig: TryErrorConfig | null = null;
 
-// Preset cache to avoid recreation
-const presetCache = new Map<string, TryErrorConfig>();
+/**
+ * Simple LRU cache implementation for preset configurations
+ */
+class LRUCache<K, V> {
+  private cache = new Map<K, V>();
+  private readonly maxSize: number;
+
+  constructor(maxSize: number = 10) {
+    this.maxSize = maxSize;
+  }
+
+  get(key: K): V | undefined {
+    const value = this.cache.get(key);
+    if (value !== undefined) {
+      // Move to end (most recently used)
+      this.cache.delete(key);
+      this.cache.set(key, value);
+    }
+    return value;
+  }
+
+  set(key: K, value: V): void {
+    // Remove key if it exists (to reorder)
+    if (this.cache.has(key)) {
+      this.cache.delete(key);
+    }
+
+    // Add to end
+    this.cache.set(key, value);
+
+    // Evict oldest if over capacity
+    if (this.cache.size > this.maxSize) {
+      const firstKey = this.cache.keys().next().value;
+      if (firstKey !== undefined) {
+        this.cache.delete(firstKey);
+      }
+    }
+  }
+
+  clear(): void {
+    this.cache.clear();
+  }
+}
+
+// Preset cache with LRU eviction
+const presetCache = new LRUCache<string, TryErrorConfig>(20);
 
 /**
  * Configuration version tracker for cache invalidation
@@ -708,7 +752,11 @@ export function configure(
     if (!presetFn) {
       throw new Error(`Unknown configuration preset: ${config}`);
     }
-    globalConfig = presetFn();
+    const presetConfig = presetFn();
+    if (!validateConfig(presetConfig)) {
+      throw new Error(`Invalid preset configuration: ${config}`);
+    }
+    globalConfig = presetConfig;
   } else {
     if (!validateConfig(config)) {
       throw new Error("Invalid configuration object");
@@ -861,16 +909,54 @@ export function withErrorService(
  */
 export const Performance = {
   /**
+   * Get high-resolution time in milliseconds
+   * Falls back gracefully based on environment
+   */
+  now(): number {
+    // Node.js high-resolution time
+    if (
+      typeof process !== "undefined" &&
+      process.hrtime &&
+      process.hrtime.bigint
+    ) {
+      const hrTime = process.hrtime.bigint();
+      return Number(hrTime) / 1_000_000; // Convert nanoseconds to milliseconds
+    }
+
+    // Browser performance.now()
+    if (typeof performance !== "undefined" && performance.now) {
+      return performance.now();
+    }
+
+    // Fallback to Date.now() with warning in development
+    if (
+      typeof process !== "undefined" &&
+      process.env.NODE_ENV === "development"
+    ) {
+      console.warn(
+        "High-resolution timing not available, falling back to Date.now()"
+      );
+    }
+    return Date.now();
+  },
+
+  /**
    * Measure error creation performance
    */
   measureErrorCreation: async (iterations: number = 1000) => {
-    const start =
-      typeof performance !== "undefined" && performance.now
-        ? performance.now()
-        : Date.now();
-
     // Import createError dynamically to avoid circular dependencies
     const { createError } = await import("./errors");
+
+    // Warm up to avoid JIT compilation affecting measurements
+    for (let i = 0; i < 10; i++) {
+      createError({
+        type: "WarmupError",
+        message: "Warmup",
+        context: { iteration: i },
+      });
+    }
+
+    const start = Performance.now();
 
     // Create errors synchronously to measure actual performance
     const errors: TryError[] = [];
@@ -884,10 +970,7 @@ export const Performance = {
       );
     }
 
-    const end =
-      typeof performance !== "undefined" && performance.now
-        ? performance.now()
-        : Date.now();
+    const end = Performance.now();
 
     return {
       totalTime: end - start,

@@ -22,7 +22,7 @@
 
 ### Bugs
 
-- [ ] **Cache Invalidation Issue**: The config cache uses a version number stored on the function object `(getConfig as any).version`, which is fragile and could be accidentally overwritten.
+- [x] **Cache Invalidation Issue**: The config cache uses a version number stored on the function object `(getConfig as any).version`, which is fragile and could be accidentally overwritten.
 - [x] **Stack Parsing Brittleness**: The stack parsers use regex that may fail on minified code or non-standard stack formats.
 - [x] **Environment Detection Cache**: `cachedEnvironment` is never invalidated, so if code runs in multiple environments (e.g., SSR), it will use the wrong environment.
 - [x] **Test Environment Issue**: The `isProduction()` function has special handling for test environments but doesn't reset the cache between tests.
@@ -45,14 +45,14 @@
 ### Bugs
 
 - [x] **ConfigPresets Not Immutable**: Preset functions return new objects each time but the `ConfigPresets` object itself is mutable.
-- [ ] **Memory Leak Risk**: The `Performance.measureErrorCreation` creates promises in a loop but doesn't await them, potentially causing memory issues.
-- [ ] **Unsafe Type Assertion**: `configure()` uses type assertion when calling preset functions without validation.
+- [x] **Memory Leak Risk**: The `Performance.measureErrorCreation` creates promises in a loop but doesn't await them, potentially causing memory issues.
+- [x] **Unsafe Type Assertion**: `configure()` uses type assertion when calling preset functions without validation.
 
 ### Inefficiencies
 
 - [x] **Preset Recreation**: Every call to a preset function creates a new configuration object instead of caching.
 - [x] **Deep Merging**: Configuration merging doesn't handle nested objects properly (shallow merge only).
-- [ ] **Performance Measurement**: The performance utilities use `Date.now()` as fallback which has poor precision.
+- [x] **Performance Measurement**: The performance utilities use `Date.now()` as fallback which has poor precision.
 
 ### Missing Features
 
@@ -65,13 +65,13 @@
 
 ### Bugs
 
-- [ ] **tryCall Type Overloads**: The function overloads for `tryCall` don't properly handle all cases, especially when options are passed.
+- [x] **tryCall Type Overloads**: The function overloads for `tryCall` don't properly handle all cases, especially when options are passed.
 - [x] **Error Message Loss**: When creating errors in `trySync`, the original error's stack trace is lost.
 
 ### Inefficiencies
 
 - [x] **Repeated Error Creation**: Each try\* function creates errors independently instead of sharing logic.
-- [ ] **Type Checking**: The `isOptionsObject` check in `tryCall` is verbose and could be simplified.
+- [x] **Type Checking**: The `isOptionsObject` check in `tryCall` is verbose and could be simplified.
 
 ### Missing Features
 
@@ -85,7 +85,7 @@
 
 - [x] **Promise Race Memory Leak**: In `tryAsync` with timeout, the original promise continues running even after timeout.
 - [x] **Timeout Promise Not Cleaned**: The timeout setTimeout is never cleared if the operation completes before timeout.
-- [ ] **Retry Delay Issue**: In the `retry` function, the delay calculation could overflow for large attempt numbers.
+- [x] **Retry Delay Issue**: In the `retry` function, the delay calculation could overflow for large attempt numbers.
 
 ### Inefficiencies
 
@@ -123,7 +123,7 @@
 
 ### Bugs
 
-- [ ] **Stack Trace Check**: `createEnhancedError` checks `process.env.NODE_ENV` which may not exist in all environments.
+- [x] **Stack Trace Check**: `createEnhancedError` checks `process.env.NODE_ENV` which may not exist in all environments.
 - [ ] **Type Assertion Issues**: Several functions use unsafe type assertions without proper validation.
 
 ### Inefficiencies
@@ -142,8 +142,8 @@
 
 ### Bugs
 
-- [ ] **Environment Detection**: `autoSetup` uses incomplete heuristics for environment detection that could fail.
-- [ ] **React Detection**: The `setupReact` function's localhost detection logic is inverted (`!window.location.hostname.includes("localhost") === false`).
+- [x] **Environment Detection**: `autoSetup` uses incomplete heuristics for environment detection that could fail.
+- [x] **React Detection**: The `setupReact` function's localhost detection logic is inverted (`!window.location.hostname.includes("localhost") === false`).
 - [x] **Next.js Detection**: Relies on private Next.js internals (`__NEXT_PRIVATE_PREBUNDLED_REACT`) which could break.
 
 ### Inefficiencies
@@ -223,13 +223,13 @@
 
 ### Additional Performance Concerns
 
-1. [ ] **Config Version Tracking**: The version tracking mechanism using `(getConfig as any).version` is fragile and could be improved.
+1. [x] **Config Version Tracking**: The version tracking mechanism using `(getConfig as any).version` is fragile and could be improved.
 2. [ ] **Promise.allSettled in tryAnyAsync**: Could be optimized for cases where we want to stop on first success.
-3. [ ] **Preset Cache Map**: The preset cache grows unbounded, could use LRU cache.
+3. [x] **Preset Cache Map**: The preset cache grows unbounded, could use LRU cache.
 
 ### Additional Type Safety Issues
 
-1. [ ] **tryCall Overloads**: The complex overload signatures make it hard to use correctly.
+1. [x] **tryCall Overloads**: The complex overload signatures make it hard to use correctly.
 2. [ ] **Factory Return Types**: Some factory functions could have better return type inference.
 
 ### Additional Missing Features

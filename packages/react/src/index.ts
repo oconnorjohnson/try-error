@@ -129,6 +129,11 @@ export * from "./context/ErrorContext";
 // Re-export all types (TryState comes from here, not from hooks)
 export * from "./types";
 
+// Export telemetry functionality
+export * from "./telemetry";
+export { createSentryProvider } from "./telemetry/providers/sentry";
+export { createConsoleProvider } from "./telemetry/providers/console";
+
 // Version info
 export const VERSION = process.env.npm_package_version || "unknown";
 

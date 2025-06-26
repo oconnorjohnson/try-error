@@ -501,8 +501,13 @@ export async function retry<T>(
       // Check if we should retry this error
       if (attempt < attempts && shouldRetry(result, attempt)) {
         // Calculate delay with overflow protection
+        // Use logarithmic check to prevent overflow
+        const maxExponent =
+          Math.log(Number.MAX_SAFE_INTEGER / baseDelay) /
+          Math.log(backoffFactor);
+        const safeExponent = Math.min(attempt - 1, Math.floor(maxExponent));
         const exponentialDelay =
-          baseDelay * Math.pow(backoffFactor, attempt - 1);
+          baseDelay * Math.pow(backoffFactor, safeExponent);
         const delay = Math.min(exponentialDelay, maxDelay);
 
         await new Promise((resolve) => setTimeout(resolve, delay));
@@ -514,8 +519,14 @@ export async function retry<T>(
       lastError = fromThrown(error);
 
       if (attempt < attempts && shouldRetry(lastError, attempt)) {
+        // Calculate delay with overflow protection
+        // Use logarithmic check to prevent overflow
+        const maxExponent =
+          Math.log(Number.MAX_SAFE_INTEGER / baseDelay) /
+          Math.log(backoffFactor);
+        const safeExponent = Math.min(attempt - 1, Math.floor(maxExponent));
         const exponentialDelay =
-          baseDelay * Math.pow(backoffFactor, attempt - 1);
+          baseDelay * Math.pow(backoffFactor, safeExponent);
         const delay = Math.min(exponentialDelay, maxDelay);
 
         await new Promise((resolve) => setTimeout(resolve, delay));

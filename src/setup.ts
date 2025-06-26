@@ -104,7 +104,11 @@ export function setupReact(options: TryErrorConfig = {}): void {
     typeof process !== "undefined"
       ? process.env.NODE_ENV === "development"
       : typeof window !== "undefined" &&
-        window.location.hostname === "localhost";
+        (window.location.hostname === "localhost" ||
+          window.location.hostname === "127.0.0.1" ||
+          window.location.hostname.startsWith("192.168.") ||
+          window.location.hostname.startsWith("10.") ||
+          window.location.hostname === "[::1]"); // IPv6 localhost
 
   const config: TryErrorConfig = {
     captureStackTrace: isDev,
@@ -289,18 +293,46 @@ export function setupTesting(options: TryErrorConfig = {}): void {
  */
 export function autoSetup(options: TryErrorConfig = {}): void {
   // Detect environment with improved heuristics
-  const isNode = typeof process !== "undefined" && process.versions?.node;
-  const isBrowser = typeof window !== "undefined";
+  const hasProcess = typeof process !== "undefined";
+  const hasWindow = typeof window !== "undefined";
+  const hasDocument = typeof document !== "undefined";
+  const hasNavigator = typeof navigator !== "undefined";
+
+  // Node.js detection
+  const isNode =
+    hasProcess && process.versions?.node !== undefined && !hasWindow;
+
+  // Browser detection
+  const isBrowser = hasWindow && hasDocument && hasNavigator;
+
+  // Next.js detection (works in both server and client)
   const isNextJs =
-    typeof process !== "undefined" &&
-    (process.env.NEXT_RUNTIME ||
-      process.env.__NEXT_PRIVATE_PREBUNDLED_REACT ||
-      process.env.NEXT_PUBLIC_VERCEL_ENV);
+    hasProcess &&
+    (process.env.NEXT_RUNTIME !== undefined ||
+      process.env.__NEXT_PRIVATE_PREBUNDLED_REACT !== undefined ||
+      process.env.NEXT_PUBLIC_VERCEL_ENV !== undefined ||
+      (hasWindow && (window as any).__NEXT_DATA__ !== undefined));
+
+  // Test environment detection
   const isTest =
-    typeof process !== "undefined" &&
+    hasProcess &&
     (process.env.NODE_ENV === "test" ||
-      process.env.JEST_WORKER_ID ||
-      process.env.VITEST);
+      process.env.JEST_WORKER_ID !== undefined ||
+      process.env.VITEST !== undefined ||
+      (hasWindow && (window as any).__karma__ !== undefined) || // Karma
+      (hasWindow && (window as any).Cypress !== undefined)); // Cypress
+
+  // Deno detection
+  const isDeno = typeof (globalThis as any).Deno !== "undefined";
+
+  // Bun detection
+  const isBun = typeof (globalThis as any).Bun !== "undefined";
+
+  // React Native detection
+  const isReactNative = hasNavigator && navigator.product === "ReactNative";
+
+  // Electron detection
+  const isElectron = hasProcess && process.versions?.electron !== undefined;
 
   let setupType: string;
 
@@ -310,12 +342,24 @@ export function autoSetup(options: TryErrorConfig = {}): void {
   } else if (isNextJs) {
     setupNextJs(options);
     setupType = "nextjs";
+  } else if (isReactNative) {
+    // React Native gets React setup with some modifications
+    setupReact({
+      captureStackTrace: false, // Stack traces are expensive on mobile
+      stackTraceLimit: 5,
+      ...options,
+    });
+    setupType = "react-native";
+  } else if (isElectron) {
+    // Electron can use Node setup
+    setupNode(options);
+    setupType = "electron";
   } else if (isBrowser) {
     setupReact(options);
     setupType = "react";
-  } else if (isNode) {
+  } else if (isNode || isDeno || isBun) {
     setupNode(options);
-    setupType = "node";
+    setupType = isNode ? "node" : isDeno ? "deno" : "bun";
   } else {
     // Fallback to basic configuration
     configure({

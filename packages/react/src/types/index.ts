@@ -1,7 +1,7 @@
 // Type definitions for React integration
 // TODO: Implement React-specific types for error handling
 
-import { TryError, TryResult, TRY_ERROR_BRAND } from "try-error";
+import { TryError, TryResult, isTryError, createError } from "try-error";
 import { ReactNode, ErrorInfo } from "react";
 
 // ============================================================================
@@ -131,9 +131,9 @@ export type ReactError =
 
 export function isReactTryError(error: unknown): error is ReactTryError {
   return (
+    isTryError(error) &&
     typeof error === "object" &&
     error !== null &&
-    TRY_ERROR_BRAND in error &&
     "type" in error &&
     "message" in error &&
     "timestamp" in error
@@ -220,10 +220,13 @@ export function isReactError(error: unknown): error is ReactError {
 export function hasFieldErrors(
   error: unknown
 ): error is FormSubmissionError | ValidationError {
-  return (
-    isFormSubmissionError(error) ||
-    (isValidationError(error) && "field" in error)
-  );
+  if (isFormSubmissionError(error)) {
+    return true;
+  }
+  if (isValidationError(error)) {
+    return error.context?.field !== undefined;
+  }
+  return false;
 }
 
 /**
@@ -236,7 +239,7 @@ export function isRetryableError(error: unknown): boolean {
   return !(
     isValidationError(error) ||
     isComponentUnmountedError(error) ||
-    (isAbortedError(error) && error.reason === "unmount")
+    (isAbortedError(error) && error.context?.reason === "unmount")
   );
 }
 
@@ -245,7 +248,7 @@ export function isRetryableError(error: unknown): boolean {
  */
 export function getComponentName(error: unknown): string | undefined {
   if (isReactTryError(error)) {
-    return error.componentName;
+    return error.context?.componentName as string | undefined;
   }
   return undefined;
 }
@@ -257,10 +260,10 @@ export function getFieldErrors(
   error: unknown
 ): Record<string, string[]> | undefined {
   if (isFormSubmissionError(error)) {
-    return error.fieldErrors;
+    return error.context?.fieldErrors as Record<string, string[]> | undefined;
   }
-  if (isValidationError(error) && error.field) {
-    return { [error.field]: [error.message] };
+  if (isValidationError(error) && error.context?.field) {
+    return { [error.context.field as string]: [error.message] };
   }
   return undefined;
 }
@@ -272,7 +275,9 @@ export function isErrorFromComponent(
   error: unknown,
   componentName: string
 ): boolean {
-  return isReactTryError(error) && error.componentName === componentName;
+  return (
+    isReactTryError(error) && error.context?.componentName === componentName
+  );
 }
 
 /**
@@ -811,11 +816,10 @@ export function createReactError<T extends ReactErrorType>(
   message: string,
   context?: Record<string, unknown>
 ): ReactTryError<T> {
-  return {
+  return createError({
     type,
     message,
-    timestamp: Date.now(),
-    source: "react",
     context,
-  } as ReactTryError<T>;
+    source: "react",
+  }) as ReactTryError<T>;
 }

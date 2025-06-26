@@ -64,10 +64,28 @@ export function createEnhancedError(
   message: string,
   options: Omit<ErrorHandlingOptions, "errorType"> = {}
 ): TryError {
-  const isDevelopment =
-    typeof process !== "undefined" &&
-    process.env &&
-    process.env.NODE_ENV === "development";
+  // Safer environment detection
+  let isDevelopment = false;
+  try {
+    // Check multiple ways to detect development environment
+    isDevelopment =
+      // Node.js environment
+      (typeof process !== "undefined" &&
+        process.env &&
+        process.env.NODE_ENV === "development") ||
+      // Browser with webpack/vite dev mode
+      (typeof window !== "undefined" &&
+        window.location &&
+        (window.location.hostname === "localhost" ||
+          window.location.hostname === "127.0.0.1")) ||
+      // Check for common dev indicators
+      (typeof globalThis !== "undefined" &&
+        ((globalThis as any).__DEV__ === true ||
+          (globalThis as any).DEBUG === true));
+  } catch {
+    // If any check fails, assume production
+    isDevelopment = false;
+  }
 
   const context = {
     ...options.context,
