@@ -45,16 +45,34 @@ export default function InstallationPage() {
             Modular Imports for Smaller Bundles
           </h2>
 
+          <div className="bg-slate-50 border border-slate-200 rounded-lg p-4 mb-6">
+            <p className="text-slate-700 text-sm mb-2">
+              <strong>📦 One Package, Multiple Entry Points:</strong>
+            </p>
+            <p className="text-slate-600 text-sm mb-3">
+              You install the same{" "}
+              <code className="bg-slate-200 px-1 py-0.5 rounded">
+                try-error
+              </code>{" "}
+              package regardless of which module you use. The different imports
+              are just entry points within the package.
+            </p>
+            <InstallCommand packageName="try-error" className="mt-2" />
+          </div>
+
           <p className="text-slate-600 mb-4">
-            try-error supports modular imports to reduce bundle size by up to
-            50% when you only need specific functionality:
+            After installation, choose the import that best fits your needs.
+            Hover over any code block below to copy the import statement:
           </p>
 
           <div className="grid gap-4 mb-6">
-            <div className="border border-slate-200 rounded-lg p-4">
-              <h3 className="font-semibold text-slate-900 mb-2">
-                Full Bundle (Default)
-              </h3>
+            <div className="border border-slate-200 rounded-lg p-4 hover:border-slate-300 transition-colors">
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="font-semibold text-slate-900">
+                  Full Bundle (Default)
+                </h3>
+                <span className="text-xs text-slate-500">Hover to copy →</span>
+              </div>
               <CodeBlock language="typescript" className="mb-2">
                 {`import { trySync, tryAsync, isTryError } from 'try-error';`}
               </CodeBlock>
@@ -63,10 +81,13 @@ export default function InstallationPage() {
               </p>
             </div>
 
-            <div className="border border-green-200 bg-green-50 rounded-lg p-4">
-              <h3 className="font-semibold text-green-900 mb-2">
-                Sync-Only Module
-              </h3>
+            <div className="border border-green-200 bg-green-50 rounded-lg p-4 hover:border-green-300 transition-colors">
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="font-semibold text-green-900">
+                  Sync-Only Module
+                </h3>
+                <span className="text-xs text-green-700">Hover to copy →</span>
+              </div>
               <CodeBlock language="typescript" className="mb-2">
                 {`import { trySync, isTryError } from 'try-error/sync';`}
               </CodeBlock>
@@ -76,10 +97,13 @@ export default function InstallationPage() {
               </p>
             </div>
 
-            <div className="border border-blue-200 bg-blue-50 rounded-lg p-4">
-              <h3 className="font-semibold text-blue-900 mb-2">
-                Async-Only Module
-              </h3>
+            <div className="border border-blue-200 bg-blue-50 rounded-lg p-4 hover:border-blue-300 transition-colors">
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="font-semibold text-blue-900">
+                  Async-Only Module
+                </h3>
+                <span className="text-xs text-blue-700">Hover to copy →</span>
+              </div>
               <CodeBlock language="typescript" className="mb-2">
                 {`import { tryAsync, isTryError } from 'try-error/async';`}
               </CodeBlock>
