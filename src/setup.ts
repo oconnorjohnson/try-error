@@ -228,6 +228,7 @@ export function setupPerformance(options: TryErrorConfig = {}): void {
   };
 
   configure({ ...config, ...options });
+  activeSetups.add("performance");
 }
 
 /**
@@ -269,6 +270,7 @@ export function setupTesting(options: TryErrorConfig = {}): void {
   };
 
   configure({ ...config, ...options });
+  activeSetups.add("testing");
 }
 
 /**
