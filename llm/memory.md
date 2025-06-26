@@ -720,3 +720,46 @@ Started implementing the comprehensive documentation improvement plan. Following
 - SEO optimization
 - Analytics setup
 - Beta testing
+
+## 2025-06-26 - Playground Implementation with Vercel Sandbox
+
+### Context
+
+Working on implementing an interactive playground for the try-error documentation using Vercel's new Sandbox compute feature.
+
+### Progress
+
+1. **Installed Vercel Sandbox SDK**: Added `@vercel/sandbox` and `ms` packages to try-error-docs
+2. **Created API Route**: Built `/api/sandbox` route to manage sandbox lifecycle:
+   - POST: Creates new sandbox with try-error pre-installed
+   - PUT: Executes code in existing sandbox
+   - DELETE: Cleans up sandbox resources
+3. **Created SandboxPlayground Component**: New component that connects to real Vercel Sandbox for code execution
+4. **Authentication Setup**: Configured to work with both OIDC tokens and access tokens
+
+### Key Decisions
+
+- Using Vercel Sandbox instead of browser-based mock execution for real code evaluation
+- Sandbox configuration: 2 vCPUs, 2-minute timeout, Node.js 22 runtime
+- Using git source type with minimal Node.js repo as base
+- Installing try-error and tsx dynamically in each sandbox
+
+### Current Issues
+
+1. **Module Resolution Error**: "Cannot find module 'try-error'" - need to ensure proper TypeScript/Node.js module configuration
+2. **Import Statement Error**: "Cannot use import statement outside a module" - need to ensure ES modules are properly configured
+
+### Next Steps
+
+1. Fix module resolution by ensuring proper package.json type: "module" configuration
+2. Consider using a pre-built Docker image or custom git repo with try-error pre-installed
+3. Add proper error handling and retry logic for sandbox initialization
+4. Implement caching of sandbox instances for better performance
+5. Add usage limits and rate limiting for production deployment
+
+### Notes
+
+- Vercel Sandbox is in beta and requires authentication via OIDC token or access tokens
+- For local development: run `vercel env pull` to get OIDC token
+- Sandbox pricing: Included allotment of 5 CPU hours for Hobby, 420 GB-hr memory
+- Currently using mock playground by default until sandbox issues are resolved
