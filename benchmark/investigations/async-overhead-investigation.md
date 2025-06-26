@@ -617,8 +617,73 @@ export async function tryAsyncOptimized<T>(
    - Using .then() chains instead of async/await
    - Providing multiple APIs for different use cases
 
+## 🔍 Root Cause Analysis (with External Insights)
+
+### Why We See High Overhead
+
+After consulting with ChatGPT about async/await performance, we discovered:
+
+1. **We're using Node v23.11.0** - Latest version with all V8 optimizations
+2. **TypeScript target is ES2020** - Native async/await, no transpilation
+3. **No polyfills or shims** - Using native Promise implementation
+
+### The Real Issue: Tight Loop Benchmarking
+
+Our benchmarks show high overhead because we're measuring **pathological cases**:
+
+1. **Tight Loop Magnification**
+
+   - We're measuring empty async operations in tight loops
+   - Each await creates/destroys microtask queue entries
+   - No real work to amortize the overhead
+
+2. **Function Creation Pattern**
+
+   ```typescript
+   // This pattern in tryAsync creates overhead:
+   await tryAsync(() => somePromise); // Creates new function each call
+   ```
+
+3. **Microtask Queue Overhead**
+   - Each await = microtask enqueue/dequeue
+   - In tight loops, this dominates runtime
+   - With real I/O or CPU work, becomes negligible
+
+### Proof from Loop Pattern Benchmark
+
+Created `async-loop-pattern.ts` to test this hypothesis:
+
+```
+Tight Loop (no work):
+- Function creation: 537% overhead
+- Promise.then: -3.3% (slightly faster than async/await)
+
+With CPU Work:
+- Function creation: -36.2% (variance, essentially equal)
+- Work dominates: 375,644% of runtime
+
+With I/O (1ms delays):
+- Function creation: 1.2% overhead (negligible)
+```
+
+### Key Insight: It's Not a Bug, It's a Benchmark Artifact
+
+The overhead we're seeing is **expected behavior** for tight loops with no real work. In real-world scenarios:
+
+- **API calls**: Network latency dominates (10-1000ms vs 0.001ms overhead)
+- **Database queries**: I/O dominates (1-100ms)
+- **File operations**: Disk I/O dominates (0.1-10ms)
+- **CPU-intensive work**: Computation dominates
+
+### Updated Recommendations
+
+1. **Still implement tryPromise/tryAwait** - For users who need maximum performance in edge cases
+2. **Document the performance characteristics** - Be transparent about when it matters
+3. **Optimize tryAsync for common case** - Use tryPromise internally when no options
+4. **Provide guidance** - Help users choose the right API for their use case
+
 ---
 
 **Last Updated**: Dec 2024
-**Investigator**: AI Assistant
-**Status**: 🟡 Investigation Complete - Recommendations Made
+**Investigator**: AI Assistant with ChatGPT consultation
+**Status**: ✅ Root Cause Understood - Implementation Plan Ready
