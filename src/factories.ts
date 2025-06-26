@@ -5,8 +5,14 @@
  * error types while maintaining all the benefits of the base TryError system.
  */
 
-import { TryError } from "./types";
+import { TryError, serializeTryError } from "./types";
 import { createError } from "./errors";
+
+// Factory registry for discovery
+const factoryRegistry = new Map<string, Function>();
+
+// Factory cache to avoid recreation
+const factoryCache = new WeakMap<Function, Map<string, TryError>>();
 
 // ============================================================================
 // GENERIC ERROR FACTORY BUILDER
@@ -21,12 +27,28 @@ export interface ErrorFactoryOptions {
 }
 
 /**
+ * Validates required fields are present in domain fields
+ */
+function validateRequiredFields<T extends Record<string, any>>(
+  fields: T,
+  required: Array<keyof T>
+): void {
+  for (const field of required) {
+    if (fields[field] === undefined || fields[field] === null) {
+      throw new Error(`Required field '${String(field)}' is missing`);
+    }
+  }
+}
+
+/**
  * Creates a factory function for domain-specific errors
  *
  * This eliminates boilerplate when creating multiple error types in the same domain.
  * Each domain can have its own factory with consistent defaults.
  *
  * @param defaultFields - Default fields to include in all errors from this factory
+ * @param requiredFields - Fields that must be provided when creating errors
+ * @param factoryName - Optional name for registry
  * @returns A factory function for creating errors of type E
  *
  * @example
@@ -40,7 +62,7 @@ export interface ErrorFactoryOptions {
  *
  * const createPaymentError = createErrorFactory<PaymentErrorType, PaymentError>({
  *   provider: "stripe" // Default for all payment errors
- * });
+ * }, ["transactionId", "amount"]);
  *
  * const error = createPaymentError("CardDeclined", "Card was declined", {
  *   transactionId: "tx_123",
@@ -49,24 +71,146 @@ export interface ErrorFactoryOptions {
  * ```
  */
 export function createErrorFactory<T extends string, E extends TryError<T>>(
-  defaultFields?: Partial<Omit<E, keyof TryError>>
+  defaultFields?: Partial<Omit<E, keyof TryError>>,
+  requiredFields?: Array<keyof Omit<E, keyof TryError>>,
+  factoryName?: string
 ) {
-  return function createDomainError(
+  const factory = function createDomainError(
     type: T,
     message: string,
     domainFields?: Partial<Omit<E, keyof TryError>>,
     options?: ErrorFactoryOptions
   ): E {
-    return {
-      ...createError({
-        type,
-        message,
-        cause: options?.cause,
-        context: options?.context,
-      }),
+    // Validate required fields if specified
+    if (requiredFields && domainFields) {
+      validateRequiredFields(domainFields, requiredFields);
+    }
+
+    // Check cache
+    const cacheKey = `${type}:${message}:${JSON.stringify(domainFields)}`;
+    let cache = factoryCache.get(factory);
+    if (!cache) {
+      cache = new Map();
+      factoryCache.set(factory, cache);
+    }
+
+    const cached = cache.get(cacheKey);
+    if (cached) {
+      return cached as E;
+    }
+
+    // Create the error
+    const baseError = createError({
+      type,
+      message,
+      cause: options?.cause,
+      context: options?.context,
+    });
+
+    const error = {
+      ...baseError,
       ...defaultFields,
       ...domainFields,
     } as E;
+
+    // Cache the error
+    cache.set(cacheKey, error);
+
+    return error;
+  };
+
+  // Register factory if name provided
+  if (factoryName) {
+    factoryRegistry.set(factoryName, factory);
+  }
+
+  return factory;
+}
+
+/**
+ * Get a registered factory by name
+ */
+export function getFactory(name: string): Function | undefined {
+  return factoryRegistry.get(name);
+}
+
+/**
+ * List all registered factory names
+ */
+export function listFactories(): string[] {
+  return Array.from(factoryRegistry.keys());
+}
+
+/**
+ * Compose multiple factories together
+ *
+ * @param factories - Array of factories to compose
+ * @returns A new factory that applies all factory defaults
+ *
+ * @example
+ * ```typescript
+ * const baseApiFactory = createErrorFactory({ provider: "api" });
+ * const authFactory = createErrorFactory({ authenticated: false });
+ *
+ * const composedFactory = composeFactories([baseApiFactory, authFactory]);
+ * ```
+ */
+export function composeFactories<T extends string, E extends TryError<T>>(
+  factories: Array<ReturnType<typeof createErrorFactory>>
+): ReturnType<typeof createErrorFactory<T, E>> {
+  return function composedFactory(
+    type: T,
+    message: string,
+    domainFields?: Partial<Omit<E, keyof TryError>>,
+    options?: ErrorFactoryOptions
+  ): E {
+    let result = {} as E;
+
+    // Apply each factory in order
+    for (const factory of factories) {
+      const partial = factory(type, message, domainFields, options);
+      result = { ...result, ...partial };
+    }
+
+    return result;
+  };
+}
+
+/**
+ * Create a serializable version of domain-specific errors
+ *
+ * @param error - The domain-specific error to serialize
+ * @returns A JSON-safe object with all fields
+ *
+ * @example
+ * ```typescript
+ * const error = createPaymentError("CardDeclined", "Card declined", {
+ *   transactionId: "tx_123",
+ *   amount: 99.99
+ * });
+ *
+ * const serialized = serializeDomainError(error);
+ * // Includes all domain-specific fields in addition to base fields
+ * ```
+ */
+export function serializeDomainError<E extends TryError>(
+  error: E
+): Record<string, unknown> {
+  // Get base serialization
+  const base = serializeTryError(error);
+
+  // Add all domain-specific fields
+  const domainFields: Record<string, unknown> = {};
+
+  for (const key in error) {
+    if (error.hasOwnProperty(key) && !(key in base)) {
+      domainFields[key] = error[key];
+    }
+  }
+
+  return {
+    ...base,
+    ...domainFields,
   };
 }
 
@@ -295,7 +439,7 @@ export function wrapWithContext<E extends TryError>(
 // ============================================================================
 
 /**
- * Pre-built factory for entity-related errors
+ * Pre-built factory for entity-related errors with validation
  *
  * @example
  * ```typescript
@@ -310,20 +454,27 @@ export function createEntityError<T extends string>(
   message: string,
   options?: ErrorFactoryOptions
 ): EntityError<T> {
+  // Validate required fields
+  if (!entityType || !entityId) {
+    throw new Error("entityType and entityId are required for entity errors");
+  }
+
+  const baseError = createError({
+    type: errorType,
+    message,
+    cause: options?.cause,
+    context: options?.context,
+  });
+
   return {
-    ...createError({
-      type: errorType,
-      message,
-      cause: options?.cause,
-      context: options?.context,
-    }),
+    ...baseError,
     entityType,
     entityId,
   };
 }
 
 /**
- * Pre-built factory for amount-related errors
+ * Pre-built factory for amount-related errors with validation
  *
  * @example
  * ```typescript
@@ -337,20 +488,29 @@ export function createAmountError<T extends string>(
   message: string,
   options?: ErrorFactoryOptions
 ): AmountError<T> {
+  // Validate required fields
+  if (typeof amount !== "number" || !currency) {
+    throw new Error(
+      "amount (number) and currency are required for amount errors"
+    );
+  }
+
+  const baseError = createError({
+    type: errorType,
+    message,
+    cause: options?.cause,
+    context: options?.context,
+  });
+
   return {
-    ...createError({
-      type: errorType,
-      message,
-      cause: options?.cause,
-      context: options?.context,
-    }),
+    ...baseError,
     amount,
     currency,
   };
 }
 
 /**
- * Pre-built factory for external service errors
+ * Pre-built factory for external service errors with validation
  *
  * @example
  * ```typescript
@@ -369,13 +529,20 @@ export function createExternalError<T extends string>(
     externalId?: string;
   }
 ): ExternalError<T> {
+  // Validate required fields
+  if (!provider) {
+    throw new Error("provider is required for external errors");
+  }
+
+  const baseError = createError({
+    type: errorType,
+    message,
+    cause: options?.cause,
+    context: options?.context,
+  });
+
   return {
-    ...createError({
-      type: errorType,
-      message,
-      cause: options?.cause,
-      context: options?.context,
-    }),
+    ...baseError,
     provider,
     statusCode: options?.statusCode,
     externalId: options?.externalId,
@@ -383,7 +550,7 @@ export function createExternalError<T extends string>(
 }
 
 /**
- * Pre-built factory for validation errors
+ * Pre-built factory for validation errors with field validation
  *
  * @example
  * ```typescript
@@ -400,13 +567,29 @@ export function createValidationError<T extends string>(
   code: string,
   options?: ErrorFactoryOptions
 ): ValidationError<T> {
+  // Validate required fields
+  if (!fields || typeof fields !== "object" || !code) {
+    throw new Error(
+      "fields (object) and code are required for validation errors"
+    );
+  }
+
+  // Validate field structure
+  for (const [field, errors] of Object.entries(fields)) {
+    if (!Array.isArray(errors)) {
+      throw new Error(`Field '${field}' must have an array of error messages`);
+    }
+  }
+
+  const baseError = createError({
+    type: errorType,
+    message,
+    cause: options?.cause,
+    context: options?.context,
+  });
+
   return {
-    ...createError({
-      type: errorType,
-      message,
-      cause: options?.cause,
-      context: options?.context,
-    }),
+    ...baseError,
     fields,
     code,
   };

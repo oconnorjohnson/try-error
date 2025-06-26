@@ -111,6 +111,10 @@ export type {
 
 export {
   createErrorFactory,
+  getFactory,
+  listFactories,
+  composeFactories,
+  serializeDomainError,
   chainError,
   wrapWithContext,
   createEntityError,
