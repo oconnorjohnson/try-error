@@ -282,7 +282,7 @@ const errorPool = new ErrorPool();`}
 configure(ConfigPresets.development());
 // ✅ Stack traces, source location, detailed logging
 
-// Production: Balanced (400% error overhead)
+// Production: Balanced (40% error overhead)
 configure(ConfigPresets.production());
 // ✅ No stack traces, minimal logging, better performance
 
