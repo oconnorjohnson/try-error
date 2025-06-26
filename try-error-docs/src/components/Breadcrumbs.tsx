@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { ChevronRight, Home } from "lucide-react";
@@ -94,19 +95,21 @@ export function Breadcrumbs() {
           </BreadcrumbLink>
         </BreadcrumbItem>
 
+        <BreadcrumbSeparator />
+
         {items.map((item, index) => (
-          <BreadcrumbItem key={item.path}>
-            <BreadcrumbSeparator>
-              <ChevronRight className="h-4 w-4" />
-            </BreadcrumbSeparator>
-            {item.isLast ? (
-              <BreadcrumbPage>{item.name}</BreadcrumbPage>
-            ) : (
-              <BreadcrumbLink asChild>
-                <Link href={item.path}>{item.name}</Link>
-              </BreadcrumbLink>
-            )}
-          </BreadcrumbItem>
+          <React.Fragment key={item.path}>
+            <BreadcrumbItem>
+              {item.isLast ? (
+                <BreadcrumbPage>{item.name}</BreadcrumbPage>
+              ) : (
+                <BreadcrumbLink asChild>
+                  <Link href={item.path}>{item.name}</Link>
+                </BreadcrumbLink>
+              )}
+            </BreadcrumbItem>
+            {index < items.length - 1 && <BreadcrumbSeparator />}
+          </React.Fragment>
         ))}
       </BreadcrumbList>
     </Breadcrumb>
