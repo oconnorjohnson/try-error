@@ -278,7 +278,7 @@ const errorPool = new ErrorPool();`}
               >
                 {`import { configure, ConfigPresets } from 'try-error';
 
-// Development: Full debugging (1700% error overhead)
+// Development: Full debugging (100-120% error overhead)
 configure(ConfigPresets.development());
 // ✅ Stack traces, source location, detailed logging
 
