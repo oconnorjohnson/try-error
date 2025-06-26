@@ -296,6 +296,20 @@ class TelemetryManager {
   clearProviders(): void {
     this.providers = [];
   }
+
+  /**
+   * Clear global tags
+   */
+  clearGlobalTags(): void {
+    this.globalTags = {};
+  }
+
+  /**
+   * Clear global context
+   */
+  clearGlobalContext(): void {
+    this.globalContext = {};
+  }
 }
 
 // Global telemetry instance
