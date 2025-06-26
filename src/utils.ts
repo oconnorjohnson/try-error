@@ -64,9 +64,19 @@ export function createEnhancedError(
   message: string,
   options: Omit<ErrorHandlingOptions, "errorType"> = {}
 ): TryError {
+  const isDevelopment =
+    typeof process !== "undefined" &&
+    process.env &&
+    process.env.NODE_ENV === "development";
+
   const context = {
     ...options.context,
     ...(options.tags && { tags: options.tags }),
+    // Include stack trace in development
+    ...(isDevelopment &&
+      options.includeStack !== false && {
+        stackTrace: new Error().stack,
+      }),
   };
 
   return {
@@ -77,7 +87,7 @@ export function createEnhancedError(
     timestamp: Date.now(),
     context: Object.keys(context).length > 0 ? context : undefined,
     stack:
-      options.includeStack !== false && process.env.NODE_ENV !== "production"
+      options.includeStack !== false && !isDevelopment
         ? new Error().stack
         : undefined,
   };
