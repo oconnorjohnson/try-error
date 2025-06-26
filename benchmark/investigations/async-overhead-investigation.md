@@ -176,19 +176,55 @@ await Promise.race([Promise.resolve(42)]) // 17.53ms vs 5.15ms baseline
 - This is not the source of our performance issues
 - The overhead comes from function calls and promise manipulation
 
+### Entry 3: Function Overhead Deep Dive (Date: Dec 2024)
+
+Created `async-function-overhead.ts` to investigate why function wrapping is so expensive:
+
+**Critical Discovery:**
+
+```
+Direct Promise.resolve: 4.94ms (baseline)
+Pre-defined arrow function: 5.12ms (+3.6%)
+Arrow function (created in loop): 28.10ms (+468.8%)
+Pre-defined async function: 4.92ms (-0.5%)
+```
+
+**The problem is creating functions inside loops!** Pre-defined functions have almost no overhead.
+
 ## 🎯 Optimization Opportunities
 
-### Opportunity 1: [Title]
+### Opportunity 1: Pre-define tryAsync Internal Functions
 
-**Potential Impact**: X% reduction
-**Complexity**: High/Medium/Low
+**Potential Impact**: 90%+ reduction (from 200% to <10%)
+**Complexity**: Low
 **Trade-offs**:
 
-### Opportunity 2: [Title]
+- Need to restructure tryAsync to avoid creating functions in the hot path
+- May need to pass more parameters around
 
-**Potential Impact**: X% reduction
-**Complexity**: High/Medium/Low
+**Evidence**: Pre-defined functions only add 3.6% overhead vs 468.8% for inline functions
+
+### Opportunity 2: Avoid Promise.race When Not Needed
+
+**Potential Impact**: 20-30% reduction
+**Complexity**: Low
 **Trade-offs**:
+
+- Need conditional logic to check if timeout/signal are provided
+- Slightly more complex code paths
+
+**Evidence**: Promise.race adds 240% overhead even with single promise
+
+### Opportunity 3: Use Async Functions Instead of Promise-Returning Functions
+
+**Potential Impact**: Minor (5-10%)
+**Complexity**: Medium
+**Trade-offs**:
+
+- Need to ensure compatibility
+- May affect error handling slightly
+
+**Evidence**: Pre-defined async functions are slightly faster than arrow functions returning promises
 
 ## 🧪 Experiments
 
