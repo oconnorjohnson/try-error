@@ -219,6 +219,21 @@ const navigation = [
         url: "/docs/guides/error-sampling",
         icon: FileText,
       },
+      {
+        title: "Performance Optimization",
+        url: "/docs/guides/performance-optimization",
+        icon: Zap,
+      },
+      {
+        title: "Middleware System",
+        url: "/docs/guides/middleware",
+        icon: Settings,
+      },
+      {
+        title: "Plugin System",
+        url: "/docs/guides/plugins",
+        icon: Puzzle,
+      },
     ],
   },
   {
