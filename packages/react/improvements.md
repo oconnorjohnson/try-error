@@ -19,7 +19,7 @@
 
 - [ ] **No Error Recovery Strategies**: No built-in recovery patterns beyond simple retry
 - [x] ~~**No Error Filtering**: Can't filter which errors to catch~~ ✅ FIXED
-- [ ] **No Async Error Boundary**: Doesn't handle Promise rejections
+- [x] ~~**No Async Error Boundary**: Doesn't handle Promise rejections~~ ✅ FIXED
 - [x] ~~**No Error Context Provider**: No way to access error state from child components~~ ✅ FIXED
 - [ ] **No Telemetry Integration**: No built-in support for error tracking services
 - [x] ~~**No Custom Retry Strategies**: Only simple retry count, no exponential backoff~~ ✅ FIXED
