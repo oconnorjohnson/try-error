@@ -1,22 +1,50 @@
 import { TryError, TRY_ERROR_BRAND } from "./types";
 import { getConfig } from "./config";
 
-// Performance optimization: Cache environment detection
-let cachedEnvironment: string | null = null;
-let cachedIsProduction: boolean | null = null;
-let cachedConfig: ReturnType<typeof getConfig> | null = null;
+// Performance optimization: Use WeakMap for config cache
+const configCache = new WeakMap<
+  typeof getConfig,
+  ReturnType<typeof getConfig>
+>();
 let configVersion = 0;
+
+// Environment detection cache with invalidation support
+let cachedEnvironment: string | null = null;
+let cachedRuntime: "server" | "client" | "edge" | null = null;
+let environmentVersion = 0;
+
+// Production detection cache
+let cachedIsProduction: boolean | null = null;
+
+// Error deduplication cache
+const errorCache = new Map<string, TryError>();
+const MAX_ERROR_CACHE_SIZE = 1000;
+
+/**
+ * Invalidate environment caches (useful for SSR)
+ */
+export function invalidateEnvironmentCache(): void {
+  cachedEnvironment = null;
+  cachedRuntime = null;
+  cachedIsProduction = null;
+  environmentVersion++;
+}
 
 /**
  * Get cached config or fetch new one if changed
  */
 function getCachedConfig() {
   const currentVersion = (getConfig as any).version || 0;
-  if (cachedConfig === null || configVersion !== currentVersion) {
-    cachedConfig = getConfig();
+  const cached = configCache.get(getConfig);
+
+  if (!cached || configVersion !== currentVersion) {
+    const newConfig = getConfig();
+    configCache.set(getConfig, newConfig);
     configVersion = currentVersion;
+    return newConfig;
   }
-  return cachedConfig;
+
+  return cached;
 }
 
 /**
@@ -71,7 +99,7 @@ export interface CreateErrorOptions<T extends string = string> {
  * Safely check if we're in a production environment (cached)
  */
 function isProduction(): boolean {
-  // Don't cache in test environment as tests change NODE_ENV
+  // Always re-check in test environment
   const isTest =
     typeof process !== "undefined" &&
     process.env &&
@@ -98,6 +126,74 @@ function isProduction(): boolean {
 }
 
 /**
+ * Unified environment and runtime detection
+ */
+function detectEnvironmentAndRuntime(): {
+  environment: "node" | "chrome" | "firefox" | "safari" | "edge" | "unknown";
+  runtime: "server" | "client" | "edge";
+} {
+  // Check cache first
+  if (cachedEnvironment !== null && cachedRuntime !== null) {
+    return {
+      environment: cachedEnvironment as any,
+      runtime: cachedRuntime,
+    };
+  }
+
+  let environment:
+    | "node"
+    | "chrome"
+    | "firefox"
+    | "safari"
+    | "edge"
+    | "unknown" = "unknown";
+  let runtime: "server" | "client" | "edge" = "client";
+
+  // Edge runtime detection (Cloudflare Workers, Vercel Edge, etc.)
+  if (
+    typeof globalThis !== "undefined" &&
+    // @ts-ignore
+    (globalThis.EdgeRuntime ||
+      globalThis.caches ||
+      // @ts-ignore
+      (typeof process !== "undefined" && process.env?.NEXT_RUNTIME === "edge"))
+  ) {
+    runtime = "edge";
+    environment = "edge";
+  }
+  // Node.js detection
+  else if (
+    typeof process !== "undefined" &&
+    process.versions &&
+    process.versions.node
+  ) {
+    environment = "node";
+    runtime = "server";
+  }
+  // Browser detection
+  else if (typeof navigator !== "undefined" && navigator.userAgent) {
+    runtime = "client";
+    const ua = navigator.userAgent.toLowerCase();
+
+    if (ua.includes("firefox")) {
+      environment = "firefox";
+    } else if (ua.includes("edg/")) {
+      environment = "edge";
+    } else if (ua.includes("chrome") && !ua.includes("edg/")) {
+      environment = "chrome";
+    } else if (ua.includes("safari") && !ua.includes("chrome")) {
+      environment = "safari";
+    }
+  }
+
+  // Cache the results
+  cachedEnvironment = environment;
+  cachedRuntime = runtime;
+
+  return { environment, runtime };
+}
+
+/**
  * Detect the JavaScript environment (cached)
  */
 function detectEnvironment():
@@ -107,44 +203,15 @@ function detectEnvironment():
   | "safari"
   | "edge"
   | "unknown" {
-  if (cachedEnvironment !== null) {
-    return cachedEnvironment as any;
-  }
+  return detectEnvironmentAndRuntime().environment;
+}
 
-  // Node.js
-  if (
-    typeof process !== "undefined" &&
-    process.versions &&
-    process.versions.node
-  ) {
-    cachedEnvironment = "node";
-    return "node";
-  }
-
-  // Browser detection
-  if (typeof navigator !== "undefined" && navigator.userAgent) {
-    const ua = navigator.userAgent.toLowerCase();
-
-    if (ua.includes("firefox")) {
-      cachedEnvironment = "firefox";
-      return "firefox";
-    }
-    if (ua.includes("edg/")) {
-      cachedEnvironment = "edge";
-      return "edge";
-    }
-    if (ua.includes("chrome") && !ua.includes("edg/")) {
-      cachedEnvironment = "chrome";
-      return "chrome";
-    }
-    if (ua.includes("safari") && !ua.includes("chrome")) {
-      cachedEnvironment = "safari";
-      return "safari";
-    }
-  }
-
-  cachedEnvironment = "unknown";
-  return "unknown";
+/**
+ * Detect the current runtime environment
+ * @returns The detected runtime environment
+ */
+function detectRuntime(): "server" | "client" | "edge" {
+  return detectEnvironmentAndRuntime().runtime;
 }
 
 /**
@@ -154,7 +221,7 @@ const stackParsers = {
   // V8 (Chrome, Node.js, Edge)
   v8: (line: string): { file: string; line: string; column: string } | null => {
     // Format: "    at functionName (file:line:column)" or "    at file:line:column"
-    // Updated regex to handle various V8 formats
+    // Updated regex to handle various V8 formats including minified code
     const patterns = [
       // "    at functionName (file:line:column)"
       /\s+at\s+.*?\s+\((.+):(\d+):(\d+)\)/,
@@ -164,6 +231,10 @@ const stackParsers = {
       /\s+at\s+async\s+.*?\s+\((.+):(\d+):(\d+)\)/,
       // "    at Object.<anonymous> (file:line:column)"
       /\s+at\s+Object\.<anonymous>\s+\((.+):(\d+):(\d+)\)/,
+      // Minified format: "at a.b.c (file:line:column)"
+      /\s+at\s+[a-zA-Z$_][\w$]*(?:\.[a-zA-Z$_][\w$]*)*\s+\((.+):(\d+):(\d+)\)/,
+      // Eval or anonymous: "at eval (eval at <anonymous> (file:line:column))"
+      /\s+at\s+eval\s+\(eval\s+at\s+.*?\((.+):(\d+):(\d+)\)/,
     ];
 
     for (const pattern of patterns) {
@@ -180,6 +251,7 @@ const stackParsers = {
     line: string
   ): { file: string; line: string; column: string } | null => {
     // Format: "functionName@file:line:column"
+    // Handle minified: "a@file:line:column"
     const match = line.match(/(?:.*@)?(.+):(\d+):(\d+)/);
     if (match) {
       return { file: match[1], line: match[2], column: match[3] };
@@ -317,6 +389,18 @@ function getSourceLocation(stackOffset: number = 2): string {
 }
 
 /**
+ * Generate a cache key for error deduplication
+ */
+function getErrorCacheKey(
+  type: string,
+  message: string,
+  context?: Record<string, unknown>
+): string {
+  const contextStr = context ? JSON.stringify(context) : "";
+  return `${type}:${message}:${contextStr}`;
+}
+
+/**
  * Create a TryError with automatic source location detection
  *
  * @param options - Error creation options
@@ -336,6 +420,17 @@ export function createError<T extends string = string>(
 ): TryError<T> {
   const config = getCachedConfig();
 
+  // Check error cache for deduplication
+  const cacheKey = getErrorCacheKey(
+    options.type,
+    options.message,
+    options.context
+  );
+  const cachedError = errorCache.get(cacheKey);
+  if (cachedError && !options.captureStackTrace) {
+    return cachedError as TryError<T>;
+  }
+
   // Ultra-fast path for minimal mode
   if (config.minimalErrors) {
     return createMinimalError(
@@ -345,8 +440,13 @@ export function createError<T extends string = string>(
     );
   }
 
+  // Get config once and reuse
+  const isProd = isProduction();
+  const shouldCaptureStack =
+    options.captureStackTrace ?? config.captureStackTrace ?? !isProd;
+
   // Fast path for production with minimal features
-  if (isProduction() && !options.captureStackTrace && !config.includeSource) {
+  if (isProd && !shouldCaptureStack && !config.includeSource) {
     const error: TryError<T> = {
       [TRY_ERROR_BRAND]: true,
       type: options.type,
@@ -375,6 +475,14 @@ export function createError<T extends string = string>(
       }
     }
 
+    // Cache the error
+    if (errorCache.size >= MAX_ERROR_CACHE_SIZE) {
+      // Remove oldest entry
+      const firstKey = errorCache.keys().next().value;
+      errorCache.delete(firstKey);
+    }
+    errorCache.set(cacheKey, transformedError);
+
     return transformedError;
   }
 
@@ -383,14 +491,6 @@ export function createError<T extends string = string>(
     options.stackOffset ?? config.sourceLocation?.defaultStackOffset ?? 3;
   const source = options.source ?? getSourceLocation(stackOffset);
   const timestamp = config.skipTimestamp ? 0 : options.timestamp ?? Date.now();
-
-  // Determine if we should capture stack trace
-  const shouldCaptureStack =
-    options.captureStackTrace !== undefined
-      ? options.captureStackTrace
-      : config.captureStackTrace !== undefined
-      ? config.captureStackTrace
-      : !isProduction();
 
   // Capture stack trace if enabled
   let stack: string | undefined;
@@ -409,7 +509,7 @@ export function createError<T extends string = string>(
       }
 
       // Replace "Error:" with the actual error type in the stack trace
-      if (stack) {
+      if (stack && options.type) {
         stack = stack.replace(/^Error:/, `${options.type}:`);
       }
     } catch {
@@ -444,6 +544,14 @@ export function createError<T extends string = string>(
       transformedError = handler(transformedError) as TryError<T>;
     }
   }
+
+  // Cache the error
+  if (errorCache.size >= MAX_ERROR_CACHE_SIZE) {
+    // Remove oldest entry
+    const firstKey = errorCache.keys().next().value;
+    errorCache.delete(firstKey);
+  }
+  errorCache.set(cacheKey, transformedError);
 
   return transformedError;
 }
@@ -556,35 +664,4 @@ export function fromThrown(
   }
 
   return wrapError("UnknownError", cause, "An unknown error occurred", context);
-}
-
-/**
- * Detect the current runtime environment
- * @returns The detected runtime environment
- */
-function detectRuntime(): "server" | "client" | "edge" {
-  // Edge runtime detection (Cloudflare Workers, Vercel Edge, etc.)
-  if (
-    typeof globalThis !== "undefined" &&
-    // @ts-ignore
-    (globalThis.EdgeRuntime ||
-      globalThis.caches ||
-      // @ts-ignore
-      (typeof process !== "undefined" && process.env?.NEXT_RUNTIME === "edge"))
-  ) {
-    return "edge";
-  }
-
-  // Server-side detection
-  if (
-    typeof window === "undefined" &&
-    typeof process !== "undefined" &&
-    process.versions &&
-    process.versions.node
-  ) {
-    return "server";
-  }
-
-  // Client-side (browser)
-  return "client";
 }

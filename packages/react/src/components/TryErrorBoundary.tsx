@@ -25,6 +25,14 @@ export interface TryErrorBoundaryProps {
   className?: string;
   // Whether to isolate this boundary (prevent error bubbling up)
   isolate?: boolean;
+  // Error filter function - return false to not catch the error
+  errorFilter?: (error: Error) => boolean;
+  // Custom retry strategy
+  retryStrategy?: {
+    maxRetries?: number;
+    delay?: number;
+    backoff?: "linear" | "exponential";
+  };
 }
 
 // State for the error boundary
@@ -62,7 +70,8 @@ export class TryErrorBoundary extends Component<
   TryErrorBoundaryProps,
   TryErrorBoundaryState
 > {
-  private retryTimeoutId: number | null = null;
+  private retryTimeoutId: ReturnType<typeof setTimeout> | null = null;
+  private errorLogMap = new WeakMap<Error, boolean>();
 
   constructor(props: TryErrorBoundaryProps) {
     super(props);
@@ -85,7 +94,12 @@ export class TryErrorBoundary extends Component<
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    // Convert regular Error to TryError for consistent handling
+    // Check if we should catch this error
+    if (this.props.errorFilter && !this.props.errorFilter(error)) {
+      throw error; // Re-throw to let parent boundary handle it
+    }
+
+    // Check if error is already a TryError to avoid double conversion
     const tryError = isTryError(error)
       ? error
       : createError({
@@ -95,6 +109,8 @@ export class TryErrorBoundary extends Component<
           context: {
             componentStack: errorInfo.componentStack,
             errorBoundary: true,
+            // Preserve original error's component stack if it exists
+            originalStack: (error as any).componentStack,
           },
         });
 
@@ -106,35 +122,75 @@ export class TryErrorBoundary extends Component<
     // Call the error handler if provided
     this.props.onError?.(tryError, errorInfo);
 
-    // Log error in development
+    // Log error in development with deduplication
     if (
       typeof process !== "undefined" &&
-      process.env?.NODE_ENV === "development"
+      process.env?.NODE_ENV === "development" &&
+      !this.errorLogMap.has(error)
     ) {
-      if (typeof console !== "undefined") {
-        console.group("🚨 TryErrorBoundary caught an error");
-        console.error("Error:", error);
-        console.error("Error Info:", errorInfo);
-        if (isTryError(tryError)) {
-          console.error("TryError Details:", {
-            type: tryError.type,
-            source: tryError.source,
-            timestamp: new Date(tryError.timestamp).toISOString(),
-            context: tryError.context,
-          });
-        }
-        console.groupEnd();
+      this.errorLogMap.set(error, true);
+      this.logError(tryError, errorInfo);
+    }
+  }
+
+  private logError(error: TryError | Error, errorInfo: ErrorInfo) {
+    // Safe console access
+    if (
+      typeof console !== "undefined" &&
+      console.group &&
+      console.error &&
+      console.groupEnd
+    ) {
+      console.group("🚨 TryErrorBoundary caught an error");
+      console.error("Error:", error);
+      console.error("Error Info:", errorInfo);
+      if (isTryError(error)) {
+        console.error("TryError Details:", {
+          type: error.type,
+          source: error.source,
+          timestamp: new Date(error.timestamp).toISOString(),
+          context: error.context,
+        });
       }
+      console.groupEnd();
     }
   }
 
   componentWillUnmount() {
-    if (this.retryTimeoutId && typeof clearTimeout !== "undefined") {
+    if (this.retryTimeoutId !== null) {
       clearTimeout(this.retryTimeoutId);
+      this.retryTimeoutId = null;
     }
   }
 
   handleRetry = () => {
+    const { retryStrategy } = this.props;
+    const maxRetries = retryStrategy?.maxRetries ?? 3;
+
+    if (this.state.retryCount >= maxRetries) {
+      return;
+    }
+
+    // Calculate delay based on retry strategy
+    let delay = 0;
+    if (retryStrategy?.delay) {
+      if (retryStrategy.backoff === "exponential") {
+        delay = retryStrategy.delay * Math.pow(2, this.state.retryCount);
+      } else {
+        delay = retryStrategy.delay;
+      }
+    }
+
+    if (delay > 0) {
+      this.retryTimeoutId = setTimeout(() => {
+        this.performRetry();
+      }, delay);
+    } else {
+      this.performRetry();
+    }
+  };
+
+  private performRetry = () => {
     this.setState((prevState) => ({
       hasError: false,
       error: null,
@@ -166,6 +222,7 @@ export class TryErrorBoundary extends Component<
           showErrorDetails={this.props.showErrorDetails}
           className={this.props.className}
           retryCount={this.state.retryCount}
+          maxRetries={this.props.retryStrategy?.maxRetries ?? 3}
         />
       );
     }
@@ -183,6 +240,7 @@ interface DefaultErrorFallbackProps {
   showErrorDetails?: boolean;
   className?: string;
   retryCount: number;
+  maxRetries: number;
 }
 
 function DefaultErrorFallback({
@@ -194,13 +252,18 @@ function DefaultErrorFallback({
     process.env?.NODE_ENV === "development",
   className = "",
   retryCount,
+  maxRetries,
 }: DefaultErrorFallbackProps) {
   const isTryErr = isTryError(error);
   const displayMessage =
     errorMessage || error.message || "An unexpected error occurred";
 
   return (
-    <div className={`try-error-boundary ${className}`} role="alert">
+    <div
+      className={`try-error-boundary ${className}`}
+      role="alert"
+      aria-live="assertive"
+    >
       <div className="try-error-boundary__content">
         <h2 className="try-error-boundary__title">
           {isTryErr ? "⚠️ Operation Failed" : "🚨 Something went wrong"}
@@ -226,13 +289,18 @@ function DefaultErrorFallback({
             <button
               className="try-error-boundary__retry-button"
               onClick={onRetry}
-              disabled={retryCount >= 3}
+              disabled={retryCount >= maxRetries}
+              aria-label={
+                retryCount >= maxRetries
+                  ? "Maximum retry attempts reached"
+                  : "Retry the failed operation"
+              }
             >
-              {retryCount >= 3 ? "Max retries reached" : "Try Again"}
+              {retryCount >= maxRetries ? "Max retries reached" : "Try Again"}
             </button>
             {retryCount > 0 && (
-              <p className="try-error-boundary__retry-count">
-                Retry attempt: {retryCount}
+              <p className="try-error-boundary__retry-count" aria-live="polite">
+                Retry attempt: {retryCount} of {maxRetries}
               </p>
             )}
           </div>
