@@ -12,6 +12,7 @@ import {
   Zap,
   Github,
 } from "lucide-react";
+import Link from "next/link";
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
@@ -305,7 +306,7 @@ export function AppSidebar() {
   return (
     <Sidebar>
       <SidebarHeader className="border-b px-6 py-4">
-        <div className="flex items-center gap-3">
+        <Link href="/" className="flex items-center gap-3">
           <Image
             src="/logo.png"
             alt="try-error logo"
@@ -317,7 +318,7 @@ export function AppSidebar() {
             <h2 className="text-lg font-semibold">try-error</h2>
             <p className="text-xs text-muted-foreground">Documentation</p>
           </div>
-        </div>
+        </Link>
       </SidebarHeader>
 
       <SidebarContent ref={scrollContainerRef} onScroll={handleScroll}>
