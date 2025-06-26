@@ -479,7 +479,9 @@ export function createError<T extends string = string>(
     if (errorCache.size >= MAX_ERROR_CACHE_SIZE) {
       // Remove oldest entry
       const firstKey = errorCache.keys().next().value;
-      errorCache.delete(firstKey);
+      if (firstKey !== undefined) {
+        errorCache.delete(firstKey);
+      }
     }
     errorCache.set(cacheKey, transformedError);
 
@@ -509,7 +511,7 @@ export function createError<T extends string = string>(
       }
 
       // Replace "Error:" with the actual error type in the stack trace
-      if (stack && options.type) {
+      if (stack) {
         stack = stack.replace(/^Error:/, `${options.type}:`);
       }
     } catch {
@@ -549,7 +551,9 @@ export function createError<T extends string = string>(
   if (errorCache.size >= MAX_ERROR_CACHE_SIZE) {
     // Remove oldest entry
     const firstKey = errorCache.keys().next().value;
-    errorCache.delete(firstKey);
+    if (firstKey !== undefined) {
+      errorCache.delete(firstKey);
+    }
   }
   errorCache.set(cacheKey, transformedError);
 

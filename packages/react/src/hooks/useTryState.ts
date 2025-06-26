@@ -1,5 +1,12 @@
-import { useState, useCallback } from "react";
-import { trySync, TryResult, TryError, isTryError } from "try-error";
+import { useState, useCallback, useRef } from "react";
+import {
+  trySync,
+  tryAsync,
+  TryResult,
+  TryError,
+  isTryError,
+  createError,
+} from "try-error";
 
 /**
  * State management hook with try-error integration
@@ -16,7 +23,7 @@ import { trySync, TryResult, TryError, isTryError } from "try-error";
  * ```
  */
 export function useTryState<T>(
-  initialValue: T
+  initialValue: T | (() => T)
 ): [
   T,
   (updater: T | ((current: T) => T)) => void,
@@ -26,30 +33,116 @@ export function useTryState<T>(
   const [state, setState] = useState<T>(initialValue);
   const [error, setError] = useState<TryError | null>(null);
 
-  const setTryState = useCallback(
-    (updater: T | ((current: T) => T)) => {
-      const result = trySync(() => {
-        if (typeof updater === "function") {
-          return (updater as (current: T) => T)(state);
-        }
-        return updater;
-      });
+  // Use ref to avoid stale closure
+  const stateRef = useRef(state);
+  stateRef.current = state;
 
-      if (isTryError(result)) {
-        setError(result);
-      } else {
-        setState(result);
-        setError(null);
+  const setTryState = useCallback((updater: T | ((current: T) => T)) => {
+    const result = trySync(() => {
+      if (typeof updater === "function") {
+        return (updater as (current: T) => T)(stateRef.current);
       }
-    },
-    [state]
-  );
+      return updater;
+    });
+
+    if (isTryError(result)) {
+      setError(result);
+    } else {
+      setState(result);
+      setError(null);
+    }
+  }, []);
 
   const clearError = useCallback(() => {
     setError(null);
   }, []);
 
   return [state, setTryState, error, clearError];
+}
+
+/**
+ * Async version of useTryState for async state updates
+ *
+ * @example
+ * ```tsx
+ * const [data, setData, error, clearError, isUpdating] = useTryStateAsync<User>(null);
+ *
+ * const updateUser = useCallback(async (userId: string) => {
+ *   await setData(async () => {
+ *     const user = await fetchUser(userId);
+ *     return validateUser(user);
+ *   });
+ * }, [setData]);
+ * ```
+ */
+export function useTryStateAsync<T>(
+  initialValue: T | (() => T)
+): [
+  T,
+  (
+    updater: T | ((current: T) => T) | ((current: T) => Promise<T>)
+  ) => Promise<void>,
+  TryError | null,
+  () => void,
+  boolean
+] {
+  const [state, setState] = useState<T>(initialValue);
+  const [error, setError] = useState<TryError | null>(null);
+  const [isUpdating, setIsUpdating] = useState(false);
+
+  // Use ref to avoid stale closure
+  const stateRef = useRef(state);
+  stateRef.current = state;
+
+  const setTryStateAsync = useCallback(
+    async (updater: T | ((current: T) => T) | ((current: T) => Promise<T>)) => {
+      setIsUpdating(true);
+      setError(null);
+
+      try {
+        let result: TryResult<T, TryError>;
+
+        if (typeof updater === "function") {
+          const updateFn = updater as
+            | ((current: T) => T)
+            | ((current: T) => Promise<T>);
+          const updateResult = updateFn(stateRef.current);
+
+          if (updateResult instanceof Promise) {
+            result = await tryAsync(() => updateResult);
+          } else {
+            result = trySync(() => updateResult);
+          }
+        } else {
+          result = updater;
+        }
+
+        if (isTryError(result)) {
+          setError(result);
+        } else {
+          setState(result);
+          setError(null);
+        }
+      } catch (e) {
+        setError(
+          createError({
+            type: "StateUpdateError",
+            message: e instanceof Error ? e.message : "State update failed",
+            cause: e,
+          })
+        );
+      } finally {
+        setIsUpdating(false);
+      }
+    },
+    []
+  );
+
+  const clearError = useCallback(() => {
+    setError(null);
+  }, []);
+
+  return [state, setTryStateAsync, error, clearError, isUpdating];
 }
 
 /**
@@ -71,16 +164,112 @@ export function useStateWithError<T>(
       setValue(newValue);
       setError(null);
     } catch (e) {
-      const tryError: TryError = {
+      const tryError = createError({
         type: "StateUpdateError",
         message: e instanceof Error ? e.message : "State update failed",
-        source: "useTryState",
-        timestamp: Date.now(),
+        source: "useStateWithError",
         cause: e,
-      };
+      });
       setError(tryError);
     }
   }, []);
 
   return [value, setValueWithError, error];
+}
+
+/**
+ * Hook for state with validation
+ *
+ * @example
+ * ```tsx
+ * const [email, setEmail, emailError] = useValidatedState(
+ *   '',
+ *   (value) => {
+ *     if (!value.includes('@')) {
+ *       throw new Error('Invalid email format');
+ *     }
+ *     return value;
+ *   }
+ * );
+ * ```
+ */
+export function useValidatedState<T>(
+  initialValue: T,
+  validator: (value: T) => T
+): [T, (value: T) => void, TryError | null] {
+  const [value, setValue] = useState<T>(initialValue);
+  const [error, setError] = useState<TryError | null>(null);
+
+  const setValidatedValue = useCallback(
+    (newValue: T) => {
+      const result = trySync(() => validator(newValue));
+
+      if (isTryError(result)) {
+        setError(result);
+      } else {
+        setValue(result);
+        setError(null);
+      }
+    },
+    [validator]
+  );
+
+  return [value, setValidatedValue, error];
+}
+
+/**
+ * Hook for state with localStorage persistence
+ *
+ * @example
+ * ```tsx
+ * const [theme, setTheme, error] = usePersistedState('theme', 'light');
+ * ```
+ */
+export function usePersistedState<T>(
+  key: string,
+  initialValue: T
+): [T, (value: T | ((current: T) => T)) => void, TryError | null] {
+  // Initialize from localStorage
+  const [state, setState] = useState<T>(() => {
+    if (typeof window === "undefined") return initialValue;
+
+    try {
+      const item = window.localStorage.getItem(key);
+      return item ? JSON.parse(item) : initialValue;
+    } catch {
+      return initialValue;
+    }
+  });
+
+  const [error, setError] = useState<TryError | null>(null);
+
+  const setPersistedState = useCallback(
+    (updater: T | ((current: T) => T)) => {
+      setState((currentState) => {
+        const newValue =
+          typeof updater === "function"
+            ? (updater as (current: T) => T)(currentState)
+            : updater;
+
+        // Try to persist to localStorage
+        const result = trySync(() => {
+          if (typeof window !== "undefined") {
+            window.localStorage.setItem(key, JSON.stringify(newValue));
+          }
+          return newValue;
+        });
+
+        if (isTryError(result)) {
+          setError(result);
+          return currentState; // Don't update state if persistence fails
+        } else {
+          setError(null);
+          return result;
+        }
+      });
+    },
+    [key]
+  );
+
+  return [state, setPersistedState, error];
 }

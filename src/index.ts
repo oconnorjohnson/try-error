@@ -73,6 +73,10 @@ export {
   isErr,
   tryAll,
   tryAny,
+  retrySync,
+  CircuitBreaker,
+  createCircuitBreaker,
+  withFallback,
 } from "./sync";
 
 // Asynchronous error handling

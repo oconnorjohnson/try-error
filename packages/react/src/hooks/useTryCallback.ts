@@ -1,19 +1,33 @@
 // useTryCallback hook for React error handling
 // TODO: Implement React callback hook for try-error integration
 
-import { useCallback } from "react";
+import { useCallback, useState, useRef, useMemo } from "react";
 import { tryAsync, trySync, isTryError, TryResult, TryError } from "try-error";
 
 // Options for useTryCallback hook
-export interface UseTryCallbackOptions {
+export interface UseTryCallbackOptions<T = unknown> {
   // Custom error handler
   onError?: (error: TryError) => void;
   // Custom success handler
-  onSuccess?: <T>(data: T) => void;
+  onSuccess?: (data: T) => void;
   // Transform error before returning
   transformError?: (error: TryError) => TryError;
   // Transform success data before returning
-  transformData?: <T>(data: T) => T;
+  transformData?: (data: T) => T;
+}
+
+// Extended options with loading state
+export interface UseTryCallbackWithStateOptions<T = unknown>
+  extends UseTryCallbackOptions<T> {
+  // Track loading state
+  trackState?: boolean;
+}
+
+// Return type with loading state
+export interface UseTryCallbackWithState<TArgs extends any[], TReturn> {
+  callback: (...args: TArgs) => Promise<TryResult<TReturn, TryError>>;
+  isLoading: boolean;
+  reset: () => void;
 }
 
 /**
@@ -41,27 +55,101 @@ export interface UseTryCallbackOptions {
  */
 export function useTryCallback<TArgs extends any[], TReturn>(
   callback: (...args: TArgs) => Promise<TReturn>,
-  options: UseTryCallbackOptions = {},
+  options: UseTryCallbackOptions<TReturn> = {},
   deps: React.DependencyList = []
 ): (...args: TArgs) => Promise<TryResult<TReturn, TryError>> {
   const { onError, onSuccess, transformError, transformData } = options;
+
+  // Memoize transform functions to prevent unnecessary re-renders
+  const memoizedTransformError = useMemo(
+    () => transformError,
+    [transformError]
+  );
+
+  const memoizedTransformData = useMemo(() => transformData, [transformData]);
 
   return useCallback(
     async (...args: TArgs): Promise<TryResult<TReturn, TryError>> => {
       const result = await tryAsync(() => callback(...args));
 
       if (isTryError(result)) {
-        const finalError = transformError ? transformError(result) : result;
+        const finalError = memoizedTransformError
+          ? memoizedTransformError(result)
+          : result;
         onError?.(finalError);
         return finalError;
       } else {
-        const finalData = transformData ? transformData(result) : result;
+        const finalData = memoizedTransformData
+          ? memoizedTransformData(result)
+          : result;
         onSuccess?.(finalData);
         return finalData;
       }
     },
-    [callback, onError, onSuccess, transformError, transformData, ...deps]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [
+      callback,
+      onError,
+      onSuccess,
+      memoizedTransformError,
+      memoizedTransformData,
+      ...deps,
+    ]
   );
+}
+
+/**
+ * Version of useTryCallback with loading state tracking
+ *
+ * @example
+ * ```tsx
+ * const { callback: handleSubmit, isLoading } = useTryCallbackWithState(
+ *   async (formData: FormData) => {
+ *     return await submitForm(formData);
+ *   },
+ *   {
+ *     onSuccess: (data) => toast.success("Submitted!"),
+ *     onError: (error) => toast.error(error.message)
+ *   },
+ *   [submitForm]
+ * );
+ *
+ * <button onClick={handleSubmit} disabled={isLoading}>
+ *   {isLoading ? 'Submitting...' : 'Submit'}
+ * </button>
+ * ```
+ */
+export function useTryCallbackWithState<TArgs extends any[], TReturn>(
+  callback: (...args: TArgs) => Promise<TReturn>,
+  options: UseTryCallbackOptions<TReturn> = {},
+  deps: React.DependencyList = []
+): UseTryCallbackWithState<TArgs, TReturn> {
+  const [isLoading, setIsLoading] = useState(false);
+  const abortControllerRef = useRef<AbortController | null>(null);
+
+  const enhancedCallback = useTryCallback(
+    async (...args: TArgs) => {
+      setIsLoading(true);
+      try {
+        return await callback(...args);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    options,
+    deps
+  );
+
+  const reset = useCallback(() => {
+    setIsLoading(false);
+    abortControllerRef.current?.abort();
+  }, []);
+
+  return {
+    callback: enhancedCallback,
+    isLoading,
+    reset,
+  };
 }
 
 /**
@@ -81,26 +169,46 @@ export function useTryCallback<TArgs extends any[], TReturn>(
  */
 export function useTryCallbackSync<TArgs extends any[], TReturn>(
   callback: (...args: TArgs) => TReturn,
-  options: UseTryCallbackOptions = {},
+  options: UseTryCallbackOptions<TReturn> = {},
   deps: React.DependencyList = []
 ): (...args: TArgs) => TryResult<TReturn, TryError> {
   const { onError, onSuccess, transformError, transformData } = options;
+
+  // Memoize transform functions
+  const memoizedTransformError = useMemo(
+    () => transformError,
+    [transformError]
+  );
+
+  const memoizedTransformData = useMemo(() => transformData, [transformData]);
 
   return useCallback(
     (...args: TArgs): TryResult<TReturn, TryError> => {
       const result = trySync(() => callback(...args));
 
       if (isTryError(result)) {
-        const finalError = transformError ? transformError(result) : result;
+        const finalError = memoizedTransformError
+          ? memoizedTransformError(result)
+          : result;
         onError?.(finalError);
         return finalError;
       } else {
-        const finalData = transformData ? transformData(result) : result;
+        const finalData = memoizedTransformData
+          ? memoizedTransformData(result)
+          : result;
         onSuccess?.(finalData);
         return finalData;
       }
     },
-    [callback, onError, onSuccess, transformError, transformData, ...deps]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [
+      callback,
+      onError,
+      onSuccess,
+      memoizedTransformError,
+      memoizedTransformData,
+      ...deps,
+    ]
   );
 }
 
@@ -197,7 +305,7 @@ export function useResultCallback<T>(
  */
 export function useFormSubmitCallback<T>(
   submitHandler: (formData: FormData) => Promise<T>,
-  options: UseTryCallbackOptions = {},
+  options: UseTryCallbackOptions<T> = {},
   deps: React.DependencyList = []
 ): (event: React.FormEvent<HTMLFormElement>) => Promise<void> {
   const tryCallback = useTryCallback(submitHandler, options, deps);
@@ -206,8 +314,15 @@ export function useFormSubmitCallback<T>(
     async (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
       const form = event.currentTarget;
-      const formData = new (globalThis as any).FormData(form);
-      await tryCallback(formData);
+
+      // Safe FormData creation
+      if (typeof FormData !== "undefined") {
+        const formData = new FormData(form);
+        await tryCallback(formData);
+      } else {
+        // Fallback for environments without FormData
+        console.error("FormData is not available in this environment");
+      }
     },
     [tryCallback]
   );

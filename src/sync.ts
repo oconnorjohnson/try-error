@@ -5,7 +5,7 @@ import {
   isTryError,
   TRY_ERROR_BRAND,
 } from "./types";
-import { fromThrown } from "./errors";
+import { fromThrown, wrapError } from "./errors";
 
 /**
  * Options for trySync function
@@ -25,6 +25,23 @@ export interface TrySyncOptions {
    * Custom error message
    */
   message?: string;
+}
+
+/**
+ * Shared error creation logic that preserves stack traces
+ */
+function createTryError(error: unknown, options?: TrySyncOptions): TryError {
+  if (options?.errorType) {
+    // Use wrapError to preserve the original error and its stack trace
+    return wrapError(
+      options.errorType,
+      error,
+      options.message,
+      options.context
+    );
+  }
+
+  return fromThrown(error, options?.context);
 }
 
 /**
@@ -52,21 +69,7 @@ export function trySync<T>(
   try {
     return fn();
   } catch (error) {
-    if (options?.errorType) {
-      return {
-        [TRY_ERROR_BRAND]: true,
-        type: options.errorType,
-        message:
-          options.message ||
-          (error instanceof Error ? error.message : "Operation failed"),
-        source: "unknown", // Will be set by createError if needed
-        timestamp: Date.now(),
-        cause: error,
-        context: options.context,
-      } as TryError;
-    }
-
-    return fromThrown(error, options?.context);
+    return createTryError(error, options);
   }
 }
 
@@ -127,16 +130,16 @@ export function tryCall<TArgs extends readonly unknown[], TReturn>(
   optionsOrFirstArg?: TrySyncOptions | TArgs[0],
   ...restArgs: TArgs extends readonly [unknown, ...infer Rest] ? Rest : TArgs
 ): TryResult<TReturn, TryError> {
-  // Check if first argument is options object
-  const isOptionsObject =
-    optionsOrFirstArg !== null &&
+  // Simplified options check
+  const isOptions =
+    optionsOrFirstArg &&
     typeof optionsOrFirstArg === "object" &&
     !Array.isArray(optionsOrFirstArg) &&
     ("errorType" in optionsOrFirstArg ||
       "context" in optionsOrFirstArg ||
       "message" in optionsOrFirstArg);
 
-  if (isOptionsObject) {
+  if (isOptions) {
     const options = optionsOrFirstArg as TrySyncOptions;
     return trySync(() => fn(...(restArgs as unknown as TArgs)), options);
   } else {
@@ -375,4 +378,179 @@ export function tryAny<T>(
   }
 
   return lastError || fromThrown("All attempts failed");
+}
+
+/**
+ * Retry a synchronous operation with configurable attempts
+ *
+ * @param fn - Function to retry
+ * @param options - Retry configuration
+ * @returns TryResult with final result or last error
+ *
+ * @example
+ * ```typescript
+ * const result = retrySync(
+ *   () => readFileSync('config.json'),
+ *   { attempts: 3, delay: 100 }
+ * );
+ * ```
+ */
+export function retrySync<T>(
+  fn: () => T,
+  options: {
+    attempts: number;
+    delay?: number;
+    shouldRetry?: (error: TryError, attempt: number) => boolean;
+  }
+): TryResult<T, TryError> {
+  const { attempts, delay = 0, shouldRetry = () => true } = options;
+  let lastError: TryError | null = null;
+
+  for (let attempt = 1; attempt <= attempts; attempt++) {
+    const result = trySync(fn);
+
+    if (!isTryError(result)) {
+      return result;
+    }
+
+    lastError = result;
+
+    if (attempt < attempts && shouldRetry(result, attempt)) {
+      if (delay > 0) {
+        // Note: Synchronous delay is not recommended for production
+        // Consider using async version for real delays
+        const start = Date.now();
+        while (Date.now() - start < delay) {
+          // Busy wait
+        }
+      }
+      continue;
+    }
+
+    break;
+  }
+
+  return lastError || fromThrown("Retry failed");
+}
+
+/**
+ * Circuit breaker pattern for synchronous operations
+ *
+ * @example
+ * ```typescript
+ * const breaker = createCircuitBreaker({
+ *   failureThreshold: 5,
+ *   resetTimeout: 60000
+ * });
+ *
+ * const result = breaker.execute(() => riskyOperation());
+ * ```
+ */
+export class CircuitBreaker {
+  private failures = 0;
+  private lastFailureTime = 0;
+  private state: "closed" | "open" | "half-open" = "closed";
+
+  constructor(
+    private options: {
+      failureThreshold: number;
+      resetTimeout: number;
+      onOpen?: () => void;
+      onClose?: () => void;
+    }
+  ) {}
+
+  execute<T>(fn: () => T): TryResult<T, TryError> {
+    // Check if circuit should be reset
+    if (
+      this.state === "open" &&
+      Date.now() - this.lastFailureTime > this.options.resetTimeout
+    ) {
+      this.state = "half-open";
+    }
+
+    // If circuit is open, fail fast
+    if (this.state === "open") {
+      return fromThrown("Circuit breaker is open");
+    }
+
+    const result = trySync(fn);
+
+    if (isTryError(result)) {
+      this.failures++;
+      this.lastFailureTime = Date.now();
+
+      if (this.failures >= this.options.failureThreshold) {
+        this.state = "open";
+        this.options.onOpen?.();
+      }
+
+      return result;
+    }
+
+    // Success - reset failures
+    if (this.state === "half-open") {
+      this.state = "closed";
+      this.options.onClose?.();
+    }
+    this.failures = 0;
+
+    return result;
+  }
+
+  reset(): void {
+    this.failures = 0;
+    this.state = "closed";
+    this.lastFailureTime = 0;
+  }
+
+  getState(): "closed" | "open" | "half-open" {
+    return this.state;
+  }
+}
+
+/**
+ * Create a circuit breaker instance
+ */
+export function createCircuitBreaker(options: {
+  failureThreshold: number;
+  resetTimeout: number;
+  onOpen?: () => void;
+  onClose?: () => void;
+}): CircuitBreaker {
+  return new CircuitBreaker(options);
+}
+
+/**
+ * Error recovery pattern - try operation with fallback
+ *
+ * @param primary - Primary operation to try
+ * @param fallback - Fallback operation if primary fails
+ * @param shouldFallback - Optional predicate to determine if fallback should be used
+ * @returns Result from primary or fallback operation
+ *
+ * @example
+ * ```typescript
+ * const config = withFallback(
+ *   () => JSON.parse(readFileSync('config.json', 'utf8')),
+ *   () => ({ defaultConfig: true }),
+ *   (error) => error.type === 'SyntaxError'
+ * );
+ * ```
+ */
+export function withFallback<T>(
+  primary: () => T,
+  fallback: () => T,
+  shouldFallback?: (error: TryError) => boolean
+): TryResult<T, TryError> {
+  const primaryResult = trySync(primary);
+
+  if (isTryError(primaryResult)) {
+    if (!shouldFallback || shouldFallback(primaryResult)) {
+      return trySync(fallback);
+    }
+    return primaryResult;
+  }
+
+  return primaryResult;
 }

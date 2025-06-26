@@ -18,7 +18,11 @@ export type ReactErrorType =
   | "EventHandlerError"
   | "FormSubmissionError"
   | "ValidationError"
-  | "AsyncComponentError";
+  | "AsyncComponentError"
+  | "StateUpdateError"
+  | "ABORTED"
+  | "COMPONENT_UNMOUNTED"
+  | "UNEXPECTED_ERROR";
 
 /**
  * Enhanced TryError for React components with component-specific context
@@ -47,6 +51,144 @@ export interface ReactTryError<T extends ReactErrorType = ReactErrorType>
     boundaryName?: string;
     retryCount?: number;
   };
+}
+
+// ============================================================================
+// DISCRIMINATED UNIONS FOR ERROR TYPES
+// ============================================================================
+
+export interface ComponentError extends ReactTryError<"ComponentError"> {
+  type: "ComponentError";
+}
+
+export interface RenderError extends ReactTryError<"RenderError"> {
+  type: "RenderError";
+}
+
+export interface EffectError extends ReactTryError<"EffectError"> {
+  type: "EffectError";
+}
+
+export interface EventHandlerError extends ReactTryError<"EventHandlerError"> {
+  type: "EventHandlerError";
+  event?: string;
+}
+
+export interface FormSubmissionError
+  extends ReactTryError<"FormSubmissionError"> {
+  type: "FormSubmissionError";
+  fieldErrors?: Record<string, string[]>;
+}
+
+export interface ValidationError extends ReactTryError<"ValidationError"> {
+  type: "ValidationError";
+  field?: string;
+  value?: unknown;
+}
+
+export interface AsyncComponentError
+  extends ReactTryError<"AsyncComponentError"> {
+  type: "AsyncComponentError";
+}
+
+export interface StateUpdateError extends ReactTryError<"StateUpdateError"> {
+  type: "StateUpdateError";
+}
+
+export interface AbortedError extends ReactTryError<"ABORTED"> {
+  type: "ABORTED";
+  reason?: "manual_abort" | "unmount" | "timeout";
+}
+
+export interface ComponentUnmountedError
+  extends ReactTryError<"COMPONENT_UNMOUNTED"> {
+  type: "COMPONENT_UNMOUNTED";
+}
+
+export interface UnexpectedError extends ReactTryError<"UNEXPECTED_ERROR"> {
+  type: "UNEXPECTED_ERROR";
+}
+
+/**
+ * Union type of all React-specific errors
+ */
+export type ReactError =
+  | ComponentError
+  | RenderError
+  | EffectError
+  | EventHandlerError
+  | FormSubmissionError
+  | ValidationError
+  | AsyncComponentError
+  | StateUpdateError
+  | AbortedError
+  | ComponentUnmountedError
+  | UnexpectedError;
+
+// ============================================================================
+// TYPE PREDICATES
+// ============================================================================
+
+export function isReactTryError(error: unknown): error is ReactTryError {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    "type" in error &&
+    "message" in error &&
+    "timestamp" in error
+  );
+}
+
+export function isComponentError(error: unknown): error is ComponentError {
+  return isReactTryError(error) && error.type === "ComponentError";
+}
+
+export function isRenderError(error: unknown): error is RenderError {
+  return isReactTryError(error) && error.type === "RenderError";
+}
+
+export function isEffectError(error: unknown): error is EffectError {
+  return isReactTryError(error) && error.type === "EffectError";
+}
+
+export function isEventHandlerError(
+  error: unknown
+): error is EventHandlerError {
+  return isReactTryError(error) && error.type === "EventHandlerError";
+}
+
+export function isFormSubmissionError(
+  error: unknown
+): error is FormSubmissionError {
+  return isReactTryError(error) && error.type === "FormSubmissionError";
+}
+
+export function isValidationError(error: unknown): error is ValidationError {
+  return isReactTryError(error) && error.type === "ValidationError";
+}
+
+export function isAsyncComponentError(
+  error: unknown
+): error is AsyncComponentError {
+  return isReactTryError(error) && error.type === "AsyncComponentError";
+}
+
+export function isStateUpdateError(error: unknown): error is StateUpdateError {
+  return isReactTryError(error) && error.type === "StateUpdateError";
+}
+
+export function isAbortedError(error: unknown): error is AbortedError {
+  return isReactTryError(error) && error.type === "ABORTED";
+}
+
+export function isComponentUnmountedError(
+  error: unknown
+): error is ComponentUnmountedError {
+  return isReactTryError(error) && error.type === "COMPONENT_UNMOUNTED";
+}
+
+export function isUnexpectedError(error: unknown): error is UnexpectedError {
+  return isReactTryError(error) && error.type === "UNEXPECTED_ERROR";
 }
 
 // ============================================================================
@@ -179,7 +321,7 @@ export interface TryState<T> {
   /**
    * Whether the operation has been executed at least once
    */
-  isExecuted: boolean;
+  isExecuted?: boolean;
 }
 
 /**
@@ -376,7 +518,7 @@ export interface ErrorBoundaryState {
   /**
    * Unique key for forcing re-render on retry
    */
-  retryKey: number;
+  retryKey?: number;
 }
 
 // ============================================================================
@@ -466,4 +608,87 @@ export interface FormTryHookReturn<T> extends TryHookReturn<T> {
    * Get field errors
    */
   getFieldErrors: (field: string) => string[];
+}
+
+// ============================================================================
+// COMPONENT PROP TYPES
+// ============================================================================
+
+/**
+ * Props for components that handle errors
+ */
+export interface WithErrorHandling<P = {}> {
+  /**
+   * Error handler
+   */
+  onError?: (error: TryError) => void;
+
+  /**
+   * Loading state
+   */
+  isLoading?: boolean;
+
+  /**
+   * Error state
+   */
+  error?: TryError | null;
+}
+
+/**
+ * Props for form components
+ */
+export interface FormComponentProps<T> extends WithErrorHandling {
+  /**
+   * Form submission handler
+   */
+  onSubmit: (data: T) => Promise<void> | void;
+
+  /**
+   * Initial form values
+   */
+  initialValues?: Partial<T>;
+
+  /**
+   * Validation schema or function
+   */
+  validate?: (values: T) => Record<string, string> | undefined;
+
+  /**
+   * Whether form is submitting
+   */
+  isSubmitting?: boolean;
+}
+
+// ============================================================================
+// HELPER TYPES
+// ============================================================================
+
+/**
+ * Type for async functions that can be aborted
+ */
+export type AbortableAsyncFn<T> = (signal: AbortSignal) => Promise<T>;
+
+/**
+ * Type for mutation functions
+ */
+export type MutationFn<TVariables, TData> = (
+  variables: TVariables,
+  signal: AbortSignal
+) => Promise<TData>;
+
+/**
+ * Type-safe error factory for React errors
+ */
+export function createReactError<T extends ReactErrorType>(
+  type: T,
+  message: string,
+  context?: Record<string, unknown>
+): ReactTryError<T> {
+  return {
+    type,
+    message,
+    timestamp: Date.now(),
+    source: "react",
+    context,
+  } as ReactTryError<T>;
 }

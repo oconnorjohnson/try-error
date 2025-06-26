@@ -3,6 +3,7 @@
 
 import React, { Component, ReactNode, ErrorInfo } from "react";
 import { isTryError, TryError, createError } from "try-error";
+import { ErrorProvider, ErrorContextValue } from "../context/ErrorContext";
 
 // Props for the TryErrorBoundary component
 export interface TryErrorBoundaryProps {
@@ -72,6 +73,7 @@ export class TryErrorBoundary extends Component<
 > {
   private retryTimeoutId: ReturnType<typeof setTimeout> | null = null;
   private errorLogMap = new WeakMap<Error, boolean>();
+  private isRetrying = false;
 
   constructor(props: TryErrorBoundaryProps) {
     super(props);
@@ -171,6 +173,8 @@ export class TryErrorBoundary extends Component<
       return;
     }
 
+    this.isRetrying = true;
+
     // Calculate delay based on retry strategy
     let delay = 0;
     if (retryStrategy?.delay) {
@@ -191,6 +195,7 @@ export class TryErrorBoundary extends Component<
   };
 
   private performRetry = () => {
+    this.isRetrying = false;
     this.setState((prevState) => ({
       hasError: false,
       error: null,
@@ -199,32 +204,54 @@ export class TryErrorBoundary extends Component<
     }));
   };
 
+  private clearError = () => {
+    this.setState({
+      hasError: false,
+      error: null,
+      errorInfo: null,
+      retryCount: 0,
+    });
+  };
+
   render() {
     if (this.state.hasError && this.state.error) {
-      // Use custom fallback if provided
-      if (this.props.fallback) {
-        return this.props.fallback(
-          this.state.error,
-          this.state.errorInfo,
-          this.handleRetry
-        );
-      }
+      const errorContextValue: ErrorContextValue = {
+        error: this.state.error,
+        errorInfo: this.state.errorInfo,
+        retry: this.handleRetry,
+        clearError: this.clearError,
+        retryCount: this.state.retryCount,
+        isRetrying: this.isRetrying,
+      };
 
-      // Default fallback UI
-      return (
-        <DefaultErrorFallback
-          error={this.state.error}
-          errorInfo={this.state.errorInfo}
-          onRetry={
-            this.props.showRetry !== false ? this.handleRetry : undefined
-          }
-          errorMessage={this.props.errorMessage}
-          showErrorDetails={this.props.showErrorDetails}
-          className={this.props.className}
-          retryCount={this.state.retryCount}
-          maxRetries={this.props.retryStrategy?.maxRetries ?? 3}
-        />
+      const errorUI = (
+        <>
+          {/* Use custom fallback if provided */}
+          {this.props.fallback ? (
+            this.props.fallback(
+              this.state.error,
+              this.state.errorInfo,
+              this.handleRetry
+            )
+          ) : (
+            <DefaultErrorFallback
+              error={this.state.error}
+              errorInfo={this.state.errorInfo}
+              onRetry={
+                this.props.showRetry !== false ? this.handleRetry : undefined
+              }
+              errorMessage={this.props.errorMessage}
+              showErrorDetails={this.props.showErrorDetails}
+              className={this.props.className}
+              retryCount={this.state.retryCount}
+              maxRetries={this.props.retryStrategy?.maxRetries ?? 3}
+            />
+          )}
+        </>
       );
+
+      // Wrap in ErrorProvider to make error context available to children
+      return <ErrorProvider value={errorContextValue}>{errorUI}</ErrorProvider>;
     }
 
     return this.props.children;

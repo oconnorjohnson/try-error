@@ -1,7 +1,7 @@
 // useTry hook for React error handling with AbortController support
 // TODO: Implement React hook for try-error integration
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, useMemo } from "react";
 import {
   tryAsync,
   trySync,
@@ -29,6 +29,14 @@ export interface UseTryOptions {
   deps?: React.DependencyList;
   // Custom abort message
   abortMessage?: string;
+  // Enable caching of results
+  cache?: boolean;
+  // Cache key for deduplication
+  cacheKey?: string;
+  // Debounce delay in ms
+  debounce?: number;
+  // Enable Suspense support
+  suspense?: boolean;
 }
 
 // Return type for useTry hook
@@ -38,6 +46,10 @@ export interface UseTryReturn<T> extends TryState<T> {
   mutate: (data: T) => void;
   abort: () => void;
 }
+
+// Global cache for request deduplication
+const requestCache = new Map<string, { data: any; timestamp: number }>();
+const pendingRequests = new Map<string, Promise<any>>();
 
 /**
  * React hook for managing try-error async operations with state
@@ -73,6 +85,10 @@ export function useTry<T>(
     resetOnExecute = true,
     deps = [],
     abortMessage = "Operation aborted",
+    cache = false,
+    cacheKey,
+    debounce,
+    suspense = false,
   } = options;
 
   // State management
@@ -93,33 +109,113 @@ export function useTry<T>(
   // AbortController ref for cancelling in-flight requests
   const abortControllerRef = useRef<AbortController | null>(null);
 
+  // Debounce timeout ref
+  const debounceTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Cleanup old abort controllers
+  const cleanupAbortControllers = useRef(new Set<AbortController>());
+
+  // Suspense promise for concurrent mode
+  const suspensePromiseRef = useRef<Promise<T> | null>(null);
+
   // Cleanup on unmount
   useEffect(() => {
     return () => {
       isMountedRef.current = false;
       // Abort any in-flight requests
       abortControllerRef.current?.abort();
+      // Clear any pending debounce
+      if (debounceTimeoutRef.current) {
+        clearTimeout(debounceTimeoutRef.current);
+      }
+      // Cleanup all abort controllers
+      cleanupAbortControllers.current.forEach((controller) =>
+        controller.abort()
+      );
+      cleanupAbortControllers.current.clear();
     };
   }, []);
 
   // Abort function to cancel current operation
   const abort = useCallback(() => {
     abortControllerRef.current?.abort();
+    if (debounceTimeoutRef.current) {
+      clearTimeout(debounceTimeoutRef.current);
+      debounceTimeoutRef.current = null;
+    }
   }, []);
 
   // Execute the async function
   const execute = useCallback(async () => {
+    // Clear any pending debounce
+    if (debounceTimeoutRef.current) {
+      clearTimeout(debounceTimeoutRef.current);
+      debounceTimeoutRef.current = null;
+    }
+
+    // Handle debouncing
+    if (debounce && debounce > 0) {
+      return new Promise<void>((resolve) => {
+        debounceTimeoutRef.current = setTimeout(() => {
+          executeInternal().then(resolve);
+        }, debounce);
+      });
+    }
+
+    return executeInternal();
+  }, [asyncFn, resetOnExecute, abortMessage, cache, cacheKey, debounce]);
+
+  const executeInternal = useCallback(async () => {
     if (!isMountedRef.current) return;
 
+    // Check cache first
+    if (cache && cacheKey) {
+      const cached = requestCache.get(cacheKey);
+      if (cached && Date.now() - cached.timestamp < 5 * 60 * 1000) {
+        // 5 min cache
+        setState({
+          data: cached.data,
+          error: null,
+          isLoading: false,
+          isSuccess: true,
+          isError: false,
+        });
+        return;
+      }
+
+      // Check if there's already a pending request for this key
+      const pending = pendingRequests.get(cacheKey);
+      if (pending) {
+        try {
+          const result = await pending;
+          if (isMountedRef.current) {
+            setState({
+              data: result,
+              error: null,
+              isLoading: false,
+              isSuccess: true,
+              isError: false,
+            });
+          }
+          return;
+        } catch (error) {
+          // Continue with new request if pending one failed
+        }
+      }
+    }
+
+    // Increment execution ID to handle race conditions
+    const currentExecutionId = ++executionIdRef.current;
+
     // Abort any previous request
-    abortControllerRef.current?.abort();
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+      cleanupAbortControllers.current.add(abortControllerRef.current);
+    }
 
     // Create new AbortController for this execution
     const abortController = new AbortController();
     abortControllerRef.current = abortController;
-
-    // Increment execution ID to handle race conditions
-    const currentExecutionId = ++executionIdRef.current;
 
     // Reset state if requested
     if (resetOnExecute) {
@@ -135,7 +231,25 @@ export function useTry<T>(
     }
 
     try {
-      const result = await tryAsync(() => asyncFn(abortController.signal));
+      // Create promise for the operation
+      const promise = tryAsync(() => asyncFn(abortController.signal));
+
+      // Store in pending requests if caching
+      if (cache && cacheKey) {
+        pendingRequests.set(cacheKey, promise);
+      }
+
+      // Handle Suspense
+      if (suspense) {
+        suspensePromiseRef.current = promise as Promise<T>;
+      }
+
+      const result = await promise;
+
+      // Clean up pending request
+      if (cache && cacheKey) {
+        pendingRequests.delete(cacheKey);
+      }
 
       // Check if this is still the latest execution and component is mounted
       if (
@@ -174,6 +288,14 @@ export function useTry<T>(
           });
         }
       } else {
+        // Cache successful result
+        if (cache && cacheKey) {
+          requestCache.set(cacheKey, {
+            data: result,
+            timestamp: Date.now(),
+          });
+        }
+
         setState({
           data: result,
           error: null,
@@ -183,6 +305,11 @@ export function useTry<T>(
         });
       }
     } catch (error) {
+      // Clean up pending request
+      if (cache && cacheKey) {
+        pendingRequests.delete(cacheKey);
+      }
+
       // This shouldn't happen with tryAsync, but just in case
       if (
         !isMountedRef.current ||
@@ -204,8 +331,16 @@ export function useTry<T>(
         isSuccess: false,
         isError: true,
       });
+    } finally {
+      // Clean up old abort controllers
+      if (cleanupAbortControllers.current.size > 10) {
+        const controllers = Array.from(cleanupAbortControllers.current);
+        controllers.slice(0, 5).forEach((controller) => {
+          cleanupAbortControllers.current.delete(controller);
+        });
+      }
     }
-  }, [asyncFn, resetOnExecute, abortMessage]);
+  }, [asyncFn, resetOnExecute, abortMessage, cache, cacheKey]);
 
   // Reset state to initial values
   const reset = useCallback(() => {
@@ -222,20 +357,38 @@ export function useTry<T>(
   }, []);
 
   // Manually set data (useful for optimistic updates)
-  const mutate = useCallback((data: T) => {
-    setState({
-      data,
-      error: null,
-      isLoading: false,
-      isSuccess: true,
-      isError: false,
-    });
-  }, []);
+  const mutate = useCallback(
+    (data: T) => {
+      // Update cache if enabled
+      if (cache && cacheKey) {
+        requestCache.set(cacheKey, {
+          data,
+          timestamp: Date.now(),
+        });
+      }
+
+      setState({
+        data,
+        error: null,
+        isLoading: false,
+        isSuccess: true,
+        isError: false,
+      });
+    },
+    [cache, cacheKey]
+  );
+
+  // Memoized execute function that includes deps
+  const memoizedExecute = useMemo(
+    () => execute,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [execute, ...deps]
+  );
 
   // Execute immediately on mount or when deps change
   useEffect(() => {
     if (immediate) {
-      execute();
+      memoizedExecute();
     }
 
     // Cleanup function to abort request if deps change
@@ -244,8 +397,12 @@ export function useTry<T>(
         abortControllerRef.current?.abort();
       }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [immediate, ...deps]); // Intentionally omit execute to avoid infinite loop
+  }, [immediate, memoizedExecute]);
+
+  // Support for Suspense
+  if (suspense && state.isLoading && suspensePromiseRef.current) {
+    throw suspensePromiseRef.current;
+  }
 
   return {
     ...state,

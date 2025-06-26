@@ -12,6 +12,10 @@ export interface UseTryMutationOptions<T> {
   onError?: (error: TryError) => void;
   onSettled?: () => void;
   abortMessage?: string;
+  // Optimistic update support
+  optimisticData?: T;
+  // Rollback function for failed optimistic updates
+  rollbackOnError?: (error: TryError) => void;
 }
 
 export interface UseTryMutationResult<T, TVariables> {
@@ -20,10 +24,17 @@ export interface UseTryMutationResult<T, TVariables> {
   isLoading: boolean;
   isSuccess: boolean;
   isError: boolean;
-  mutate: (variables: TVariables) => Promise<void>;
+  mutate: (variables: TVariables) => Promise<TryResult<T, TryError>>;
   mutateAsync: (variables: TVariables) => Promise<TryResult<T, TryError>>;
   reset: () => void;
   abort: () => void;
+}
+
+// Mutation queue for managing multiple mutations
+interface QueuedMutation<TVariables> {
+  variables: TVariables;
+  resolve: (value: any) => void;
+  reject: (error: any) => void;
 }
 
 /**
@@ -78,6 +89,8 @@ export function useTryMutation<T, TVariables = void>(
     onError,
     onSettled,
     abortMessage = "Mutation aborted",
+    optimisticData,
+    rollbackOnError,
   } = options;
 
   // AbortController ref for cancelling in-flight mutations
@@ -86,11 +99,28 @@ export function useTryMutation<T, TVariables = void>(
   // Track if component is mounted
   const isMountedRef = useRef(true);
 
+  // Mutation queue
+  const mutationQueueRef = useRef<QueuedMutation<TVariables>[]>([]);
+  const isProcessingQueueRef = useRef(false);
+
+  // Previous data for rollback
+  const previousDataRef = useRef<T | null>(null);
+
   // Cleanup on unmount
   useEffect(() => {
     return () => {
       isMountedRef.current = false;
       abortControllerRef.current?.abort();
+      // Clear the queue
+      mutationQueueRef.current.forEach(({ reject }) => {
+        reject(
+          createError({
+            type: "COMPONENT_UNMOUNTED",
+            message: "Component unmounted before mutation could complete",
+          })
+        );
+      });
+      mutationQueueRef.current = [];
     };
   }, []);
 
@@ -103,9 +133,32 @@ export function useTryMutation<T, TVariables = void>(
     setData(null);
     setError(null);
     setIsLoading(false);
+    previousDataRef.current = null;
   }, []);
 
-  const mutateAsync = useCallback(
+  const processMutationQueue = useCallback(async () => {
+    if (isProcessingQueueRef.current || mutationQueueRef.current.length === 0) {
+      return;
+    }
+
+    isProcessingQueueRef.current = true;
+
+    while (mutationQueueRef.current.length > 0 && isMountedRef.current) {
+      const mutation = mutationQueueRef.current.shift();
+      if (!mutation) continue;
+
+      try {
+        const result = await mutateAsyncInternal(mutation.variables);
+        mutation.resolve(result);
+      } catch (error) {
+        mutation.reject(error);
+      }
+    }
+
+    isProcessingQueueRef.current = false;
+  }, []);
+
+  const mutateAsyncInternal = useCallback(
     async (variables: TVariables): Promise<TryResult<T, TryError>> => {
       // Abort any previous mutation
       abortControllerRef.current?.abort();
@@ -121,6 +174,14 @@ export function useTryMutation<T, TVariables = void>(
         });
       }
 
+      // Store previous data for potential rollback
+      previousDataRef.current = data;
+
+      // Apply optimistic update if provided
+      if (optimisticData !== undefined && isMountedRef.current) {
+        setData(optimisticData);
+      }
+
       setIsLoading(true);
       setError(null);
 
@@ -131,6 +192,14 @@ export function useTryMutation<T, TVariables = void>(
 
         // Check if component is still mounted and request wasn't aborted
         if (!isMountedRef.current || abortController.signal.aborted) {
+          // Rollback optimistic update if needed
+          if (
+            optimisticData !== undefined &&
+            previousDataRef.current !== undefined
+          ) {
+            setData(previousDataRef.current);
+          }
+
           return createError({
             type: "ABORTED",
             message: abortMessage,
@@ -143,23 +212,13 @@ export function useTryMutation<T, TVariables = void>(
         }
 
         if (isTryError(result)) {
-          // Check if this was an abort error
+          // Rollback optimistic update on error
           if (
-            result.cause instanceof Error &&
-            result.cause.name === "AbortError"
+            optimisticData !== undefined &&
+            previousDataRef.current !== undefined
           ) {
-            const abortError = createError({
-              type: "ABORTED",
-              message: abortMessage,
-              context: { reason: "manual_abort" },
-              cause: result.cause,
-            });
-            setError(abortError);
-            setData(null);
-            onError?.(abortError);
-            setIsLoading(false);
-            onSettled?.();
-            return abortError;
+            setData(previousDataRef.current);
+            rollbackOnError?.(result);
           }
 
           setError(result);
@@ -171,8 +230,10 @@ export function useTryMutation<T, TVariables = void>(
           onSuccess?.(result);
         }
 
-        setIsLoading(false);
-        onSettled?.();
+        if (isMountedRef.current) {
+          setIsLoading(false);
+          onSettled?.();
+        }
 
         return result;
       } catch (error) {
@@ -182,9 +243,19 @@ export function useTryMutation<T, TVariables = void>(
             type: "ABORTED",
             message: abortMessage,
             context: { reason: "manual_abort" },
+            cause: error,
           });
 
           if (isMountedRef.current) {
+            // Rollback optimistic update
+            if (
+              optimisticData !== undefined &&
+              previousDataRef.current !== undefined
+            ) {
+              setData(previousDataRef.current);
+              rollbackOnError?.(abortError);
+            }
+
             setError(abortError);
             setIsLoading(false);
             onError?.(abortError);
@@ -202,6 +273,15 @@ export function useTryMutation<T, TVariables = void>(
         });
 
         if (isMountedRef.current && !abortController.signal.aborted) {
+          // Rollback optimistic update
+          if (
+            optimisticData !== undefined &&
+            previousDataRef.current !== undefined
+          ) {
+            setData(previousDataRef.current);
+            rollbackOnError?.(unexpectedError);
+          }
+
           setError(unexpectedError);
           setIsLoading(false);
           onError?.(unexpectedError);
@@ -211,12 +291,40 @@ export function useTryMutation<T, TVariables = void>(
         return unexpectedError;
       }
     },
-    [mutationFn, onSuccess, onError, onSettled, abortMessage]
+    [
+      mutationFn,
+      onSuccess,
+      onError,
+      onSettled,
+      abortMessage,
+      data,
+      optimisticData,
+      rollbackOnError,
+    ]
+  );
+
+  const mutateAsync = useCallback(
+    async (variables: TVariables): Promise<TryResult<T, TryError>> => {
+      // Add to queue if already processing
+      if (isProcessingQueueRef.current) {
+        return new Promise((resolve, reject) => {
+          mutationQueueRef.current.push({ variables, resolve, reject });
+        });
+      }
+
+      const result = await mutateAsyncInternal(variables);
+
+      // Process any queued mutations
+      processMutationQueue();
+
+      return result;
+    },
+    [mutateAsyncInternal, processMutationQueue]
   );
 
   const mutate = useCallback(
-    async (variables: TVariables) => {
-      await mutateAsync(variables);
+    async (variables: TVariables): Promise<TryResult<T, TryError>> => {
+      return mutateAsync(variables);
     },
     [mutateAsync]
   );
@@ -257,10 +365,10 @@ export function useFormMutation<T>(
   const mutation = useTryMutation(submitFn, options);
 
   const submitForm = useCallback(
-    (event: React.FormEvent<HTMLFormElement>) => {
+    async (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
       const formData = new FormData(event.currentTarget);
-      mutation.mutate(formData);
+      return mutation.mutate(formData);
     },
     [mutation.mutate]
   );

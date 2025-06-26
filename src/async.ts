@@ -30,6 +30,11 @@ export interface TryAsyncOptions {
    * Timeout in milliseconds (optional)
    */
   timeout?: number;
+
+  /**
+   * AbortSignal for cancellation (optional)
+   */
+  signal?: AbortSignal;
 }
 
 /**
@@ -61,20 +66,41 @@ export async function tryAsync<T>(
   try {
     let promise = fn();
 
-    // Add timeout if specified
-    if (options?.timeout) {
+    // Add cancellation support
+    if (options?.signal) {
       promise = Promise.race([
         promise,
-        new Promise<never>((_, reject) =>
-          setTimeout(
-            () =>
-              reject(
-                new Error(`Operation timed out after ${options.timeout}ms`)
-              ),
-            options.timeout
-          )
-        ),
+        new Promise<never>((_, reject) => {
+          if (options.signal!.aborted) {
+            reject(new Error("Operation was aborted"));
+          } else {
+            options.signal!.addEventListener("abort", () => {
+              reject(new Error("Operation was aborted"));
+            });
+          }
+        }),
       ]);
+    }
+
+    // Add timeout if specified
+    if (options?.timeout) {
+      let timeoutId: NodeJS.Timeout | number;
+      const timeoutPromise = new Promise<never>((_, reject) => {
+        timeoutId = setTimeout(
+          () =>
+            reject(new Error(`Operation timed out after ${options.timeout}ms`)),
+          options.timeout
+        );
+      });
+
+      try {
+        const result = await Promise.race([promise, timeoutPromise]);
+        clearTimeout(timeoutId!);
+        return result;
+      } catch (error) {
+        clearTimeout(timeoutId!);
+        throw error;
+      }
     }
 
     const result = await promise;
@@ -404,8 +430,10 @@ export async function withTimeout<T, E extends TryError>(
   timeoutMs: number,
   timeoutMessage?: string
 ): Promise<TryResult<T, E | TryError>> {
-  const timeoutPromise = new Promise<TryError>((resolve) =>
-    setTimeout(() => {
+  let timeoutId: NodeJS.Timeout | number;
+
+  const timeoutPromise = new Promise<TryError>((resolve) => {
+    timeoutId = setTimeout(() => {
       resolve(
         fromThrown(
           new Error(
@@ -413,10 +441,17 @@ export async function withTimeout<T, E extends TryError>(
           )
         )
       );
-    }, timeoutMs)
-  );
+    }, timeoutMs);
+  });
 
-  return Promise.race([resultPromise, timeoutPromise]);
+  try {
+    const result = await Promise.race([resultPromise, timeoutPromise]);
+    clearTimeout(timeoutId!);
+    return result;
+  } catch (error) {
+    clearTimeout(timeoutId!);
+    throw error;
+  }
 }
 
 /**
@@ -465,10 +500,11 @@ export async function retry<T>(
 
       // Check if we should retry this error
       if (attempt < attempts && shouldRetry(result, attempt)) {
-        const delay = Math.min(
-          baseDelay * Math.pow(backoffFactor, attempt - 1),
-          maxDelay
-        );
+        // Calculate delay with overflow protection
+        const exponentialDelay =
+          baseDelay * Math.pow(backoffFactor, attempt - 1);
+        const delay = Math.min(exponentialDelay, maxDelay);
+
         await new Promise((resolve) => setTimeout(resolve, delay));
         continue;
       }
@@ -478,10 +514,10 @@ export async function retry<T>(
       lastError = fromThrown(error);
 
       if (attempt < attempts && shouldRetry(lastError, attempt)) {
-        const delay = Math.min(
-          baseDelay * Math.pow(backoffFactor, attempt - 1),
-          maxDelay
-        );
+        const exponentialDelay =
+          baseDelay * Math.pow(backoffFactor, attempt - 1);
+        const delay = Math.min(exponentialDelay, maxDelay);
+
         await new Promise((resolve) => setTimeout(resolve, delay));
         continue;
       }
@@ -491,4 +527,241 @@ export async function retry<T>(
   }
 
   return lastError || fromThrown("Retry failed");
+}
+
+/**
+ * Progress tracking for long-running async operations
+ */
+export interface ProgressTracker<T> {
+  promise: Promise<TryResult<T, TryError>>;
+  getProgress: () => number;
+  cancel: () => void;
+}
+
+/**
+ * Create an async operation with progress tracking
+ *
+ * @param fn - Async function that receives a progress callback
+ * @param options - Optional configuration
+ * @returns ProgressTracker with promise and progress methods
+ *
+ * @example
+ * ```typescript
+ * const tracker = withProgress(async (setProgress) => {
+ *   setProgress(0);
+ *   await processChunk1();
+ *   setProgress(33);
+ *   await processChunk2();
+ *   setProgress(66);
+ *   await processChunk3();
+ *   setProgress(100);
+ *   return result;
+ * });
+ *
+ * // Check progress
+ * const interval = setInterval(() => {
+ *   console.log(`Progress: ${tracker.getProgress()}%`);
+ * }, 1000);
+ *
+ * const result = await tracker.promise;
+ * clearInterval(interval);
+ * ```
+ */
+export function withProgress<T>(
+  fn: (setProgress: (percent: number) => void) => Promise<T>,
+  options?: TryAsyncOptions
+): ProgressTracker<T> {
+  let progress = 0;
+  let cancelled = false;
+  const abortController = new AbortController();
+
+  const setProgress = (percent: number) => {
+    progress = Math.max(0, Math.min(100, percent));
+  };
+
+  const promise = tryAsync(
+    async () => {
+      if (cancelled) {
+        throw new Error("Operation was cancelled");
+      }
+      return await fn(setProgress);
+    },
+    {
+      ...options,
+      signal: options?.signal || abortController.signal,
+    }
+  );
+
+  return {
+    promise,
+    getProgress: () => progress,
+    cancel: () => {
+      cancelled = true;
+      abortController.abort();
+    },
+  };
+}
+
+/**
+ * Rate limiter for async operations
+ */
+export class RateLimiter {
+  private queue: Array<() => void> = [];
+  private activeCount = 0;
+
+  constructor(
+    private options: {
+      maxConcurrent: number;
+      minDelay?: number;
+    }
+  ) {}
+
+  /**
+   * Execute an async operation with rate limiting
+   */
+  async execute<T>(fn: () => Promise<T>): Promise<TryResult<T, TryError>> {
+    // Wait for a slot to become available
+    await new Promise<void>((resolve) => {
+      const tryExecute = () => {
+        if (this.activeCount < this.options.maxConcurrent) {
+          this.activeCount++;
+          resolve();
+        } else {
+          this.queue.push(tryExecute);
+        }
+      };
+      tryExecute();
+    });
+
+    try {
+      const startTime = Date.now();
+      const result = await tryAsync(fn);
+
+      // Ensure minimum delay between operations
+      if (this.options.minDelay) {
+        const elapsed = Date.now() - startTime;
+        const remainingDelay = this.options.minDelay - elapsed;
+        if (remainingDelay > 0) {
+          await new Promise((resolve) => setTimeout(resolve, remainingDelay));
+        }
+      }
+
+      return result;
+    } finally {
+      this.activeCount--;
+      const next = this.queue.shift();
+      if (next) {
+        next();
+      }
+    }
+  }
+
+  /**
+   * Get current queue size
+   */
+  getQueueSize(): number {
+    return this.queue.length;
+  }
+
+  /**
+   * Get number of active operations
+   */
+  getActiveCount(): number {
+    return this.activeCount;
+  }
+}
+
+/**
+ * Create a rate limiter instance
+ */
+export function createRateLimiter(options: {
+  maxConcurrent: number;
+  minDelay?: number;
+}): RateLimiter {
+  return new RateLimiter(options);
+}
+
+/**
+ * Queue for managing async operations
+ */
+export class AsyncQueue<T> {
+  private queue: Array<{
+    fn: () => Promise<T>;
+    resolve: (value: TryResult<T, TryError>) => void;
+    reject: (error: any) => void;
+  }> = [];
+  private processing = false;
+
+  constructor(
+    private options: {
+      concurrency?: number;
+      onError?: (error: TryError) => void;
+    } = {}
+  ) {}
+
+  /**
+   * Add an operation to the queue
+   */
+  async add(fn: () => Promise<T>): Promise<TryResult<T, TryError>> {
+    return new Promise((resolve, reject) => {
+      this.queue.push({ fn, resolve, reject });
+      this.process();
+    });
+  }
+
+  /**
+   * Process queued operations
+   */
+  private async process(): Promise<void> {
+    if (this.processing || this.queue.length === 0) {
+      return;
+    }
+
+    this.processing = true;
+    const concurrency = this.options.concurrency || 1;
+
+    while (this.queue.length > 0) {
+      const batch = this.queue.splice(0, concurrency);
+
+      await Promise.all(
+        batch.map(async ({ fn, resolve, reject }) => {
+          try {
+            const result = await tryAsync(fn);
+            if (isTryError(result) && this.options.onError) {
+              this.options.onError(result);
+            }
+            resolve(result);
+          } catch (error) {
+            reject(error);
+          }
+        })
+      );
+    }
+
+    this.processing = false;
+  }
+
+  /**
+   * Get current queue size
+   */
+  getSize(): number {
+    return this.queue.length;
+  }
+
+  /**
+   * Clear the queue
+   */
+  clear(): void {
+    this.queue = [];
+  }
+}
+
+/**
+ * Create an async queue instance
+ */
+export function createAsyncQueue<T>(options?: {
+  concurrency?: number;
+  onError?: (error: TryError) => void;
+}): AsyncQueue<T> {
+  return new AsyncQueue<T>(options);
 }

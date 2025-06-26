@@ -13,6 +13,9 @@ import { TryError } from "./types";
  */
 let globalConfig: TryErrorConfig | null = null;
 
+// Preset cache to avoid recreation
+const presetCache = new Map<string, TryErrorConfig>();
+
 /**
  * Configuration options for try-error behavior
  */
@@ -202,236 +205,109 @@ export interface PerformanceConfig {
 }
 
 /**
- * Environment-specific configuration presets
+ * Deep merge two configuration objects
  */
-export const ConfigPresets = {
+function deepMerge<T extends Record<string, any>>(
+  target: T,
+  source: Partial<T>
+): T {
+  const result = { ...target };
+
+  for (const key in source) {
+    if (source.hasOwnProperty(key)) {
+      const sourceValue = source[key];
+      const targetValue = result[key];
+
+      if (
+        sourceValue !== null &&
+        typeof sourceValue === "object" &&
+        !Array.isArray(sourceValue) &&
+        targetValue !== null &&
+        typeof targetValue === "object" &&
+        !Array.isArray(targetValue)
+      ) {
+        result[key] = deepMerge(targetValue, sourceValue);
+      } else {
+        result[key] = sourceValue as any;
+      }
+    }
+  }
+
+  return result;
+}
+
+/**
+ * Validate configuration object
+ */
+function validateConfig(config: unknown): config is TryErrorConfig {
+  if (typeof config !== "object" || config === null) {
+    return false;
+  }
+
+  const cfg = config as any;
+
+  // Validate boolean fields
+  const booleanFields = [
+    "captureStackTrace",
+    "includeSource",
+    "minimalErrors",
+    "skipTimestamp",
+    "skipContext",
+    "developmentMode",
+    "runtimeDetection",
+  ];
+
+  for (const field of booleanFields) {
+    if (field in cfg && typeof cfg[field] !== "boolean") {
+      console.warn(`Configuration field '${field}' must be a boolean`);
+      return false;
+    }
+  }
+
+  // Validate number fields
+  if ("stackTraceLimit" in cfg && typeof cfg.stackTraceLimit !== "number") {
+    console.warn("Configuration field 'stackTraceLimit' must be a number");
+    return false;
+  }
+
+  // Validate string fields
+  if ("defaultErrorType" in cfg && typeof cfg.defaultErrorType !== "string") {
+    console.warn("Configuration field 'defaultErrorType' must be a string");
+    return false;
+  }
+
+  // Validate function fields
+  const functionFields = ["serializer", "onError"];
+  for (const field of functionFields) {
+    if (field in cfg && typeof cfg[field] !== "function") {
+      console.warn(`Configuration field '${field}' must be a function`);
+      return false;
+    }
+  }
+
+  return true;
+}
+
+/**
+ * Environment-specific configuration presets
+ * Made immutable by using Object.freeze
+ */
+export const ConfigPresets = Object.freeze({
   /**
    * Development configuration with full debugging features
    */
-  development: (): TryErrorConfig => ({
-    captureStackTrace: true,
-    stackTraceLimit: 50,
-    includeSource: true,
-    developmentMode: true,
-    onError: (error) => {
-      if (typeof console !== "undefined") {
-        console.group(`🚨 TryError: ${error.type}`);
-        console.error("Message:", error.message);
-        console.error("Source:", error.source);
-        console.error("Context:", error.context);
-        if (error.stack) console.error("Stack:", error.stack);
-        console.groupEnd();
-      }
-      return error;
-    },
-  }),
+  development: (): TryErrorConfig => {
+    const cached = presetCache.get("development");
+    if (cached) return cached;
 
-  /**
-   * Production configuration optimized for performance
-   */
-  production: (): TryErrorConfig => ({
-    captureStackTrace: false,
-    stackTraceLimit: 0,
-    includeSource: true, // Keep source for debugging in logs
-    developmentMode: false,
-    serializer: (error) => ({
-      type: error.type,
-      message: error.message,
-      timestamp: error.timestamp,
-      source: error.source,
-      // Omit sensitive context in serialization
-    }),
-    onError: (error) => {
-      // Production: Send to monitoring, not console
-      // Users should integrate their error service here
-
-      // Example integrations (commented out):
-      // if (typeof window !== 'undefined' && window.Sentry) {
-      //   window.Sentry.captureException(error);
-      // }
-      // if (typeof process !== 'undefined' && global.logger) {
-      //   global.logger.error('Application error', error);
-      // }
-
-      // By default: No console logging in production
-      // This keeps end-user console clean
-      return error;
-    },
-  }),
-
-  /**
-   * Testing configuration with assertion-friendly features
-   */
-  test: (): TryErrorConfig => ({
-    captureStackTrace: true,
-    stackTraceLimit: 10,
-    includeSource: true,
-    developmentMode: true,
-    serializer: (error) => ({
-      type: error.type,
-      message: error.message,
-      context: error.context,
-      source: error.source,
-    }),
-  }),
-
-  /**
-   * High-performance configuration for critical paths
-   */
-  performance: (): TryErrorConfig & { performance: PerformanceConfig } => ({
-    captureStackTrace: false,
-    stackTraceLimit: 0,
-    includeSource: false,
-    developmentMode: false,
-    performance: {
-      errorCreation: {
-        cacheConstructors: true,
-        lazyStackTrace: true,
-        objectPooling: true,
-        poolSize: 100,
-      },
-      contextCapture: {
-        maxContextSize: 1024 * 5, // 5KB
-        deepClone: false,
-        timeout: 50,
-      },
-      memory: {
-        maxErrorHistory: 50,
-        useWeakRefs: true,
-        gcHints: true,
-      },
-    },
-  }),
-
-  /**
-   * Minimal configuration for <50% overhead target
-   */
-  minimal: (): TryErrorConfig => ({
-    captureStackTrace: false,
-    stackTraceLimit: 0,
-    includeSource: false,
-    developmentMode: false,
-    minimalErrors: true,
-    skipTimestamp: true,
-    skipContext: true,
-  }),
-
-  /**
-   * Server production with logging
-   */
-  serverProduction: (): TryErrorConfig => ({
-    captureStackTrace: false,
-    stackTraceLimit: 0,
-    includeSource: true,
-    developmentMode: false,
-    onError: (error) => {
-      // Server: Log to your logging service
-      // This is where you'd integrate with Winston, Pino, etc.
-
-      // Example (implement based on your logger):
-      // logger.error({
-      //   type: error.type,
-      //   message: error.message,
-      //   source: error.source,
-      //   timestamp: error.timestamp,
-      //   context: error.context,
-      // });
-
-      return error;
-    },
-  }),
-
-  /**
-   * Client production with error tracking
-   */
-  clientProduction: (): TryErrorConfig => ({
-    captureStackTrace: false,
-    stackTraceLimit: 0,
-    includeSource: true,
-    developmentMode: false,
-    serializer: (error) => ({
-      // Only send non-sensitive data to tracking services
-      type: error.type,
-      message: error.message,
-      timestamp: error.timestamp,
-      source: error.source,
-      // Omit potentially sensitive context
-    }),
-    onError: (error) => {
-      // Client: Send to error tracking, no console
-
-      // Common integrations (implement as needed):
-      // if (window.Sentry) {
-      //   window.Sentry.captureException(error);
-      // }
-      // if (window.LogRocket) {
-      //   window.LogRocket.captureException(error);
-      // }
-      // if (window.bugsnag) {
-      //   window.bugsnag.notify(error);
-      // }
-
-      // No console output - keeps user console clean
-      return error;
-    },
-  }),
-
-  /**
-   * Edge/Serverless optimized
-   */
-  edge: (): TryErrorConfig => ({
-    captureStackTrace: false,
-    stackTraceLimit: 0,
-    includeSource: false, // Minimize overhead
-    developmentMode: false,
-    minimalErrors: true,
-    skipTimestamp: false, // Keep timestamp for logs
-    skipContext: false, // Keep context for debugging
-    onError: (error) => {
-      // Edge: Use platform-specific logging
-
-      // Cloudflare Workers example:
-      // if (typeof caches !== 'undefined') {
-      //   console.log(JSON.stringify({
-      //     type: error.type,
-      //     message: error.message,
-      //     timestamp: error.timestamp,
-      //   }));
-      // }
-
-      return error;
-    },
-  }),
-
-  /**
-   * Next.js optimized configuration with runtime detection
-   * Automatically applies the correct handler based on where the error occurs
-   */
-  nextjs: (): TryErrorConfig => ({
-    runtimeDetection: true,
-    captureStackTrace: process.env.NODE_ENV !== "production",
-    stackTraceLimit: process.env.NODE_ENV === "production" ? 5 : 20,
-    includeSource: true,
-    developmentMode: process.env.NODE_ENV === "development",
-
-    environmentHandlers: {
-      server: (error) => {
-        // Server-side: Log to console or logging service
-        if (process.env.NODE_ENV === "production") {
-          // Production: Minimal logging
-          console.error(`[Server Error] ${error.type}: ${error.message}`);
-
-          // Example integration with logging service:
-          // logger.error({
-          //   type: error.type,
-          //   message: error.message,
-          //   source: error.source,
-          //   timestamp: error.timestamp,
-          //   context: error.context,
-          // });
-        } else {
-          // Development: Detailed logging
-          console.group(`🚨 [Server] TryError: ${error.type}`);
+    const config = Object.freeze({
+      captureStackTrace: true,
+      stackTraceLimit: 50,
+      includeSource: true,
+      developmentMode: true,
+      onError: (error: TryError) => {
+        if (typeof console !== "undefined") {
+          console.group(`🚨 TryError: ${error.type}`);
           console.error("Message:", error.message);
           console.error("Source:", error.source);
           console.error("Context:", error.context);
@@ -440,43 +316,327 @@ export const ConfigPresets = {
         }
         return error;
       },
+    });
 
-      client: (error) => {
-        // Client-side: Send to error tracking, no console in production
-        if (process.env.NODE_ENV === "production") {
-          // Example integrations:
-          // if (window.Sentry) {
-          //   window.Sentry.captureException(error);
-          // }
-          // if (window.LogRocket) {
-          //   window.LogRocket.captureException(error);
-          // }
-          // No console output in production
-        } else {
-          // Development: Console logging
-          console.group(`🚨 [Client] TryError: ${error.type}`);
-          console.error("Message:", error.message);
-          console.error("Context:", error.context);
-          console.groupEnd();
-        }
+    presetCache.set("development", config);
+    return config;
+  },
+
+  /**
+   * Production configuration optimized for performance
+   */
+  production: (): TryErrorConfig => {
+    const cached = presetCache.get("production");
+    if (cached) return cached;
+
+    const config = Object.freeze({
+      captureStackTrace: false,
+      stackTraceLimit: 0,
+      includeSource: true, // Keep source for debugging in logs
+      developmentMode: false,
+      serializer: (error: TryError) => ({
+        type: error.type,
+        message: error.message,
+        timestamp: error.timestamp,
+        source: error.source,
+        // Omit sensitive context in serialization
+      }),
+      onError: (error: TryError) => {
+        // Production: Send to monitoring, not console
+        // Users should integrate their error service here
+
+        // Example integrations (commented out):
+        // if (typeof window !== 'undefined' && window.Sentry) {
+        //   window.Sentry.captureException(error);
+        // }
+        // if (typeof process !== 'undefined' && global.logger) {
+        //   global.logger.error('Application error', error);
+        // }
+
+        // By default: No console logging in production
+        // This keeps end-user console clean
         return error;
       },
+    });
 
-      edge: (error) => {
-        // Edge runtime: Minimal logging
-        console.log(
-          JSON.stringify({
-            type: error.type,
-            message: error.message,
-            timestamp: error.timestamp,
-            runtime: "edge",
-          })
-        );
+    presetCache.set("production", config);
+    return config;
+  },
+
+  /**
+   * Testing configuration with assertion-friendly features
+   */
+  test: (): TryErrorConfig => {
+    const cached = presetCache.get("test");
+    if (cached) return cached;
+
+    const config = Object.freeze({
+      captureStackTrace: true,
+      stackTraceLimit: 10,
+      includeSource: true,
+      developmentMode: true,
+      serializer: (error: TryError) => ({
+        type: error.type,
+        message: error.message,
+        context: error.context,
+        source: error.source,
+      }),
+    });
+
+    presetCache.set("test", config);
+    return config;
+  },
+
+  /**
+   * High-performance configuration for critical paths
+   */
+  performance: (): TryErrorConfig & { performance: PerformanceConfig } => {
+    const cached = presetCache.get("performance");
+    if (cached) return cached as any;
+
+    const config = Object.freeze({
+      captureStackTrace: false,
+      stackTraceLimit: 0,
+      includeSource: false,
+      developmentMode: false,
+      performance: {
+        errorCreation: {
+          cacheConstructors: true,
+          lazyStackTrace: true,
+          objectPooling: true,
+          poolSize: 100,
+        },
+        contextCapture: {
+          maxContextSize: 1024 * 5, // 5KB
+          deepClone: false,
+          timeout: 50,
+        },
+        memory: {
+          maxErrorHistory: 50,
+          useWeakRefs: true,
+          gcHints: true,
+        },
+      },
+    });
+
+    presetCache.set("performance", config);
+    return config;
+  },
+
+  /**
+   * Minimal configuration for <50% overhead target
+   */
+  minimal: (): TryErrorConfig => {
+    const cached = presetCache.get("minimal");
+    if (cached) return cached;
+
+    const config = Object.freeze({
+      captureStackTrace: false,
+      stackTraceLimit: 0,
+      includeSource: false,
+      developmentMode: false,
+      minimalErrors: true,
+      skipTimestamp: true,
+      skipContext: true,
+    });
+
+    presetCache.set("minimal", config);
+    return config;
+  },
+
+  /**
+   * Server production with logging
+   */
+  serverProduction: (): TryErrorConfig => {
+    const cached = presetCache.get("serverProduction");
+    if (cached) return cached;
+
+    const config = Object.freeze({
+      captureStackTrace: false,
+      stackTraceLimit: 0,
+      includeSource: true,
+      developmentMode: false,
+      onError: (error: TryError) => {
+        // Server: Log to your logging service
+        // This is where you'd integrate with Winston, Pino, etc.
+
+        // Example (implement based on your logger):
+        // logger.error({
+        //   type: error.type,
+        //   message: error.message,
+        //   source: error.source,
+        //   timestamp: error.timestamp,
+        //   context: error.context,
+        // });
+
         return error;
       },
-    },
-  }),
-} as const;
+    });
+
+    presetCache.set("serverProduction", config);
+    return config;
+  },
+
+  /**
+   * Client production with error tracking
+   */
+  clientProduction: (): TryErrorConfig => {
+    const cached = presetCache.get("clientProduction");
+    if (cached) return cached;
+
+    const config = Object.freeze({
+      captureStackTrace: false,
+      stackTraceLimit: 0,
+      includeSource: true,
+      developmentMode: false,
+      serializer: (error: TryError) => ({
+        // Only send non-sensitive data to tracking services
+        type: error.type,
+        message: error.message,
+        timestamp: error.timestamp,
+        source: error.source,
+        // Omit potentially sensitive context
+      }),
+      onError: (error: TryError) => {
+        // Client: Send to error tracking, no console
+
+        // Common integrations (implement as needed):
+        // if (window.Sentry) {
+        //   window.Sentry.captureException(error);
+        // }
+        // if (window.LogRocket) {
+        //   window.LogRocket.captureException(error);
+        // }
+        // if (window.bugsnag) {
+        //   window.bugsnag.notify(error);
+        // }
+
+        // No console output - keeps user console clean
+        return error;
+      },
+    });
+
+    presetCache.set("clientProduction", config);
+    return config;
+  },
+
+  /**
+   * Edge/Serverless optimized
+   */
+  edge: (): TryErrorConfig => {
+    const cached = presetCache.get("edge");
+    if (cached) return cached;
+
+    const config = Object.freeze({
+      captureStackTrace: false,
+      stackTraceLimit: 0,
+      includeSource: false, // Minimize overhead
+      developmentMode: false,
+      minimalErrors: true,
+      skipTimestamp: false, // Keep timestamp for logs
+      skipContext: false, // Keep context for debugging
+      onError: (error: TryError) => {
+        // Edge: Use platform-specific logging
+
+        // Cloudflare Workers example:
+        // if (typeof caches !== 'undefined') {
+        //   console.log(JSON.stringify({
+        //     type: error.type,
+        //     message: error.message,
+        //     timestamp: error.timestamp,
+        //   }));
+        // }
+
+        return error;
+      },
+    });
+
+    presetCache.set("edge", config);
+    return config;
+  },
+
+  /**
+   * Next.js optimized configuration with runtime detection
+   * Automatically applies the correct handler based on where the error occurs
+   */
+  nextjs: (): TryErrorConfig => {
+    const cached = presetCache.get("nextjs");
+    if (cached) return cached;
+
+    const config = Object.freeze({
+      runtimeDetection: true,
+      captureStackTrace: process.env.NODE_ENV !== "production",
+      stackTraceLimit: process.env.NODE_ENV === "production" ? 5 : 20,
+      includeSource: true,
+      developmentMode: process.env.NODE_ENV === "development",
+
+      environmentHandlers: {
+        server: (error: TryError) => {
+          // Server-side: Log to console or logging service
+          if (process.env.NODE_ENV === "production") {
+            // Production: Minimal logging
+            console.error(`[Server Error] ${error.type}: ${error.message}`);
+
+            // Example integration with logging service:
+            // logger.error({
+            //   type: error.type,
+            //   message: error.message,
+            //   source: error.source,
+            //   timestamp: error.timestamp,
+            //   context: error.context,
+            // });
+          } else {
+            // Development: Detailed logging
+            console.group(`🚨 [Server] TryError: ${error.type}`);
+            console.error("Message:", error.message);
+            console.error("Source:", error.source);
+            console.error("Context:", error.context);
+            if (error.stack) console.error("Stack:", error.stack);
+            console.groupEnd();
+          }
+          return error;
+        },
+
+        client: (error: TryError) => {
+          // Client-side: Send to error tracking, no console in production
+          if (process.env.NODE_ENV === "production") {
+            // Example integrations:
+            // if (window.Sentry) {
+            //   window.Sentry.captureException(error);
+            // }
+            // if (window.LogRocket) {
+            //   window.LogRocket.captureException(error);
+            // }
+            // No console output in production
+          } else {
+            // Development: Console logging
+            console.group(`🚨 [Client] TryError: ${error.type}`);
+            console.error("Message:", error.message);
+            console.error("Context:", error.context);
+            console.groupEnd();
+          }
+          return error;
+        },
+
+        edge: (error: TryError) => {
+          // Edge runtime: Minimal logging
+          console.log(
+            JSON.stringify({
+              type: error.type,
+              message: error.message,
+              timestamp: error.timestamp,
+              runtime: "edge",
+            })
+          );
+          return error;
+        },
+      },
+    });
+
+    presetCache.set("nextjs", config);
+    return config;
+  },
+} as const);
 
 /**
  * Configure global try-error behavior
@@ -502,9 +662,16 @@ export function configure(
   config: TryErrorConfig | keyof typeof ConfigPresets
 ): void {
   if (typeof config === "string") {
-    globalConfig = ConfigPresets[config]();
+    const presetFn = ConfigPresets[config];
+    if (!presetFn) {
+      throw new Error(`Unknown configuration preset: ${config}`);
+    }
+    globalConfig = presetFn();
   } else {
-    globalConfig = { ...globalConfig, ...config };
+    if (!validateConfig(config)) {
+      throw new Error("Invalid configuration object");
+    }
+    globalConfig = globalConfig ? deepMerge(globalConfig, config) : config;
   }
   // Increment version to invalidate caches
   (getConfig as any).version = ((getConfig as any).version || 0) + 1;
@@ -654,12 +821,19 @@ export const Performance = {
   /**
    * Measure error creation performance
    */
-  measureErrorCreation: (iterations: number = 1000) => {
+  measureErrorCreation: async (iterations: number = 1000) => {
     const start =
-      typeof performance !== "undefined" ? performance.now() : Date.now();
+      typeof performance !== "undefined" && performance.now
+        ? performance.now()
+        : Date.now();
 
+    // Import createError dynamically to avoid circular dependencies
+    const { createError } = await import("./errors");
+
+    // Create errors synchronously to measure actual performance
+    const errors: TryError[] = [];
     for (let i = 0; i < iterations; i++) {
-      import("./errors").then(({ createError }) =>
+      errors.push(
         createError({
           type: "TestError",
           message: "Performance test",
@@ -669,12 +843,15 @@ export const Performance = {
     }
 
     const end =
-      typeof performance !== "undefined" ? performance.now() : Date.now();
+      typeof performance !== "undefined" && performance.now
+        ? performance.now()
+        : Date.now();
 
     return {
       totalTime: end - start,
       averageTime: (end - start) / iterations,
       iterations,
+      errors: errors.length, // Ensure errors are not optimized away
     };
   },
 

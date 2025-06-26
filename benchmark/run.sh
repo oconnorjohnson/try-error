@@ -49,7 +49,7 @@ echo ""
 
 # 5. Memory profiling (requires --expose-gc)
 echo -e "${YELLOW}=== Memory Profiling ===${NC}"
-node --expose-gc dist/benchmark/memory/profiler.js
+node --expose-gc -r tsx/cjs benchmark/memory/profiler.ts
 
 echo ""
 echo ""
@@ -67,6 +67,6 @@ echo -e "${GREEN}✅ Benchmark suite complete!${NC}"
 
 # Check if we should save baseline
 if [[ "$1" == "--save-baseline" ]]; then
-    echo -e "${BLUE}Saving baseline...${NC}"
-    npx tsx benchmark/save-baseline.ts
+    echo -e "${BLUE}Note: Baseline saving should be implemented in individual benchmark scripts${NC}"
+    echo -e "${BLUE}Run benchmarks with appropriate flags to save baselines${NC}"
 fi 
