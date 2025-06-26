@@ -1,20 +1,72 @@
 #!/bin/bash
 
-echo "Building the library..."
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+echo -e "${BLUE}Building the library...${NC}"
 pnpm build
 
+if [ $? -ne 0 ]; then
+    echo -e "${RED}Build failed!${NC}"
+    exit 1
+fi
+
 echo ""
-echo "Running performance benchmarks..."
+echo -e "${GREEN}Running comprehensive benchmark suite...${NC}"
 echo ""
 
-# Run standard benchmarks
-echo "=== Standard Benchmarks ==="
+# 1. Standard benchmarks
+echo -e "${YELLOW}=== Standard Performance Benchmarks ===${NC}"
 npx tsx benchmark/index.ts
 
 echo ""
 echo ""
-echo "=== Memory Benchmarks (with GC exposed) ==="
-node --expose-gc dist/benchmark/index.js
+
+# 2. Minimal overhead analysis
+echo -e "${YELLOW}=== Minimal Overhead Analysis ===${NC}"
+npx tsx benchmark/minimal-overhead.ts
 
 echo ""
-echo "Done!" 
+echo ""
+
+# 3. Library comparison
+echo -e "${YELLOW}=== Library Comparison ===${NC}"
+npx tsx benchmark/compare.ts
+
+echo ""
+echo ""
+
+# 4. Real-world scenarios
+echo -e "${YELLOW}=== Real-World Scenarios ===${NC}"
+npx tsx benchmark/scenarios/real-world.ts
+
+echo ""
+echo ""
+
+# 5. Memory profiling (requires --expose-gc)
+echo -e "${YELLOW}=== Memory Profiling ===${NC}"
+node --expose-gc dist/benchmark/memory/profiler.js
+
+echo ""
+echo ""
+
+# 6. Check for regressions (if baseline exists)
+if [ -f "benchmark/baseline.json" ]; then
+    echo -e "${YELLOW}=== Performance Regression Check ===${NC}"
+    npx tsx benchmark/regression/check.ts
+else
+    echo -e "${YELLOW}No baseline found. Run with --save-baseline to create one.${NC}"
+fi
+
+echo ""
+echo -e "${GREEN}✅ Benchmark suite complete!${NC}"
+
+# Check if we should save baseline
+if [[ "$1" == "--save-baseline" ]]; then
+    echo -e "${BLUE}Saving baseline...${NC}"
+    npx tsx benchmark/save-baseline.ts
+fi 
