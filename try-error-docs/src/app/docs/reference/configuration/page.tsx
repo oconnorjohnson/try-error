@@ -1546,6 +1546,513 @@ export function initializeTryError() {
                 </CodeBlock>
               </CardContent>
             </Card>
+
+            {/* Sentry Integration */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Sentry Integration</CardTitle>
+                <CardDescription>
+                  Complete setup for Sentry error tracking with try-error
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div>
+                    <h4 className="font-semibold text-slate-800 mb-2">
+                      1. Install Sentry
+                    </h4>
+                    <CodeBlock
+                      language="bash"
+                      title="Terminal"
+                      showLineNumbers={false}
+                    >
+                      {`pnpm add @sentry/nextjs
+# or for other frameworks:
+pnpm add @sentry/node @sentry/react`}
+                    </CodeBlock>
+                  </div>
+
+                  <div>
+                    <h4 className="font-semibold text-slate-800 mb-2">
+                      2. Initialize Sentry
+                    </h4>
+                    <CodeBlock
+                      language="typescript"
+                      title="sentry.client.config.ts"
+                      showLineNumbers={true}
+                    >
+                      {`import * as Sentry from '@sentry/nextjs';
+
+Sentry.init({
+  dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
+  environment: process.env.NODE_ENV,
+  integrations: [
+    Sentry.replayIntegration(),
+    Sentry.feedbackIntegration({
+      colorScheme: 'auto',
+    }),
+  ],
+  tracesSampleRate: process.env.NODE_ENV === 'production' ? 0.1 : 1.0,
+  replaysSessionSampleRate: 0.1,
+  replaysOnErrorSampleRate: 1.0,
+});`}
+                    </CodeBlock>
+                  </div>
+
+                  <div>
+                    <h4 className="font-semibold text-slate-800 mb-2">
+                      3. Configure try-error with Sentry
+                    </h4>
+                    <CodeBlock
+                      language="typescript"
+                      title="app/layout.tsx or _app.tsx"
+                      showLineNumbers={true}
+                    >
+                      {`import { configure } from 'try-error';
+import * as Sentry from '@sentry/nextjs';
+
+// Configure try-error to send all errors to Sentry
+configure({
+  onError: (error) => {
+    // Capture in Sentry with additional context
+    Sentry.captureException(error, {
+      tags: {
+        errorType: error.type,
+        environment: process.env.NODE_ENV,
+        version: process.env.NEXT_PUBLIC_APP_VERSION,
+      },
+      contexts: {
+        tryError: {
+          type: error.type,
+          source: error.source,
+          timestamp: error.timestamp,
+        },
+      },
+      extra: error.context,
+    });
+
+    // Also set user context if available
+    if (error.context?.userId) {
+      Sentry.setUser({
+        id: error.context.userId,
+        email: error.context.userEmail,
+      });
+    }
+
+    return error;
+  },
+  
+  // Customize serialization for Sentry
+  serializer: (error) => ({
+    type: error.type,
+    message: error.message,
+    timestamp: error.timestamp,
+    // Include stack traces in production for Sentry
+    stack: error.stack,
+    source: error.source,
+    context: error.context,
+  }),
+});`}
+                    </CodeBlock>
+                  </div>
+
+                  <div>
+                    <h4 className="font-semibold text-slate-800 mb-2">
+                      4. Enhanced Error Creation for Sentry
+                    </h4>
+                    <CodeBlock
+                      language="typescript"
+                      title="Enhanced error creation with Sentry context"
+                      showLineNumbers={true}
+                    >
+                      {`import { createTryError } from 'try-error';
+import * as Sentry from '@sentry/nextjs';
+
+// Create errors with Sentry-friendly context
+export async function processPayment(userId: string, amount: number) {
+  // Add breadcrumb for Sentry
+  Sentry.addBreadcrumb({
+    category: 'payment',
+    message: 'Processing payment',
+    level: 'info',
+    data: { userId, amount },
+  });
+
+  const result = await tryAsync(async () => {
+    const payment = await paymentAPI.process({ userId, amount });
+    
+    if (!payment.success) {
+      // Create error with rich context for Sentry
+      throw createTryError('PaymentError', payment.error.message, {
+        userId,
+        amount,
+        paymentId: payment.id,
+        errorCode: payment.error.code,
+        // This will be captured in Sentry's extra data
+        paymentProvider: payment.provider,
+        attemptNumber: payment.attemptNumber,
+      });
+    }
+    
+    return payment;
+  });
+
+  if (isTryError(result)) {
+    // Add specific Sentry context for payment errors
+    Sentry.withScope((scope) => {
+      scope.setTag('payment.failed', true);
+      scope.setContext('payment', {
+        userId,
+        amount,
+        error: result.message,
+      });
+      scope.setLevel('error');
+    });
+  }
+
+  return result;
+}`}
+                    </CodeBlock>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Vercel Analytics Integration */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Vercel Analytics Integration</CardTitle>
+                <CardDescription>
+                  Track errors and custom events with Vercel Web Analytics
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div>
+                    <h4 className="font-semibold text-slate-800 mb-2">
+                      1. Install Vercel Analytics
+                    </h4>
+                    <CodeBlock
+                      language="bash"
+                      title="Terminal"
+                      showLineNumbers={false}
+                    >
+                      {`pnpm add @vercel/analytics`}
+                    </CodeBlock>
+                  </div>
+
+                  <div>
+                    <h4 className="font-semibold text-slate-800 mb-2">
+                      2. Setup Analytics with Error Tracking
+                    </h4>
+                    <CodeBlock
+                      language="typescript"
+                      title="app/layout.tsx"
+                      showLineNumbers={true}
+                    >
+                      {`import { Analytics } from '@vercel/analytics/react';
+import { configure } from 'try-error';
+import { track } from '@vercel/analytics';
+
+// Configure try-error to track errors as custom events
+configure({
+  onError: (error) => {
+    // Track error occurrence in Vercel Analytics
+    track('error_occurred', {
+      errorType: error.type,
+      errorMessage: error.message,
+      source: error.source?.file || 'unknown',
+      // Don't send sensitive data to analytics
+      path: typeof window !== 'undefined' ? window.location.pathname : 'server',
+    });
+
+    // Track specific error types differently
+    if (error.type === 'ValidationError') {
+      track('validation_error', {
+        fields: error.context?.validationErrors?.length || 0,
+        form: error.context?.formName,
+      });
+    } else if (error.type === 'APIError') {
+      track('api_error', {
+        endpoint: error.context?.endpoint,
+        statusCode: error.context?.statusCode,
+      });
+    }
+
+    return error;
+  },
+});
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en">
+      <body>
+        {children}
+        <Analytics 
+          mode={process.env.NODE_ENV === 'production' ? 'production' : 'development'}
+          beforeSend={(event) => {
+            // Redact sensitive paths from analytics
+            if (event.url.includes('/admin') || event.url.includes('/api/internal')) {
+              return null;
+            }
+            return event;
+          }}
+        />
+      </body>
+    </html>
+  );
+}`}
+                    </CodeBlock>
+                  </div>
+
+                  <div>
+                    <h4 className="font-semibold text-slate-800 mb-2">
+                      3. Track Error Recovery and User Actions
+                    </h4>
+                    <CodeBlock
+                      language="typescript"
+                      title="Error recovery tracking"
+                      showLineNumbers={true}
+                    >
+                      {`import { track } from '@vercel/analytics';
+import { tryAsync, isTryError } from 'try-error';
+
+export function PaymentForm() {
+  const [retryCount, setRetryCount] = useState(0);
+
+  const handleSubmit = async (formData) => {
+    const result = await tryAsync(() => processPayment(formData));
+
+    if (isTryError(result)) {
+      // Track error with retry context
+      track('payment_error', {
+        errorType: result.type,
+        retryCount,
+        amount: formData.amount,
+        // Track recovery actions
+        userAction: retryCount > 0 ? 'retry' : 'initial_attempt',
+      });
+
+      if (result.type === 'NetworkError' && retryCount < 3) {
+        // Track retry attempt
+        track('error_retry_attempted', {
+          errorType: result.type,
+          attemptNumber: retryCount + 1,
+        });
+        setRetryCount(retryCount + 1);
+      }
+    } else {
+      // Track successful recovery
+      if (retryCount > 0) {
+        track('error_recovered', {
+          errorType: 'PaymentError',
+          retriesNeeded: retryCount,
+        });
+      }
+      
+      // Track successful payment
+      track('payment_success', {
+        amount: formData.amount,
+        retriesNeeded: retryCount,
+      });
+    }
+  };
+
+  return (
+    // Your form JSX
+  );
+}`}
+                    </CodeBlock>
+                  </div>
+
+                  <div>
+                    <h4 className="font-semibold text-slate-800 mb-2">
+                      4. Error Analytics Dashboard Integration
+                    </h4>
+                    <CodeBlock
+                      language="typescript"
+                      title="Error metrics tracking"
+                      showLineNumbers={true}
+                    >
+                      {`import { configure } from 'try-error';
+import { track } from '@vercel/analytics';
+
+// Track error metrics for analytics dashboard
+configure({
+  onError: (error) => {
+    const errorMetrics = {
+      // Basic error info
+      type: error.type,
+      severity: getSeverityLevel(error),
+      
+      // Performance impact
+      occurredAt: new Date().toISOString(),
+      environment: process.env.NODE_ENV,
+      
+      // User impact
+      userId: error.context?.userId || 'anonymous',
+      sessionId: error.context?.sessionId,
+      
+      // Error categorization for analytics
+      category: categorizeError(error),
+      isRecoverable: isRecoverableError(error),
+      
+      // Feature flags or A/B test context
+      featureFlags: error.context?.featureFlags,
+      experimentId: error.context?.experimentId,
+    };
+
+    // Send to Vercel Analytics
+    track('error_metrics', errorMetrics);
+
+    // Track critical errors separately
+    if (errorMetrics.severity === 'critical') {
+      track('critical_error', {
+        type: error.type,
+        message: error.message,
+        impactedFeature: error.context?.feature,
+      });
+    }
+
+    return error;
+  },
+});
+
+// Helper functions for error categorization
+function getSeverityLevel(error) {
+  const criticalTypes = ['DatabaseError', 'AuthenticationError', 'PaymentError'];
+  const warningTypes = ['ValidationError', 'RateLimitError'];
+  
+  if (criticalTypes.includes(error.type)) return 'critical';
+  if (warningTypes.includes(error.type)) return 'warning';
+  return 'info';
+}
+
+function categorizeError(error) {
+  const categoryMap = {
+    ValidationError: 'user_input',
+    NetworkError: 'infrastructure',
+    DatabaseError: 'infrastructure',
+    AuthenticationError: 'security',
+    AuthorizationError: 'security',
+    PaymentError: 'business_critical',
+    RateLimitError: 'performance',
+  };
+  
+  return categoryMap[error.type] || 'other';
+}
+
+function isRecoverableError(error) {
+  const recoverableTypes = ['NetworkError', 'RateLimitError', 'TimeoutError'];
+  return recoverableTypes.includes(error.type);
+}`}
+                    </CodeBlock>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Combined Integration Example */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Complete Integration Example</CardTitle>
+                <CardDescription>
+                  Using try-error with both Sentry and Vercel Analytics
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <CodeBlock
+                  language="typescript"
+                  title="lib/error-monitoring.ts"
+                  showLineNumbers={true}
+                >
+                  {`import { configure } from 'try-error';
+import * as Sentry from '@sentry/nextjs';
+import { track } from '@vercel/analytics';
+
+export function setupErrorMonitoring() {
+  configure({
+    // Capture stack traces only in development
+    captureStackTrace: process.env.NODE_ENV === 'development',
+    
+    // Production-optimized settings
+    skipTimestamp: process.env.NODE_ENV === 'production',
+    skipContext: process.env.NODE_ENV === 'production',
+    
+    onError: (error) => {
+      // 1. Send to Sentry for debugging
+      Sentry.captureException(error, {
+        tags: {
+          errorType: error.type,
+          environment: process.env.NODE_ENV,
+          version: process.env.NEXT_PUBLIC_APP_VERSION,
+        },
+        contexts: {
+          tryError: {
+            type: error.type,
+            source: error.source,
+            timestamp: error.timestamp,
+          },
+        },
+        extra: error.context,
+      });
+
+      // 2. Track in Vercel Analytics for metrics
+      track('error', {
+        type: error.type,
+        category: categorizeError(error),
+        severity: getSeverityLevel(error),
+        path: typeof window !== 'undefined' ? window.location.pathname : 'server',
+      });
+
+      // 3. Log to console in development
+      if (process.env.NODE_ENV === 'development') {
+        console.error(\`[\${error.type}]\`, error.message, error);
+      }
+
+      // 4. Send critical errors to PagerDuty or similar
+      if (isCriticalError(error)) {
+        notifyOncall(error);
+      }
+
+      return error;
+    },
+    
+    // Custom serialization for production
+    serializer: (error) => {
+      // Full details for Sentry
+      if (process.env.NODE_ENV === 'development') {
+        return error; // Return full error object
+      }
+      
+      // Minimal details for production client
+      return {
+        type: error.type,
+        message: error.message,
+        timestamp: error.timestamp,
+        // Only include non-sensitive context
+        context: {
+          url: error.context?.url,
+          statusCode: error.context?.statusCode,
+        },
+      };
+    },
+  });
+
+  // Set up Sentry user context
+  if (typeof window !== 'undefined') {
+    const userId = getUserId(); // Your user ID logic
+    if (userId) {
+      Sentry.setUser({ id: userId });
+    }
+  }
+}
+
+// Initialize on app start
+setupErrorMonitoring();`}
+                </CodeBlock>
+              </CardContent>
+            </Card>
           </div>
         </section>
 
@@ -1772,6 +2279,7 @@ configure({
     cause: error.cause
   }),
   
+  // Global error handling
   onError: (error) => {
     // Detailed console logging in development
     console.group(\`🚨 TryError: \${error.type}\`);
