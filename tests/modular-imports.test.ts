@@ -56,8 +56,8 @@ describe("Modular imports", () => {
     expect(typeof coreModule.FEATURES).toBe("object");
 
     // Should NOT have sync or async specific functions
-    expect(coreModule.trySync).toBeUndefined();
-    expect(coreModule.tryAsync).toBeUndefined();
+    expect((coreModule as any).trySync).toBeUndefined();
+    expect((coreModule as any).tryAsync).toBeUndefined();
   });
 
   test("full module exports everything", async () => {
