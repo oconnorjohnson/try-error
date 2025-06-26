@@ -319,7 +319,7 @@ export function AppSidebar() {
         <div className="text-xs text-muted-foreground space-y-3">
           <div>
             <p>Built with Next.js & shadcn/ui</p>
-            <p className="mt-1">© 2024 try-error</p>
+            <p className="mt-1">© 2025 try-error</p>
           </div>
           <div className="pt-2 border-t border-border">
             <a
