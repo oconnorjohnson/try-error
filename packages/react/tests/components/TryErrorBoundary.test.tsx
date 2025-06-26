@@ -1,6 +1,6 @@
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import "../../src/test-setup";
+import "../test-setup";
 import {
   TryErrorBoundary,
   useErrorBoundaryTrigger,
