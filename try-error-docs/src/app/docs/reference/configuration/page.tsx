@@ -2104,6 +2104,98 @@ setupErrorMonitoring();`}
           </div>
         </section>
 
+        {/* Runtime Detection */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold text-slate-900 mb-4">
+            Runtime Detection for Isomorphic Apps
+          </h2>
+
+          <Alert className="mb-6 border-green-500/20 bg-green-500/5">
+            <AlertDescription>
+              <strong className="text-foreground">New Feature:</strong> Runtime
+              detection solves the global configuration problem in isomorphic
+              applications like Next.js, Nuxt, and Remix by detecting the
+              environment when errors are created, not when configured.
+            </AlertDescription>
+          </Alert>
+
+          <p className="text-slate-600 mb-6">
+            Traditional error libraries use global configuration that gets
+            overwritten in isomorphic apps. try-error's runtime detection
+            ensures each error uses the correct handler based on where it's
+            thrown.
+          </p>
+
+          <div className="grid md:grid-cols-2 gap-6 mb-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">
+                  Traditional Approach ❌
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CodeBlock language="typescript" showLineNumbers={true}>
+                  {`// Server starts
+configure({ onError: serverHandler });
+
+// Client loads (overwrites!)
+configure({ onError: clientHandler });
+
+// Now server uses client config 🚨`}
+                </CodeBlock>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">Runtime Detection ✅</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CodeBlock language="typescript" showLineNumbers={true}>
+                  {`// Configure once with handlers
+configure({
+  runtimeDetection: true,
+  environmentHandlers: {
+    server: serverHandler,
+    client: clientHandler
+  }
+});
+
+// Each error uses correct handler`}
+                </CodeBlock>
+              </CardContent>
+            </Card>
+          </div>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>How Runtime Detection Works</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <CodeBlock
+                language="typescript"
+                title="Internal Runtime Detection"
+                showLineNumbers={true}
+              >
+                {`// When an error is created, try-error detects:
+
+// Edge Runtime
+if (globalThis.EdgeRuntime || process.env.NEXT_RUNTIME === 'edge') {
+  return 'edge';
+}
+
+// Server-side
+if (typeof window === 'undefined' && process.versions?.node) {
+  return 'server';
+}
+
+// Client-side
+return 'client';`}
+              </CodeBlock>
+            </CardContent>
+          </Card>
+        </section>
+
         {/* Configuration Options */}
         <section>
           <h2 className="text-2xl font-semibold text-slate-900 mb-4">
