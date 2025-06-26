@@ -155,23 +155,33 @@ export function useTryStateAsync<T>(
  */
 export function useStateWithError<T>(
   initialValue: T
-): [T, (value: T) => void, TryError | null] {
+): [T, (value: T | ((prev: T) => T)) => void, TryError | null] {
   const [value, setValue] = useState<T>(initialValue);
   const [error, setError] = useState<TryError | null>(null);
 
-  const setValueWithError = useCallback((newValue: T) => {
-    try {
-      setValue(newValue);
-      setError(null);
-    } catch (e) {
-      const tryError = createError({
-        type: "StateUpdateError",
-        message: e instanceof Error ? e.message : "State update failed",
-        source: "useStateWithError",
-        cause: e,
-      });
-      setError(tryError);
-    }
+  const setValueWithError = useCallback((newValue: T | ((prev: T) => T)) => {
+    // Clear any previous error
+    setError(null);
+
+    // Use functional update to ensure we have the latest state
+    setValue((currentValue) => {
+      // If newValue is a function, execute it with error handling
+      if (typeof newValue === "function") {
+        const result = trySync(() =>
+          (newValue as (prev: T) => T)(currentValue)
+        );
+
+        if (isTryError(result)) {
+          setError(result);
+          return currentValue; // Don't update state on error
+        }
+
+        return result;
+      }
+
+      // For direct values, just return them
+      return newValue;
+    });
   }, []);
 
   return [value, setValueWithError, error];

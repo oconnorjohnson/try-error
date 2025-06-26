@@ -1,6 +1,7 @@
 import { TryError, TRY_ERROR_BRAND } from "./types";
 import { getConfig, getConfigVersion } from "./config";
 import { getGlobalErrorPool } from "./pool";
+import { createLazyError } from "./lazy";
 
 // Performance optimization: Use WeakMap for config cache
 const configCache = new WeakMap<
@@ -423,6 +424,8 @@ export function createError<T extends string = string>(
 
   // Check if object pooling is enabled
   const usePooling = config.performance?.errorCreation?.objectPooling ?? false;
+  const useLazyEvaluation =
+    config.performance?.errorCreation?.lazyStackTrace ?? false;
 
   // Check error cache for deduplication
   const cacheKey = getErrorCacheKey(
@@ -448,6 +451,68 @@ export function createError<T extends string = string>(
   const isProd = isProduction();
   const shouldCaptureStack =
     options.captureStackTrace ?? config.captureStackTrace ?? !isProd;
+
+  // Lazy evaluation path
+  if (useLazyEvaluation && !isProd) {
+    const stackOffset =
+      options.stackOffset ?? config.sourceLocation?.defaultStackOffset ?? 3;
+
+    const lazyError = createLazyError({
+      type: options.type,
+      message: options.message,
+      getSource: () => options.source ?? getSourceLocation(stackOffset),
+      getStack: shouldCaptureStack
+        ? () => {
+            try {
+              const error = new Error(options.message);
+              if (
+                config.stackTraceLimit &&
+                typeof Error.stackTraceLimit === "number"
+              ) {
+                const originalLimit = Error.stackTraceLimit;
+                Error.stackTraceLimit = config.stackTraceLimit;
+                const stack = error.stack;
+                Error.stackTraceLimit = originalLimit;
+                return stack?.replace(/^Error:/, `${options.type}:`);
+              }
+              return error.stack?.replace(/^Error:/, `${options.type}:`);
+            } catch {
+              return undefined;
+            }
+          }
+        : undefined,
+      getTimestamp: () =>
+        config.skipTimestamp ? 0 : options.timestamp ?? Date.now(),
+      context: config.skipContext ? undefined : options.context,
+      cause: options.cause,
+    });
+
+    // Apply transformations
+    let transformedError = lazyError;
+
+    if (config.onError) {
+      transformedError = config.onError(transformedError) as TryError<T>;
+    }
+
+    if (config.runtimeDetection && config.environmentHandlers) {
+      const runtime = detectRuntime();
+      const handler = config.environmentHandlers[runtime];
+      if (handler) {
+        transformedError = handler(transformedError) as TryError<T>;
+      }
+    }
+
+    // Cache the error
+    if (errorCache.size >= MAX_ERROR_CACHE_SIZE) {
+      const firstKey = errorCache.keys().next().value;
+      if (firstKey !== undefined) {
+        errorCache.delete(firstKey);
+      }
+    }
+    errorCache.set(cacheKey, transformedError);
+
+    return transformedError;
+  }
 
   // Fast path for production with minimal features
   if (isProd && !shouldCaptureStack && !config.includeSource) {

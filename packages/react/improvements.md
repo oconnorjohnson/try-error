@@ -28,15 +28,15 @@
 
 ### Bugs
 
-- [ ] **Race Condition**: `executionIdRef` check happens after await, component could unmount during async operation
-- [ ] **Memory Leak on Fast Unmount**: If component unmounts immediately, execute could still be running
+- [x] ~~**Race Condition**: `executionIdRef` check happens after await, component could unmount during async operation~~ ✅ FIXED
+- [x] ~~**Memory Leak on Fast Unmount**: If component unmounts immediately, execute could still be running~~ ✅ FIXED
 - [ ] **Deps Array Handling**: The eslint-disable comment indicates incorrect dependency handling
 - [x] ~~**AbortController Not Cleaned**: Old abort controllers aren't garbage collected properly~~ ✅ FIXED
 
 ### Inefficiencies
 
-- [ ] **State Updates**: Multiple setState calls could be batched
-- [ ] **Unnecessary Re-renders**: State updates even when values haven't changed
+- [x] ~~**State Updates**: Multiple setState calls could be batched~~ ✅ FIXED
+- [x] ~~**Unnecessary Re-renders**: State updates even when values haven't changed~~ ✅ FIXED
 - [ ] **Signal Creation**: Creates new AbortSignal for every execution even if not needed
 
 ### Missing Features
@@ -92,8 +92,8 @@
 ### Bugs
 
 - [x] ~~**Stale Closure**: The `state` variable in `setTryState` could be stale~~ ✅ FIXED
-- [ ] **Missing TRY_ERROR_BRAND**: Error object in `useStateWithError` doesn't have the brand symbol
-- [ ] **Type Incompatibility**: Created error doesn't match TryError interface completely
+- [x] ~~**Missing TRY_ERROR_BRAND**: Error object in `useStateWithError` doesn't have the brand symbol~~ ✅ FIXED
+- [x] ~~**Type Incompatibility**: Created error doesn't match TryError interface completely~~ ✅ FIXED
 
 ### Inefficiencies
 
