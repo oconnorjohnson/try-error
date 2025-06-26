@@ -52,25 +52,57 @@ export default function ErrorSamplingPage() {
 
         <CodeBlock
           language="typescript"
-          title="Random Sampling (10% of errors)"
+          title="True 10% Random Sampling"
           showLineNumbers={true}
           className="mb-4"
         >
           {`import { configure } from 'try-error';
 import * as Sentry from '@sentry/nextjs';
 
-// Sample 10% of errors randomly
+// Sample exactly 10% of ALL errors
 const SAMPLE_RATE = 0.1;
 
 configure({
   onError: (error) => {
-    // Always log critical errors
+    // Simple random sampling - 10% of everything
+    if (Math.random() < SAMPLE_RATE) {
+      Sentry.captureException(error, {
+        tags: {
+          sampled: true,
+          sampleRate: SAMPLE_RATE,
+        },
+      });
+    }
+    return error;
+  },
+});`}
+        </CodeBlock>
+
+        <p className="text-slate-600 mb-4">
+          However, you often want to ensure critical errors are always captured:
+        </p>
+
+        <CodeBlock
+          language="typescript"
+          title="Random Sampling with Critical Error Exceptions"
+          showLineNumbers={true}
+          className="mb-4"
+        >
+          {`import { configure } from 'try-error';
+import * as Sentry from '@sentry/nextjs';
+
+// Sample 10% of non-critical errors, 100% of critical errors
+const SAMPLE_RATE = 0.1;
+
+configure({
+  onError: (error) => {
+    // Always log critical errors (100% sampling)
     if (error.type === 'PaymentError' || error.type === 'SecurityError') {
       Sentry.captureException(error);
       return error;
     }
 
-    // Random sampling for other errors
+    // Random sampling for other errors (10% sampling)
     if (Math.random() < SAMPLE_RATE) {
       Sentry.captureException(error, {
         tags: {

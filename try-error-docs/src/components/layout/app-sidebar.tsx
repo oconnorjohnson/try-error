@@ -194,6 +194,11 @@ const navigation = [
         url: "/docs/examples/react",
         icon: BookOpen,
       },
+      {
+        title: "Sentry & Vercel Analytics",
+        url: "/docs/examples/sentry-vercel",
+        icon: BookOpen,
+      },
     ],
   },
   {
