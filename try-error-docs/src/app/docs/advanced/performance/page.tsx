@@ -59,9 +59,9 @@ export default function PerformancePage() {
                   <li>
                     • <strong>20% to 120% overhead</strong> (configurable)
                   </li>
-                  <li>• Default config: ~1700% overhead (rich debugging)</li>
-                  <li>• Production config: ~400% overhead (no stack traces)</li>
-                  <li>• Minimal config: ~50% overhead (bare essentials)</li>
+                  <li>• Default config: ~100-120% overhead (rich debugging)</li>
+                  <li>• Production config: ~40% overhead (no stack traces)</li>
+                  <li>• Minimal config: ~20% overhead (bare essentials)</li>
                 </ul>
                 <div className="mt-3 p-3 bg-orange-100 rounded">
                   <p className="text-orange-800 text-xs">
