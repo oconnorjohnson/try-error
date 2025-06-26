@@ -1,5 +1,6 @@
 import { Github } from "lucide-react";
 import { CodeBlock } from "@/components/EnhancedCodeBlock";
+import Image from "next/image";
 
 export default function HomePage() {
   return (
@@ -11,9 +12,11 @@ export default function HomePage() {
         </div>
         <div className="flex flex-row items-center justify-center">
           {/* Logo */}
-          <img
+          <Image
             src="/logo.png"
             alt="try-error logo"
+            width={96}
+            height={96}
             className="w-16 h-16 md:w-24 md:h-24"
           />
           <h1 className="text-2xl lg:text-4xl font-light">try-error</h1>
