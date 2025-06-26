@@ -275,6 +275,7 @@ export function withDefaultFn<T, E extends TryError>(
 
 /**
  * Filter results to only success values
+ * Optimized to process in a single pass
  *
  * @param results - Array of results
  * @returns Array of only the success values
@@ -288,11 +289,17 @@ export function withDefaultFn<T, E extends TryError>(
 export function filterSuccess<T, E extends TryError>(
   results: Array<TryResult<T, E>>
 ): T[] {
-  return results.filter((result) => !isTryError(result)) as T[];
+  return results.reduce<T[]>((acc, result) => {
+    if (!isTryError(result)) {
+      acc.push(result);
+    }
+    return acc;
+  }, []);
 }
 
 /**
  * Filter results to only error values
+ * Optimized to process in a single pass
  *
  * @param results - Array of results
  * @returns Array of only the error values
@@ -306,7 +313,12 @@ export function filterSuccess<T, E extends TryError>(
 export function filterErrors<T, E extends TryError>(
   results: Array<TryResult<T, E>>
 ): E[] {
-  return results.filter((result) => isTryError(result)) as E[];
+  return results.reduce<E[]>((acc, result) => {
+    if (isTryError(result)) {
+      acc.push(result);
+    }
+    return acc;
+  }, []);
 }
 
 /**
@@ -403,6 +415,7 @@ export function getErrorSummary(errors: TryError[]): Record<string, number> {
 
 /**
  * Format an error for logging with all context
+ * Uses efficient string building
  *
  * @param error - Error to format
  * @param includeStack - Whether to include stack trace
@@ -417,25 +430,24 @@ export function formatErrorForLogging(
   error: TryError,
   includeStack: boolean = false
 ): string {
-  const parts = [
-    `[${error.type}] ${error.message}`,
-    `Source: ${error.source}`,
-    `Timestamp: ${new Date(error.timestamp).toISOString()}`,
-  ];
+  // Use template literal for efficient string building
+  let result = `[${error.type}] ${error.message}\nSource: ${
+    error.source
+  }\nTimestamp: ${new Date(error.timestamp).toISOString()}`;
 
   if (error.context) {
-    parts.push(`Context: ${JSON.stringify(error.context, null, 2)}`);
+    result += `\nContext: ${JSON.stringify(error.context, null, 2)}`;
   }
 
   if (error.cause) {
-    parts.push(`Cause: ${error.cause}`);
+    result += `\nCause: ${error.cause}`;
   }
 
   if (includeStack && error.stack) {
-    parts.push(`Stack: ${error.stack}`);
+    result += `\nStack: ${error.stack}`;
   }
 
-  return parts.join("\n");
+  return result;
 }
 
 /**
