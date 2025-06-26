@@ -229,3 +229,12 @@ Based on impact and usage patterns, here are the top priority improvements:
 2. **Snapshot Utilities** - Nice to have for testing
 3. **CSP Support** - Only affects specific deployments
 4. **Playground** - Can use external tools like CodeSandbox
+
+### High Priority
+
+- [ ] **Error Recovery Strategies**: Beyond simple retry, implement circuit breaker pattern, exponential backoff, and custom recovery strategies
+- [ ] **Optimistic Updates**: For mutations, allow optimistic updates with automatic rollback on error
+- [ ] **Error Boundaries Integration**: Better integration with React Error Boundaries, including error recovery UI components
+- [ ] **Development Experience**: Better development tools, debugging utilities, and devtools integration
+- [ ] **Framework Support**: Next.js, Remix, and React Native specific utilities and examples
+- [ ] **Accessibility**: Ensure error states are properly announced to screen readers

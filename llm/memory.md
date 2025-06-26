@@ -157,11 +157,24 @@ Try-Error is a TypeScript error handling library designed for zero-overhead, typ
    - Support for breadcrumbs, user context, and custom events
 
 4. **Performance Fixes**:
+
    - Fixed race conditions in `useTry` hook
    - Implemented proper cleanup for AbortControllers
    - Batched state updates to reduce re-renders
    - Added checks to prevent state updates after unmount
    - Fixed `useStateWithError` to properly handle functional updates
+
+5. **Optimistic Updates for Mutations**:
+   - Enhanced `useTryMutation` with comprehensive optimistic update support
+   - Added support for optimistic data as value or function
+   - Implemented automatic rollback on error with custom rollback callbacks
+   - Added retry functionality with customizable retry logic and exponential backoff
+   - Implemented mutation result caching with configurable cache time
+   - Enhanced callbacks to receive variables for better context
+   - Added `setData` method for manual data updates with functional update support
+   - Added `invalidate` method for cache invalidation
+   - Added `isIdle` state and `failureCount` tracking
+   - Created comprehensive test suite for optimistic updates
 
 #### Remaining High-Priority Items 🚧
 
