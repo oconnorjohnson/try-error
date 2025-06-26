@@ -113,15 +113,27 @@ const data = await tryAsync(() => fetchUserData());
 
 ## Tree-Shaking Benefits
 
-Modern bundlers (webpack, rollup, esbuild, etc.) will automatically tree-shake unused code when you use modular imports:
+Modern bundlers (webpack, rollup, esbuild, vite, etc.) will automatically tree-shake unused code. try-error is optimized for tree-shaking:
+
+- **`"sideEffects": false`** in package.json tells bundlers all code is side-effect free
+- **ESM builds** are provided for optimal tree-shaking (`import` in package.json exports)
+- **Modular imports** allow you to import only what you need
 
 ```typescript
-// ❌ Bad: Imports everything, even if you only use sync
+// ❌ Less optimal: Even with tree-shaking, may include some unused code
 import { trySync } from "try-error";
 
-// ✅ Good: Imports only sync functionality
+// ✅ Optimal: Imports only sync functionality, guaranteed smaller bundle
 import { trySync } from "try-error/sync";
 ```
+
+### Tree-Shaking with Default Import
+
+When using the default import (`from "try-error"`), modern bundlers will still tree-shake unused exports. However, using modular imports provides:
+
+1. **Guaranteed smaller bundles** - No chance of accidental inclusion
+2. **Faster build times** - Less code to analyze
+3. **Clearer intent** - Makes it obvious what your code uses
 
 ## TypeScript Support
 
