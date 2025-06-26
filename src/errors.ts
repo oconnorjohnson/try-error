@@ -451,7 +451,7 @@ export function createError<T extends string = string>(
     options.context
   );
   const cachedError = errorCache.get(cacheKey);
-  if (cachedError && !options.captureStackTrace) {
+  if (cachedError && options.captureStackTrace === undefined) {
     return cachedError as TryError<T>;
   }
 
