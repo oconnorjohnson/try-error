@@ -72,8 +72,8 @@ export default function DocsIntroduction() {
             </CardHeader>
             <CardContent>
               <CardDescription>
-                Success path: &lt;3% overhead. Error path: configurable from 50%
-                to 1700% (stack traces, context capture).
+                Success path: &lt;3% overhead. Error path: configurable from 20%
+                to 120% depending on configuration.
               </CardDescription>
             </CardContent>
           </Card>
@@ -262,16 +262,16 @@ return result; // Type-safe success value`}
                     variant="secondary"
                     className="bg-orange-500/10 text-orange-500 border-orange-500/20"
                   >
-                    50%-1700% overhead
+                    20%-120% overhead
                   </Badge>
                   <span className="text-sm text-muted-foreground">
                     configurable
                   </span>
                 </div>
                 <ul className="space-y-1 text-sm text-muted-foreground">
-                  <li>• Stack trace capture: ~1200% of overhead</li>
-                  <li>• Context cloning: ~300% of overhead</li>
-                  <li>• Source location: ~200% of overhead</li>
+                  <li>• Stack trace capture: ~80% of overhead</li>
+                  <li>• Context cloning: ~30% of overhead</li>
+                  <li>• Source location: ~10% of overhead</li>
                 </ul>
               </CardContent>
             </Card>
@@ -316,7 +316,7 @@ return result; // Type-safe success value`}
                     <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">
                       ConfigPresets.minimal()
                     </code>{" "}
-                    for &lt;50% overhead.
+                    for &lt;20% overhead.
                   </p>
                 </div>
               </div>
@@ -343,7 +343,7 @@ return result; // Type-safe success value`}
               <CheckCircle className="h-5 w-5 text-green-500 mt-0.5" />
               <div>
                 <strong>Minimal Overhead:</strong> Success path &lt;3%, error
-                path configurable (50%-1700%)
+                path configurable (20%-120%)
               </div>
             </div>
 
