@@ -290,7 +290,7 @@ configure(ConfigPresets.production());
 configure(ConfigPresets.performance());
 // ✅ Caching, lazy evaluation, object pooling
 
-// Minimal: Ultra-light (50% error overhead)
+// Minimal: Ultra-light (20% error overhead)
 configure(ConfigPresets.minimal());
 // ✅ Bare minimum, no stack traces, no timestamps, no context
 
