@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   description:
     "Lightweight, progressive, type-safe error handling for TypeScript",
   icons: {
-    icon: "/try-error-logo.svg",
+    icon: "/logo.png",
   },
 };
 

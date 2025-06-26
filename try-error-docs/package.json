@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@docsearch/css": "^3.9.0",
+    "@docsearch/react": "^3.9.0",
     "@radix-ui/react-dialog": "^1.1.14",
     "@radix-ui/react-navigation-menu": "^1.2.13",
     "@radix-ui/react-scroll-area": "^1.2.9",

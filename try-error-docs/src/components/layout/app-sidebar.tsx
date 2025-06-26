@@ -295,11 +295,7 @@ export function AppSidebar() {
     <Sidebar>
       <SidebarHeader className="border-b px-6 py-4">
         <div className="flex items-center gap-3">
-          <img
-            src="/try-error-logo.svg"
-            alt="try-error logo"
-            className="h-10 w-10"
-          />
+          <img src="/logo.png" alt="try-error logo" className="h-10 w-10" />
           <div>
             <h2 className="text-lg font-semibold">try-error</h2>
             <p className="text-xs text-muted-foreground">Documentation</p>
