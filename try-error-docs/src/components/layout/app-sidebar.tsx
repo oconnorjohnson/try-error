@@ -315,8 +315,9 @@ export function AppSidebar() {
             className="h-10 w-10"
           />
           <div>
-            <h2 className="text-lg font-semibold">try-error</h2>
-            <p className="text-xs text-muted-foreground">Documentation</p>
+            <p className="text-xs lg:text-sm text-muted-foreground">
+              Documentation
+            </p>
           </div>
         </Link>
       </SidebarHeader>
