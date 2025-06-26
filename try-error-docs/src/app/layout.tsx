@@ -20,10 +20,8 @@ export const metadata: Metadata = {
   icons: {
     icon: "/logo.png",
   },
-  verification: {
-    other: {
-      "algolia-site-verification": "D1AADE7F9B3E5B02",
-    },
+  other: {
+    "algolia-site-verification": "D1AADE7F9B3E5B02",
   },
 };
 
