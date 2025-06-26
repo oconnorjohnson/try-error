@@ -15,6 +15,16 @@ const searchClient = liteClient(
 
 const indexName = process.env.NEXT_PUBLIC_ALGOLIA_INDEX_NAME || "";
 
+// Function to transform production URLs to development URLs
+const transformUrl = (url: string): string => {
+  if (process.env.NODE_ENV === "development") {
+    // Replace the production domain with localhost:1999
+    // You might need to adjust this based on your actual production URL
+    return url.replace(/https?:\/\/[^\/]+/, "http://localhost:1999");
+  }
+  return url;
+};
+
 interface SearchResult {
   objectID: string;
   title?: string;
@@ -38,6 +48,7 @@ export function SearchDialog() {
       apiKey: process.env.NEXT_PUBLIC_ALGOLIA_SEARCH_API_KEY
         ? "SET"
         : "NOT SET",
+      environment: process.env.NODE_ENV,
     });
   }, []);
 
@@ -83,7 +94,13 @@ export function SearchDialog() {
         console.log("Sample search result structure:", hits[0]);
       }
 
-      setResults(hits);
+      // Transform URLs for development environment
+      const transformedHits = hits.map((hit) => ({
+        ...hit,
+        url: hit.url ? transformUrl(hit.url) : undefined,
+      }));
+
+      setResults(transformedHits);
     } catch (error) {
       console.error("Search error:", error);
       setResults([]);
@@ -109,7 +126,13 @@ export function SearchDialog() {
 
   const handleResultClick = (result: SearchResult) => {
     if (result.url) {
-      window.location.href = result.url;
+      // For development, we'll use client-side navigation if it's a relative path
+      if (result.url.startsWith("http://localhost:1999")) {
+        const path = result.url.replace("http://localhost:1999", "");
+        window.location.href = path;
+      } else {
+        window.location.href = result.url;
+      }
     }
     onClose();
   };
@@ -181,6 +204,11 @@ export function SearchDialog() {
                         {result.content && (
                           <div className="mt-1 text-sm text-muted-foreground line-clamp-2">
                             {result.content}
+                          </div>
+                        )}
+                        {result.url && (
+                          <div className="mt-1 text-xs text-muted-foreground opacity-60">
+                            {result.url}
                           </div>
                         )}
                       </button>
