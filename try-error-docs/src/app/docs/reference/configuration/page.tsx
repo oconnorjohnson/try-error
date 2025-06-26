@@ -76,7 +76,7 @@ export default function ConfigurationPage() {
         {/* Where to Configure */}
         <section
           id="where-to-configure"
-          className="bg-purple-50 border-2 border-purple-300 rounded-lg p-6 mb-8"
+          className="bg-purple-500 border-2 border-purple-300 rounded-lg p-6 mb-8"
         >
           <h2 className="text-2xl font-semibold text-purple-900 mb-4">
             📍 Where to Configure try-error
@@ -1057,9 +1057,15 @@ configure('development'); // Uses ConfigPresets.development()`}
 
 // Use built-in presets
 configure(ConfigPresets.development()); // Full debugging features
-configure(ConfigPresets.production());  // Performance optimized
+configure(ConfigPresets.production());  // Performance optimized (no console)
 configure(ConfigPresets.test());        // Test-friendly configuration
-configure(ConfigPresets.performance()); // Maximum performance
+configure(ConfigPresets.performance()); // Maximum performance with caching
+configure(ConfigPresets.minimal());     // Ultra-lightweight (<50% overhead)
+
+// Environment-specific presets (NEW)
+configure(ConfigPresets.serverProduction()); // Server with logging integration
+configure(ConfigPresets.clientProduction()); // Client with error tracking
+configure(ConfigPresets.edge());             // Edge/serverless optimized
 
 // Customize presets
 const customConfig = {
@@ -1068,13 +1074,11 @@ const customConfig = {
 };
 configure(customConfig);
 
-// Environment-based configuration
-import { createEnvConfig } from 'try-error';
+// Helper for error service integration
+import { withErrorService } from 'try-error';
 
-configure(createEnvConfig({
-  development: ConfigPresets.development(),
-  production: ConfigPresets.production(),
-  test: ConfigPresets.test()
+configure(withErrorService((error) => {
+  Sentry.captureException(error);
 }));`}
               </CodeBlock>
             </div>
@@ -1113,6 +1117,152 @@ const error = await createError({
 // Global config remains unchanged
 const globalError = createTryError('GlobalError', 'Uses global config');`}
               </CodeBlock>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">
+                Preset Details
+              </h3>
+              <div className="space-y-4">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-base">
+                      ConfigPresets.production()
+                    </CardTitle>
+                    <CardDescription>
+                      Optimized for production use
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <ul className="text-sm space-y-1">
+                      <li>
+                        • Stack traces: <strong>Disabled</strong>
+                      </li>
+                      <li>
+                        • Console logging: <strong>None</strong> (changed in
+                        v1.0)
+                      </li>
+                      <li>
+                        • Source location: <strong>Included</strong>
+                      </li>
+                      <li>• Best for: Generic production environments</li>
+                    </ul>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-base">
+                      ConfigPresets.serverProduction()
+                    </CardTitle>
+                    <CardDescription>
+                      Server-side production with logging hooks
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <ul className="text-sm space-y-1">
+                      <li>
+                        • Stack traces: <strong>Disabled</strong>
+                      </li>
+                      <li>
+                        • Console logging: <strong>None</strong>
+                      </li>
+                      <li>
+                        • Source location: <strong>Included</strong> (for logs)
+                      </li>
+                      <li>• Best for: Node.js servers, API backends</li>
+                      <li>• Integrate with: Winston, Pino, CloudWatch</li>
+                    </ul>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-base">
+                      ConfigPresets.clientProduction()
+                    </CardTitle>
+                    <CardDescription>
+                      Client-side production with error tracking
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <ul className="text-sm space-y-1">
+                      <li>
+                        • Stack traces: <strong>Disabled</strong>
+                      </li>
+                      <li>
+                        • Console logging: <strong>None</strong>
+                      </li>
+                      <li>
+                        • Source location: <strong>Included</strong>
+                      </li>
+                      <li>• Custom serializer: Removes sensitive data</li>
+                      <li>• Best for: Browser apps, React, Vue</li>
+                      <li>• Integrate with: Sentry, LogRocket, Bugsnag</li>
+                    </ul>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-base">
+                      ConfigPresets.edge()
+                    </CardTitle>
+                    <CardDescription>
+                      Optimized for edge/serverless runtimes
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <ul className="text-sm space-y-1">
+                      <li>
+                        • Stack traces: <strong>Disabled</strong>
+                      </li>
+                      <li>
+                        • Source location: <strong>Disabled</strong> (size
+                        optimization)
+                      </li>
+                      <li>
+                        • Minimal mode: <strong>Enabled</strong>
+                      </li>
+                      <li>
+                        • Best for: Cloudflare Workers, Vercel Edge, Deno Deploy
+                      </li>
+                      <li>• Overhead: &lt;100% on error paths</li>
+                    </ul>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-base">
+                      ConfigPresets.minimal()
+                    </CardTitle>
+                    <CardDescription>
+                      Ultra-lightweight for performance-critical code
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <ul className="text-sm space-y-1">
+                      <li>
+                        • Stack traces: <strong>Disabled</strong>
+                      </li>
+                      <li>
+                        • Source location: <strong>Disabled</strong>
+                      </li>
+                      <li>
+                        • Timestamp: <strong>Disabled</strong>
+                      </li>
+                      <li>
+                        • Context: <strong>Disabled</strong>
+                      </li>
+                      <li>• Overhead: &lt;50% on error paths</li>
+                      <li>
+                        • Best for: Hot code paths, high-frequency operations
+                      </li>
+                    </ul>
+                  </CardContent>
+                </Card>
+              </div>
             </div>
           </div>
         </section>
