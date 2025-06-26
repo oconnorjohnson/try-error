@@ -15,7 +15,7 @@ interface MemorySnapshot {
   timestamp: number;
 }
 
-interface MemoryProfile {
+export interface MemoryProfile {
   name: string;
   iterations: number;
   snapshots: MemorySnapshot[];
