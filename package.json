@@ -3,26 +3,28 @@
   "version": "0.0.1-alpha.1",
   "description": "Lightweight, progressive, type-safe error handling for TypeScript",
   "main": "dist/index.js",
+  "module": "dist/esm/index.js",
   "types": "dist/index.d.ts",
+  "sideEffects": false,
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
+      "import": "./dist/esm/index.js",
       "require": "./dist/index.js"
     },
     "./sync": {
       "types": "./dist/sync-only.d.ts",
-      "import": "./dist/sync-only.js",
+      "import": "./dist/esm/sync-only.js",
       "require": "./dist/sync-only.js"
     },
     "./async": {
       "types": "./dist/async-only.d.ts",
-      "import": "./dist/async-only.js",
+      "import": "./dist/esm/async-only.js",
       "require": "./dist/async-only.js"
     },
     "./core": {
       "types": "./dist/core.d.ts",
-      "import": "./dist/core.js",
+      "import": "./dist/esm/core.js",
       "require": "./dist/core.js"
     },
     "./package.json": "./package.json"
