@@ -71,6 +71,7 @@ export function setupNode(options: TryErrorConfig = {}): void {
   });
 
   configure({ ...config, ...options });
+  activeSetups.add("node");
 }
 
 /**
