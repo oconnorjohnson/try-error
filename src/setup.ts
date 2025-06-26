@@ -13,6 +13,9 @@ import {
   ConfigPresets,
 } from "./config";
 
+// Track active setups for teardown
+const activeSetups = new Set<string>();
+
 /**
  * Quick setup for Node.js/Express applications
  * Automatically configures based on NODE_ENV with sensible defaults
@@ -97,7 +100,8 @@ export function setupReact(options: TryErrorConfig = {}): void {
   const isDev =
     typeof process !== "undefined"
       ? process.env.NODE_ENV === "development"
-      : !window.location.hostname.includes("localhost") === false;
+      : typeof window !== "undefined" &&
+        window.location.hostname === "localhost";
 
   const config: TryErrorConfig = {
     captureStackTrace: isDev,
@@ -116,6 +120,7 @@ export function setupReact(options: TryErrorConfig = {}): void {
   };
 
   configure({ ...config, ...options });
+  activeSetups.add("react");
 }
 
 /**
@@ -151,6 +156,17 @@ export function setupReact(options: TryErrorConfig = {}): void {
  * ```
  */
 export function setupNextJs(options: TryErrorConfig = {}): void {
+  // Improved Next.js detection
+  const isNextJs =
+    typeof process !== "undefined" &&
+    (process.env.NEXT_RUNTIME ||
+      process.env.__NEXT_PRIVATE_PREBUNDLED_REACT ||
+      process.env.NEXT_PUBLIC_VERCEL_ENV);
+
+  if (!isNextJs) {
+    console.warn("setupNextJs called but Next.js environment not detected");
+  }
+
   const nextjsConfig = ConfigPresets.nextjs();
 
   // Merge custom options with Next.js preset
@@ -168,6 +184,7 @@ export function setupNextJs(options: TryErrorConfig = {}): void {
   }
 
   configure(finalConfig);
+  activeSetups.add("nextjs");
 }
 
 /**
@@ -266,24 +283,34 @@ export function setupTesting(options: TryErrorConfig = {}): void {
  * ```
  */
 export function autoSetup(options: TryErrorConfig = {}): void {
-  // Detect environment
+  // Detect environment with improved heuristics
   const isNode = typeof process !== "undefined" && process.versions?.node;
   const isBrowser = typeof window !== "undefined";
   const isNextJs =
     typeof process !== "undefined" &&
-    process.env.__NEXT_PRIVATE_PREBUNDLED_REACT;
+    (process.env.NEXT_RUNTIME ||
+      process.env.__NEXT_PRIVATE_PREBUNDLED_REACT ||
+      process.env.NEXT_PUBLIC_VERCEL_ENV);
   const isTest =
     typeof process !== "undefined" &&
-    (process.env.NODE_ENV === "test" || process.env.JEST_WORKER_ID);
+    (process.env.NODE_ENV === "test" ||
+      process.env.JEST_WORKER_ID ||
+      process.env.VITEST);
+
+  let setupType: string;
 
   if (isTest) {
     setupTesting(options);
+    setupType = "test";
   } else if (isNextJs) {
     setupNextJs(options);
+    setupType = "nextjs";
   } else if (isBrowser) {
     setupReact(options);
+    setupType = "react";
   } else if (isNode) {
     setupNode(options);
+    setupType = "node";
   } else {
     // Fallback to basic configuration
     configure({
@@ -293,7 +320,10 @@ export function autoSetup(options: TryErrorConfig = {}): void {
       developmentMode: false,
       ...options,
     });
+    setupType = "fallback";
   }
+
+  activeSetups.add(setupType);
 }
 
 /**
@@ -320,4 +350,130 @@ export function createCustomSetup(baseConfig: TryErrorConfig) {
   return (options: TryErrorConfig = {}) => {
     configure({ ...baseConfig, ...options });
   };
+}
+
+/**
+ * Validate that setup was successful
+ *
+ * @returns Object with validation results
+ *
+ * @example
+ * ```typescript
+ * setupNode();
+ * const validation = validateSetup();
+ * if (!validation.isValid) {
+ *   console.error('Setup failed:', validation.errors);
+ * }
+ * ```
+ */
+export function validateSetup(): {
+  isValid: boolean;
+  errors: string[];
+  warnings: string[];
+  activeSetups: string[];
+} {
+  const errors: string[] = [];
+  const warnings: string[] = [];
+  const config = getConfig();
+
+  // Check if any setup was called
+  if (activeSetups.size === 0) {
+    warnings.push("No setup function has been called");
+  }
+
+  // Check for conflicting setups
+  if (activeSetups.has("node") && activeSetups.has("react")) {
+    warnings.push("Both Node.js and React setups are active");
+  }
+
+  // Validate configuration
+  if (typeof config.captureStackTrace !== "boolean") {
+    errors.push("Invalid captureStackTrace configuration");
+  }
+
+  if (config.stackTraceLimit && typeof config.stackTraceLimit !== "number") {
+    errors.push("Invalid stackTraceLimit configuration");
+  }
+
+  return {
+    isValid: errors.length === 0,
+    errors,
+    warnings,
+    activeSetups: Array.from(activeSetups),
+  };
+}
+
+/**
+ * Compose multiple setup configurations
+ *
+ * @param setups - Array of setup functions to compose
+ * @returns A new setup function that applies all configurations
+ *
+ * @example
+ * ```typescript
+ * const mySetup = composeSetups([
+ *   () => setupNode({ captureStackTrace: true }),
+ *   () => configure({ onError: myErrorHandler })
+ * ]);
+ *
+ * mySetup();
+ * ```
+ */
+export function composeSetups(
+  setups: Array<(options?: TryErrorConfig) => void>
+): (options?: TryErrorConfig) => void {
+  return (options: TryErrorConfig = {}) => {
+    for (const setup of setups) {
+      setup(options);
+    }
+    activeSetups.add("composed");
+  };
+}
+
+/**
+ * Create a dynamic setup that changes based on runtime conditions
+ *
+ * @param condition - Function that returns true when setup should be applied
+ * @param trueSetup - Setup to use when condition is true
+ * @param falseSetup - Setup to use when condition is false
+ * @returns A setup function that applies the appropriate configuration
+ *
+ * @example
+ * ```typescript
+ * const dynamicSetup = createDynamicSetup(
+ *   () => process.env.NODE_ENV === 'production',
+ *   setupPerformance,
+ *   setupTesting
+ * );
+ *
+ * dynamicSetup();
+ * ```
+ */
+export function createDynamicSetup(
+  condition: () => boolean,
+  trueSetup: (options?: TryErrorConfig) => void,
+  falseSetup: (options?: TryErrorConfig) => void
+): (options?: TryErrorConfig) => void {
+  return (options: TryErrorConfig = {}) => {
+    if (condition()) {
+      trueSetup(options);
+    } else {
+      falseSetup(options);
+    }
+    activeSetups.add("dynamic");
+  };
+}
+
+/**
+ * Tear down all active setups and reset configuration
+ *
+ * @example
+ * ```typescript
+ * // In tests or when switching configurations
+ * teardownSetup();
+ * ```
+ */
+export function teardownSetup(): void {
+  resetConfig();
+  activeSetups.clear();
 }
