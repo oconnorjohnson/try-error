@@ -1,6 +1,18 @@
 // try-error - Lightweight, progressive, type-safe error handling for TypeScript
 // This file will export all public APIs
 
+// Library version
+export const VERSION = "1.0.0";
+
+// Feature flags
+export const FEATURES = {
+  serialization: true,
+  errorComparison: true,
+  errorCloning: true,
+  asyncStackTraces: false, // Not implemented yet
+  objectPooling: false, // Not implemented yet
+} as const;
+
 // Core types
 export type {
   TryError,
@@ -16,9 +28,12 @@ export type {
 export {
   isTryError,
   isTrySuccess,
-  isTryFailure,
   matchTryResult,
   unwrapTryResult,
+  serializeTryError,
+  deserializeTryError,
+  areTryErrorsEqual,
+  cloneTryError,
 } from "./types";
 
 // Error creation utilities
@@ -49,8 +64,8 @@ export {
   trySync,
   trySyncTuple,
   tryCall,
-  tryMap as trySyncMap,
-  tryChain as trySyncChain,
+  tryMap,
+  tryChain,
   unwrap,
   unwrapOr,
   unwrapOrElse,
@@ -68,9 +83,7 @@ export {
   tryAsyncTuple,
   tryAwait,
   tryMapAsync,
-  tryMap as tryAsyncMap,
   tryChainAsync,
-  tryChain as tryAsyncChain,
   tryAllAsync,
   tryAnyAsync,
   tryAnySequential,

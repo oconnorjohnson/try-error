@@ -1,8 +1,8 @@
 /**
  * Private symbol for brand checking - prevents type guard spoofing
- * Using Symbol.for() to ensure the same symbol across module boundaries
+ * Using a private symbol instead of Symbol.for() for better performance
  */
-export const TRY_ERROR_BRAND = Symbol.for("try-error.TryError");
+export const TRY_ERROR_BRAND = Symbol("try-error.TryError");
 
 /**
  * Core error type with rich context for debugging and error handling
@@ -70,7 +70,7 @@ export type TryTuple<T, E extends TryError = TryError> =
  * Type guard to check if a value is a TryError
  *
  * IMPROVED: This is the most reliable type guard - use this for type narrowing
- * Now uses Symbol branding to prevent spoofing
+ * Now uses Symbol branding to prevent spoofing and validates all fields
  */
 export function isTryError<E extends TryError = TryError>(
   value: unknown
@@ -79,7 +79,7 @@ export function isTryError<E extends TryError = TryError>(
     typeof value === "object" &&
     value !== null &&
     TRY_ERROR_BRAND in value &&
-    (value as any)[TRY_ERROR_BRAND] === true &&
+    (value as any)[TRY_ERROR_BRAND] === true && // Exact check for true
     "type" in value &&
     "message" in value &&
     "source" in value &&
@@ -87,7 +87,13 @@ export function isTryError<E extends TryError = TryError>(
     typeof (value as any).type === "string" &&
     typeof (value as any).message === "string" &&
     typeof (value as any).source === "string" &&
-    typeof (value as any).timestamp === "number"
+    typeof (value as any).timestamp === "number" &&
+    // Validate context if present
+    (!("context" in value) ||
+      (value as any).context === undefined ||
+      (typeof (value as any).context === "object" &&
+        (value as any).context !== null &&
+        !Array.isArray((value as any).context)))
   );
 }
 
@@ -100,15 +106,6 @@ export function isTrySuccess<T, E extends TryError>(
   result: TryResult<T, E>
 ): result is T {
   return !isTryError(result);
-}
-
-/**
- * IMPROVED: More explicit type guard for errors that works better with TypeScript
- */
-export function isTryFailure<T, E extends TryError>(
-  result: TryResult<T, E>
-): result is E {
-  return isTryError(result);
 }
 
 /**
@@ -161,4 +158,76 @@ export function unwrapTryResult<T, E extends TryError>(
     return { success: false, error: result };
   }
   return { success: true, data: result };
+}
+
+/**
+ * Serialize a TryError to a JSON-safe format
+ * Removes the Symbol property and converts to a plain object
+ */
+export function serializeTryError<E extends TryError>(
+  error: E
+): Record<string, unknown> {
+  const { [TRY_ERROR_BRAND]: _, ...serializable } = error;
+  return {
+    ...serializable,
+    __tryError: true, // Marker for deserialization
+  };
+}
+
+/**
+ * Deserialize a JSON object back to a TryError
+ * Adds back the Symbol property
+ */
+export function deserializeTryError<T extends string = string>(
+  obj: Record<string, unknown>
+): TryError<T> | null {
+  if (
+    typeof obj === "object" &&
+    obj !== null &&
+    obj.__tryError === true &&
+    typeof obj.type === "string" &&
+    typeof obj.message === "string" &&
+    typeof obj.source === "string" &&
+    typeof obj.timestamp === "number"
+  ) {
+    const { __tryError, ...rest } = obj;
+    return {
+      [TRY_ERROR_BRAND]: true,
+      ...rest,
+    } as TryError<T>;
+  }
+  return null;
+}
+
+/**
+ * Compare two TryErrors for equality
+ * Compares all fields except the Symbol and stack trace
+ */
+export function areTryErrorsEqual<E1 extends TryError, E2 extends TryError>(
+  error1: E1,
+  error2: E2
+): boolean {
+  return (
+    error1.type === error2.type &&
+    error1.message === error2.message &&
+    error1.source === error2.source &&
+    error1.timestamp === error2.timestamp &&
+    JSON.stringify(error1.context) === JSON.stringify(error2.context) &&
+    error1.cause === error2.cause
+  );
+}
+
+/**
+ * Clone a TryError with optional modifications
+ * Creates a new error with the same properties, optionally overriding some
+ */
+export function cloneTryError<E extends TryError>(
+  error: E,
+  modifications?: Partial<Omit<E, typeof TRY_ERROR_BRAND>>
+): E {
+  return {
+    ...error,
+    ...modifications,
+    [TRY_ERROR_BRAND]: true,
+  } as E;
 }
