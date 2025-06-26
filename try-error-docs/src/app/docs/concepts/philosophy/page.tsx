@@ -50,8 +50,8 @@ export default function PhilosophyPage() {
               <p className="text-slate-600">
                 Error handling shouldn't slow down your application. try-error
                 adds &lt;3% overhead for successful operations. Error paths have
-                configurable overhead (50%-1700%) based on debugging needs -
-                this is acceptable because errors should be exceptional.
+                configurable overhead (20%-120%) based on debugging needs - this
+                is acceptable because errors should be exceptional.
               </p>
             </div>
 
@@ -244,9 +244,9 @@ interface Result<T, E> {
           <p className="text-slate-600 mb-4">
             try-error errors include rich context like stack traces, timestamps,
             and source information to aid in debugging. This causes higher error
-            path overhead (50%-1700%) but is configurable. The trade-off is
-            worth it because errors should be rare, and debugging time saved
-            outweighs runtime cost.
+            path overhead (20%-120%) but is configurable. The trade-off is worth
+            it because errors should be rare, and debugging time saved outweighs
+            runtime cost.
           </p>
 
           <CodeBlock
