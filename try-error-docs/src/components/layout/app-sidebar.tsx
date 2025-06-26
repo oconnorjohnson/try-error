@@ -209,6 +209,11 @@ const navigation = [
         url: "/docs/guides/integration",
         icon: FileText,
       },
+      {
+        title: "Error Sampling",
+        url: "/docs/guides/error-sampling",
+        icon: FileText,
+      },
     ],
   },
   {
