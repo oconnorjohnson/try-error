@@ -384,6 +384,72 @@ return result; // Type-safe success value`}
         </div>
       </section>
 
+      {/* Advanced Features */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-semibold">Advanced Features</h2>
+
+        <p className="text-muted-foreground">
+          try-error goes beyond basic error handling with powerful performance
+          optimizations and extensibility features.
+        </p>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-base">
+                🚀 Performance Optimizations
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <CardDescription>
+                Object pooling, lazy evaluation, and configurable performance
+                profiles for high-throughput applications.
+              </CardDescription>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-base">🔌 Plugin System</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <CardDescription>
+                Extend try-error with custom error types, middleware, and
+                integrations without modifying core.
+              </CardDescription>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-base">
+                🎯 Middleware Pipeline
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <CardDescription>
+                Intercept and transform errors with composable middleware for
+                logging, retry, and monitoring.
+              </CardDescription>
+            </CardContent>
+          </Card>
+        </div>
+
+        <div className="flex gap-2 mt-4">
+          <Button variant="outline" size="sm" asChild>
+            <a href="/docs/guides/performance-optimization">
+              Learn about Performance →
+            </a>
+          </Button>
+          <Button variant="outline" size="sm" asChild>
+            <a href="/docs/guides/middleware">Explore Middleware →</a>
+          </Button>
+          <Button variant="outline" size="sm" asChild>
+            <a href="/docs/guides/plugins">Discover Plugins →</a>
+          </Button>
+        </div>
+      </section>
+
       {/* Next Steps */}
       <section className="space-y-4">
         <h2 className="text-2xl font-semibold">Next Steps</h2>
