@@ -11,6 +11,8 @@ import {
   createEnvConfig,
   TryErrorConfig,
   ConfigPresets,
+  getConfig,
+  resetConfig,
 } from "./config";
 
 // Track active setups for teardown

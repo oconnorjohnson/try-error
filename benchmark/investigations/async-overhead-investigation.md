@@ -99,17 +99,40 @@ Library comparison (compare.ts):
 
 ## 📝 Investigation Log
 
-### Entry 1: Initial Code Review (Date: TBD)
+### Entry 1: Initial Code Review (Date: Dec 2024)
 
-_Notes from reviewing the tryAsync implementation_
+Looking at the `tryAsync` implementation in `src/async.ts`:
 
-### Entry 2: Profiling Results (Date: TBD)
+- The function wraps the promise in a try-catch block
+- Supports optional timeout and AbortSignal features
+- Uses Promise.race for timeout/abort functionality
+- Creates TryError objects on failure using `fromThrown`
 
-_CPU profiling findings_
+Key observations:
 
-### Entry 3: Micro-benchmark Results (Date: TBD)
+1. Even without timeout/signal, there's significant overhead
+2. The main function has multiple code paths for different options
+3. Error creation goes through `fromThrown` which may be expensive
 
-_Detailed measurements of individual operations_
+### Entry 2: Micro-benchmark Results (Date: Dec 2024)
+
+Created `async-micro-benchmark.ts` to isolate overhead sources:
+
+**Results:**
+
+```
+Native async/await: 5.15ms (baseline)
+Function wrapping: 28.36ms (+451.0%)
+Promise.race (single): 17.53ms (+240.6%)
+Try-catch wrapper: 5.21ms (+1.2%)
+Minimal tryAsync: 11.35ms (+120.5%)
+Ultra-minimal tryAsync: 11.86ms (+130.4%)
+Full tryAsync: 15.55ms (+202.1%)
+```
+
+**SHOCKING DISCOVERY: The function wrapping alone adds 451% overhead!**
+
+This is completely unexpected. Simply wrapping `Promise.resolve(42)` in a function and calling it is dramatically slower than the direct call. This suggests a V8 optimization issue.
 
 ## 💡 Findings
 
