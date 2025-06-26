@@ -206,7 +206,7 @@ export async function benchmarkNestedErrorHandling() {
           let current = result;
           while (current.cause && isTryError(current.cause)) {
             log.chain.push(current.cause.type);
-            current = current.cause;
+            current = current.cause as typeof result;
           }
         }
       }
