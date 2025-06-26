@@ -136,17 +136,45 @@ This is completely unexpected. Simply wrapping `Promise.resolve(42)` in a functi
 
 ## 💡 Findings
 
-### Finding 1: [Title]
+### Finding 1: Function Wrapping Creates Massive Overhead
 
-**Impact**: High/Medium/Low
+**Impact**: High
 **Details**:
+
+- Wrapping `Promise.resolve(42)` in a function adds 451% overhead
+- This accounts for most of the tryAsync overhead
+- The issue appears to be V8 optimization related
+
 **Evidence**:
 
-### Finding 2: [Title]
+```
+Direct call: await Promise.resolve(42) // 5.15ms for 100k
+Wrapped: const fn = () => Promise.resolve(42); await fn() // 28.36ms
+```
 
-**Impact**: High/Medium/Low
+### Finding 2: Promise.race Also Adds Significant Overhead
+
+**Impact**: Medium
 **Details**:
+
+- Even with a single promise, Promise.race adds 240% overhead
+- This is used in tryAsync for timeout/abort support
+- Should be avoided when not needed
+
 **Evidence**:
+
+```
+await Promise.race([Promise.resolve(42)]) // 17.53ms vs 5.15ms baseline
+```
+
+### Finding 3: Try-Catch Has Minimal Impact
+
+**Impact**: Low
+**Details**:
+
+- Adding try-catch around await only adds 1.2% overhead
+- This is not the source of our performance issues
+- The overhead comes from function calls and promise manipulation
 
 ## 🎯 Optimization Opportunities
 
