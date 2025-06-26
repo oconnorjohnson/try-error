@@ -8,7 +8,7 @@ export default function MigrationPage() {
           Migration Guide
         </h1>
         <p className="text-xl text-slate-600">
-          Gradually adopt try-error in your existing codebase
+          Gradually adopt tryError in your existing codebase
         </p>
       </div>
 
@@ -20,13 +20,13 @@ export default function MigrationPage() {
           </h2>
 
           <p className="text-slate-600 mb-4">
-            try-error is designed for gradual adoption. You can start using it
-            in new code while keeping existing try/catch blocks unchanged.
+            tryError is designed for gradual adoption. You can start using it in
+            new code while keeping existing try/catch blocks unchanged.
           </p>
 
           <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
             <p className="text-green-800">
-              <strong>✅ Safe Migration:</strong> try-error works alongside
+              <strong>✅ Safe Migration:</strong> tryError works alongside
               traditional error handling. No need for a big rewrite!
             </p>
           </div>
@@ -62,9 +62,9 @@ export default function MigrationPage() {
 
             <div>
               <h4 className="text-sm font-semibold text-green-600 mb-2">
-                ✅ After (try-error)
+                ✅ After (tryError)
               </h4>
-              <CodeBlock language="typescript" title="try-error Approach">
+              <CodeBlock language="typescript" title="tryError Approach">
                 {`function parseConfig(jsonString: string) {
   const result = trySync(() => JSON.parse(jsonString));
   if (isTryError(result)) {
@@ -102,7 +102,7 @@ export default function MigrationPage() {
 
             <div>
               <h4 className="text-sm font-semibold text-green-600 mb-2">
-                ✅ After (try-error)
+                ✅ After (tryError)
               </h4>
               <CodeBlock language="typescript" title="tryAsync Approach">
                 {`async function fetchUser(id: string) {
@@ -132,7 +132,7 @@ export default function MigrationPage() {
             1. Start with New Code
           </h3>
           <p className="text-slate-600 mb-4">
-            Begin using try-error for all new functions and modules. This gives
+            Begin using tryError for all new functions and modules. This gives
             you immediate benefits without touching existing code.
           </p>
 
@@ -173,7 +173,7 @@ function safeParseInt(value: string) {
           </h3>
           <p className="text-slate-600 mb-4">
             When you need to modify existing functions, consider converting them
-            to try-error at the same time.
+            to tryError at the same time.
           </p>
         </section>
 
@@ -184,7 +184,7 @@ function safeParseInt(value: string) {
           </h2>
 
           <p className="text-slate-600 mb-4">
-            try-error functions can easily work with traditional try/catch code:
+            tryError functions can easily work with traditional try/catch code:
           </p>
 
           <CodeBlock
@@ -193,7 +193,7 @@ function safeParseInt(value: string) {
             showLineNumbers={true}
             className="mb-4"
           >
-            {`// try-error function called from try/catch code
+            {`// tryError function called from try/catch code
 function legacyFunction() {
   try {
     const result = newTryErrorFunction();
@@ -207,7 +207,7 @@ function legacyFunction() {
   }
 }
 
-// try/catch function called from try-error code
+// try/catch function called from tryError code
 async function newFunction() {
   const result = await tryAsync(() => legacyAsyncFunction());
   if (isTryError(result)) {
@@ -256,7 +256,7 @@ async function newFunction() {
               </h4>
               <CodeBlock
                 language="typescript"
-                title="try-error Error Propagation"
+                title="tryError Error Propagation"
               >
                 {`async function processData() {
   const data = await tryAsync(() => fetchData());
@@ -298,7 +298,7 @@ async function newFunction() {
               <h4 className="text-sm font-semibold text-slate-600 mb-2">
                 After
               </h4>
-              <CodeBlock language="typescript" title="try-error Default Values">
+              <CodeBlock language="typescript" title="tryError Default Values">
                 {`function getConfig() {
   const result = trySync(() => JSON.parse(configString));
   return isTryError(result) ? defaultConfig : result;
@@ -315,13 +315,13 @@ async function newFunction() {
           </h2>
 
           <p className="text-slate-600 mb-4">
-            Your existing tests should continue to work. For new try-error code,
+            Your existing tests should continue to work. For new tryError code,
             test both success and error cases:
           </p>
 
           <CodeBlock
             language="typescript"
-            title="Testing try-error Functions"
+            title="Testing tryError Functions"
             showLineNumbers={true}
             className="mb-4"
           >
@@ -357,7 +357,7 @@ async function newFunction() {
                 Core Concepts
               </h3>
               <p className="text-slate-600 text-sm mb-3">
-                Understand the philosophy behind try-error
+                Understand the philosophy behind tryError
               </p>
               <a
                 href="/docs/concepts/philosophy"

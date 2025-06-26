@@ -21,7 +21,7 @@ export default function ReactComponentsPage() {
           </h2>
 
           <p className="text-slate-600 mb-4">
-            A React Error Boundary specifically designed to work with try-error,
+            A React Error Boundary specifically designed to work with tryError,
             providing enhanced error information and recovery options.
           </p>
 
@@ -49,7 +49,7 @@ export default function ReactComponentsPage() {
             showLineNumbers={true}
             className="mb-4"
           >
-            {`import { TryErrorBoundary } from '@try-error/react';
+            {`import { TryErrorBoundary } from '@tryError/react';
 
 function ErrorFallback({ error, resetError, retry }) {
   return (
@@ -137,7 +137,7 @@ function App() {
             showLineNumbers={true}
             className="mb-4"
           >
-            {`import { AsyncComponent } from '@try-error/react';
+            {`import { AsyncComponent } from '@tryError/react';
 
 function UserProfile({ userId }: { userId: string }) {
   return (
@@ -179,7 +179,7 @@ function UserProfile({ userId }: { userId: string }) {
           </h2>
 
           <p className="text-slate-600 mb-4">
-            A form component that handles submission with try-error, providing
+            A form component that handles submission with tryError, providing
             automatic loading states and error handling.
           </p>
 
@@ -208,7 +208,7 @@ function UserProfile({ userId }: { userId: string }) {
             showLineNumbers={true}
             className="mb-4"
           >
-            {`import { TryForm } from '@try-error/react';
+            {`import { TryForm } from '@tryError/react';
 
 function CreateUserForm() {
   return (
@@ -307,7 +307,7 @@ function CreateUserForm() {
             showLineNumbers={true}
             className="mb-4"
           >
-            {`import { RetryButton } from '@try-error/react';
+            {`import { RetryButton } from '@tryError/react';
 
 function DataFetcher() {
   const [data, setData] = useState(null);
@@ -378,7 +378,7 @@ function DataFetcher() {
             showLineNumbers={true}
             className="mb-4"
           >
-            {`import { ErrorDisplay } from '@try-error/react';
+            {`import { ErrorDisplay } from '@tryError/react';
 
 function UserProfile({ userId }: { userId: string }) {
   const { data: user, error } = useTryAsync(

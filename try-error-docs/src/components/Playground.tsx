@@ -15,7 +15,7 @@ interface PlaygroundProps {
   language?: "typescript" | "javascript";
 }
 
-const defaultTypeScriptCode = `import { trySync, tryAsync } from 'try-error';
+const defaultTypeScriptCode = `import { trySync, tryAsync } from 'tryError';
 
 // Synchronous example
 const parseJSON = (jsonString: string) => {

@@ -44,18 +44,18 @@ export async function POST(request: NextRequest) {
     // Setup the playground environment
     console.log("Setting up playground environment...");
 
-    // Create package.json with try-error dependency
+    // Create package.json with tryError dependency
     await sandbox.writeFiles([
       {
         path: "package.json",
         content: Buffer.from(
           JSON.stringify(
             {
-              name: "try-error-playground",
+              name: "tryError-playground",
               version: "1.0.0",
               type: "module",
               dependencies: {
-                "try-error": "latest",
+                tryError: "latest",
                 tsx: "latest",
               },
             },

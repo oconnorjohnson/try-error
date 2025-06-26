@@ -309,7 +309,7 @@ export function AppSidebar() {
         <Link href="/" className="flex items-center gap-3">
           <Image
             src="/logo.png"
-            alt="try-error logo"
+            alt="tryError logo"
             width={40}
             height={40}
             className="h-10 w-10"
@@ -351,11 +351,11 @@ export function AppSidebar() {
         <div className="text-xs text-muted-foreground space-y-3">
           <div>
             <p>Built with Next.js & shadcn/ui</p>
-            <p className="mt-1">© 2025 try-error</p>
+            <p className="mt-1">© 2025 tryError</p>
           </div>
           <div className="pt-2 border-t border-border">
             <a
-              href="https://github.com/oconnorjohnson/try-error"
+              href="https://github.com/oconnorjohnson/tryError"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground transition-colors"

@@ -8,7 +8,7 @@ export default function ReactExamplesPage() {
           React Examples
         </h1>
         <p className="text-xl text-slate-600">
-          Real-world examples of using try-error in React applications
+          Real-world examples of using tryError in React applications
         </p>
       </div>
 
@@ -30,8 +30,8 @@ export default function ReactExamplesPage() {
             showLineNumbers={true}
             className="mb-4"
           >
-            {`import { useTryAsync, TryErrorBoundary } from '@try-error/react';
-import { tryAsync, isTryError } from 'try-error';
+            {`import { useTryAsync, TryErrorBoundary } from '@tryError/react';
+import { tryAsync, isTryError } from 'tryError';
 
 interface User {
   id: string;
@@ -228,7 +228,7 @@ function App() {
 
           <p className="text-slate-600 mb-4">
             A form component that handles validation, submission, and error
-            states using try-error patterns.
+            states using tryError patterns.
           </p>
 
           <CodeBlock
@@ -237,8 +237,8 @@ function App() {
             showLineNumbers={true}
             className="mb-4"
           >
-            {`import { useTryMutation, useTryCallback } from '@try-error/react';
-import { trySync, isTryError } from 'try-error';
+            {`import { useTryMutation, useTryCallback } from '@tryError/react';
+import { trySync, isTryError } from 'tryError';
 import { useState } from 'react';
 
 interface CreateUserForm {
@@ -264,7 +264,7 @@ function CreateUserForm() {
   });
   const [validationErrors, setValidationErrors] = useState<ValidationErrors>({});
 
-  // Validation function using try-error
+  // Validation function using tryError
   const validateForm = useTryCallback(
     (data: CreateUserForm): ValidationErrors => {
       const errors: ValidationErrors = {};
@@ -482,8 +482,8 @@ function FormField({
             showLineNumbers={true}
             className="mb-4"
           >
-            {`import { useTryAsync } from '@try-error/react';
-import { tryAsync, isTryError } from 'try-error';
+            {`import { useTryAsync } from '@tryError/react';
+import { tryAsync, isTryError } from 'tryError';
 import { useState, useCallback } from 'react';
 
 interface ApiData {
@@ -666,7 +666,7 @@ function DataFetcherWithRetry({ endpoint }: { endpoint: string }) {
                 </li>
                 <li>• Use graceful degradation for non-critical features</li>
                 <li>
-                  • Validate user input with try-error for consistent error
+                  • Validate user input with tryError for consistent error
                   handling
                 </li>
                 <li>
@@ -729,7 +729,7 @@ function DataFetcherWithRetry({ endpoint }: { endpoint: string }) {
                 Basic Examples
               </h3>
               <p className="text-slate-600 text-sm mb-3">
-                Core try-error patterns and examples
+                Core tryError patterns and examples
               </p>
               <a
                 href="/docs/examples/basic"

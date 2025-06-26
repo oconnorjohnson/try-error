@@ -17,17 +17,17 @@ export default function SentryVercelIntegrationPage() {
           Sentry & Vercel Analytics Integration
         </h1>
         <p className="text-xl text-slate-600">
-          Learn how to integrate try-error with popular error tracking and
+          Learn how to integrate tryError with popular error tracking and
           analytics services in your Next.js application.
         </p>
       </div>
 
       <Alert className="mb-8 border-blue-500/20 bg-blue-500/5">
         <AlertDescription>
-          <strong>Why integrate?</strong> While try-error provides excellent
+          <strong>Why integrate?</strong> While tryError provides excellent
           error handling, services like Sentry and Vercel Analytics offer
           centralized dashboards, alerting, and team collaboration features that
-          complement try-error perfectly.
+          complement tryError perfectly.
         </AlertDescription>
       </Alert>
 
@@ -40,7 +40,7 @@ export default function SentryVercelIntegrationPage() {
         <p className="text-slate-600 mb-6">
           Sentry provides comprehensive error tracking with features like
           release tracking, performance monitoring, and session replay. Here's
-          how to integrate it with try-error.
+          how to integrate it with tryError.
         </p>
 
         <Tabs defaultValue="setup" className="mb-8">
@@ -84,7 +84,7 @@ npx @sentry/wizard@latest -i nextjs`}
               <CardHeader>
                 <CardTitle>Basic Integration</CardTitle>
                 <CardDescription>
-                  Simple integration using try-error's configuration
+                  Simple integration using tryError's configuration
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -93,10 +93,10 @@ npx @sentry/wizard@latest -i nextjs`}
                   title="app/layout.tsx"
                   showLineNumbers={true}
                 >
-                  {`import { setupNextJs } from 'try-error/setup';
+                  {`import { setupNextJs } from 'tryError/setup';
 import * as Sentry from '@sentry/nextjs';
 
-// Configure try-error to send errors to Sentry
+// Configure tryError to send errors to Sentry
 setupNextJs({
   environmentHandlers: {
     server: (error) => {
@@ -160,7 +160,7 @@ setupNextJs({
                   title="lib/error-tracking.ts"
                   showLineNumbers={true}
                 >
-                  {`import { TryError } from 'try-error';
+                  {`import { TryError } from 'tryError';
 import * as Sentry from '@sentry/nextjs';
 import { track } from '@vercel/analytics';
 
@@ -252,7 +252,7 @@ export function handleErrorWithTracking(error: TryError) {
                   showLineNumbers={true}
                   className="mt-4"
                 >
-                  {`import { setupNextJs } from 'try-error/setup';
+                  {`import { setupNextJs } from 'tryError/setup';
 import { handleErrorWithTracking } from '@/lib/error-tracking';
 
 // Use the advanced handler
@@ -294,7 +294,7 @@ setupNextJs({
               showLineNumbers={true}
             >
               {`import { track } from '@vercel/analytics';
-import { TryError } from 'try-error';
+import { TryError } from 'tryError';
 
 export function trackError(error: TryError) {
   // Track basic error event
@@ -345,7 +345,7 @@ export function trackError(error: TryError) {
           <CardHeader>
             <CardTitle>Production-Ready Setup</CardTitle>
             <CardDescription>
-              A complete example integrating try-error with Sentry and Vercel
+              A complete example integrating tryError with Sentry and Vercel
               Analytics
             </CardDescription>
           </CardHeader>
@@ -355,7 +355,7 @@ export function trackError(error: TryError) {
               title="lib/error-management.ts"
               showLineNumbers={true}
             >
-              {`import { setupNextJs, TryError } from 'try-error';
+              {`import { setupNextJs, TryError } from 'tryError';
 import * as Sentry from '@sentry/nextjs';
 import { track } from '@vercel/analytics';
 

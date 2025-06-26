@@ -8,7 +8,7 @@ export default function BasicExamplesPage() {
           Basic Examples
         </h1>
         <p className="text-xl text-slate-600">
-          Common patterns and real-world examples using try-error
+          Common patterns and real-world examples using tryError
         </p>
       </div>
 
@@ -20,7 +20,7 @@ export default function BasicExamplesPage() {
           </h2>
 
           <p className="text-slate-600 mb-4">
-            One of the most common use cases for try-error is safe JSON parsing:
+            One of the most common use cases for tryError is safe JSON parsing:
           </p>
 
           <CodeBlock
@@ -29,7 +29,7 @@ export default function BasicExamplesPage() {
             showLineNumbers={true}
             className="mb-4"
           >
-            {`import { trySync, isTryError } from 'try-error';
+            {`import { trySync, isTryError } from 'tryError';
 
 function parseUserConfig(jsonString: string) {
   const result = trySync(() => JSON.parse(jsonString));
@@ -73,7 +73,7 @@ console.log(fallbackConfig.theme); // "light" (default)`}
             showLineNumbers={true}
             className="mb-4"
           >
-            {`import { tryAsync, isTryError } from 'try-error';
+            {`import { tryAsync, isTryError } from 'tryError';
 
 async function fetchUserProfile(userId: string) {
   // Fetch user data
@@ -142,7 +142,7 @@ if (profile.error) {
             showLineNumbers={true}
             className="mb-4"
           >
-            {`import { trySync, tryAsync, isTryError } from 'try-error';
+            {`import { trySync, tryAsync, isTryError } from 'tryError';
 import fs from 'fs';
 
 // Synchronous file reading
@@ -212,7 +212,7 @@ if (!saved) {
             showLineNumbers={true}
             className="mb-4"
           >
-            {`import { trySync, isTryError } from 'try-error';
+            {`import { trySync, isTryError } from 'tryError';
 
 interface UserForm {
   email: string;
@@ -320,7 +320,7 @@ if (validation.valid) {
             showLineNumbers={true}
             className="mb-4"
           >
-            {`import { tryAsync, isTryError } from 'try-error';
+            {`import { tryAsync, isTryError } from 'tryError';
 
 class UserRepository {
   constructor(private db: any) {}
@@ -419,7 +419,7 @@ if (user) {
             showLineNumbers={true}
             className="mb-4"
           >
-            {`import { trySync, isTryError } from 'try-error';
+            {`import { trySync, isTryError } from 'tryError';
 
 interface AppConfig {
   port: number;

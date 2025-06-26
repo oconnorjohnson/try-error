@@ -11,7 +11,7 @@ export default function ReactInstallationPage() {
           React Integration
         </h1>
         <p className="text-xl text-slate-600">
-          Install and set up try-error with React for enhanced error handling in
+          Install and set up tryError with React for enhanced error handling in
           your components
         </p>
       </div>
@@ -28,14 +28,14 @@ export default function ReactInstallationPage() {
               <h3 className="text-lg font-semibold text-slate-900 mb-2">
                 Core Library
               </h3>
-              <InstallCommand packageName="try-error" className="mb-4" />
+              <InstallCommand packageName="tryError" className="mb-4" />
             </div>
 
             <div>
               <h3 className="text-lg font-semibold text-slate-900 mb-2">
                 React Integration (Optional)
               </h3>
-              <InstallCommand packageName="@try-error/react" className="mb-4" />
+              <InstallCommand packageName="@tryError/react" className="mb-4" />
             </div>
           </div>
 
@@ -54,7 +54,7 @@ export default function ReactInstallationPage() {
           </h2>
 
           <p className="text-slate-600 mb-4">
-            The React integration works seamlessly with the core try-error
+            The React integration works seamlessly with the core tryError
             library:
           </p>
 
@@ -64,8 +64,8 @@ export default function ReactInstallationPage() {
             showLineNumbers={true}
             className="mb-4"
           >
-            {`import { useTryAsync, useTrySync } from '@try-error/react';
-import { tryAsync, isTryError } from 'try-error';
+            {`import { useTryAsync, useTrySync } from '@tryError/react';
+import { tryAsync, isTryError } from 'tryError';
 
 function UserProfile({ userId }: { userId: string }) {
   // Using the React hook
@@ -124,7 +124,7 @@ function UserProfile({ userId }: { userId: string }) {
           </h2>
 
           <p className="text-slate-600 mb-4">
-            try-error works well with React Error Boundaries for comprehensive
+            tryError works well with React Error Boundaries for comprehensive
             error handling:
           </p>
 
@@ -135,7 +135,7 @@ function UserProfile({ userId }: { userId: string }) {
             className="mb-4"
           >
             {`import { ErrorBoundary } from 'react-error-boundary';
-import { TryErrorBoundary } from '@try-error/react';
+import { TryErrorBoundary } from '@tryError/react';
 
 function App() {
   return (

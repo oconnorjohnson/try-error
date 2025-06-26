@@ -49,7 +49,7 @@ interface ConsoleOutput {
   timestamp: number;
 }
 
-// Mock try-error implementation for the playground
+// Mock tryError implementation for the playground
 const mockTryError = `
 const trySync = (fn) => {
   try {
@@ -216,7 +216,7 @@ export function PlaygroundAdvanced({
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "try-error-example.ts";
+    a.download = "tryError-example.ts";
     a.click();
     URL.revokeObjectURL(url);
   }, [code]);

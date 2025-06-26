@@ -14,7 +14,7 @@ export default function HomePage() {
         {/* Logo */}
         <Image
           src="/logo.png"
-          alt="try-error logo"
+          alt="tryError logo"
           width={96}
           height={96}
           className="w-24 h-24 md:w-40 md:h-40"
@@ -46,7 +46,7 @@ export default function HomePage() {
             View Documentation
           </a>
           <a
-            href="https://github.com/oconnorjohnson/try-error"
+            href="https://github.com/oconnorjohnson/tryError"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-6 py-3 border border-slate-600 text-slate-200 rounded-lg hover:bg-slate-800 transition-colors"
@@ -152,7 +152,7 @@ const result = trySync(() => operation());
           <div className="border border-slate-700 bg-slate-800 rounded-lg">
             <div className="p-4 border-b border-slate-700">
               <h3 className="text-lg font-semibold text-green-400">
-                ✅ After: try-error
+                ✅ After: tryError
               </h3>
             </div>
             <div className="p-4">

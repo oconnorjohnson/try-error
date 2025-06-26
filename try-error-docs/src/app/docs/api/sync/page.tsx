@@ -8,7 +8,7 @@ export default function SyncAPIPage() {
           Synchronous Operations
         </h1>
         <p className="text-xl text-slate-600">
-          API reference for handling synchronous operations with try-error
+          API reference for handling synchronous operations with tryError
         </p>
       </div>
 
@@ -66,7 +66,7 @@ export default function SyncAPIPage() {
             showLineNumbers={true}
             className="mb-4"
           >
-            {`import { trySync, isTryError } from 'try-error';
+            {`import { trySync, isTryError } from 'tryError';
 
 // JSON parsing
 const parseResult = trySync(() => JSON.parse('{"name": "John"}'));

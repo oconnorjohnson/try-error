@@ -15,13 +15,13 @@ export default function ReactHooksPage() {
       <div>
         <h1 className="text-4xl font-bold mb-4">React Hooks</h1>
         <p className="text-xl text-muted-foreground">
-          Complete guide to using try-error hooks in React applications.
+          Complete guide to using tryError hooks in React applications.
         </p>
       </div>
 
       <Alert>
         <AlertDescription>
-          The @try-error/react package provides hooks that integrate seamlessly
+          The @tryError/react package provides hooks that integrate seamlessly
           with React's state management and lifecycle, making error handling
           declarative and type-safe.
         </AlertDescription>
@@ -42,7 +42,7 @@ export default function ReactHooksPage() {
             <div>
               <h4 className="font-semibold mb-2">Basic Usage</h4>
               <CodeBlock language="typescript" title="useTry basic example">
-                {`import { useTry } from '@try-error/react';
+                {`import { useTry } from '@tryError/react';
 
 function UserProfile({ userId }: { userId: string }) {
   const { data, error, loading, execute, reset } = useTry(
@@ -144,7 +144,7 @@ interface UseTryResult<T> {
             <div>
               <h4 className="font-semibold mb-2">Basic Usage</h4>
               <CodeBlock language="typescript" title="useTryCallback example">
-                {`import { useTryCallback } from '@try-error/react';
+                {`import { useTryCallback } from '@tryError/react';
 
 function CreateUserForm() {
   const [name, setName] = useState('');
@@ -257,7 +257,7 @@ interface UseTryCallbackResult<TArgs extends any[]> {
             <div>
               <h4 className="font-semibold mb-2">Basic Usage</h4>
               <CodeBlock language="typescript" title="useTryState example">
-                {`import { useTryState } from '@try-error/react';
+                {`import { useTryState } from '@tryError/react';
 
 interface User {
   id: string;
@@ -345,7 +345,7 @@ function UserManager() {
                 language="typescript"
                 title="useTryMutation with optimistic updates"
               >
-                {`import { useTryMutation } from '@try-error/react';
+                {`import { useTryMutation } from '@tryError/react';
 
 function TodoList({ todos, setTodos }: { 
   todos: Todo[], 
@@ -418,7 +418,7 @@ function TodoList({ todos, setTodos }: {
                 language="typescript"
                 title="Combining hooks with error boundaries"
               >
-                {`import { TryErrorBoundary } from '@try-error/react';
+                {`import { TryErrorBoundary } from '@tryError/react';
 
 function App() {
   return (
@@ -481,7 +481,7 @@ function UsersList() {
               <h4 className="font-semibold mb-2">3. Form Validation Pattern</h4>
               <CodeBlock
                 language="typescript"
-                title="Form handling with try-error"
+                title="Form handling with tryError"
               >
                 {`function useFormValidation<T>(validationSchema: (data: T) => TryResult<T>) {
   const [data, setData] = useState<T>({} as T);

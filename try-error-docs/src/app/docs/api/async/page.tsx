@@ -8,7 +8,7 @@ export default function AsyncAPIPage() {
           Asynchronous Operations
         </h1>
         <p className="text-xl text-slate-600">
-          API reference for handling asynchronous operations with try-error
+          API reference for handling asynchronous operations with tryError
         </p>
       </div>
 
@@ -66,7 +66,7 @@ export default function AsyncAPIPage() {
             showLineNumbers={true}
             className="mb-4"
           >
-            {`import { tryAsync, isTryError } from 'try-error';
+            {`import { tryAsync, isTryError } from 'tryError';
 
 // API calls
 const fetchUser = async (id: string) => {

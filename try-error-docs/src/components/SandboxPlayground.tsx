@@ -217,7 +217,7 @@ export function SandboxPlayground({
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `try-error-example.${language === "typescript" ? "ts" : "js"}`;
+    a.download = `tryError-example.${language === "typescript" ? "ts" : "js"}`;
     a.click();
     URL.revokeObjectURL(url);
   }, [code, language]);

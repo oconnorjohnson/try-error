@@ -29,7 +29,7 @@ export default function DocsIntroduction() {
         </div>
 
         <h1 className="text-4xl font-bold tracking-tight">
-          Introduction to try-error
+          Introduction to tryError
         </h1>
 
         <p className="text-xl text-muted-foreground">
@@ -51,10 +51,10 @@ export default function DocsIntroduction() {
 
       {/* What is try-error */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-semibold">What is try-error?</h2>
+        <h2 className="text-2xl font-semibold">What is tryError?</h2>
 
         <p className="text-muted-foreground">
-          <strong>try-error</strong> provides <em>errors as values</em> with{" "}
+          <strong>tryError</strong> provides <em>errors as values</em> with{" "}
           <strong>zero-overhead success paths</strong>,
           <strong>progressive adoption</strong>, and a{" "}
           <strong>developer-first experience</strong>. It allows you to handle
@@ -150,7 +150,7 @@ export default function DocsIntroduction() {
         <h2 className="text-2xl font-semibold">The Solution</h2>
 
         <p className="text-muted-foreground">
-          try-error provides a middle ground that feels natural to
+          tryError provides a middle ground that feels natural to
           JavaScript/TypeScript developers while providing the benefits of
           explicit error handling.
         </p>
@@ -187,11 +187,11 @@ export default function DocsIntroduction() {
             <CardHeader>
               <CardTitle className="text-green-600 flex items-center gap-2">
                 <Code2 className="h-5 w-5" />
-                After: try-error
+                After: tryError
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <CodeBlock language="typescript" title="try-error Approach">
+              <CodeBlock language="typescript" title="tryError Approach">
                 {`const result = await tryAsync(async () => {
   const response = await fetch("/api/user");
   return response.json();
@@ -287,7 +287,7 @@ return result; // Type-safe success value`}
                   </strong>
                 </div>
                 <p className="text-sm">
-                  Error overhead is high because try-error captures rich
+                  Error overhead is high because tryError captures rich
                   debugging information:
                 </p>
                 <ul className="space-y-1 text-sm">
@@ -389,7 +389,7 @@ return result; // Type-safe success value`}
         <h2 className="text-2xl font-semibold">Advanced Features</h2>
 
         <p className="text-muted-foreground">
-          try-error goes beyond basic error handling with powerful performance
+          tryError goes beyond basic error handling with powerful performance
           optimizations and extensibility features.
         </p>
 
@@ -414,7 +414,7 @@ return result; // Type-safe success value`}
             </CardHeader>
             <CardContent>
               <CardDescription>
-                Extend try-error with custom error types, middleware, and
+                Extend tryError with custom error types, middleware, and
                 integrations without modifying core.
               </CardDescription>
             </CardContent>
@@ -461,7 +461,7 @@ return result; // Type-safe success value`}
                 Installation <ArrowRight className="h-4 w-4" />
               </div>
               <div className="text-sm opacity-90">
-                Get try-error installed in your project
+                Get tryError installed in your project
               </div>
             </a>
           </Button>

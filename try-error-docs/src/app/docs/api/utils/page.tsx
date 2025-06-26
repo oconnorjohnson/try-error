@@ -8,7 +8,7 @@ export default function UtilsAPIPage() {
           Utilities API
         </h1>
         <p className="text-xl text-slate-600">
-          API reference for try-error utility functions and helpers
+          API reference for tryError utility functions and helpers
         </p>
       </div>
 
@@ -21,7 +21,7 @@ export default function UtilsAPIPage() {
 
           <p className="text-slate-600 mb-4">
             Type guard functions help TypeScript narrow types and provide
-            runtime type checking for try-error results.
+            runtime type checking for tryError results.
           </p>
 
           <div className="space-y-6">
@@ -39,7 +39,7 @@ export default function UtilsAPIPage() {
                 showLineNumbers={true}
                 className="mb-4"
               >
-                {`import { isTryError } from 'try-error';
+                {`import { isTryError } from 'tryError';
 
 function isTryError<T = any>(value: unknown): value is TryError<T>
 
@@ -79,7 +79,7 @@ function handleResult<T>(result: TryResult<T, TryError>) {
                 showLineNumbers={true}
                 className="mb-4"
               >
-                {`import { isTrySuccess } from 'try-error';
+                {`import { isTrySuccess } from 'tryError';
 
 function isTrySuccess<T, E extends TryError>(
   result: TryResult<T, E>
@@ -126,7 +126,7 @@ function processResults<T>(results: TryResult<T, TryError>[]) {
                 showLineNumbers={true}
                 className="mb-4"
               >
-                {`import { hasErrorType } from 'try-error';
+                {`import { hasErrorType } from 'tryError';
 
 function hasErrorType<T extends string>(
   error: TryError,
@@ -167,7 +167,7 @@ function isRetryableError(error: TryError): boolean {
           </h2>
 
           <p className="text-slate-600 mb-4">
-            Transform and manipulate try-error results with functional
+            Transform and manipulate tryError results with functional
             programming patterns.
           </p>
 
@@ -185,7 +185,7 @@ function isRetryableError(error: TryError): boolean {
                 showLineNumbers={true}
                 className="mb-4"
               >
-                {`import { mapResult } from 'try-error';
+                {`import { mapResult } from 'tryError';
 
 function mapResult<T, U, E extends TryError>(
   result: TryResult<T, E>,
@@ -235,7 +235,7 @@ async function mapResultAsync<T, U, E extends TryError>(
                 showLineNumbers={true}
                 className="mb-4"
               >
-                {`import { mapError } from 'try-error';
+                {`import { mapError } from 'tryError';
 
 function mapError<T, E1 extends TryError, E2 extends TryError>(
   result: TryResult<T, E1>,
@@ -292,7 +292,7 @@ const apiResult = mapError(result, error => {
                 showLineNumbers={true}
                 className="mb-4"
               >
-                {`import { flatMapResult } from 'try-error';
+                {`import { flatMapResult } from 'tryError';
 
 function flatMapResult<T, U, E extends TryError>(
   result: TryResult<T, E>,
@@ -350,7 +350,7 @@ async function processUserWorkflow(userId: string) {
           </h2>
 
           <p className="text-slate-600 mb-4">
-            Combine multiple try-error results with various strategies.
+            Combine multiple tryError results with various strategies.
           </p>
 
           <div className="space-y-6">
@@ -368,7 +368,7 @@ async function processUserWorkflow(userId: string) {
                 showLineNumbers={true}
                 className="mb-4"
               >
-                {`import { combineResults } from 'try-error';
+                {`import { combineResults } from 'tryError';
 
 function combineResults<T extends readonly TryResult<any, any>[]>(
   results: T
