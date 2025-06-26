@@ -28,7 +28,6 @@ export {
   type TryFailure,
   isTryError,
   isTrySuccess,
-  isTryFailure,
 
   // Error creation
   createError,
@@ -87,11 +86,39 @@ export {
   fieldValidationError,
 } from "try-error";
 
-// Export React-specific hooks
-export * from "./hooks/useTry";
-export * from "./hooks/useTryCallback";
-export * from "./hooks/useTryState";
-export * from "./hooks/useTryMutation";
+// Export React-specific hooks (without conflicting exports)
+export {
+  // From useTry
+  useTry,
+  useTrySync,
+  type UseTryOptions,
+  type UseTryReturn,
+
+  // From useTryCallback
+  useTryCallback,
+  useTryCallbackSync,
+  useTryCallbackWithState,
+  useErrorCallback,
+  useSuccessCallback,
+  useResultCallback,
+  useFormSubmitCallback,
+  type UseTryCallbackOptions,
+  type UseTryCallbackWithStateOptions,
+  type UseTryCallbackWithState,
+
+  // From useTryState
+  useTryState,
+  useTryStateAsync,
+  useStateWithError,
+  useValidatedState,
+  usePersistedState,
+
+  // From useTryMutation
+  useTryMutation,
+  useFormMutation,
+  type UseTryMutationOptions,
+  type UseTryMutationResult,
+} from "./hooks";
 
 // Export React components
 export * from "./components/TryErrorBoundary";
@@ -99,7 +126,7 @@ export * from "./components/TryErrorBoundary";
 // Export context utilities
 export * from "./context/ErrorContext";
 
-// Re-export all types
+// Re-export all types (TryState comes from here, not from hooks)
 export * from "./types";
 
 // Version info
