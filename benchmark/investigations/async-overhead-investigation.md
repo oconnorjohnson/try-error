@@ -303,27 +303,94 @@ Inline try-catch: +0.3% (baseline check)
 
 ## 🎬 Action Items
 
-1. [ ] Review tryAsync implementation in detail
+1. [x] Review tryAsync implementation in detail
 2. [ ] Set up CPU profiling environment
-3. [ ] Create isolated micro-benchmarks
+3. [x] Create isolated micro-benchmarks
 4. [ ] Research V8 async optimizations
 5. [ ] Test with different Node.js versions
 6. [ ] Compare with other libraries' approaches
-7. [ ] Experiment with alternative implementations
+7. [x] Experiment with alternative implementations
 
 ## 🏁 Success Criteria
 
-- Reduce async overhead to <20% (from current 184-234%)
-- Maintain all current functionality
-- No breaking changes to API
-- Document all trade-offs clearly
+- Reduce async overhead to <20% (from current 184-234%) ❌ (Got to 64%)
+- Maintain all current functionality ✅
+- No breaking changes to API ❓ (May need new API)
+- Document all trade-offs clearly ✅
 
-## 📋 Notes
+## 📋 Final Recommendations
 
-_Space for additional notes, observations, and ideas during the investigation_
+### 1. **Add Promise-Based Alternative APIs**
+
+```typescript
+// Current API (keep for compatibility)
+const result = await tryAsync(() => fetch("/api/data"));
+
+// New faster API
+const result = await tryPromise(fetch("/api/data"));
+```
+
+### 2. **Use Promise.then() Internally**
+
+Replace async/await with promise.then() in performance-critical paths:
+
+```typescript
+export function tryPromiseFast<T>(promise: Promise<T>): Promise<TryResult<T>> {
+  return promise.then(
+    (value) => value,
+    (error) => fromThrown(error)
+  );
+}
+```
+
+### 3. **Document the Performance Trade-off**
+
+Be transparent that tryAsync has overhead due to V8 limitations:
+
+- For performance-critical code, use `tryPromise()` or `trySync()`
+- For convenience and full features, use `tryAsync()`
+
+### 4. **Consider a Hybrid Approach**
+
+```typescript
+// Auto-detect if passed a function or promise
+export function tryAuto<T>(
+  input: (() => Promise<T>) | Promise<T>
+): Promise<TryResult<T>> {
+  if (typeof input === "function") {
+    // Slower path for functions
+    return tryAsync(input);
+  } else {
+    // Fast path for promises
+    return tryPromiseFast(input);
+  }
+}
+```
+
+## 🎯 Key Learnings
+
+1. **V8 doesn't optimize async functions that take function parameters well**
+
+   - Creating functions inline makes it worse (468% overhead)
+   - But even pre-defined functions have issues (118% overhead)
+
+2. **Promise.then() is significantly faster than async/await for wrappers**
+
+   - 64% overhead vs 145% overhead
+   - This is a 55% performance improvement
+
+3. **The overhead is NOT from our error handling**
+
+   - It's from the async function wrapper pattern itself
+   - Even minimal wrappers have huge overhead
+
+4. **Alternative API designs can help**
+   - Passing promises directly instead of functions
+   - Using .then() chains instead of async/await
+   - Providing multiple APIs for different use cases
 
 ---
 
-**Last Updated**: [Date]
-**Investigator**: [Name]
-**Status**: 🔴 Not Started
+**Last Updated**: Dec 2024
+**Investigator**: AI Assistant
+**Status**: 🟡 Investigation Complete - Recommendations Made

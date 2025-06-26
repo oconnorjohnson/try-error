@@ -1,7 +1,13 @@
 // TryErrorBoundary component for React error handling
 // TODO: Implement React error boundary for try-error integration
 
-import React, { Component, ReactNode, ErrorInfo } from "react";
+import React, {
+  Component,
+  ReactNode,
+  ErrorInfo,
+  useEffect,
+  useRef,
+} from "react";
 import { isTryError, TryError, createError } from "try-error";
 import { ErrorProvider, ErrorContextValue } from "../context/ErrorContext";
 
@@ -34,6 +40,10 @@ export interface TryErrorBoundaryProps {
     delay?: number;
     backoff?: "linear" | "exponential";
   };
+  // Whether to catch async errors (unhandled promise rejections)
+  catchAsyncErrors?: boolean;
+  // Whether to catch errors from event handlers
+  catchEventHandlerErrors?: boolean;
 }
 
 // State for the error boundary
@@ -42,6 +52,57 @@ interface TryErrorBoundaryState {
   error: Error | TryError | null;
   errorInfo: ErrorInfo | null;
   retryCount: number;
+  asyncError?: Error | TryError | null;
+}
+
+// Global registry for async error boundaries
+const asyncErrorBoundaries = new Set<TryErrorBoundary>();
+
+// Global error handlers setup flag
+let globalHandlersSetup = false;
+
+// Setup global error handlers for async errors
+function setupGlobalErrorHandlers() {
+  if (globalHandlersSetup || typeof window === "undefined") return;
+
+  globalHandlersSetup = true;
+
+  // Handle unhandled promise rejections
+  window.addEventListener("unhandledrejection", (event) => {
+    const error = new Error(
+      event.reason?.message || "Unhandled Promise Rejection"
+    );
+    error.stack = event.reason?.stack || error.stack;
+
+    // Notify all async error boundaries
+    asyncErrorBoundaries.forEach((boundary) => {
+      if (boundary.props.catchAsyncErrors) {
+        boundary.handleAsyncError(error, "unhandledRejection");
+      }
+    });
+
+    // Prevent default browser behavior
+    event.preventDefault();
+  });
+
+  // Handle global errors (including event handler errors)
+  window.addEventListener("error", (event) => {
+    // Check if this is an event handler error
+    const isEventHandlerError =
+      !event.filename && !event.lineno && !event.colno;
+
+    asyncErrorBoundaries.forEach((boundary) => {
+      if (
+        (boundary.props.catchAsyncErrors && !isEventHandlerError) ||
+        (boundary.props.catchEventHandlerErrors && isEventHandlerError)
+      ) {
+        boundary.handleAsyncError(
+          event.error || new Error(event.message),
+          "globalError"
+        );
+      }
+    });
+  });
 }
 
 /**
@@ -49,6 +110,7 @@ interface TryErrorBoundaryState {
  *
  * Catches both regular React errors and provides special handling for TryError objects.
  * Includes retry functionality, custom fallback UIs, and error reporting integration.
+ * Now also supports catching async errors and event handler errors.
  *
  * @example
  * ```tsx
@@ -62,6 +124,8 @@ interface TryErrorBoundaryState {
  *   )}
  *   onError={(error) => reportError(error)}
  *   showRetry={true}
+ *   catchAsyncErrors={true}
+ *   catchEventHandlerErrors={true}
  * >
  *   <MyComponent />
  * </TryErrorBoundary>
@@ -74,6 +138,7 @@ export class TryErrorBoundary extends Component<
   private retryTimeoutId: ReturnType<typeof setTimeout> | null = null;
   private errorLogMap = new WeakMap<Error, boolean>();
   private isRetrying = false;
+  private isMounted = false;
 
   constructor(props: TryErrorBoundaryProps) {
     super(props);
@@ -82,7 +147,30 @@ export class TryErrorBoundary extends Component<
       error: null,
       errorInfo: null,
       retryCount: 0,
+      asyncError: null,
     };
+  }
+
+  componentDidMount() {
+    this.isMounted = true;
+
+    // Register this boundary for async errors if enabled
+    if (this.props.catchAsyncErrors || this.props.catchEventHandlerErrors) {
+      asyncErrorBoundaries.add(this);
+      setupGlobalErrorHandlers();
+    }
+  }
+
+  componentWillUnmount() {
+    this.isMounted = false;
+
+    if (this.retryTimeoutId !== null) {
+      clearTimeout(this.retryTimeoutId);
+      this.retryTimeoutId = null;
+    }
+
+    // Unregister from async error handling
+    asyncErrorBoundaries.delete(this);
   }
 
   static getDerivedStateFromError(
@@ -96,25 +184,58 @@ export class TryErrorBoundary extends Component<
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    this.handleError(error, errorInfo);
+  }
+
+  // Handle async errors caught by global handlers
+  handleAsyncError = (
+    error: Error,
+    source: "unhandledRejection" | "globalError"
+  ) => {
+    if (!this.isMounted || this.state.hasError) return;
+
+    // Check if we should catch this error
+    if (this.props.errorFilter && !this.props.errorFilter(error)) {
+      return;
+    }
+
+    const tryError = this.convertToTryError(error, {
+      source,
+      async: true,
+      timestamp: Date.now(),
+    });
+
+    this.setState({
+      hasError: true,
+      error: tryError,
+      errorInfo: null,
+      asyncError: tryError,
+    });
+
+    // Call the error handler if provided
+    this.props.onError?.(tryError, null);
+
+    // Log error in development
+    if (
+      typeof process !== "undefined" &&
+      process.env?.NODE_ENV === "development" &&
+      !this.errorLogMap.has(error)
+    ) {
+      this.errorLogMap.set(error, true);
+      this.logError(tryError, null);
+    }
+  };
+
+  private handleError(error: Error, errorInfo: ErrorInfo | null) {
     // Check if we should catch this error
     if (this.props.errorFilter && !this.props.errorFilter(error)) {
       throw error; // Re-throw to let parent boundary handle it
     }
 
-    // Check if error is already a TryError to avoid double conversion
-    const tryError = isTryError(error)
-      ? error
-      : createError({
-          type: "ReactError",
-          message: error.message,
-          cause: error,
-          context: {
-            componentStack: errorInfo.componentStack,
-            errorBoundary: true,
-            // Preserve original error's component stack if it exists
-            originalStack: (error as any).componentStack,
-          },
-        });
+    const tryError = this.convertToTryError(error, {
+      componentStack: errorInfo?.componentStack,
+      errorBoundary: true,
+    });
 
     this.setState({
       error: tryError,
@@ -135,7 +256,37 @@ export class TryErrorBoundary extends Component<
     }
   }
 
-  private logError(error: TryError | Error, errorInfo: ErrorInfo) {
+  private convertToTryError(
+    error: Error,
+    additionalContext?: Record<string, any>
+  ): TryError {
+    if (isTryError(error)) {
+      // Merge additional context if provided
+      if (additionalContext) {
+        return {
+          ...error,
+          context: {
+            ...error.context,
+            ...additionalContext,
+          },
+        };
+      }
+      return error;
+    }
+
+    return createError({
+      type: "ReactError",
+      message: error.message,
+      cause: error,
+      context: {
+        // Preserve original error's component stack if it exists
+        originalStack: (error as any).componentStack,
+        ...additionalContext,
+      },
+    });
+  }
+
+  private logError(error: TryError | Error, errorInfo: ErrorInfo | null) {
     // Safe console access
     if (
       typeof console !== "undefined" &&
@@ -155,13 +306,6 @@ export class TryErrorBoundary extends Component<
         });
       }
       console.groupEnd();
-    }
-  }
-
-  componentWillUnmount() {
-    if (this.retryTimeoutId !== null) {
-      clearTimeout(this.retryTimeoutId);
-      this.retryTimeoutId = null;
     }
   }
 
