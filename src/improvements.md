@@ -39,6 +39,7 @@
 - [x] **No Error Deduplication**: Creating the same error multiple times creates new objects each time.
 - [ ] **No Custom Stack Trace Formatting**: Can't customize how stack traces are formatted beyond basic options.
 - [ ] **No Error Metrics**: No built-in way to track error creation performance or frequency.
+- [ ] **No Rate Limiting for Error Creation**: Rate limiting exists for async operations but not for error creation itself.
 
 ## 3. src/config.ts
 
@@ -96,9 +97,12 @@
 ### Missing Features
 
 - [x] **No Progress Tracking**: No way to track progress of long-running async operations.
-- [ ] **No Cancellation**: No built-in cancellation support for async operations.
+- [ ] **No Cancellation**: No built-in cancellation support for async operations beyond AbortSignal.
 - [x] **No Rate Limiting**: No built-in rate limiting for async operations.
 - [x] **No Queue Management**: No way to queue and manage multiple async operations.
+- [ ] **Async Iterators**: Support for async generators and iterators.
+- [ ] **Streaming**: Handle errors in streaming scenarios.
+- [ ] **Deadlock Detection**: Detect potential deadlocks in async code.
 
 ## 6. src/factories.ts
 
@@ -179,9 +183,11 @@
 
 ### Performance Issues
 
-1. [ ] **No Object Pooling**: Despite being mentioned in config, object pooling is not implemented.
-2. [ ] **No Lazy Evaluation**: Error properties are always computed even if never accessed.
+1. [x] ~~**No Object Pooling**: Despite being mentioned in config, object pooling is not implemented.~~ ✅ IMPLEMENTED
+2. [x] ~~**No Lazy Evaluation**: Error properties are always computed even if never accessed.~~ ✅ IMPLEMENTED
 3. [ ] **No Memoization**: Repeated operations aren't memoized.
+4. [ ] **Micro-optimizations**: Use bit flags instead of boolean properties, intern common strings.
+5. [ ] **WASM Module**: For ultra-high performance scenarios, compile critical paths to WebAssembly.
 
 ### Type Safety Issues
 
@@ -204,8 +210,8 @@
 ### Integration Issues
 
 1. [ ] **No Framework Adapters**: No official adapters for popular frameworks beyond React.
-2. [ ] **No Middleware Support**: No middleware system for extending functionality.
-3. [ ] **No Plugin System**: No way to add custom functionality via plugins.
+2. [x] ~~**No Middleware Support**: No middleware system for extending functionality.~~ ✅ IMPLEMENTED
+3. [x] ~~**No Plugin System**: No way to add custom functionality via plugins.~~ ✅ IMPLEMENTED
 
 ### Monitoring and Observability
 
@@ -235,10 +241,11 @@
 ### Additional Missing Features
 
 1. [ ] **Error Aggregation Pipeline**: No way to create pipelines for processing multiple errors.
-2. [ ] **Error Transformation Middleware**: No middleware system for transforming errors.
+2. [ ] **Error Transformation Middleware**: No middleware system for transforming errors beyond basic middleware.
 3. [ ] **Structured Logging Integration**: No built-in integration with structured logging libraries.
 4. [ ] **Error Recovery Strategies**: No built-in strategies beyond simple retry and circuit breaker.
-5. [ ] **Async Error Boundaries**: No async-aware error boundary utilities.
+5. [ ] **Async Error Boundaries**: No async-aware error boundary utilities for React.
+6. [ ] **Event System**: Emit events for error creation, transformation, etc.
 
 ## 8. Optimization Opportunities
 
@@ -269,6 +276,7 @@
 - [ ] **DataDog Plugin**: Official DataDog integration.
 - [ ] **OpenTelemetry**: Support for distributed tracing.
 - [ ] **GraphQL**: Special handling for GraphQL errors.
+- [ ] **Structured Logging Integration**: No built-in integration with structured logging libraries (Winston, Pino, etc.).
 
 ### Developer Experience
 
@@ -281,16 +289,16 @@
 
 ### Advanced Error Handling
 
-- [ ] **Error Aggregation**: Combine multiple errors into one.
+- [ ] **Error Aggregation**: Combine multiple errors into one beyond basic `combineErrors`.
 - [ ] **Error Chaining**: Better support for error causes and chains.
-- [ ] **Error Recovery**: Built-in recovery strategies.
+- [ ] **Error Recovery**: Built-in recovery strategies beyond retry and circuit breaker.
 - [ ] **Error Policies**: Define how different error types should be handled.
 
 ### Async Improvements
 
 - [ ] **Async Iterators**: Support for async generators and iterators.
 - [ ] **Streaming**: Handle errors in streaming scenarios.
-- [ ] **Cancellation**: Proper cancellation token support.
+- [ ] **Cancellation**: Proper cancellation token support beyond AbortSignal.
 - [ ] **Deadlock Detection**: Detect potential deadlocks in async code.
 
 ### Debugging Tools
@@ -306,7 +314,7 @@ The try-error codebase has made significant progress in addressing the identifie
 
 ### ✅ Completed (as of latest evaluation)
 
-- All type safety issues resolved
+- All type safety issues resolved in types.ts
 - Major bug fixes implemented
 - Performance optimizations: object pooling, lazy evaluation
 - Extensibility: complete middleware and plugin systems
@@ -320,7 +328,9 @@ The try-error codebase has made significant progress in addressing the identifie
 2. Remaining micro-optimizations (bit flags, string interning)
 3. Event system for error lifecycle
 4. Additional plugin integrations (DataDog, OpenTelemetry)
-5. Advanced async features (streaming, cancellation)
+5. Advanced async features (streaming, cancellation, iterators)
+6. Type safety improvements (reduce type assertions, improve generics)
+7. Security features (PII detection, sanitization)
 
 ### 💡 Future Enhancements
 
@@ -328,5 +338,6 @@ The try-error codebase has made significant progress in addressing the identifie
 - Debugging and visualization tools
 - WASM module for ultra-high performance
 - Error aggregation and chaining improvements
+- Monitoring and observability features (metrics, tracing, error budgets)
 
 The codebase is now significantly more robust, performant, and extensible than when we started. The foundation is solid for building a production-ready error handling library.
