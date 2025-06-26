@@ -5,13 +5,17 @@
 export const VERSION = "1.0.0";
 
 // Feature flags
-export const FEATURES = {
+export const FEATURES = /*#__PURE__*/ Object.freeze({
   serialization: true,
   errorComparison: true,
   errorCloning: true,
   asyncStackTraces: false, // Not implemented yet
-  objectPooling: false, // Not implemented yet
-} as const;
+  objectPooling: true, // Now implemented
+  lazyEvaluation: true, // Now implemented
+  eventSystem: true, // Now implemented
+  stringInterning: true, // Now implemented
+  bitFlags: true, // Now implemented
+});
 
 // Core types
 export type {
@@ -209,6 +213,32 @@ export {
   createPlugin,
   sentryPlugin,
 } from "./plugins";
+
+// Event system
+export type { ErrorEvent, ErrorEventListener } from "./events";
+
+export {
+  ErrorEventEmitter,
+  errorEvents,
+  emitErrorCreated,
+  emitErrorTransformed,
+  emitErrorPooled,
+  emitErrorReleased,
+  emitErrorSerialized,
+  emitErrorWrapped,
+  emitErrorRetry,
+  emitErrorRecovered,
+} from "./events";
+
+// Performance optimizations
+export { ErrorFlags, setFlag, clearFlag, hasFlag } from "./bitflags";
+export {
+  intern,
+  internError,
+  getInternStats,
+  clearInternPool,
+  preinternCommonStrings,
+} from "./intern";
 
 // Re-export commonly used functions with clearer names
 export { trySync as try$ } from "./sync";
