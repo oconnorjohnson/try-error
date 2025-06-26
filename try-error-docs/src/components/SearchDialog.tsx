@@ -244,17 +244,7 @@ export function SearchDialog() {
                           <div className="font-medium">
                             {getDisplayTitle(result)}
                           </div>
-                          {result.content && (
-                            <div
-                              className="mt-1 text-sm text-muted-foreground line-clamp-2"
-                              dangerouslySetInnerHTML={{
-                                __html: result.content.replace(
-                                  /<mark>(.*?)<\/mark>/g,
-                                  '<span class="bg-yellow-200 dark:bg-yellow-800">$1</span>'
-                                ),
-                              }}
-                            />
-                          )}
+
                           {result.url && (
                             <div className="mt-1 text-xs text-muted-foreground opacity-60 truncate">
                               {result.url}
