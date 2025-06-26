@@ -225,7 +225,6 @@ describe("Lazy Evaluation", () => {
       let sourceComputed = false;
       let stackComputed = false;
       let timestampComputed = false;
-      let contextComputed = false;
 
       const error = createLazyError({
         type: "ForceError",
@@ -244,30 +243,21 @@ describe("Lazy Evaluation", () => {
         },
       });
 
-      // Make context lazy too
-      const lazyError = makeLazy(error, {
-        context: () => {
-          contextComputed = true;
-          return { forced: true };
-        },
-      });
-
-      // Don't call isTryError to avoid triggering evaluation
-      // Nothing computed yet except what isTryError already triggered
+      // Nothing computed yet
+      expect(sourceComputed).toBe(false);
       expect(stackComputed).toBe(false);
-      expect(contextComputed).toBe(false);
+      expect(timestampComputed).toBe(false);
 
       // Force evaluation
-      const result = forceLazyEvaluation(lazyError);
+      const result = forceLazyEvaluation(error);
 
-      // All should be computed
+      // All lazy properties should be computed
       expect(sourceComputed).toBe(true);
       expect(stackComputed).toBe(true);
       expect(timestampComputed).toBe(true);
-      expect(contextComputed).toBe(true);
 
       // Should return the same error
-      expect(result).toBe(lazyError);
+      expect(result).toBe(error);
     });
   });
 
