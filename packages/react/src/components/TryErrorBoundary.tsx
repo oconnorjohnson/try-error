@@ -529,6 +529,113 @@ export function useErrorBoundaryTrigger() {
 }
 
 /**
+ * Hook for handling async errors in components
+ *
+ * This hook provides a way to catch and report async errors to the nearest
+ * error boundary that has async error catching enabled.
+ *
+ * @example
+ * ```tsx
+ * function MyComponent() {
+ *   const throwAsyncError = useAsyncError();
+ *
+ *   const handleClick = async () => {
+ *     try {
+ *       const data = await fetchData();
+ *       // process data
+ *     } catch (error) {
+ *       throwAsyncError(error);
+ *     }
+ *   };
+ *
+ *   return <button onClick={handleClick}>Fetch Data</button>;
+ * }
+ * ```
+ */
+export function useAsyncError() {
+  const [, setError] = React.useState();
+
+  return React.useCallback((error: Error | TryError) => {
+    setError(() => {
+      throw error;
+    });
+  }, []);
+}
+
+/**
+ * Hook that wraps async operations and automatically reports errors
+ *
+ * @example
+ * ```tsx
+ * function MyComponent() {
+ *   const wrapAsync = useAsyncErrorHandler();
+ *
+ *   const handleClick = wrapAsync(async () => {
+ *     const data = await fetchData(); // Errors automatically caught
+ *     return data;
+ *   });
+ *
+ *   return <button onClick={handleClick}>Fetch Data</button>;
+ * }
+ * ```
+ */
+export function useAsyncErrorHandler() {
+  const throwAsyncError = useAsyncError();
+
+  return React.useCallback(
+    <T extends (...args: any[]) => Promise<any>>(asyncFn: T): T => {
+      return (async (...args: Parameters<T>) => {
+        try {
+          return await asyncFn(...args);
+        } catch (error) {
+          throwAsyncError(
+            error instanceof Error ? error : new Error(String(error))
+          );
+        }
+      }) as T;
+    },
+    [throwAsyncError]
+  );
+}
+
+/**
+ * Component that provides async error boundary functionality using hooks
+ *
+ * This is a functional component alternative to the class-based TryErrorBoundary
+ * for simpler use cases.
+ *
+ * @example
+ * ```tsx
+ * <AsyncErrorBoundary
+ *   fallback={<div>Something went wrong!</div>}
+ *   onError={(error) => console.error(error)}
+ * >
+ *   <MyAsyncComponent />
+ * </AsyncErrorBoundary>
+ * ```
+ */
+export function AsyncErrorBoundary({
+  children,
+  fallback,
+  onError,
+}: {
+  children: ReactNode;
+  fallback?: ReactNode;
+  onError?: (error: Error | TryError) => void;
+}) {
+  return (
+    <TryErrorBoundary
+      catchAsyncErrors
+      catchEventHandlerErrors
+      fallback={fallback ? () => fallback : undefined}
+      onError={onError}
+    >
+      {children}
+    </TryErrorBoundary>
+  );
+}
+
+/**
  * Higher-order component that wraps a component with TryErrorBoundary
  *
  * @example

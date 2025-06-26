@@ -318,54 +318,282 @@ Inline try-catch: +0.3% (baseline check)
 - No breaking changes to API ❓ (May need new API)
 - Document all trade-offs clearly ✅
 
-## 📋 Final Recommendations
+## 📋 Implementation Plan: Async Performance Optimization
 
-### 1. **Add Promise-Based Alternative APIs**
+### Phase 1: Core Performance APIs (Priority: HIGH)
 
-```typescript
-// Current API (keep for compatibility)
-const result = await tryAsync(() => fetch("/api/data"));
-
-// New faster API
-const result = await tryPromise(fetch("/api/data"));
-```
-
-### 2. **Use Promise.then() Internally**
-
-Replace async/await with promise.then() in performance-critical paths:
+#### 1.1 Add `tryPromise` - The Fast Path
 
 ```typescript
-export function tryPromiseFast<T>(promise: Promise<T>): Promise<TryResult<T>> {
+/**
+ * Fast async error handling for promises (64% overhead vs 145%)
+ * Use this when you already have a promise
+ */
+export function tryPromise<T>(
+  promise: Promise<T>
+): Promise<TryResult<T, TryError>> {
   return promise.then(
     (value) => value,
     (error) => fromThrown(error)
   );
 }
+
+// Usage:
+const result = await tryPromise(fetch("/api/data"));
 ```
 
-### 3. **Document the Performance Trade-off**
-
-Be transparent that tryAsync has overhead due to V8 limitations:
-
-- For performance-critical code, use `tryPromise()` or `trySync()`
-- For convenience and full features, use `tryAsync()`
-
-### 4. **Consider a Hybrid Approach**
+#### 1.2 Add `tryAwait` - Convenience Alias
 
 ```typescript
-// Auto-detect if passed a function or promise
-export function tryAuto<T>(
-  input: (() => Promise<T>) | Promise<T>
-): Promise<TryResult<T>> {
-  if (typeof input === "function") {
-    // Slower path for functions
-    return tryAsync(input);
-  } else {
-    // Fast path for promises
-    return tryPromiseFast(input);
+/**
+ * Alias for tryPromise with a more intuitive name
+ * Makes migration easier: just add "try" before "await"
+ */
+export const tryAwait = tryPromise;
+
+// Usage:
+const result = await tryAwait(fetch("/api/data"));
+```
+
+#### 1.3 Optimize `tryAsync` for Common Case
+
+```typescript
+/**
+ * Optimized tryAsync that uses fast path when no options provided
+ */
+export function tryAsync<T>(
+  fn: () => Promise<T>,
+  options?: TryAsyncOptions
+): Promise<TryResult<T, TryError>> {
+  // Fast path: no options
+  if (!options) {
+    try {
+      // Execute function immediately and use tryPromise
+      return tryPromise(fn());
+    } catch (error) {
+      // Handle sync errors from fn()
+      return Promise.resolve(fromThrown(error));
+    }
   }
+
+  // Slow path: with options (timeout, signal, etc.)
+  return tryAsyncWithOptions(fn, options);
 }
 ```
+
+### Phase 2: Advanced Patterns (Priority: MEDIUM)
+
+#### 2.1 Lazy Evaluation Pattern
+
+```typescript
+/**
+ * Returns a lazy wrapper that only executes when awaited
+ * Allows building error handling chains without immediate execution
+ */
+export function tryLazy<T>(fn: () => Promise<T>): {
+  then: Promise<TryResult<T>>["then"];
+  catch: Promise<TryResult<T>>["catch"];
+  finally: Promise<TryResult<T>>["finally"];
+  with: (options: TryAsyncOptions) => Promise<TryResult<T>>;
+} {
+  return {
+    then: (onFulfilled, onRejected) =>
+      tryPromise(fn()).then(onFulfilled, onRejected),
+    catch: (onRejected) => tryPromise(fn()).catch(onRejected),
+    finally: (onFinally) => tryPromise(fn()).finally(onFinally),
+    with: (options) => tryAsync(fn, options),
+  };
+}
+
+// Usage:
+const result = await tryLazy(() => fetch("/api/data"));
+const resultWithTimeout = await tryLazy(() => fetch("/api/data")).with({
+  timeout: 5000,
+});
+```
+
+#### 2.2 Chainable API
+
+```typescript
+/**
+ * Fluent API for building async error handling chains
+ */
+export class TryChain<T> {
+  constructor(private promise: Promise<TryResult<T>>) {}
+
+  map<U>(fn: (value: T) => U): TryChain<U> {
+    return new TryChain(
+      this.promise.then((result) =>
+        isTryError(result) ? result : trySync(() => fn(result))
+      )
+    );
+  }
+
+  flatMap<U>(fn: (value: T) => Promise<U>): TryChain<U> {
+    return new TryChain(
+      this.promise.then((result) =>
+        isTryError(result) ? result : tryPromise(fn(result))
+      )
+    );
+  }
+
+  recover(fn: (error: TryError) => T): TryChain<T> {
+    return new TryChain(
+      this.promise.then((result) => (isTryError(result) ? fn(result) : result))
+    );
+  }
+
+  get(): Promise<TryResult<T>> {
+    return this.promise;
+  }
+}
+
+export function tryChain<T>(promise: Promise<T>): TryChain<T> {
+  return new TryChain(tryPromise(promise));
+}
+
+// Usage:
+const result = await tryChain(fetch("/api/user"))
+  .flatMap((response) => response.json())
+  .map((user) => user.name)
+  .recover((error) => "Anonymous")
+  .get();
+```
+
+### Phase 3: Migration Strategy (Priority: HIGH)
+
+#### 3.1 Compatibility Layer
+
+```typescript
+/**
+ * Smart auto-detection for gradual migration
+ */
+export function tryAuto<T>(
+  input: (() => Promise<T>) | Promise<T>,
+  options?: TryAsyncOptions
+): Promise<TryResult<T, TryError>> {
+  // If it's a promise, use fast path
+  if (input && typeof input.then === "function") {
+    if (options?.timeout || options?.signal) {
+      // Need to wrap with timeout/signal support
+      return tryAsync(() => input as Promise<T>, options);
+    }
+    return tryPromise(input as Promise<T>);
+  }
+
+  // If it's a function, use traditional path
+  return tryAsync(input as () => Promise<T>, options);
+}
+```
+
+#### 3.2 ESLint Rule
+
+```typescript
+// Custom ESLint rule to suggest performance improvements
+export const preferTryPromise = {
+  create(context) {
+    return {
+      CallExpression(node) {
+        if (
+          node.callee.name === "tryAsync" &&
+          node.arguments[0]?.type === "ArrowFunctionExpression" &&
+          node.arguments[0].body.type === "CallExpression" &&
+          !node.arguments[1] // No options
+        ) {
+          context.report({
+            node,
+            message: "Consider using tryPromise for better performance",
+            fix(fixer) {
+              const fnBody = node.arguments[0].body;
+              return fixer.replaceText(
+                node,
+                `tryPromise(${context.getSourceCode().getText(fnBody)})`
+              );
+            },
+          });
+        }
+      },
+    };
+  },
+};
+```
+
+### Phase 4: Documentation & Communication (Priority: HIGH)
+
+#### 4.1 Performance Guide
+
+Create a dedicated performance guide explaining:
+
+- When to use each function (decision tree)
+- Performance characteristics of each approach
+- Migration examples
+- Benchmarks for different scenarios
+
+#### 4.2 API Reference Update
+
+```typescript
+/**
+ * tryAsync - Full-featured async error handling (145% overhead)
+ * Best for: Complex scenarios with timeout/cancellation
+ *
+ * tryPromise - Fast promise error handling (64% overhead)
+ * Best for: Simple promise wrapping, performance-critical code
+ *
+ * tryAwait - Alias for tryPromise
+ * Best for: Drop-in replacement for await
+ *
+ * tryLazy - Deferred execution pattern
+ * Best for: Building reusable error handling chains
+ */
+```
+
+### Phase 5: Internal Optimizations (Priority: LOW)
+
+#### 5.1 Optimize Existing tryAsync
+
+```typescript
+// Cache commonly used functions
+const identityFn = <T>(x: T) => x;
+const getError = (e: unknown) => fromThrown(e);
+
+// Pre-compile timeout error messages
+const timeoutError = (ms: number) =>
+  new Error(`Operation timed out after ${ms}ms`);
+
+// Use Promise.then internally where possible
+export async function tryAsyncOptimized<T>(
+  fn: () => Promise<T>,
+  options?: TryAsyncOptions
+): Promise<TryResult<T, TryError>> {
+  if (!options?.timeout && !options?.signal) {
+    // Use then-based approach for simple case
+    try {
+      return fn().then(identityFn, getError);
+    } catch (syncError) {
+      return Promise.resolve(fromThrown(syncError));
+    }
+  }
+
+  // Complex case with timeout/signal
+  // ... existing implementation
+}
+```
+
+### Implementation Priority & Timeline
+
+1. **Week 1**: Implement tryPromise/tryAwait (Phase 1.1-1.2)
+2. **Week 2**: Optimize tryAsync & add tests (Phase 1.3)
+3. **Week 3**: Documentation & migration guide (Phase 4)
+4. **Week 4**: Advanced patterns (Phase 2)
+5. **Week 5**: Migration tools & internal optimizations (Phase 3 & 5)
+
+### Success Metrics
+
+- [ ] tryPromise achieves <70% overhead (currently 64%)
+- [ ] tryAsync optimized path achieves <100% overhead (from 145%)
+- [ ] Zero breaking changes to existing API
+- [ ] Clear migration path documented
+- [ ] Performance regression tests in place
 
 ## 🎯 Key Learnings
 
