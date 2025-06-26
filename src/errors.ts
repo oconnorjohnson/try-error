@@ -7,10 +7,6 @@ let cachedIsProduction: boolean | null = null;
 let cachedConfig: ReturnType<typeof getConfig> | null = null;
 let configVersion = 0;
 
-// Track config changes
-const originalGetConfig = getConfig;
-(getConfig as any).version = 0;
-
 /**
  * Get cached config or fetch new one if changed
  */
