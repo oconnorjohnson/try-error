@@ -467,7 +467,9 @@ export function createError<T extends string = string>(
   // Get config once and reuse
   const isProd = isProduction();
   const shouldCaptureStack =
-    options.captureStackTrace ?? config.captureStackTrace ?? !isProd;
+    options.captureStackTrace !== undefined
+      ? options.captureStackTrace
+      : config.captureStackTrace ?? !isProd;
 
   // Lazy evaluation path
   if (useLazyEvaluation && !isProd) {

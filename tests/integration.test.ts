@@ -145,9 +145,9 @@ describe("Integration Tests", () => {
         ? configResults
         : '{"apiUrl": "https://default.api.com", "timeout": 3000}';
 
-      const parsedConfig = await tryAsyncMap(
+      const parsedConfig = await tryMapAsync(
         Promise.resolve(finalConfig),
-        async (content) => {
+        async (content: any) => {
           if (typeof content === "string") {
             return JSON.parse(content);
           }
@@ -326,7 +326,7 @@ describe("Integration Tests", () => {
       const userResult = await tryAsync(
         (): Promise<User> => mockApiClient.fetchUser(1)
       );
-      const profileResult = await tryAsyncMap(
+      const profileResult = await tryMapAsync(
         Promise.resolve(userResult),
         async (user: User): Promise<UserProfile> => ({
           userId: user.id,
@@ -450,19 +450,19 @@ describe("Integration Tests", () => {
         mockServices.validateInput(userInput)
       );
 
-      const userCreationResult = await tryAsyncChain(
+      const userCreationResult = await tryChainAsync(
         Promise.resolve(validationResult),
         async () => tryAsync(() => mockServices.createUser(userInput))
       );
 
-      const emailResult = await tryAsyncChain(
+      const emailResult = await tryChainAsync(
         Promise.resolve(userCreationResult),
-        async (user) => tryAsync(() => mockServices.sendWelcomeEmail(user))
+        async (user: any) => tryAsync(() => mockServices.sendWelcomeEmail(user))
       );
 
-      const logResult = await tryAsyncChain(
+      const logResult = await tryChainAsync(
         Promise.resolve(userCreationResult), // Log regardless of email success
-        async (user) =>
+        async (user: any) =>
           Promise.resolve(trySync(() => mockServices.logUserCreation(user)))
       );
 
