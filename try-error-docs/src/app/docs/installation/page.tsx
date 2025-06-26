@@ -113,10 +113,11 @@ export default function InstallationPage() {
               </p>
             </div>
 
-            <div className="border border-purple-200 bg-purple-50 rounded-lg p-4">
-              <h3 className="font-semibold text-purple-900 mb-2">
-                Core Module
-              </h3>
+            <div className="border border-purple-200 bg-purple-50 rounded-lg p-4 hover:border-purple-300 transition-colors">
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="font-semibold text-purple-900">Core Module</h3>
+                <span className="text-xs text-purple-700">Hover to copy →</span>
+              </div>
               <CodeBlock language="typescript" className="mb-2">
                 {`import { isTryError, createError } from 'try-error/core';`}
               </CodeBlock>
