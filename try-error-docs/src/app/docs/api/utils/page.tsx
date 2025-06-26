@@ -852,6 +852,499 @@ async function progressiveTimeout<T>(
             </div>
           </div>
         </section>
+
+        {/* Performance Optimization Utilities */}
+        <section>
+          <h2 className="text-2xl font-semibold text-slate-900 mb-4">
+            Performance Optimization
+          </h2>
+
+          <p className="text-slate-600 mb-4">
+            Utilities for optimizing try-error performance in high-throughput
+            scenarios.
+          </p>
+
+          <div className="space-y-6">
+            <div>
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">
+                Object Pooling
+              </h3>
+              <p className="text-slate-600 mb-3">
+                Manage error object pools to reduce garbage collection pressure.
+              </p>
+              <CodeBlock
+                language="typescript"
+                title="Object Pooling API"
+                showLineNumbers={true}
+                className="mb-4"
+              >
+                {`import { 
+  ErrorPool, 
+  getGlobalErrorPool, 
+  configureErrorPool, 
+  resetErrorPool,
+  getErrorPoolStats 
+} from 'try-error';
+
+// Create a custom pool
+const pool = new ErrorPool(100); // Pool size
+
+// Acquire and release errors
+const error = pool.acquire();
+error.type = 'CustomError';
+error.message = 'Something went wrong';
+// ... use the error
+pool.release(error); // Return to pool
+
+// Configure global pool
+configureErrorPool({
+  enabled: true,
+  maxSize: 200
+});
+
+// Get pool statistics
+const stats = getErrorPoolStats();
+console.log({
+  poolSize: stats.poolSize,
+  activeCount: stats.activeCount,
+  hitRate: stats.hitRate,
+  hits: stats.hits,
+  misses: stats.misses
+});
+
+// Reset global pool
+resetErrorPool();
+
+// Pool management methods
+pool.clear();        // Empty the pool
+pool.resize(50);     // Change pool size
+const stats = pool.getStats(); // Get pool statistics`}
+              </CodeBlock>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">
+                Lazy Evaluation
+              </h3>
+              <p className="text-slate-600 mb-3">
+                Create errors with lazy-evaluated properties for better
+                performance.
+              </p>
+              <CodeBlock
+                language="typescript"
+                title="Lazy Evaluation API"
+                showLineNumbers={true}
+                className="mb-4"
+              >
+                {`import { 
+  createLazyError, 
+  makeLazy, 
+  isLazyProperty, 
+  forceLazyEvaluation,
+  createDebugProxy 
+} from 'try-error';
+
+// Create error with lazy properties
+const error = createLazyError({
+  type: 'LazyError',
+  message: 'Error message',
+  getSource: () => {
+    // Expensive computation only when accessed
+    return computeSourceLocation();
+  },
+  getStack: () => {
+    // Generate stack trace on demand
+    return new Error().stack;
+  },
+  getTimestamp: () => Date.now(),
+  context: { immediate: 'value' }
+});
+
+// Make existing error lazy
+const lazyError = makeLazy(existingError, {
+  source: () => computeSource(),
+  stack: () => generateStack(),
+  context: () => gatherContext()
+});
+
+// Check if property is lazy
+if (isLazyProperty(error, 'stack')) {
+  console.log('Stack will be computed on access');
+}
+
+// Force all lazy properties to evaluate
+const evaluated = forceLazyEvaluation(error);
+
+// Debug lazy property access
+const debugError = createDebugProxy(error);
+// Logs: "Lazy evaluation triggered for property: stack"
+console.log(debugError.stack);`}
+              </CodeBlock>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">
+                Configuration Presets
+              </h3>
+              <p className="text-slate-600 mb-3">
+                Pre-configured settings for different performance scenarios.
+              </p>
+              <CodeBlock
+                language="typescript"
+                title="Configuration Presets"
+                showLineNumbers={true}
+                className="mb-4"
+              >
+                {`import { configure, ConfigPresets } from 'try-error';
+
+// Maximum performance - minimal features
+configure(ConfigPresets.minimal());
+// Enables: minimalErrors, skipTimestamp, skipContext, skipSourceLocation
+// Disables: stack traces, context capture, source location
+
+// Production - balanced performance and debugging
+configure(ConfigPresets.production());
+// Enables: lazy evaluation, object pooling
+// Disables: verbose logging, debug features
+
+// Development - full debugging features
+configure(ConfigPresets.development());
+// Enables: all debugging features, verbose logging
+// Disables: performance optimizations
+
+// Custom performance configuration
+configure({
+  performance: {
+    errorCreation: {
+      objectPooling: true,
+      poolSize: 100,
+      lazyStackTrace: true,
+      lazySourceLocation: true
+    },
+    contextCapture: {
+      maxDepth: 3,
+      maxProperties: 50,
+      excludePatterns: ['password', 'token']
+    },
+    memoryManagement: {
+      maxErrorsInMemory: 1000,
+      errorTTL: 60000 // 1 minute
+    }
+  }
+});`}
+              </CodeBlock>
+            </div>
+          </div>
+        </section>
+
+        {/* Middleware System */}
+        <section>
+          <h2 className="text-2xl font-semibold text-slate-900 mb-4">
+            Middleware System
+          </h2>
+
+          <p className="text-slate-600 mb-4">
+            Extend try-error with custom logic using middleware pipelines.
+          </p>
+
+          <div className="space-y-6">
+            <div>
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">
+                MiddlewarePipeline
+              </h3>
+              <p className="text-slate-600 mb-3">
+                Create and manage middleware pipelines for error handling.
+              </p>
+              <CodeBlock
+                language="typescript"
+                title="Middleware Pipeline API"
+                showLineNumbers={true}
+                className="mb-4"
+              >
+                {`import { MiddlewarePipeline, ErrorMiddleware } from 'try-error';
+
+// Create a pipeline
+const pipeline = new MiddlewarePipeline();
+
+// Add middleware
+pipeline
+  .use((result, next) => {
+    console.log('Before:', result);
+    const nextResult = next();
+    console.log('After:', nextResult);
+    return nextResult;
+  })
+  .use(loggingMiddleware)
+  .use(retryMiddleware(3));
+
+// Execute pipeline
+const result = pipeline.execute(trySync(() => operation()));
+
+// Wrap a function
+const safeFn = pipeline.wrap((x: number) => 
+  trySync(() => riskyOperation(x))
+);
+
+// Clone pipeline
+const cloned = pipeline.clone();
+
+// Pipeline properties
+console.log(pipeline.length); // Number of middleware`}
+              </CodeBlock>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">
+                Built-in Middleware
+              </h3>
+              <p className="text-slate-600 mb-3">
+                Common middleware implementations ready to use.
+              </p>
+              <CodeBlock
+                language="typescript"
+                title="Built-in Middleware"
+                showLineNumbers={true}
+                className="mb-4"
+              >
+                {`import { 
+  loggingMiddleware,
+  retryMiddleware,
+  transformMiddleware,
+  enrichContextMiddleware,
+  circuitBreakerMiddleware,
+  rateLimitMiddleware,
+  filterMiddleware,
+  compose
+} from 'try-error';
+
+// Logging
+pipeline.use(loggingMiddleware(console.error));
+pipeline.use(loggingMiddleware(customLogger));
+
+// Retry with predicate
+pipeline.use(retryMiddleware(3, error => 
+  error.type === 'NetworkError'
+));
+
+// Transform errors
+pipeline.use(transformMiddleware(error => ({
+  ...error,
+  message: sanitize(error.message)
+})));
+
+// Enrich context
+pipeline.use(enrichContextMiddleware(() => ({
+  requestId: getCurrentRequestId(),
+  timestamp: Date.now()
+})));
+
+// Circuit breaker
+pipeline.use(circuitBreakerMiddleware({
+  threshold: 5,
+  timeout: 60000,
+  onOpen: () => console.warn('Circuit opened'),
+  onClose: () => console.info('Circuit closed')
+}));
+
+// Rate limiting
+pipeline.use(rateLimitMiddleware(1000, 100)); // 100/sec
+
+// Filter by error type
+pipeline.use(filterMiddleware(
+  ['NetworkError', 'TimeoutError'],
+  retryMiddleware(5)
+));
+
+// Compose multiple middleware
+const errorHandling = compose(
+  loggingMiddleware(logger),
+  retryMiddleware(3),
+  transformMiddleware(sanitize)
+);`}
+              </CodeBlock>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">
+                Global Registry
+              </h3>
+              <p className="text-slate-600 mb-3">
+                Register and manage named middleware pipelines globally.
+              </p>
+              <CodeBlock
+                language="typescript"
+                title="Global Middleware Registry"
+                showLineNumbers={true}
+                className="mb-4"
+              >
+                {`import { globalRegistry } from 'try-error';
+
+// Create named pipelines
+const apiPipeline = new MiddlewarePipeline()
+  .use(rateLimitMiddleware(1000, 100))
+  .use(retryMiddleware(3))
+  .use(loggingMiddleware);
+
+const dbPipeline = new MiddlewarePipeline()
+  .use(circuitBreakerMiddleware({ threshold: 5 }))
+  .use(transformMiddleware);
+
+// Register pipelines
+globalRegistry.register('api', apiPipeline);
+globalRegistry.register('database', dbPipeline);
+
+// Retrieve pipelines
+const api = globalRegistry.get('api');
+const db = globalRegistry.get('database');
+
+// List registered pipelines
+const names = globalRegistry.list(); // ['api', 'database']
+
+// Remove pipeline
+globalRegistry.remove('api'); // returns boolean`}
+              </CodeBlock>
+            </div>
+          </div>
+        </section>
+
+        {/* Plugin System */}
+        <section>
+          <h2 className="text-2xl font-semibold text-slate-900 mb-4">
+            Plugin System
+          </h2>
+
+          <p className="text-slate-600 mb-4">
+            Extend try-error with plugins that add new capabilities and
+            integrations.
+          </p>
+
+          <div className="space-y-6">
+            <div>
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">
+                Plugin Manager
+              </h3>
+              <p className="text-slate-600 mb-3">
+                Install, enable, and manage plugins for try-error.
+              </p>
+              <CodeBlock
+                language="typescript"
+                title="Plugin Manager API"
+                showLineNumbers={true}
+                className="mb-4"
+              >
+                {`import { pluginManager, Plugin } from 'try-error';
+
+// Install a plugin
+await pluginManager.install(myPlugin);
+
+// Enable/disable plugins
+await pluginManager.enable('plugin-name');
+await pluginManager.disable('plugin-name');
+
+// Uninstall plugin
+await pluginManager.uninstall('plugin-name');
+
+// Check plugin status
+const isInstalled = pluginManager.isInstalled('plugin-name');
+const isEnabled = pluginManager.isEnabled('plugin-name');
+
+// Get plugin information
+const plugin = pluginManager.get('plugin-name');
+const installed = pluginManager.getInstalled();
+const enabled = pluginManager.getEnabled();
+
+// Get merged configuration from all plugins
+const config = pluginManager.getMergedConfig();
+
+// Get all middleware from plugins
+const middleware = pluginManager.getAllMiddleware();
+
+// Get custom error types from plugins
+const errorTypes = pluginManager.getAllErrorTypes();
+
+// Get utilities from plugins
+const utilities = pluginManager.getAllUtilities();
+
+// Notify plugins of config changes
+await pluginManager.notifyConfigChange(newConfig);`}
+              </CodeBlock>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">
+                Creating Plugins
+              </h3>
+              <p className="text-slate-600 mb-3">
+                Build custom plugins to extend try-error functionality.
+              </p>
+              <CodeBlock
+                language="typescript"
+                title="Plugin Creation API"
+                showLineNumbers={true}
+                className="mb-4"
+              >
+                {`import { createPlugin, Plugin, PluginAPI } from 'try-error';
+
+// Using createPlugin helper
+const myPlugin = createPlugin(
+  {
+    name: 'my-plugin',
+    version: '1.0.0',
+    description: 'My custom plugin',
+    dependencies: ['other-plugin']
+  },
+  (api: PluginAPI) => ({
+    // Add middleware
+    middleware: api.addMiddleware(
+      loggingMiddleware,
+      retryMiddleware
+    ),
+    
+    // Create error types
+    errorTypes: {
+      ...api.createErrorType('CustomError', (message, context) => ({
+        [TRY_ERROR_BRAND]: true,
+        type: 'CustomError',
+        message,
+        source: 'my-plugin',
+        timestamp: Date.now(),
+        context
+      }))
+    },
+    
+    // Add utilities
+    utilities: {
+      ...api.addUtility('myHelper', helperFunction)
+    }
+  })
+);
+
+// Manual plugin creation
+const plugin: Plugin = {
+  metadata: {
+    name: 'manual-plugin',
+    version: '1.0.0'
+  },
+  
+  hooks: {
+    onInstall: async () => console.log('Installing'),
+    onUninstall: async () => console.log('Uninstalling'),
+    onEnable: async () => console.log('Enabling'),
+    onDisable: async () => console.log('Disabling'),
+    onConfigChange: async (config) => console.log('Config:', config)
+  },
+  
+  capabilities: {
+    config: { customOption: true },
+    middleware: [customMiddleware],
+    errorTypes: { CustomError: customErrorFactory },
+    utilities: { helper: helperFunction }
+  }
+};`}
+              </CodeBlock>
+            </div>
+          </div>
+        </section>
       </div>
     </div>
   );
