@@ -16,7 +16,6 @@ import {
   RotateCcw,
   Download,
   Share2,
-  XCircle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
