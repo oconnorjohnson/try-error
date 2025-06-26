@@ -402,6 +402,80 @@ export const ConfigPresets = {
       return error;
     },
   }),
+
+  /**
+   * Next.js optimized configuration with runtime detection
+   * Automatically applies the correct handler based on where the error occurs
+   */
+  nextjs: (): TryErrorConfig => ({
+    runtimeDetection: true,
+    captureStackTrace: process.env.NODE_ENV !== "production",
+    stackTraceLimit: process.env.NODE_ENV === "production" ? 5 : 20,
+    includeSource: true,
+    developmentMode: process.env.NODE_ENV === "development",
+
+    environmentHandlers: {
+      server: (error) => {
+        // Server-side: Log to console or logging service
+        if (process.env.NODE_ENV === "production") {
+          // Production: Minimal logging
+          console.error(`[Server Error] ${error.type}: ${error.message}`);
+
+          // Example integration with logging service:
+          // logger.error({
+          //   type: error.type,
+          //   message: error.message,
+          //   source: error.source,
+          //   timestamp: error.timestamp,
+          //   context: error.context,
+          // });
+        } else {
+          // Development: Detailed logging
+          console.group(`🚨 [Server] TryError: ${error.type}`);
+          console.error("Message:", error.message);
+          console.error("Source:", error.source);
+          console.error("Context:", error.context);
+          if (error.stack) console.error("Stack:", error.stack);
+          console.groupEnd();
+        }
+        return error;
+      },
+
+      client: (error) => {
+        // Client-side: Send to error tracking, no console in production
+        if (process.env.NODE_ENV === "production") {
+          // Example integrations:
+          // if (window.Sentry) {
+          //   window.Sentry.captureException(error);
+          // }
+          // if (window.LogRocket) {
+          //   window.LogRocket.captureException(error);
+          // }
+          // No console output in production
+        } else {
+          // Development: Console logging
+          console.group(`🚨 [Client] TryError: ${error.type}`);
+          console.error("Message:", error.message);
+          console.error("Context:", error.context);
+          console.groupEnd();
+        }
+        return error;
+      },
+
+      edge: (error) => {
+        // Edge runtime: Minimal logging
+        console.log(
+          JSON.stringify({
+            type: error.type,
+            message: error.message,
+            timestamp: error.timestamp,
+            runtime: "edge",
+          })
+        );
+        return error;
+      },
+    },
+  }),
 } as const;
 
 /**

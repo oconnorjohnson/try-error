@@ -714,6 +714,398 @@ describe('User validation', () => {
           </div>
         </section>
 
+        {/* Error Monitoring Services Integration */}
+        <section>
+          <h2 className="text-2xl font-semibold text-slate-900 mb-4">
+            Error Monitoring Services
+          </h2>
+
+          <p className="text-slate-600 mb-4">
+            Integrate try-error with popular error monitoring and analytics
+            services to track, analyze, and debug errors in production.
+          </p>
+
+          <div className="space-y-6">
+            {/* Sentry Integration */}
+            <div>
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">
+                Sentry Integration
+              </h3>
+              <p className="text-slate-600 mb-3">
+                Sentry provides real-time error tracking and performance
+                monitoring. Integrate it with try-error for comprehensive error
+                insights.
+              </p>
+
+              <CodeBlock
+                language="typescript"
+                title="Complete Sentry Integration"
+                showLineNumbers={true}
+                className="mb-4"
+              >
+                {`// 1. Install Sentry
+// pnpm add @sentry/nextjs
+
+// 2. Initialize Sentry (sentry.client.config.ts)
+import * as Sentry from '@sentry/nextjs';
+
+Sentry.init({
+  dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
+  environment: process.env.NODE_ENV,
+  integrations: [
+    Sentry.replayIntegration(),
+    Sentry.feedbackIntegration({ colorScheme: 'auto' }),
+  ],
+  tracesSampleRate: process.env.NODE_ENV === 'production' ? 0.1 : 1.0,
+  replaysSessionSampleRate: 0.1,
+  replaysOnErrorSampleRate: 1.0,
+});
+
+// 3. Configure try-error with Sentry
+import { configure } from 'try-error';
+
+configure({
+  onError: (error) => {
+    // Capture in Sentry with rich context
+    Sentry.captureException(error, {
+      tags: {
+        errorType: error.type,
+        source: error.source?.file,
+        tryError: true,
+      },
+      contexts: {
+        tryError: {
+          type: error.type,
+          message: error.message,
+          timestamp: error.timestamp,
+          source: error.source,
+        },
+      },
+      extra: {
+        context: error.context,
+        metadata: error.metadata,
+      },
+    });
+
+    // Set user context if available
+    if (error.context?.userId) {
+      Sentry.setUser({
+        id: error.context.userId,
+        email: error.context.userEmail,
+      });
+    }
+
+    return error;
+  },
+});
+
+// 4. Usage in your application
+export async function processOrder(orderId: string) {
+  // Add breadcrumb for better debugging
+  Sentry.addBreadcrumb({
+    category: 'order',
+    message: 'Processing order',
+    level: 'info',
+    data: { orderId },
+  });
+
+  const result = await tryAsync(async () => {
+    const order = await api.processOrder(orderId);
+    
+    if (!order.success) {
+      throw createTryError('OrderProcessingError', order.error.message, {
+        orderId,
+        errorCode: order.error.code,
+        // Rich context for Sentry
+        orderDetails: order.details,
+        customerInfo: order.customer,
+      });
+    }
+    
+    return order;
+  });
+
+  if (isTryError(result)) {
+    // Add additional Sentry context for specific errors
+    Sentry.withScope((scope) => {
+      scope.setTag('order.failed', true);
+      scope.setContext('order', {
+        id: orderId,
+        error: result.message,
+      });
+      scope.setLevel('error');
+    });
+  }
+
+  return result;
+}`}
+              </CodeBlock>
+
+              <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
+                <h4 className="font-semibold text-green-800 mb-2">
+                  Sentry Benefits with try-error
+                </h4>
+                <ul className="space-y-1 text-green-700 text-sm">
+                  <li>• Automatic error grouping by TryError type</li>
+                  <li>• Rich context from try-error's structured errors</li>
+                  <li>• Source location tracking for better debugging</li>
+                  <li>• Performance monitoring with error correlation</li>
+                  <li>• Session replay on errors for debugging</li>
+                </ul>
+              </div>
+            </div>
+
+            {/* Vercel Analytics Integration */}
+            <div>
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">
+                Vercel Analytics Integration
+              </h3>
+              <p className="text-slate-600 mb-3">
+                Track error metrics and user impact with Vercel Analytics custom
+                events.
+              </p>
+
+              <CodeBlock
+                language="typescript"
+                title="Vercel Analytics Error Tracking"
+                showLineNumbers={true}
+                className="mb-4"
+              >
+                {`// 1. Install Vercel Analytics
+// pnpm add @vercel/analytics
+
+// 2. Setup Analytics in your layout
+import { Analytics } from '@vercel/analytics/react';
+import { track } from '@vercel/analytics';
+import { configure } from 'try-error';
+
+// 3. Configure try-error to track errors
+configure({
+  onError: (error) => {
+    // Track error occurrence
+    track('error_occurred', {
+      errorType: error.type,
+      errorMessage: error.message,
+      source: error.source?.file || 'unknown',
+      path: typeof window !== 'undefined' ? window.location.pathname : 'server',
+      // Don't send sensitive data
+      severity: getSeverityLevel(error),
+      category: categorizeError(error),
+    });
+
+    // Track specific error types with custom events
+    switch (error.type) {
+      case 'ValidationError':
+        track('validation_error', {
+          fields: error.context?.validationErrors?.length || 0,
+          form: error.context?.formName,
+        });
+        break;
+      
+      case 'APIError':
+        track('api_error', {
+          endpoint: error.context?.endpoint,
+          statusCode: error.context?.statusCode,
+          duration: error.context?.duration,
+        });
+        break;
+      
+      case 'PaymentError':
+        track('payment_error', {
+          amount: error.context?.amount,
+          currency: error.context?.currency,
+          provider: error.context?.provider,
+        });
+        break;
+    }
+
+    return error;
+  },
+});
+
+// 4. Track error recovery and user actions
+export function CheckoutForm() {
+  const handleSubmit = async (formData) => {
+    const startTime = Date.now();
+    const result = await tryAsync(() => processCheckout(formData));
+
+    if (isTryError(result)) {
+      // Track failed checkout
+      track('checkout_failed', {
+        errorType: result.type,
+        duration: Date.now() - startTime,
+        step: result.context?.step || 'unknown',
+      });
+
+      // Track user recovery actions
+      if (result.type === 'PaymentError') {
+        track('payment_retry_shown', {
+          errorCode: result.context?.errorCode,
+        });
+      }
+    } else {
+      // Track successful checkout
+      track('checkout_success', {
+        duration: Date.now() - startTime,
+        amount: formData.amount,
+      });
+    }
+
+    return result;
+  };
+}
+
+// 5. Error Analytics Dashboard
+export function RootLayout({ children }) {
+  return (
+    <html lang="en">
+      <body>
+        {children}
+        <Analytics 
+          mode={process.env.NODE_ENV}
+          beforeSend={(event) => {
+            // Redact sensitive URLs
+            if (event.url.includes('/admin') || 
+                event.url.includes('/api/internal')) {
+              return null;
+            }
+            return event;
+          }}
+        />
+      </body>
+    </html>
+  );
+}`}
+              </CodeBlock>
+
+              <div className="bg-purple-50 border border-purple-200 rounded-lg p-4 mb-4">
+                <h4 className="font-semibold text-purple-800 mb-2">
+                  Analytics Insights with try-error
+                </h4>
+                <ul className="space-y-1 text-purple-700 text-sm">
+                  <li>• Error rate tracking by type and severity</li>
+                  <li>• User impact analysis with custom events</li>
+                  <li>• Recovery rate metrics for better UX</li>
+                  <li>• A/B testing error rates across features</li>
+                  <li>• Real-time error dashboards</li>
+                </ul>
+              </div>
+            </div>
+
+            {/* Other Monitoring Services */}
+            <div>
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">
+                Other Monitoring Services
+              </h3>
+              <p className="text-slate-600 mb-3">
+                try-error can integrate with any error monitoring service
+                through its flexible configuration API.
+              </p>
+
+              <CodeBlock
+                language="typescript"
+                title="Generic Error Service Integration"
+                showLineNumbers={true}
+                className="mb-4"
+              >
+                {`import { configure } from 'try-error';
+import { Bugsnag, LogRocket, Rollbar, DataDog } from './monitoring-services';
+
+configure({
+  onError: (error) => {
+    // Send to multiple services
+    const errorPayload = {
+      type: error.type,
+      message: error.message,
+      timestamp: error.timestamp,
+      context: error.context,
+      stack: error.stack,
+      source: error.source,
+    };
+
+    // Bugsnag
+    if (typeof Bugsnag !== 'undefined') {
+      Bugsnag.notify(error, (event) => {
+        event.addMetadata('tryError', errorPayload);
+      });
+    }
+
+    // LogRocket
+    if (typeof LogRocket !== 'undefined') {
+      LogRocket.captureException(error, {
+        tags: { errorType: error.type },
+        extra: errorPayload,
+      });
+    }
+
+    // Rollbar
+    if (typeof Rollbar !== 'undefined') {
+      Rollbar.error(error.message, error, {
+        tryError: errorPayload,
+      });
+    }
+
+    // DataDog
+    if (typeof DataDog !== 'undefined') {
+      DataDog.logger.error(error.message, {
+        error: errorPayload,
+        service: 'frontend',
+        env: process.env.NODE_ENV,
+      });
+    }
+
+    // Custom logging endpoint
+    if (process.env.NODE_ENV === 'production') {
+      fetch('/api/errors', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          error: errorPayload,
+          userAgent: navigator.userAgent,
+          timestamp: new Date().toISOString(),
+        }),
+      }).catch(() => {
+        // Silently fail if logging fails
+      });
+    }
+
+    return error;
+  },
+});`}
+              </CodeBlock>
+            </div>
+
+            {/* Best Practices */}
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+              <h4 className="font-semibold text-yellow-800 mb-2">
+                Error Monitoring Best Practices
+              </h4>
+              <ul className="space-y-2 text-yellow-700 text-sm">
+                <li>
+                  <strong>1. Don't log sensitive data:</strong> Always sanitize
+                  error context before sending to external services
+                </li>
+                <li>
+                  <strong>2. Use sampling in production:</strong> For
+                  high-traffic apps, sample errors to control costs
+                </li>
+                <li>
+                  <strong>3. Set up alerts:</strong> Configure alerts for
+                  critical error types and error rate spikes
+                </li>
+                <li>
+                  <strong>4. Track error trends:</strong> Monitor error rates
+                  over time to catch regressions early
+                </li>
+                <li>
+                  <strong>5. Correlate with deployments:</strong> Link error
+                  spikes to specific deployments for faster debugging
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
         {/* Related Pages */}
         <section>
           <h2 className="text-2xl font-semibold text-slate-900 mb-4">
