@@ -128,29 +128,9 @@ export {
   fieldValidationError,
 } from "./factories";
 
-// Stage 1: Enhanced utilities for common patterns
+// Enhanced utilities for common patterns
 export type { ErrorHandlingOptions } from "./utils";
 
-export {
-  createEnhancedError,
-  isErrorOfType,
-  isErrorOfTypes,
-  getErrorMessage,
-  getErrorContext,
-  hasErrorContext,
-  transformResult,
-  withDefault,
-  withDefaultFn,
-  filterSuccess,
-  filterErrors,
-  partitionResults,
-  combineErrors,
-  getErrorSummary,
-  formatErrorForLogging,
-  createErrorReport,
-} from "./utils";
-
-// Stage 3: Advanced utilities
 export {
   createEnhancedError,
   isErrorOfType,
