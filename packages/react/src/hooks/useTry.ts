@@ -166,13 +166,25 @@ export function useTry<T>(
   }, [asyncFn, resetOnExecute, abortMessage, cache, cacheKey, debounce]);
 
   const executeInternal = useCallback(async () => {
+    // Check if component is mounted before starting
     if (!isMountedRef.current) return;
+
+    // Increment execution ID to handle race conditions
+    const currentExecutionId = ++executionIdRef.current;
 
     // Check cache first
     if (cache && cacheKey) {
       const cached = requestCache.get(cacheKey);
       if (cached && Date.now() - cached.timestamp < 5 * 60 * 1000) {
         // 5 min cache
+        // Check if still the current execution
+        if (
+          currentExecutionId !== executionIdRef.current ||
+          !isMountedRef.current
+        ) {
+          return;
+        }
+
         setState({
           data: cached.data,
           error: null,
@@ -188,24 +200,28 @@ export function useTry<T>(
       if (pending) {
         try {
           const result = await pending;
-          if (isMountedRef.current) {
-            setState({
-              data: result,
-              error: null,
-              isLoading: false,
-              isSuccess: true,
-              isError: false,
-            });
+
+          // Check if still the current execution after await
+          if (
+            currentExecutionId !== executionIdRef.current ||
+            !isMountedRef.current
+          ) {
+            return;
           }
+
+          setState({
+            data: result,
+            error: null,
+            isLoading: false,
+            isSuccess: true,
+            isError: false,
+          });
           return;
         } catch (error) {
           // Continue with new request if pending one failed
         }
       }
     }
-
-    // Increment execution ID to handle race conditions
-    const currentExecutionId = ++executionIdRef.current;
 
     // Abort any previous request
     if (abortControllerRef.current) {
@@ -217,18 +233,33 @@ export function useTry<T>(
     const abortController = new AbortController();
     abortControllerRef.current = abortController;
 
-    // Reset state if requested
-    if (resetOnExecute) {
-      setState({
-        data: null,
-        error: null,
-        isLoading: true,
-        isSuccess: false,
-        isError: false,
-      });
-    } else {
-      setState((prev) => ({ ...prev, isLoading: true }));
+    // Check again before state update
+    if (
+      currentExecutionId !== executionIdRef.current ||
+      !isMountedRef.current
+    ) {
+      abortController.abort();
+      return;
     }
+
+    // Reset state if requested (batch state updates)
+    setState((prevState) => {
+      if (resetOnExecute) {
+        return {
+          data: null,
+          error: null,
+          isLoading: true,
+          isSuccess: false,
+          isError: false,
+        };
+      } else {
+        // Only update if loading state actually changed
+        if (!prevState.isLoading) {
+          return { ...prevState, isLoading: true };
+        }
+        return prevState;
+      }
+    });
 
     try {
       // Create promise for the operation
@@ -253,8 +284,8 @@ export function useTry<T>(
 
       // Check if this is still the latest execution and component is mounted
       if (
-        !isMountedRef.current ||
         currentExecutionId !== executionIdRef.current ||
+        !isMountedRef.current ||
         abortController.signal.aborted
       ) {
         return;
@@ -262,11 +293,13 @@ export function useTry<T>(
 
       if (isTryError(result)) {
         // Check if this was an abort error
-        if (
+        const isAbortError =
           result.cause instanceof Error &&
-          result.cause.name === "AbortError"
-        ) {
-          setState({
+          (result.cause.name === "AbortError" || result.type === "ABORTED");
+
+        if (isAbortError) {
+          // Only update state if we're still the current execution
+          setState((prevState) => ({
             data: null,
             error: createError({
               type: "ABORTED",
@@ -277,7 +310,7 @@ export function useTry<T>(
             isLoading: false,
             isSuccess: false,
             isError: true,
-          });
+          }));
         } else {
           setState({
             data: null,
@@ -310,15 +343,16 @@ export function useTry<T>(
         pendingRequests.delete(cacheKey);
       }
 
-      // This shouldn't happen with tryAsync, but just in case
+      // Check if still the current execution
       if (
-        !isMountedRef.current ||
         currentExecutionId !== executionIdRef.current ||
+        !isMountedRef.current ||
         abortController.signal.aborted
       ) {
         return;
       }
 
+      // Handle unexpected errors
       setState({
         data: null,
         error: createError({

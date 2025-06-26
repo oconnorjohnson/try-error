@@ -208,6 +208,11 @@ export interface TryErrorConfig {
     client?: (error: TryError) => TryError;
     edge?: (error: TryError) => TryError;
   };
+
+  /**
+   * Performance optimization configuration
+   */
+  performance?: PerformanceConfig;
 }
 
 /**

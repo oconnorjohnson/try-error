@@ -155,6 +155,15 @@ export {
   getErrorFingerprint,
 } from "./utils";
 
+// Performance utilities
+export {
+  ErrorPool,
+  getGlobalErrorPool,
+  configureErrorPool,
+  resetErrorPool,
+  getErrorPoolStats,
+} from "./pool";
+
 // Re-export commonly used functions with clearer names
 export { trySync as try$ } from "./sync";
 

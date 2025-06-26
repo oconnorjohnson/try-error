@@ -1,5 +1,6 @@
 import { TryError, TRY_ERROR_BRAND } from "./types";
 import { getConfig, getConfigVersion } from "./config";
+import { getGlobalErrorPool } from "./pool";
 
 // Performance optimization: Use WeakMap for config cache
 const configCache = new WeakMap<
@@ -420,6 +421,9 @@ export function createError<T extends string = string>(
 ): TryError<T> {
   const config = getCachedConfig();
 
+  // Check if object pooling is enabled
+  const usePooling = config.performance?.errorCreation?.objectPooling ?? false;
+
   // Check error cache for deduplication
   const cacheKey = getErrorCacheKey(
     options.type,
@@ -447,16 +451,39 @@ export function createError<T extends string = string>(
 
   // Fast path for production with minimal features
   if (isProd && !shouldCaptureStack && !config.includeSource) {
-    const error: TryError<T> = {
-      [TRY_ERROR_BRAND]: true,
-      type: options.type,
-      message: options.message,
-      source: options.source ?? "production",
-      timestamp: config.skipTimestamp ? 0 : options.timestamp ?? Date.now(),
-      stack: undefined,
-      context: config.skipContext ? undefined : options.context,
-      cause: options.cause,
-    };
+    let error: TryError<T>;
+
+    if (usePooling) {
+      // Use object pool
+      const pool = getGlobalErrorPool();
+      const pooledError = pool.acquire<T>();
+
+      // Set properties on pooled error
+      (pooledError as any).type = options.type;
+      (pooledError as any).message = options.message;
+      (pooledError as any).source = options.source ?? "production";
+      (pooledError as any).timestamp = config.skipTimestamp
+        ? 0
+        : options.timestamp ?? Date.now();
+      (pooledError as any).stack = undefined;
+      (pooledError as any).context = config.skipContext
+        ? undefined
+        : options.context;
+      (pooledError as any).cause = options.cause;
+
+      error = pooledError as TryError<T>;
+    } else {
+      error = {
+        [TRY_ERROR_BRAND]: true,
+        type: options.type,
+        message: options.message,
+        source: options.source ?? "production",
+        timestamp: config.skipTimestamp ? 0 : options.timestamp ?? Date.now(),
+        stack: undefined,
+        context: config.skipContext ? undefined : options.context,
+        cause: options.cause,
+      };
+    }
 
     // Apply transformations
     let transformedError = error;
@@ -519,16 +546,35 @@ export function createError<T extends string = string>(
     }
   }
 
-  const error: TryError<T> = {
-    [TRY_ERROR_BRAND]: true,
-    type: options.type,
-    message: options.message,
-    source,
-    timestamp,
-    stack,
-    context: options.context,
-    cause: options.cause,
-  };
+  let error: TryError<T>;
+
+  if (usePooling) {
+    // Use object pool for normal path too
+    const pool = getGlobalErrorPool();
+    const pooledError = pool.acquire<T>();
+
+    // Set properties on pooled error
+    (pooledError as any).type = options.type;
+    (pooledError as any).message = options.message;
+    (pooledError as any).source = source;
+    (pooledError as any).timestamp = timestamp;
+    (pooledError as any).stack = stack;
+    (pooledError as any).context = options.context;
+    (pooledError as any).cause = options.cause;
+
+    error = pooledError as TryError<T>;
+  } else {
+    error = {
+      [TRY_ERROR_BRAND]: true,
+      type: options.type,
+      message: options.message,
+      source,
+      timestamp,
+      stack,
+      context: options.context,
+      cause: options.cause,
+    };
+  }
 
   // Apply transformations
   let transformedError = error;
