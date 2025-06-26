@@ -50,6 +50,11 @@ const navigation = [
         icon: Rocket,
       },
       {
+        title: "Interactive Playground",
+        url: "/docs/playground",
+        icon: Code,
+      },
+      {
         title: "Migration Guide",
         url: "/docs/migration",
         icon: FileText,
