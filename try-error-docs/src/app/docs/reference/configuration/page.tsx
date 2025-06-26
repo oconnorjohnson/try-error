@@ -146,8 +146,26 @@ ReactDOM.createRoot(...).render(<App />);`}
                   {`// For App Router: app/layout.tsx
 import { setupNextJs } from 'try-error/setup';
 
-// Configure at the top level
+// Simple setup (same config for both server and client)
 setupNextJs();
+
+// Advanced: Separate server/client configurations
+setupNextJs({
+  server: {
+    captureStackTrace: false,
+    onError: (error) => {
+      // Server-side logging
+      console.error('[Server Error]', error);
+    }
+  },
+  client: {
+    captureStackTrace: false,
+    onError: (error) => {
+      // Client-side error tracking
+      // window.Sentry?.captureException(error);
+    }
+  }
+});
 
 export default function RootLayout({
   children,
@@ -159,16 +177,6 @@ export default function RootLayout({
       <body>{children}</body>
     </html>
   );
-}
-
-// For Pages Router: pages/_app.tsx
-import { setupNextJs } from 'try-error/setup';
-
-// Configure before App component
-setupNextJs();
-
-export default function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />;
 }`}
                 </CodeBlock>
               </div>
