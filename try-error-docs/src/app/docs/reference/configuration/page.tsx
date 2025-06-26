@@ -2713,8 +2713,8 @@ configure({
                 </h4>
                 <ul className="space-y-1 text-orange-700 text-sm">
                   <li>• Default config: ~100-120% overhead ❌</li>
-                  <li>• Production config: ~400% overhead ⚠️</li>
-                  <li>• Minimal config: ~50% overhead ✅</li>
+                  <li>• Production config: ~40% overhead ⚠️</li>
+                  <li>• Minimal config: ~20% overhead ✅</li>
                 </ul>
               </div>
             </div>
