@@ -399,7 +399,7 @@ export interface PluginAPI {
   createErrorType: (
     type: string,
     factory: (message: string, context?: any) => TryError
-  ) => Record<string, Function>;
+  ) => Record<string, (message: string, context?: any) => TryError>;
   addMiddleware: (...middleware: ErrorMiddleware[]) => ErrorMiddleware[];
   addUtility: (name: string, fn: Function) => Record<string, Function>;
 }

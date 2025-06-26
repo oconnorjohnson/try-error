@@ -797,47 +797,6 @@ function logToLocalStorage(error: TryError, reason: string) {
       </section>
 
       {/* Best Practices */}
-      <section className="mb-12">
-        <h2 className="text-2xl font-semibold text-slate-900 mb-4">
-          Sampling Best Practices
-        </h2>
-
-        <div className="grid md:grid-cols-2 gap-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Do's ✅</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ul className="space-y-2 text-sm">
-                <li>• Always sample critical/security errors at 100%</li>
-                <li>• Use multiple sampling strategies together</li>
-                <li>• Track sampling metrics to optimize rates</li>
-                <li>• Store unsampled errors locally for debugging</li>
-                <li>• Consider user impact when setting rates</li>
-                <li>• Test sampling logic thoroughly</li>
-                <li>• Document your sampling strategy</li>
-              </ul>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Don'ts ❌</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ul className="space-y-2 text-sm">
-                <li>• Don't sample so aggressively you miss issues</li>
-                <li>• Don't forget to handle error spikes</li>
-                <li>• Don't sample based on sensitive data</li>
-                <li>• Don't hardcode sampling rates</li>
-                <li>• Don't ignore sampling in development</li>
-                <li>• Don't forget to monitor sampling effectiveness</li>
-                <li>• Don't apply same rate to all error types</li>
-              </ul>
-            </CardContent>
-          </Card>
-        </div>
-      </section>
 
       {/* Monitoring Sampling */}
       <section>

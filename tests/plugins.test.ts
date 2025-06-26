@@ -15,6 +15,7 @@ import {
   PluginMetadata,
 } from "../src/plugins";
 import { TryError, TRY_ERROR_BRAND } from "../src/types";
+import { TryErrorConfig } from "../src/config";
 
 describe("PluginManager", () => {
   let manager: PluginManager;
@@ -31,7 +32,7 @@ describe("PluginManager", () => {
           version: "1.0.0",
         },
         hooks: {
-          onInstall: jest.fn(),
+          onInstall: jest.fn(() => {}),
         },
       };
 
@@ -101,7 +102,7 @@ describe("PluginManager", () => {
           version: "1.0.0",
         },
         hooks: {
-          onUninstall: jest.fn(),
+          onUninstall: jest.fn(() => {}),
         },
       };
 
@@ -119,9 +120,9 @@ describe("PluginManager", () => {
           version: "1.0.0",
         },
         hooks: {
-          onEnable: jest.fn(),
-          onDisable: jest.fn(),
-          onUninstall: jest.fn(),
+          onEnable: jest.fn(() => {}),
+          onDisable: jest.fn(() => {}),
+          onUninstall: jest.fn(() => {}),
         },
       };
 
@@ -172,7 +173,7 @@ describe("PluginManager", () => {
           version: "1.0.0",
         },
         hooks: {
-          onEnable: jest.fn(),
+          onEnable: jest.fn(() => {}),
         },
       };
 
@@ -191,7 +192,7 @@ describe("PluginManager", () => {
           version: "1.0.0",
         },
         hooks: {
-          onEnable: jest.fn(),
+          onEnable: jest.fn(() => {}),
         },
       };
 
@@ -202,7 +203,7 @@ describe("PluginManager", () => {
           dependencies: ["base"],
         },
         hooks: {
-          onEnable: jest.fn(),
+          onEnable: jest.fn(() => {}),
         },
       };
 
@@ -223,8 +224,8 @@ describe("PluginManager", () => {
           version: "1.0.0",
         },
         hooks: {
-          onEnable: jest.fn(),
-          onDisable: jest.fn(),
+          onEnable: jest.fn(() => {}),
+          onDisable: jest.fn(() => {}),
         },
       };
 
@@ -268,7 +269,7 @@ describe("PluginManager", () => {
           version: "1.0.0",
         },
         hooks: {
-          onEnable: jest.fn(),
+          onEnable: jest.fn(() => {}),
         },
       };
 
@@ -286,7 +287,7 @@ describe("PluginManager", () => {
           version: "1.0.0",
         },
         hooks: {
-          onDisable: jest.fn(),
+          onDisable: jest.fn(() => {}),
         },
       };
 
@@ -339,8 +340,8 @@ describe("PluginManager", () => {
     });
 
     it("should collect middleware from enabled plugins", async () => {
-      const middleware1 = jest.fn((result, next) => next());
-      const middleware2 = jest.fn((result, next) => next());
+      const middleware1 = jest.fn((result: any, next: any) => next());
+      const middleware2 = jest.fn((result: any, next: any) => next());
 
       const plugin1: Plugin = {
         metadata: {
@@ -372,21 +373,27 @@ describe("PluginManager", () => {
     });
 
     it("should collect error types from enabled plugins", async () => {
-      const errorFactory1 = jest.fn((message: string) => ({
-        [TRY_ERROR_BRAND]: true,
-        type: "CustomError1",
-        message,
-        source: "plugin1",
-        timestamp: Date.now(),
-      }));
+      const errorFactory1 = jest.fn(
+        (message: string) =>
+          ({
+            [TRY_ERROR_BRAND]: true as true,
+            type: "CustomError1",
+            message,
+            source: "plugin1",
+            timestamp: Date.now(),
+          } as TryError)
+      );
 
-      const errorFactory2 = jest.fn((message: string) => ({
-        [TRY_ERROR_BRAND]: true,
-        type: "CustomError2",
-        message,
-        source: "plugin2",
-        timestamp: Date.now(),
-      }));
+      const errorFactory2 = jest.fn(
+        (message: string) =>
+          ({
+            [TRY_ERROR_BRAND]: true as true,
+            type: "CustomError2",
+            message,
+            source: "plugin2",
+            timestamp: Date.now(),
+          } as TryError)
+      );
 
       const plugin1: Plugin = {
         metadata: {
@@ -469,7 +476,7 @@ describe("PluginManager", () => {
           version: "1.0.0",
         },
         hooks: {
-          onConfigChange: jest.fn(),
+          onConfigChange: jest.fn((config: TryErrorConfig) => {}),
         },
       };
 
@@ -479,7 +486,7 @@ describe("PluginManager", () => {
           version: "1.0.0",
         },
         hooks: {
-          onConfigChange: jest.fn(),
+          onConfigChange: jest.fn((config: TryErrorConfig) => {}),
         },
       };
 
@@ -489,7 +496,7 @@ describe("PluginManager", () => {
           version: "1.0.0",
         },
         hooks: {
-          onConfigChange: jest.fn(),
+          onConfigChange: jest.fn((config: TryErrorConfig) => {}),
         },
       };
 
@@ -530,14 +537,17 @@ describe("PluginManager", () => {
 
 describe("createPlugin helper", () => {
   it("should create a plugin with the helper", () => {
-    const middleware = jest.fn((result, next) => next());
-    const errorFactory = jest.fn((message: string) => ({
-      [TRY_ERROR_BRAND]: true,
-      type: "HelperError",
-      message,
-      source: "helper",
-      timestamp: Date.now(),
-    }));
+    const middleware = jest.fn((result: any, next: any) => next());
+    const errorFactory = jest.fn(
+      (message: string) =>
+        ({
+          [TRY_ERROR_BRAND]: true as true,
+          type: "HelperError",
+          message,
+          source: "helper",
+          timestamp: Date.now(),
+        } as TryError)
+    );
     const utility = jest.fn();
 
     const plugin = createPlugin(
@@ -604,7 +614,7 @@ describe("Sentry plugin example", () => {
   });
 
   it("should log on install and enable", async () => {
-    const consoleSpy = jest.spyOn(console, "log").mockImplementation();
+    const consoleSpy = jest.spyOn(console, "log").mockImplementation(() => {});
 
     await sentryPlugin.hooks!.onInstall!();
     expect(consoleSpy).toHaveBeenCalledWith("Sentry plugin installed");
