@@ -424,3 +424,127 @@ This completes the documentation requirements for the performance optimization a
   - Source location parsing: ~10% overhead (was 200%)
   - Timestamp generation: ~5% overhead (was 50%)
 - These numbers better reflect real-world performance characteristics
+
+# try-error Development Memory
+
+## Overview
+
+`try-error` is a lightweight, progressive, type-safe error handling library for TypeScript that provides an alternative to traditional try-catch blocks using a Result pattern similar to Rust's Result type.
+
+## Key Architecture Decisions
+
+### Core Philosophy
+
+- **Progressive Enhancement**: Start simple, add features as needed
+- **Type Safety First**: Full TypeScript support with discriminated unions
+- **Zero Dependencies**: Lightweight and self-contained
+- **Performance Focused**: Minimal overhead, lazy evaluation options
+
+### Error Structure
+
+- Uses branded types with Symbol for type guards to prevent spoofing
+- Rich error objects with: type, message, source location, timestamp, context, cause
+- Supports error chaining and wrapping
+
+## Recent Improvements (2024-12-30)
+
+### Performance Optimizations Implemented
+
+1. **Type Safety Improvements**
+
+   - Reduced type assertions throughout codebase
+   - Created proper interfaces for mutable pooled errors
+   - Fixed type narrowing in isTryError function
+   - Used Object.assign instead of type assertions for pooled errors
+
+2. **Micro-optimizations**
+
+   - ✅ Bit flags implementation (`src/bitflags.ts`) - Pack boolean properties into single number
+   - ✅ String interning (`src/intern.ts`) - Reuse common strings with WeakRef support
+   - ✅ Event system (`src/events.ts`) - Lifecycle events with async queue processing
+
+3. **Bundle Size Optimizations**
+
+   - ✅ Added tree-shaking hints with `/*#__PURE__*/` comments
+   - Exports are now properly annotated for dead code elimination
+
+4. **Bug Fixes**
+   - Fixed caching logic to respect explicit captureStackTrace options
+   - Fixed source location to properly respect includeSource config
+   - Fixed production detection for stack trace capture
+   - Fixed lazy evaluation path to respect config settings
+
+### Architecture Improvements
+
+- Event system for monitoring error lifecycle (creation, transformation, pooling, etc.)
+- String interning with weak references for memory efficiency
+- Bit flags for compact boolean storage
+- Proper config change listeners to invalidate caches
+
+## Testing Status
+
+- All 233 tests passing (12 test suites)
+- Integration tests fixed for async function names
+- Source location tests updated for reliability
+- Performance tests made more stable
+
+## Next High-Priority Items
+
+### Performance
+
+- [ ] WASM Module for ultra-high performance scenarios
+- [ ] Promise creation overhead reduction
+- [ ] Debouncing for async operations
+
+### Bundle Size
+
+- [ ] Modular builds (separate sync/async imports)
+- [ ] Compression-friendly code structure
+
+### Advanced Features
+
+- [ ] Async iterators and streaming support
+- [ ] Proper cancellation beyond AbortSignal
+- [ ] Deadlock detection for async operations
+
+### Developer Experience
+
+- [ ] VSCode extension for better IDE support
+- [ ] ESLint plugin for best practices
+- [ ] CodeMod for migration from try-catch
+- [ ] Interactive playground
+
+### Monitoring & Integration
+
+- [ ] OpenTelemetry support
+- [ ] DataDog plugin
+- [ ] Structured logging integration
+- [ ] Error budgets and metrics
+
+## Configuration Best Practices
+
+- Use runtime configuration, not config files
+- Configure at module level in serverless environments
+- Minimal overhead (~0.1ms) makes runtime config optimal
+- Configuration options: minimalErrors, skipTimestamp, skipContext for performance
+
+## Performance Targets
+
+- Error creation: <1μs in production mode
+- Memory usage: ~200 bytes per error (minimal mode)
+- Bundle size: Core ~5KB gzipped
+
+## Code Organization
+
+- `src/` - Core library code
+- `packages/react/` - React integration with hooks and error boundaries
+- `try-error-docs/` - Next.js documentation site
+- Monorepo using pnpm workspaces
+
+## Development Workflow
+
+1. Make changes to core library
+2. Run `pnpm test` to verify all tests pass
+3. Update `src/improvements.md` to track progress
+4. Update this memory file with key decisions
+5. Write comprehensive unit tests for new features
