@@ -70,19 +70,19 @@ describe("Integration Tests", () => {
       const emailValidation = tryChain(userResult, (user: any) =>
         trySync(() => mockApiClient.validateEmail(user.email))
       );
-      const postsResult = await tryAsyncChain(
+      const postsResult = await tryChainAsync(
         Promise.resolve(emailValidation),
-        async (isValid) => {
+        async (isValid: any) => {
           if (!isValid) throw new Error("Email validation failed");
           return tryAsync(() => mockApiClient.fetchPosts(userId));
         }
       );
-      const transformedData = await tryAsyncMap(
+      const transformedData = await tryMapAsync(
         Promise.resolve(postsResult),
-        async (posts) => ({
+        async (posts: any) => ({
           userId,
           postCount: posts.length,
-          titles: posts.map((p) => p.title),
+          titles: posts.map((p: any) => p.title),
         })
       );
 
@@ -98,9 +98,9 @@ describe("Integration Tests", () => {
       const userId = 404;
 
       const userResult = await tryAsync(() => mockApiClient.fetchUser(userId));
-      const postsResult = await tryAsyncChain(
+      const postsResult = await tryChainAsync(
         Promise.resolve(userResult),
-        async (user) => tryAsync(() => mockApiClient.fetchPosts(user.id))
+        async (user: any) => tryAsync(() => mockApiClient.fetchPosts(user.id))
       );
 
       expect(isErr(postsResult)).toBe(true);
