@@ -114,3 +114,147 @@ This file tracks key decisions, progress, and context for the try-error library 
 - Add performance benchmarks
 
 ### Previous Entries
+
+# Try-Error Development Memory
+
+## Core Philosophy
+
+- Zero-overhead error handling for TypeScript
+- Progressive enhancement (Stage 0 → 1 → 2 → 3)
+- Type-safe, ergonomic API
+- Tree-shakeable, minimal bundle size
+
+## Key Decisions
+
+### Architecture
+
+- Result<T, E> pattern (not Either monad)
+- Symbol branding for type guards
+- Separate sync/async APIs
+- No throwing by default
+
+### Performance Targets
+
+- <50% overhead vs try-catch
+- Zero dependencies
+- Tree-shakeable exports
+- Minimal memory allocation
+
+## Implementation Progress
+
+### Completed Features
+
+- ✅ Core types (TryResult, TryError)
+- ✅ Basic sync/async error handling
+- ✅ Error creation with source location
+- ✅ Configuration system
+- ✅ Domain-specific error factories
+- ✅ Utility functions
+- ✅ React package with hooks
+- ✅ Setup utilities
+- ✅ Documentation site structure
+
+### Recent Improvements (Based on improvements.md)
+
+#### src/types.ts
+
+- ✅ Fixed type guard vulnerability - now validates symbol value is exactly `true`
+- ✅ Added context validation in type guards
+- ✅ Changed from Symbol.for() to private Symbol for better performance
+- ✅ Added error serialization/deserialization functions
+- ✅ Added error comparison utility (areTryErrorsEqual)
+- ✅ Added error cloning with modifications (cloneTryError)
+
+#### src/errors.ts
+
+- ✅ Fixed cache invalidation using WeakMap instead of function properties
+- ✅ Fixed environment detection cache invalidation for SSR
+- ✅ Improved stack parsers to handle minified code
+- ✅ Consolidated environment and runtime detection logic
+- ✅ Replaced string concatenation with template literals
+- ✅ Added error deduplication cache (MAX_ERROR_CACHE_SIZE = 1000)
+- ✅ Added invalidateEnvironmentCache() for SSR scenarios
+
+#### src/config.ts
+
+- ✅ Made ConfigPresets immutable with Object.freeze
+- ✅ Fixed memory leak in Performance.measureErrorCreation by awaiting promises
+- ✅ Added config validation (validateConfig)
+- ✅ Implemented preset caching to avoid recreation
+- ✅ Added deep merge for configuration objects
+- ✅ Improved performance measurement using performance.now() properly
+
+#### src/sync.ts
+
+- ✅ Fixed error creation to preserve original stack traces
+- ✅ Shared error creation logic (createTryError)
+- ✅ Simplified isOptionsObject check
+- ✅ Added retry logic (retrySync)
+- ✅ Added circuit breaker pattern (CircuitBreaker)
+- ✅ Added error recovery pattern (withFallback)
+
+#### src/async.ts
+
+- ✅ Fixed promise race memory leak by clearing timeouts
+- ✅ Fixed timeout promise cleanup
+- ✅ Added overflow protection for retry delays
+- ✅ Added cancellation support via AbortSignal
+- ✅ Added progress tracking (withProgress)
+- ✅ Added rate limiting (RateLimiter)
+- ✅ Added queue management (AsyncQueue)
+
+#### src/factories.ts
+
+- ✅ Removed unsafe type assertions
+- ✅ Added validation for required fields
+- ✅ Implemented factory caching
+- ✅ Added factory registry (getFactory, listFactories)
+- ✅ Added factory composition (composeFactories)
+- ✅ Added automatic serialization for domain errors
+
+#### src/utils.ts
+
+- ✅ Fixed process.env checks for missing environments
+- ✅ Optimized array operations to single-pass
+- ✅ Improved string building with template literals
+- ✅ Added error diffing (diffErrors)
+- ✅ Added error grouping (groupErrors)
+- ✅ Added error sampling utilities (ErrorSampling)
+- ✅ Added error correlation (correlateErrors)
+- ✅ Added error fingerprinting (getErrorFingerprint)
+
+#### src/setup.ts
+
+- ✅ Fixed React localhost detection logic
+- ✅ Improved Next.js detection with multiple env checks
+- ✅ Added setup validation (validateSetup)
+- ✅ Added setup composition (composeSetups)
+- ✅ Added dynamic setup (createDynamicSetup)
+- ✅ Added teardown support (teardownSetup)
+- ✅ Track active setups for validation
+
+#### src/index.ts
+
+- ✅ Fixed re-export naming conflicts
+- ✅ Added VERSION and FEATURES exports
+- ✅ Cleaned up duplicate exports
+
+### Pending Tasks
+
+- [ ] Fix remaining test failures
+- [ ] Implement object pooling (mentioned in config but not implemented)
+- [ ] Add async stack traces support
+- [ ] Add lazy evaluation for error properties
+- [ ] Add memoization for repeated operations
+- [ ] Create migration guide from try-catch
+- [ ] Add performance optimization guide
+- [ ] Add error boundary testing utilities
+- [ ] Add framework adapters beyond React
+- [ ] Add middleware/plugin system
+- [ ] Add OpenTelemetry integration
+- [ ] Add PII detection/sanitization
+- [ ] Add error budget tracking
+
+## Context for Next Session
+
+The codebase has been significantly improved based on the comprehensive analysis in improvements.md. Most bugs and inefficiencies have been fixed, and many missing features have been added. The main remaining work is fixing test failures and implementing the more advanced features like object pooling, async stack traces, and monitoring integrations.
