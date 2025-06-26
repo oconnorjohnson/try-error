@@ -30,6 +30,12 @@ interface SearchResult {
   title?: string;
   content?: string;
   url?: string;
+  hierarchy?: {
+    lvl0?: string;
+    lvl1?: string;
+    lvl2?: string;
+    lvl3?: string;
+  };
   [key: string]: any;
 }
 
@@ -82,6 +88,33 @@ export function SearchDialog() {
             indexName: indexName,
             query: searchQuery,
             hitsPerPage: 20,
+            // Search parameters
+            attributesToRetrieve: [
+              "title",
+              "content",
+              "url",
+              "hierarchy.lvl0",
+              "hierarchy.lvl1",
+              "hierarchy.lvl2",
+              "hierarchy.lvl3",
+            ],
+            restrictSearchableAttributes: [
+              "title",
+              "hierarchy.lvl0",
+              "hierarchy.lvl1",
+              "hierarchy.lvl2",
+              "hierarchy.lvl3",
+              "content",
+            ],
+            highlightPreTag: "<mark>",
+            highlightPostTag: "</mark>",
+            snippetEllipsisText: "...",
+            attributesToSnippet: ["content:50"],
+            // Relevance settings
+            minWordSizefor1Typo: 4,
+            minWordSizefor2Typos: 8,
+            advancedSyntax: true,
+            distinct: true,
           },
         ],
       });
@@ -109,11 +142,11 @@ export function SearchDialog() {
     }
   }, []);
 
-  // Debounce search
+  // Debounce search with a longer delay to reduce API calls
   useEffect(() => {
     const timer = setTimeout(() => {
       handleSearch(query);
-    }, 300);
+    }, 400); // Increased from 300ms to 400ms
 
     return () => clearTimeout(timer);
   }, [query, handleSearch]);
@@ -126,7 +159,6 @@ export function SearchDialog() {
 
   const handleResultClick = (result: SearchResult) => {
     if (result.url) {
-      // For development, we'll use client-side navigation if it's a relative path
       if (result.url.startsWith("http://localhost:1999")) {
         const path = result.url.replace("http://localhost:1999", "");
         window.location.href = path;
@@ -135,6 +167,21 @@ export function SearchDialog() {
       }
     }
     onClose();
+  };
+
+  // Get a display title from the result
+  const getDisplayTitle = (result: SearchResult): string => {
+    if (result.title) return result.title;
+
+    // Try to get title from hierarchy
+    const hierarchyTitle =
+      result.hierarchy?.lvl0 ||
+      result.hierarchy?.lvl1 ||
+      result.hierarchy?.lvl2 ||
+      result.hierarchy?.lvl3;
+    if (hierarchyTitle) return hierarchyTitle;
+
+    return result.objectID;
   };
 
   return (
@@ -177,50 +224,58 @@ export function SearchDialog() {
                 </Button>
               </div>
 
-              <ScrollArea className="max-h-[60vh]">
-                {isSearching && (
-                  <div className="p-4 text-center text-sm text-muted-foreground">
-                    Searching...
-                  </div>
-                )}
+              <ScrollArea className="max-h-[calc(90vh-10rem)] overflow-y-auto">
+                <div className="divide-y">
+                  {isSearching && (
+                    <div className="p-4 text-center text-sm text-muted-foreground">
+                      Searching...
+                    </div>
+                  )}
 
-                {!isSearching && query && results.length === 0 && (
-                  <div className="p-4 text-center text-sm text-muted-foreground">
-                    No results found for "{query}"
-                  </div>
-                )}
+                  {!isSearching && query && results.length === 0 && (
+                    <div className="p-4 text-center text-sm text-muted-foreground">
+                      No results found for "{query}"
+                    </div>
+                  )}
 
-                {!isSearching && results.length > 0 && (
-                  <div className="py-2">
-                    {results.map((result) => (
-                      <button
-                        key={result.objectID}
-                        className="w-full px-4 py-2 text-left hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none"
-                        onClick={() => handleResultClick(result)}
-                      >
-                        <div className="font-medium">
-                          {result.title || result.objectID}
-                        </div>
-                        {result.content && (
-                          <div className="mt-1 text-sm text-muted-foreground line-clamp-2">
-                            {result.content}
+                  {!isSearching && results.length > 0 && (
+                    <div className="divide-y">
+                      {results.map((result) => (
+                        <button
+                          key={result.objectID}
+                          className="w-full px-4 py-3 text-left hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none"
+                          onClick={() => handleResultClick(result)}
+                        >
+                          <div className="font-medium">
+                            {getDisplayTitle(result)}
                           </div>
-                        )}
-                        {result.url && (
-                          <div className="mt-1 text-xs text-muted-foreground opacity-60">
-                            {result.url}
-                          </div>
-                        )}
-                      </button>
-                    ))}
-                  </div>
-                )}
+                          {result.content && (
+                            <div
+                              className="mt-1 text-sm text-muted-foreground line-clamp-2"
+                              dangerouslySetInnerHTML={{
+                                __html: result.content.replace(
+                                  /<mark>(.*?)<\/mark>/g,
+                                  '<span class="bg-yellow-200 dark:bg-yellow-800">$1</span>'
+                                ),
+                              }}
+                            />
+                          )}
+                          {result.url && (
+                            <div className="mt-1 text-xs text-muted-foreground opacity-60 truncate">
+                              {result.url}
+                            </div>
+                          )}
+                        </button>
+                      ))}
+                    </div>
+                  )}
 
-                {!query && (
-                  <div className="p-4 text-center text-sm text-muted-foreground">
-                    Type to search...
-                  </div>
-                )}
+                  {!query && (
+                    <div className="p-4 text-center text-sm text-muted-foreground">
+                      Type to search...
+                    </div>
+                  )}
+                </div>
               </ScrollArea>
             </div>
           </div>,
