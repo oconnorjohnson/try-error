@@ -20,6 +20,11 @@ export const metadata: Metadata = {
   icons: {
     icon: "/logo.png",
   },
+  verification: {
+    other: {
+      "algolia-site-verification": "D1AADE7F9B3E5B02",
+    },
+  },
 };
 
 export default function RootLayout({
@@ -29,7 +34,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <meta name="algolia-site-verification" content="D1AADE7F9B3E5B02" />
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
