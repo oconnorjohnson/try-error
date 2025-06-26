@@ -132,7 +132,7 @@ if (!isTryError(result)) {
               </p>
               <ul className="space-y-1 text-orange-700 text-sm">
                 <li>
-                  • <strong>50% to 1700% overhead</strong> (configurable)
+                  • <strong>20% to 120% overhead</strong> (configurable)
                 </li>
                 <li>• Stack trace capture: ~1200% overhead</li>
                 <li>• Context deep cloning: ~300% overhead</li>
