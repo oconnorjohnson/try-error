@@ -117,58 +117,92 @@ export function setupReact(options: TryErrorConfig = {}): void {
  * Quick setup for Next.js applications
  * Handles both server-side and client-side environments
  *
- * @param options - Optional custom configuration overrides
+ * @param options - Optional custom configuration overrides or separate server/client configs
  *
  * @example
  * ```typescript
- * // In your layout.tsx or _app.tsx
- * import { setupNextJs } from 'try-error/setup';
+ * // Simple setup (same config for both)
+ * setupNextJs();
  *
- * setupNextJs(); // Automatic server/client detection
- *
- * // With custom error reporting
+ * // With separate server/client configurations
  * setupNextJs({
- *   onError: (error) => {
- *     if (typeof window !== 'undefined') {
- *       // Client-side: send to API
- *       fetch('/api/errors', {
- *         method: 'POST',
- *         body: JSON.stringify({ error: error.message, type: error.type })
- *       }).catch(() => {});
- *     } else {
- *       // Server-side: log to console
- *       console.error(`[SSR ERROR] ${error.type}: ${error.message}`);
+ *   server: {
+ *     onError: (error) => {
+ *       logger.error('Server error', error);
  *     }
+ *   },
+ *   client: {
+ *     onError: (error) => {
+ *       Sentry.captureException(error);
+ *     }
+ *   }
+ * });
+ *
+ * // Or with shared config + environment-specific overrides
+ * setupNextJs({
+ *   includeSource: true,
+ *   server: {
+ *     captureStackTrace: false,
+ *     onError: (error) => logger.error(error)
+ *   },
+ *   client: {
+ *     captureStackTrace: false,
+ *     onError: (error) => trackError(error)
  *   }
  * });
  * ```
  */
-export function setupNextJs(options: TryErrorConfig = {}): void {
+export function setupNextJs(
+  options: TryErrorConfig & {
+    server?: Partial<TryErrorConfig>;
+    client?: Partial<TryErrorConfig>;
+  } = {}
+): void {
   const isServer = typeof window === "undefined";
   const isDev =
     typeof process !== "undefined"
       ? process.env.NODE_ENV === "development"
       : false;
 
-  const config: TryErrorConfig = {
+  // Extract server/client specific configs
+  const { server, client, ...sharedConfig } = options;
+
+  // Base configuration
+  const baseConfig: TryErrorConfig = {
     captureStackTrace: isDev,
     stackTraceLimit: isDev ? (isServer ? 50 : 20) : isServer ? 5 : 3,
-    includeSource: isDev,
+    includeSource: isDev || isServer, // Keep source on server for logs
     developmentMode: isDev,
-    onError: (error) => {
+    ...sharedConfig, // Apply shared config
+  };
+
+  // Apply environment-specific config
+  const envConfig = isServer ? server : client;
+  const finalConfig = { ...baseConfig, ...envConfig };
+
+  // Default error handlers if not provided
+  if (!finalConfig.onError) {
+    finalConfig.onError = (error) => {
       if (isDev && typeof console !== "undefined") {
         const prefix = isServer ? "[SSR]" : "[Client]";
         console.group(`🚨 ${prefix} TryError: ${error.type}`);
         console.error("Message:", error.message);
         console.error("Source:", error.source);
         console.error("Context:", error.context);
+        if (error.stack) console.error("Stack:", error.stack);
         console.groupEnd();
+      } else if (isServer) {
+        // Production server: Log errors (but not to stdout)
+        // Users should integrate their logger here
+      } else {
+        // Production client: No console output
+        // Users should integrate error tracking here
       }
       return error;
-    },
-  };
+    };
+  }
 
-  configure({ ...config, ...options });
+  configure(finalConfig);
 }
 
 /**
