@@ -31,6 +31,18 @@ interface PoolableError<T extends string = string> extends MutableTryError<T> {
 }
 
 /**
+ * Type guard for poolable errors
+ */
+function isPoolableError(error: unknown): error is PoolableError {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    "_pooled" in error &&
+    (error as PoolableError)._pooled === true
+  );
+}
+
+/**
  * Object pool for TryError instances
  */
 export class ErrorPool {
@@ -111,15 +123,14 @@ export class ErrorPool {
    * Release an error back to the pool
    */
   release(error: TryError): void {
-    if (!("_pooled" in error) || !(error as any)._pooled) {
+    if (!isPoolableError(error)) {
       return; // Not a pooled error
     }
 
-    const poolable = error as unknown as PoolableError;
-    poolable._reset();
+    error._reset();
 
     if (this.pool.length < this.maxSize) {
-      this.pool.push(poolable);
+      this.pool.push(error);
       this.stats.returns++;
     }
 

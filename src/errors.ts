@@ -523,18 +523,16 @@ export function createError<T extends string = string>(
       const pool = getGlobalErrorPool();
       const pooledError = pool.acquire<T>();
 
-      // Set properties on pooled error
-      (pooledError as any).type = options.type;
-      (pooledError as any).message = options.message;
-      (pooledError as any).source = options.source ?? "production";
-      (pooledError as any).timestamp = config.skipTimestamp
-        ? 0
-        : options.timestamp ?? Date.now();
-      (pooledError as any).stack = undefined;
-      (pooledError as any).context = config.skipContext
-        ? undefined
-        : options.context;
-      (pooledError as any).cause = options.cause;
+      // Set properties on pooled error using Object.assign for type safety
+      Object.assign(pooledError, {
+        type: options.type,
+        message: options.message,
+        source: options.source ?? "production",
+        timestamp: config.skipTimestamp ? 0 : options.timestamp ?? Date.now(),
+        stack: undefined,
+        context: config.skipContext ? undefined : options.context,
+        cause: options.cause,
+      });
 
       error = pooledError as TryError<T>;
     } else {
@@ -618,14 +616,16 @@ export function createError<T extends string = string>(
     const pool = getGlobalErrorPool();
     const pooledError = pool.acquire<T>();
 
-    // Set properties on pooled error
-    (pooledError as any).type = options.type;
-    (pooledError as any).message = options.message;
-    (pooledError as any).source = source;
-    (pooledError as any).timestamp = timestamp;
-    (pooledError as any).stack = stack;
-    (pooledError as any).context = options.context;
-    (pooledError as any).cause = options.cause;
+    // Set properties on pooled error using Object.assign for type safety
+    Object.assign(pooledError, {
+      type: options.type,
+      message: options.message,
+      source: source,
+      timestamp: timestamp,
+      stack: stack,
+      context: options.context,
+      cause: options.cause,
+    });
 
     error = pooledError as TryError<T>;
   } else {

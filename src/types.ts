@@ -75,26 +75,41 @@ export type TryTuple<T, E extends TryError = TryError> =
 export function isTryError<E extends TryError = TryError>(
   value: unknown
 ): value is E {
-  return (
-    typeof value === "object" &&
-    value !== null &&
-    TRY_ERROR_BRAND in value &&
-    (value as any)[TRY_ERROR_BRAND] === true && // Exact check for true
-    "type" in value &&
-    "message" in value &&
-    "source" in value &&
-    "timestamp" in value &&
-    typeof (value as any).type === "string" &&
-    typeof (value as any).message === "string" &&
-    typeof (value as any).source === "string" &&
-    typeof (value as any).timestamp === "number" &&
-    // Validate context if present
-    (!("context" in value) ||
-      (value as any).context === undefined ||
-      (typeof (value as any).context === "object" &&
-        (value as any).context !== null &&
-        !Array.isArray((value as any).context)))
-  );
+  // Early return for null/undefined
+  if (typeof value !== "object" || value === null) {
+    return false;
+  }
+
+  // Type narrow to object with index signature
+  const obj = value as Record<string | symbol, unknown>;
+
+  // Check for brand symbol
+  if (!(TRY_ERROR_BRAND in obj) || obj[TRY_ERROR_BRAND] !== true) {
+    return false;
+  }
+
+  // Check required string fields
+  if (
+    typeof obj.type !== "string" ||
+    typeof obj.message !== "string" ||
+    typeof obj.source !== "string" ||
+    typeof obj.timestamp !== "number"
+  ) {
+    return false;
+  }
+
+  // Validate optional context field
+  if (
+    "context" in obj &&
+    obj.context !== undefined &&
+    (typeof obj.context !== "object" ||
+      obj.context === null ||
+      Array.isArray(obj.context))
+  ) {
+    return false;
+  }
+
+  return true;
 }
 
 /**
