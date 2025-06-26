@@ -1,5 +1,10 @@
 import { TryError, TRY_ERROR_BRAND } from "./types";
-import { getConfig, getConfigVersion } from "./config";
+import {
+  getConfig,
+  getConfigVersion,
+  addConfigChangeListener,
+  removeConfigChangeListener,
+} from "./config";
 import { getGlobalErrorPool } from "./pool";
 import { createLazyError } from "./lazy";
 
@@ -21,6 +26,12 @@ let cachedIsProduction: boolean | null = null;
 // Error deduplication cache
 const errorCache = new Map<string, TryError>();
 const MAX_ERROR_CACHE_SIZE = 1000;
+
+// Listen for config changes to clear caches
+addConfigChangeListener(() => {
+  cachedIsProduction = null;
+  errorCache.clear();
+});
 
 /**
  * Invalidate environment caches (useful for SSR)
