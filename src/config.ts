@@ -103,6 +103,22 @@ export interface TryErrorConfig {
    * Global error transformation hook
    */
   onError?: (error: TryError) => TryError;
+
+  /**
+   * Runtime environment detection for isomorphic apps (Next.js, Nuxt, etc.)
+   * When enabled, environment-specific handlers are called based on runtime detection
+   * @default false
+   */
+  runtimeDetection?: boolean;
+
+  /**
+   * Environment-specific error handlers (used with runtimeDetection)
+   */
+  environmentHandlers?: {
+    server?: (error: TryError) => TryError;
+    client?: (error: TryError) => TryError;
+    edge?: (error: TryError) => TryError;
+  };
 }
 
 /**
