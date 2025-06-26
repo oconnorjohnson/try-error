@@ -16,7 +16,7 @@ export default function PerformanceOptimizationPage() {
       <div>
         <h1 className="text-4xl font-bold mb-4">Performance Optimization</h1>
         <p className="text-xl text-muted-foreground">
-          Advanced techniques to optimize try-error for high-performance
+          Advanced techniques to optimize tryError for high-performance
           applications
         </p>
       </div>
@@ -24,7 +24,7 @@ export default function PerformanceOptimizationPage() {
       <Alert>
         <AlertTitle>Performance First</AlertTitle>
         <AlertDescription>
-          try-error is designed with performance in mind. These optimization
+          tryError is designed with performance in mind. These optimization
           features allow you to fine-tune performance for your specific use case
           while maintaining zero overhead when not used.
         </AlertDescription>
@@ -62,7 +62,7 @@ export default function PerformanceOptimizationPage() {
 
             <TabsContent value="basic">
               <EnhancedCodeBlock language="typescript" showLineNumbers>
-                {`import { configure, trySync } from 'try-error';
+                {`import { configure, trySync } from 'tryError';
 
 // Enable object pooling globally
 configure({
@@ -91,7 +91,7 @@ function processRequest(data: unknown) {
 
             <TabsContent value="configuration">
               <EnhancedCodeBlock language="typescript" showLineNumbers>
-                {`import { configureErrorPool, getErrorPoolStats } from 'try-error';
+                {`import { configureErrorPool, getErrorPoolStats } from 'tryError';
 
 // Configure the global error pool
 configureErrorPool({
@@ -100,7 +100,7 @@ configureErrorPool({
 });
 
 // Or configure per-scope pools
-import { ErrorPool } from 'try-error';
+import { ErrorPool } from 'tryError';
 
 const requestPool = new ErrorPool(50);
 
@@ -121,7 +121,7 @@ function handleRequest() {
 
             <TabsContent value="monitoring">
               <EnhancedCodeBlock language="typescript" showLineNumbers>
-                {`import { getErrorPoolStats } from 'try-error';
+                {`import { getErrorPoolStats } from 'tryError';
 
 // Monitor pool performance
 const stats = getErrorPoolStats();
@@ -193,7 +193,7 @@ console.log({
 
             <TabsContent value="auto">
               <EnhancedCodeBlock language="typescript" showLineNumbers>
-                {`import { configure, trySync } from 'try-error';
+                {`import { configure, trySync } from 'tryError';
 
 // Enable lazy evaluation globally
 configure({
@@ -220,7 +220,7 @@ if (isTryError(result)) {
 
             <TabsContent value="manual">
               <EnhancedCodeBlock language="typescript" showLineNumbers>
-                {`import { createLazyError, makeLazy, forceLazyEvaluation } from 'try-error';
+                {`import { createLazyError, makeLazy, forceLazyEvaluation } from 'tryError';
 
 // Create an error with lazy properties
 const error = createLazyError({
@@ -250,7 +250,7 @@ const evaluatedError = forceLazyEvaluation(lazyError);`}
 
             <TabsContent value="debugging">
               <EnhancedCodeBlock language="typescript" showLineNumbers>
-                {`import { createDebugProxy, isLazyProperty } from 'try-error';
+                {`import { createDebugProxy, isLazyProperty } from 'tryError';
 
 // Create a debug proxy to monitor property access
 const debugError = createDebugProxy(error);
@@ -276,12 +276,12 @@ const monitoredError = createDebugProxy(error);
             Performance Configuration
           </h2>
           <p className="text-muted-foreground mb-6">
-            Fine-tune try-error's performance characteristics for your specific
+            Fine-tune tryError's performance characteristics for your specific
             use case.
           </p>
 
           <EnhancedCodeBlock language="typescript" showLineNumbers>
-            {`import { configure, ConfigPresets } from 'try-error';
+            {`import { configure, ConfigPresets } from 'tryError';
 
 // Use preset configurations
 configure(ConfigPresets.minimal()); // Maximum performance
@@ -337,23 +337,23 @@ configure({
                   <Badge variant="outline">~500K ops/sec</Badge>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span>try-error (minimal mode)</span>
+                  <span>tryError (minimal mode)</span>
                   <Badge variant="outline">~450K ops/sec</Badge>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span>try-error (with pooling)</span>
+                  <span>tryError (with pooling)</span>
                   <Badge variant="outline">~400K ops/sec</Badge>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span>try-error (lazy evaluation)</span>
+                  <span>tryError (lazy evaluation)</span>
                   <Badge variant="outline">~420K ops/sec</Badge>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span>try-error (default)</span>
+                  <span>tryError (default)</span>
                   <Badge variant="outline">~350K ops/sec</Badge>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span>try-error (full features)</span>
+                  <span>tryError (full features)</span>
                   <Badge variant="outline">~250K ops/sec</Badge>
                 </div>
               </div>

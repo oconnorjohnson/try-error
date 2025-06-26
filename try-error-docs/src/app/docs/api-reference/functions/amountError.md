@@ -1,8 +1,8 @@
-[**try-error API Documentation v0.0.1-alpha.1**](../index.md)
+[**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
 ***
 
-[try-error API Documentation](../index.md) / amountError
+[tryError API Documentation](../index.md) / amountError
 
 # Function: amountError()
 
@@ -15,7 +15,7 @@ function amountError<T>(
 currency): AmountError<T>;
 ```
 
-Defined in: [factories.ts:638](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/factories.ts#L638)
+Defined in: [factories.ts:638](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/factories.ts#L638)
 
 IMPROVED: More intuitive amount error factory
 

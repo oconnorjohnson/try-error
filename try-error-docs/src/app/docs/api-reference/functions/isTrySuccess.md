@@ -1,8 +1,8 @@
-[**try-error API Documentation v0.0.1-alpha.1**](../index.md)
+[**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
 ***
 
-[try-error API Documentation](../index.md) / isTrySuccess
+[tryError API Documentation](../index.md) / isTrySuccess
 
 # Function: isTrySuccess()
 
@@ -10,7 +10,7 @@
 function isTrySuccess<T, E>(result): result is T;
 ```
 
-Defined in: [types.ts:120](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/types.ts#L120)
+Defined in: [types.ts:120](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/types.ts#L120)
 
 Type predicate to narrow a TryResult to its success type
 

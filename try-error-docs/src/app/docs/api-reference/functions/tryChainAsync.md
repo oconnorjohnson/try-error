@@ -1,8 +1,8 @@
-[**try-error API Documentation v0.0.1-alpha.1**](../index.md)
+[**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
 ***
 
-[try-error API Documentation](../index.md) / tryChainAsync
+[tryError API Documentation](../index.md) / tryChainAsync
 
 # Function: tryChainAsync()
 
@@ -10,7 +10,7 @@
 function tryChainAsync<T, U, E1, E2>(resultPromise, chainer): Promise<TryResult<U, E1 | E2>>;
 ```
 
-Defined in: [async.ts:253](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/async.ts#L253)
+Defined in: [async.ts:253](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/async.ts#L253)
 
 Chain async operations that return Promise<TryResult>, short-circuiting on errors
 

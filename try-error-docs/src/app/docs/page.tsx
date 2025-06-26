@@ -49,7 +49,7 @@ export default function DocsIntroduction() {
         </AlertDescription>
       </Alert>
 
-      {/* What is try-error */}
+      {/* What is tryError */}
       <section className="space-y-4">
         <h2 className="text-2xl font-semibold">What is tryError?</h2>
 

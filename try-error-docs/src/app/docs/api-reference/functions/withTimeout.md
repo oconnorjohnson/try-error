@@ -1,8 +1,8 @@
-[**try-error API Documentation v0.0.1-alpha.1**](../index.md)
+[**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
 ***
 
-[try-error API Documentation](../index.md) / withTimeout
+[tryError API Documentation](../index.md) / withTimeout
 
 # Function: withTimeout()
 
@@ -13,7 +13,7 @@ function withTimeout<T, E>(
 timeoutMessage?): Promise<TryResult<T, TryError<string> | E>>;
 ```
 
-Defined in: [async.ts:428](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/async.ts#L428)
+Defined in: [async.ts:428](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/async.ts#L428)
 
 Add a timeout to any Promise<TryResult>
 

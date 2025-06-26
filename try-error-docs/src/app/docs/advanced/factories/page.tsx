@@ -37,7 +37,7 @@ export default function FactoriesPage() {
                 showLineNumbers={true}
                 className="mb-4"
               >
-                {`import { createTryError, TryError } from 'try-error';
+                {`import { createTryError, TryError } from 'tryError';
 
 // Basic validation error factory
 export function createValidationError(

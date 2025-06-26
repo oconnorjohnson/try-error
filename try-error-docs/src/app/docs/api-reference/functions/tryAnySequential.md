@@ -1,8 +1,8 @@
-[**try-error API Documentation v0.0.1-alpha.1**](../index.md)
+[**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
 ***
 
-[try-error API Documentation](../index.md) / tryAnySequential
+[tryError API Documentation](../index.md) / tryAnySequential
 
 # Function: tryAnySequential()
 
@@ -10,7 +10,7 @@
 function tryAnySequential<T>(attemptFns): Promise<TryResult<T, TryError<string>>>;
 ```
 
-Defined in: [async.ts:391](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/async.ts#L391)
+Defined in: [async.ts:391](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/async.ts#L391)
 
 Try multiple async operations in sequence, returning the first successful result
 Stops on first success (doesn't wait for remaining promises)

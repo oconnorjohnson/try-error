@@ -1,8 +1,8 @@
-[**try-error API Documentation v0.0.1-alpha.1**](../index.md)
+[**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
 ***
 
-[try-error API Documentation](../index.md) / unwrap
+[tryError API Documentation](../index.md) / unwrap
 
 # Function: unwrap()
 
@@ -10,7 +10,7 @@
 function unwrap<T, E>(result, message?): T;
 ```
 
-Defined in: [sync.ts:232](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/sync.ts#L232)
+Defined in: [sync.ts:232](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/sync.ts#L232)
 
 Extract the success value from a TryResult, throwing if it's an error
 

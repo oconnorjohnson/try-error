@@ -1,8 +1,8 @@
-[**try-error API Documentation v0.0.1-alpha.1**](../index.md)
+[**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
 ***
 
-[try-error API Documentation](../index.md) / createAmountError
+[tryError API Documentation](../index.md) / createAmountError
 
 # Function: createAmountError()
 
@@ -15,7 +15,7 @@ function createAmountError<T>(
 options?): AmountError<T>;
 ```
 
-Defined in: [factories.ts:484](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/factories.ts#L484)
+Defined in: [factories.ts:484](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/factories.ts#L484)
 
 Pre-built factory for amount-related errors with validation
 

@@ -1,8 +1,8 @@
-[**try-error API Documentation v0.0.1-alpha.1**](../index.md)
+[**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
 ***
 
-[try-error API Documentation](../index.md) / transformResult
+[tryError API Documentation](../index.md) / transformResult
 
 # Function: transformResult()
 
@@ -10,7 +10,7 @@
 function transformResult<T, U, E>(result, transform): TryResult<U, E>;
 ```
 
-Defined in: [utils.ts:243](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/utils.ts#L243)
+Defined in: [utils.ts:243](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/utils.ts#L243)
 
 Transform a result value while preserving errors
 

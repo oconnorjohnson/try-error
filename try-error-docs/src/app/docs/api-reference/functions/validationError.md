@@ -1,8 +1,8 @@
-[**try-error API Documentation v0.0.1-alpha.1**](../index.md)
+[**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
 ***
 
-[try-error API Documentation](../index.md) / validationError
+[tryError API Documentation](../index.md) / validationError
 
 # Function: validationError()
 
@@ -14,7 +14,7 @@ function validationError<T>(
 context?): ValidationError<T>;
 ```
 
-Defined in: [factories.ts:615](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/factories.ts#L615)
+Defined in: [factories.ts:615](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/factories.ts#L615)
 
 IMPROVED: More intuitive validation error factory
 

@@ -6,7 +6,7 @@ export default function QuickStartPage() {
       <div className="mb-8">
         <h1 className="text-4xl font-bold text-slate-900 mb-4">Quick Start</h1>
         <p className="text-xl text-slate-600">
-          Learn the essentials of try-error with practical examples
+          Learn the essentials of tryError with practical examples
         </p>
       </div>
 
@@ -27,7 +27,7 @@ export default function QuickStartPage() {
             title="Synchronous Examples"
             className="mb-4"
           >
-            {`import { trySync, isTryError } from 'try-error';
+            {`import { trySync, isTryError } from 'tryError';
 
 // JSON parsing
 const parseResult = trySync(() => JSON.parse(jsonString));
@@ -63,7 +63,7 @@ return JSON.parse(fileResult);`}
             title="Async Examples"
             className="mb-4"
           >
-            {`import { tryAsync, isTryError } from 'try-error';
+            {`import { tryAsync, isTryError } from 'tryError';
 
 // API calls
 const fetchUser = async (id: string) => {
@@ -176,7 +176,7 @@ async function getUserPreferences(userId: string) {
           </h2>
 
           <p className="text-slate-600 mb-4">
-            try-error provides full TypeScript support with intelligent type
+            tryError provides full TypeScript support with intelligent type
             inference:
           </p>
 

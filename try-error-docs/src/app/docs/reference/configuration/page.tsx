@@ -17,12 +17,12 @@ export default function ConfigurationPage() {
           Configuration Reference
         </h1>
         <p className="text-xl text-slate-600">
-          Configure try-error behavior and customize error handling for your
+          Configure tryError behavior and customize error handling for your
           application
         </p>
         <div className="mt-4 bg-slate-100 border border-slate-300 rounded-lg p-4">
           <p className="text-slate-700">
-            <strong>📌 Quick Start:</strong> try-error is configured in your
+            <strong>📌 Quick Start:</strong> tryError is configured in your
             application code, not through config files. Call{" "}
             <code className="bg-slate-200 px-1 rounded">setupNode()</code>,{" "}
             <code className="bg-slate-200 px-1 rounded">setupReact()</code>, or{" "}
@@ -42,11 +42,11 @@ export default function ConfigurationPage() {
       {/* When is configuration needed */}
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
         <h2 className="text-lg font-semibold text-blue-900 mb-3">
-          💡 Do I need to configure try-error?
+          💡 Do I need to configure tryError?
         </h2>
         <div className="space-y-3">
           <p className="text-blue-800 text-sm">
-            <strong>Short answer:</strong> No! try-error works perfectly out of
+            <strong>Short answer:</strong> No! tryError works perfectly out of
             the box without any configuration.
           </p>
           <p className="text-blue-700 text-sm">
@@ -79,11 +79,11 @@ export default function ConfigurationPage() {
           className="bg-purple-50 border-2 border-purple-300 rounded-lg p-6 mb-8"
         >
           <h2 className="text-2xl font-semibold text-purple-900 mb-4">
-            📍 Where to Configure try-error
+            📍 Where to Configure tryError
           </h2>
 
           <p className="text-purple-800 mb-4">
-            <strong>Important:</strong> try-error does NOT use configuration
+            <strong>Important:</strong> tryError does NOT use configuration
             files. Configuration happens in your application code at runtime.
           </p>
 
@@ -93,7 +93,7 @@ export default function ConfigurationPage() {
                 Option 1: Application Entry Point (Recommended)
               </h3>
               <p className="text-purple-700 mb-3">
-                Configure try-error once at your application's entry point,
+                Configure tryError once at your application's entry point,
                 before any other code runs.
               </p>
 
@@ -108,7 +108,7 @@ export default function ConfigurationPage() {
                     showLineNumbers={true}
                   >
                     {`// At the very top of your entry file
-import { setupNode } from 'try-error/setup';
+import { setupNode } from 'tryError/setup';
 
 // Configure before anything else
 setupNode();
@@ -130,7 +130,7 @@ const app = express();
                     showLineNumbers={true}
                   >
                     {`// At the very top of your entry file
-import { setupReact } from 'try-error/setup';
+import { setupReact } from 'tryError/setup';
 
 // Configure before React
 setupReact();
@@ -153,7 +153,7 @@ ReactDOM.createRoot(...).render(<App />);`}
                   showLineNumbers={true}
                 >
                   {`// For App Router: app/layout.tsx
-import { setupNextJs } from 'try-error/setup';
+import { setupNextJs } from 'tryError/setup';
 
 // Simple setup (same config for both server and client)
 setupNextJs();
@@ -202,12 +202,12 @@ export default function RootLayout({
 
               <CodeBlock
                 language="typescript"
-                title="config/try-error.config.ts"
+                title="config/tryError.config.ts"
                 showLineNumbers={true}
                 className="mb-3"
               >
                 {`// Create a configuration module
-import { configure } from 'try-error';
+import { configure } from 'tryError';
 
 // Your custom configuration
 configure({
@@ -239,7 +239,7 @@ export const tryErrorConfig = {
                 showLineNumbers={true}
               >
                 {`// Import configuration first
-import './config/try-error.config';
+import './config/tryError.config';
 
 // Then import everything else
 import express from 'express';
@@ -263,7 +263,7 @@ const app = express();
                 title="config/index.ts"
                 showLineNumbers={true}
               >
-                {`import { configure, ConfigPresets } from 'try-error';
+                {`import { configure, ConfigPresets } from 'tryError';
 
 // Configure based on environment
 switch (process.env.NODE_ENV) {
@@ -278,7 +278,7 @@ switch (process.env.NODE_ENV) {
 }
 
 // Or use the auto-setup
-import { autoSetup } from 'try-error/setup';
+import { autoSetup } from 'tryError/setup';
 autoSetup(); // Automatically detects environment`}
               </CodeBlock>
             </div>
@@ -290,21 +290,21 @@ autoSetup(); // Automatically detects environment`}
             </h3>
             <ul className="space-y-2 text-purple-800">
               <li>
-                <strong>1. Configure Once:</strong> Configure try-error only
+                <strong>1. Configure Once:</strong> Configure tryError only
                 once per application. Multiple configurations will override each
                 other.
               </li>
               <li>
                 <strong>2. Configure Early:</strong> Always configure before
-                using any try-error functions (trySync, tryAsync, etc.).
+                using any tryError functions (trySync, tryAsync, etc.).
               </li>
               <li>
-                <strong>3. No Config Files:</strong> try-error doesn't read from
+                <strong>3. No Config Files:</strong> tryError doesn't read from
                 .tryerrorrc or similar files. All configuration is done in code.
               </li>
               <li>
                 <strong>4. Global Effect:</strong> Configuration affects all
-                try-error usage globally in your application.
+                tryError usage globally in your application.
               </li>
             </ul>
           </div>
@@ -312,7 +312,7 @@ autoSetup(); // Automatically detects environment`}
           <div className="bg-yellow-50 border border-yellow-300 rounded-lg p-4 mt-4">
             <h3 className="font-semibold text-black mb-2">💡 Testing Tip</h3>
             <p className="text-black">
-              For testing, you might want to reconfigure try-error. Use a test
+              For testing, you might want to reconfigure tryError. Use a test
               setup file:
             </p>
             <CodeBlock
@@ -321,7 +321,7 @@ autoSetup(); // Automatically detects environment`}
               showLineNumbers={true}
               className="mt-2"
             >
-              {`import { configure } from 'try-error';
+              {`import { configure } from 'tryError';
 
 beforeAll(() => {
   configure({
@@ -349,7 +349,7 @@ beforeAll(() => {
 
           <p className="text-slate-600 mb-4">
             Use our one-liner setup utilities for instant optimization with
-            sensible defaults. These functions automatically configure try-error
+            sensible defaults. These functions automatically configure tryError
             for your environment.
           </p>
 
@@ -364,7 +364,7 @@ beforeAll(() => {
               className="mb-4"
             >
               {`// Import setup utilities (tree-shakeable)
-import { setupNode, setupReact, setupNextJs, autoSetup } from 'try-error/setup';
+import { setupNode, setupReact, setupNextJs, autoSetup } from 'tryError/setup';
 
 // Node.js/Express - Automatic environment detection
 setupNode(); // ✨ Optimized for dev/prod automatically
@@ -379,11 +379,11 @@ setupNextJs(); // ✨ Works for both server and client
 autoSetup(); // ✨ Detects Node.js, React, Next.js, etc.
 
 // High-performance (for critical applications)
-import { setupPerformance } from 'try-error/setup';
+import { setupPerformance } from 'tryError/setup';
 setupPerformance(); // ✨ Maximum performance, minimal overhead
 
 // Testing environment
-import { setupTesting } from 'try-error/setup';
+import { setupTesting } from 'tryError/setup';
 setupTesting(); // ✨ Test-friendly configuration`}
             </CodeBlock>
             <div className="bg-green-900 border border-green-300 rounded-lg p-3">
@@ -623,7 +623,7 @@ setupNextJs({
                 showLineNumbers={true}
                 className="mb-3"
               >
-                {`import { createCustomSetup } from 'try-error/setup';
+                {`import { createCustomSetup } from 'tryError/setup';
 
 // Create your organization's standard setup
 const setupMyApp = createCustomSetup({
@@ -647,7 +647,7 @@ setupMyApp({ developmentMode: true }); // Override specific options`}
           </h2>
 
           <p className="text-slate-600 mb-4">
-            Want complete control? Here's how to configure try-error manually
+            Want complete control? Here's how to configure tryError manually
             with all available options.
           </p>
 
@@ -664,7 +664,7 @@ setupMyApp({ developmentMode: true }); // Override specific options`}
               </li>
               <li>• You want to understand exactly what's happening</li>
               <li>
-                • You're building a library that uses try-error internally
+                • You're building a library that uses tryError internally
               </li>
             </ul>
           </div>
@@ -779,7 +779,7 @@ setupMyApp({ developmentMode: true }); // Override specific options`}
                 showLineNumbers={true}
                 className="mb-3"
               >
-                {`import { configure } from 'try-error';
+                {`import { configure } from 'tryError';
 
 // Step 1: Basic configuration
 configure({
@@ -1040,7 +1040,7 @@ configure({
 
           <p className="text-slate-600 mb-4">
             For advanced use cases, you can use the configuration API directly
-            to customize try-error behavior.
+            to customize tryError behavior.
           </p>
 
           <div className="space-y-6">
@@ -1049,7 +1049,7 @@ configure({
                 configure()
               </h3>
               <p className="text-slate-600 mb-3">
-                Configure global settings for try-error behavior.
+                Configure global settings for tryError behavior.
               </p>
               <CodeBlock
                 language="typescript"
@@ -1057,7 +1057,7 @@ configure({
                 showLineNumbers={true}
                 className="mb-3"
               >
-                {`import { configure, TryErrorConfig } from 'try-error';
+                {`import { configure, TryErrorConfig } from 'tryError';
 
 // Configure global settings
 configure({
@@ -1116,7 +1116,7 @@ configure('development'); // Uses ConfigPresets.development()`}
                 showLineNumbers={true}
                 className="mb-3"
               >
-                {`import { ConfigPresets, configure } from 'try-error';
+                {`import { ConfigPresets, configure } from 'tryError';
 
 // Use built-in presets
 configure(ConfigPresets.development()); // Full debugging features
@@ -1139,7 +1139,7 @@ const customConfig = {
 configure(customConfig);
 
 // Helper for error service integration
-import { withErrorService } from 'try-error';
+import { withErrorService } from 'tryError';
 
 configure(withErrorService((error) => {
   Sentry.captureException(error);
@@ -1160,7 +1160,7 @@ configure(withErrorService((error) => {
                 showLineNumbers={true}
                 className="mb-3"
               >
-                {`import { createScope } from 'try-error';
+                {`import { createScope } from 'tryError';
 
 // Create a scoped configuration
 const { config, createError } = createScope({
@@ -1375,7 +1375,7 @@ const globalError = createTryError('GlobalError', 'Uses global config');`}
                 Next.js Apps Need Special Handling:
               </strong>{" "}
               Server components, API routes, and client components often need
-              different error handling strategies. try-error makes this easy
+              different error handling strategies. tryError makes this easy
               with environment-aware configuration.
             </AlertDescription>
           </Alert>
@@ -1395,10 +1395,10 @@ const globalError = createTryError('GlobalError', 'Uses global config');`}
                   title="app/layout.tsx"
                   showLineNumbers={true}
                 >
-                  {`import { setupNextJs } from 'try-error/setup';
+                  {`import { setupNextJs } from 'tryError/setup';
 
 // This runs on both server and client
-// try-error automatically detects the runtime environment for each error
+// tryError automatically detects the runtime environment for each error
 setupNextJs();
 
 export default function RootLayout({
@@ -1417,7 +1417,7 @@ export default function RootLayout({
                 <Alert className="mt-4">
                   <AlertDescription>
                     <strong>How it works:</strong> Unlike traditional global
-                    configuration, try-error detects the runtime environment
+                    configuration, tryError detects the runtime environment
                     (server, client, or edge)
                     <em>when each error is created</em>, not when configured.
                     This solves the Next.js isomorphic challenge perfectly.
@@ -1440,7 +1440,7 @@ export default function RootLayout({
                   title="app/layout.tsx - Production-Ready Setup"
                   showLineNumbers={true}
                 >
-                  {`import { setupNextJs } from 'try-error/setup';
+                  {`import { setupNextJs } from 'tryError/setup';
 import * as Sentry from '@sentry/nextjs';
 import { logger } from '@/lib/logger';
 
@@ -1514,7 +1514,7 @@ setupNextJs({
                 >
                   {`'use server';
 
-import { tryAsync, isTryError } from 'try-error';
+import { tryAsync, isTryError } from 'tryError';
 import { revalidatePath } from 'next/cache';
 
 export async function updateUser(userId: string, data: UpdateUserData) {
@@ -1561,7 +1561,7 @@ export async function updateUser(userId: string, data: UpdateUserData) {
                   title="app/api/users/route.ts"
                   showLineNumbers={true}
                 >
-                  {`import { tryAsync, isTryError } from 'try-error';
+                  {`import { tryAsync, isTryError } from 'tryError';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
@@ -1596,10 +1596,10 @@ export async function GET(request: NextRequest) {
               <CardContent>
                 <CodeBlock
                   language="typescript"
-                  title="lib/try-error-setup.ts"
+                  title="lib/tryError-setup.ts"
                   showLineNumbers={true}
                 >
-                  {`import { setupNextJs } from 'try-error/setup';
+                  {`import { setupNextJs } from 'tryError/setup';
 import * as Sentry from '@sentry/nextjs';
 import { Logger } from 'winston';
 
@@ -1665,7 +1665,7 @@ export function initializeTryError() {
               <CardHeader>
                 <CardTitle>Sentry Integration</CardTitle>
                 <CardDescription>
-                  Complete setup for Sentry error tracking with try-error
+                  Complete setup for Sentry error tracking with tryError
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -1714,17 +1714,17 @@ Sentry.init({
 
                   <div>
                     <h4 className="font-semibold text-slate-800 mb-2">
-                      3. Configure try-error with Sentry
+                      3. Configure tryError with Sentry
                     </h4>
                     <CodeBlock
                       language="typescript"
                       title="app/layout.tsx or _app.tsx"
                       showLineNumbers={true}
                     >
-                      {`import { configure } from 'try-error';
+                      {`import { configure } from 'tryError';
 import * as Sentry from '@sentry/nextjs';
 
-// Configure try-error to send all errors to Sentry
+// Configure tryError to send all errors to Sentry
 configure({
   onError: (error) => {
     // Capture in Sentry with additional context
@@ -1778,7 +1778,7 @@ configure({
                       title="Enhanced error creation with Sentry context"
                       showLineNumbers={true}
                     >
-                      {`import { createTryError } from 'try-error';
+                      {`import { createTryError } from 'tryError';
 import * as Sentry from '@sentry/nextjs';
 
 // Create errors with Sentry-friendly context
@@ -1864,10 +1864,10 @@ export async function processPayment(userId: string, amount: number) {
                       showLineNumbers={true}
                     >
                       {`import { Analytics } from '@vercel/analytics/react';
-import { configure } from 'try-error';
+import { configure } from 'tryError';
 import { track } from '@vercel/analytics';
 
-// Configure try-error to track errors as custom events
+// Configure tryError to track errors as custom events
 configure({
   onError: (error) => {
     // Track error occurrence in Vercel Analytics
@@ -1928,7 +1928,7 @@ export default function RootLayout({ children }) {
                       showLineNumbers={true}
                     >
                       {`import { track } from '@vercel/analytics';
-import { tryAsync, isTryError } from 'try-error';
+import { tryAsync, isTryError } from 'tryError';
 
 export function PaymentForm() {
   const [retryCount, setRetryCount] = useState(0);
@@ -1987,7 +1987,7 @@ export function PaymentForm() {
                       title="Error metrics tracking"
                       showLineNumbers={true}
                     >
-                      {`import { configure } from 'try-error';
+                      {`import { configure } from 'tryError';
 import { track } from '@vercel/analytics';
 
 // Track error metrics for analytics dashboard
@@ -2070,7 +2070,7 @@ function isRecoverableError(error) {
               <CardHeader>
                 <CardTitle>Complete Integration Example</CardTitle>
                 <CardDescription>
-                  Using try-error with both Sentry and Vercel Analytics
+                  Using tryError with both Sentry and Vercel Analytics
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -2079,7 +2079,7 @@ function isRecoverableError(error) {
                   title="lib/error-monitoring.ts"
                   showLineNumbers={true}
                 >
-                  {`import { configure } from 'try-error';
+                  {`import { configure } from 'tryError';
 import * as Sentry from '@sentry/nextjs';
 import { track } from '@vercel/analytics';
 
@@ -2186,7 +2186,7 @@ setupErrorMonitoring();`}
 
           <p className="text-slate-600 mb-6">
             Traditional error libraries use global configuration that gets
-            overwritten in isomorphic apps. try-error's runtime detection
+            overwritten in isomorphic apps. tryError's runtime detection
             ensures each error uses the correct handler based on where it's
             thrown.
           </p>
@@ -2242,7 +2242,7 @@ configure({
                 title="Internal Runtime Detection"
                 showLineNumbers={true}
               >
-                {`// When an error is created, try-error detects:
+                {`// When an error is created, tryError detects:
 
 // Edge Runtime
 if (globalThis.EdgeRuntime || process.env.NEXT_RUNTIME === 'edge') {
@@ -2269,7 +2269,7 @@ return 'client';`}
 
           <p className="text-slate-600 mb-4">
             Complete reference for all configuration options available in
-            try-error.
+            tryError.
           </p>
 
           <div className="space-y-6">
@@ -2466,7 +2466,7 @@ return 'client';`}
                 className="mb-3"
               >
                 {`// config/development.ts
-import { configure } from 'try-error';
+import { configure } from 'tryError';
 
 configure({
   captureStackTrace: true,
@@ -2510,7 +2510,7 @@ configure({
                 className="mb-3"
               >
                 {`// config/production.ts
-import { configure } from 'try-error';
+import { configure } from 'tryError';
 
 configure({
   captureStackTrace: false, // Disable for performance
@@ -2549,7 +2549,7 @@ configure({
                 className="mb-3"
               >
                 {`// config/testing.ts
-import { configure } from 'try-error';
+import { configure } from 'tryError';
 
 // Collect errors for test assertions
 const testErrors: TryError[] = [];
@@ -2608,7 +2608,7 @@ export function clearTestErrors(): void {
                 showLineNumbers={true}
                 className="mb-3"
               >
-                {`import { configure, ConfigPresets } from 'try-error';
+                {`import { configure, ConfigPresets } from 'tryError';
 
 // Use the performance preset
 configure(ConfigPresets.performance());
@@ -2653,7 +2653,7 @@ configure({
                 showLineNumbers={true}
                 className="mb-3"
               >
-                {`import { Performance } from 'try-error';
+                {`import { Performance } from 'tryError';
 
 // Measure error creation performance
 const metrics = Performance.measureErrorCreation(1000);
@@ -2740,7 +2740,7 @@ configure({
                 showLineNumbers={true}
                 className="mb-3"
               >
-                {`import { configure, ConfigPresets } from 'try-error';
+                {`import { configure, ConfigPresets } from 'tryError';
 
 // Use the minimal preset for <50% overhead
 configure(ConfigPresets.minimal());
@@ -2783,7 +2783,7 @@ const error = trySync(() => JSON.parse("invalid"));
                 showLineNumbers={true}
                 className="mb-3"
               >
-                {`import { createMinimalError } from 'try-error';
+                {`import { createMinimalError } from 'tryError';
 
 // Bypass all processing - near-zero overhead
 const error = createMinimalError(
@@ -2833,7 +2833,7 @@ try {
 } catch (e) {}
 // Time: 4,708ms
 
-// Default try-error configuration
+// Default tryError configuration
 const result1 = trySync(() => JSON.parse("invalid"));
 // Time: 85,734ms (1720% overhead) ❌
 
@@ -2934,7 +2934,7 @@ const error = createMinimalError("ParseError", "Invalid JSON");
                 className="mb-3"
               >
                 {`// Step 1: Start with defaults in development
-import { trySync } from 'try-error';
+import { trySync } from 'tryError';
 
 // Step 2: Profile and identify bottlenecks
 if (process.env.NODE_ENV === 'production') {
@@ -2994,7 +2994,7 @@ function ultraFastValidation(items: string[]) {
                 <li>
                   • Use setup utilities for quick, optimized configuration
                 </li>
-                <li>• Configure try-error early in your application startup</li>
+                <li>• Configure tryError early in your application startup</li>
                 <li>• Use environment-specific configurations</li>
                 <li>• Disable stack traces in production for performance</li>
                 <li>• Set up error monitoring and reporting</li>
@@ -3007,7 +3007,7 @@ function ultraFastValidation(items: string[]) {
               <h4 className="font-semibold text-red-800 mb-2">❌ Don't</h4>
               <ul className="space-y-1 text-red-700 text-sm">
                 <li>
-                  • Configure try-error multiple times in the same application
+                  • Configure tryError multiple times in the same application
                 </li>
                 <li>• Include sensitive data in error contexts</li>
                 <li>• Use development configuration in production</li>

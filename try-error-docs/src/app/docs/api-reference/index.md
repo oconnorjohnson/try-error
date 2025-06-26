@@ -1,33 +1,33 @@
-**try-error API Documentation v0.0.1-alpha.1**
+**tryError API Documentation v0.0.1-alpha.1**
 
 ***
 
-# try-error
+# tryError
 
 > Lightweight, progressive, type-safe error handling for TypeScript
 
-[![npm version](https://img.shields.io/npm/v/try-error.svg)](https://www.npmjs.com/package/try-error)
-[![npm downloads](https://img.shields.io/npm/dm/try-error.svg)](https://www.npmjs.com/package/try-error)
-[![Bundle Size](https://img.shields.io/bundlephobia/minzip/try-error)](https://bundlephobia.com/package/try-error)
-[![gzip size](https://img.badgesize.io/https://unpkg.com/try-error/dist/index.js?compression=gzip&label=gzip%20size)](https://unpkg.com/try-error/dist/index.js)
+[![npm version](https://img.shields.io/npm/v/tryError.svg)](https://www.npmjs.com/package/tryError)
+[![npm downloads](https://img.shields.io/npm/dm/tryError.svg)](https://www.npmjs.com/package/tryError)
+[![Bundle Size](https://img.shields.io/bundlephobia/minzip/tryError)](https://bundlephobia.com/package/tryError)
+[![gzip size](https://img.badgesize.io/https://unpkg.com/tryError/dist/index.js?compression=gzip&label=gzip%20size)](https://unpkg.com/tryError/dist/index.js)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue.svg)](https://www.typescriptlang.org/)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/danieljohnson/try-error/blob/main/CONTRIBUTING.md)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/danieljohnson/tryError/blob/main/CONTRIBUTING.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![npm](https://img.shields.io/npm/v/try-error/alpha)](https://www.npmjs.com/package/try-error)
+[![npm](https://img.shields.io/npm/v/tryError/alpha)](https://www.npmjs.com/package/tryError)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
-[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/danieljohnson/try-error/graphs/commit-activity)
-[![Dependencies](https://img.shields.io/librariesio/release/npm/try-error)](https://libraries.io/npm/try-error)
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/danieljohnson/tryError/graphs/commit-activity)
+[![Dependencies](https://img.shields.io/librariesio/release/npm/tryError)](https://libraries.io/npm/tryError)
 
 ⚠️ **Alpha Version**: This library is currently in alpha and APIs may change. Not recommended for production use yet.
 
-## Why try-error?
+## Why tryError?
 
 Traditional error handling in JavaScript forces you to choose between:
 
 - **try/catch blocks**: Clunky syntax, no type safety, hidden control flow
 - **Functional libraries**: Heavy abstractions, steep learning curve, large bundle size
 
-**try-error** provides a middle ground:
+**tryError** provides a middle ground:
 
 - ✅ **Errors as values** - Explicit error handling without exceptions
 - ✅ **Zero overhead** - Success values are returned directly
@@ -39,17 +39,17 @@ Traditional error handling in JavaScript forces you to choose between:
 ## Installation
 
 ```bash
-npm install try-error
+npm install tryError
 # or
-yarn add try-error
+yarn add tryError
 # or
-pnpm add try-error
+pnpm add tryError
 ```
 
 ## Quick Start
 
 ```typescript
-import { trySync, tryAsync, isTryError } from "try-error";
+import { trySync, tryAsync, isTryError } from "tryError";
 
 // Wrap synchronous operations
 const result = trySync(() => JSON.parse(jsonString));
@@ -190,11 +190,11 @@ const results = await tryAllAsync([
 ## React Integration
 
 ```bash
-npm install @try-error/react
+npm install @tryError/react
 ```
 
 ```tsx
-import { useTry } from "@try-error/react";
+import { useTry } from "@tryError/react";
 
 function UserProfile({ userId }) {
   const {
@@ -212,7 +212,7 @@ function UserProfile({ userId }) {
 
 ## Comparison with Alternatives
 
-| Feature        | try-error | fp-ts    | neverthrow | native try/catch |
+| Feature        | tryError | fp-ts    | neverthrow | native try/catch |
 | -------------- | --------- | -------- | ---------- | ---------------- |
 | Type Safety    | ✅ Full   | ✅ Full  | ✅ Full    | ❌ None          |
 | Bundle Size    | 4.7KB     | ~50KB    | ~12KB      | 0KB              |
@@ -298,10 +298,10 @@ MIT © Daniel Johnson
 
 ## Links
 
-- [Documentation](https://try-error.dev)
-- [GitHub Repository](https://github.com/danieljohnson/try-error)
-- [npm Package](https://www.npmjs.com/package/try-error)
-- [Issue Tracker](https://github.com/danieljohnson/try-error/issues)
+- [Documentation](https://tryError.dev)
+- [GitHub Repository](https://github.com/danieljohnson/tryError)
+- [npm Package](https://www.npmjs.com/package/tryError)
+- [Issue Tracker](https://github.com/danieljohnson/tryError/issues)
 
 ## Enumerations
 
@@ -373,7 +373,7 @@ const ConfigPresets: Readonly<{
 }>;
 ```
 
-Defined in: [config.ts:386](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/config.ts#L386)
+Defined in: [config.ts:386](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/config.ts#L386)
 
 Environment-specific configuration presets
 Made immutable by using Object.freeze
@@ -386,7 +386,7 @@ Made immutable by using Object.freeze
 const errorEvents: ErrorEventEmitter;
 ```
 
-Defined in: [events.ts:207](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/events.ts#L207)
+Defined in: [events.ts:207](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/events.ts#L207)
 
 Global error event emitter
 
@@ -403,7 +403,7 @@ const ErrorSampling: {
 };
 ```
 
-Defined in: [utils.ts:631](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/utils.ts#L631)
+Defined in: [utils.ts:631](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/utils.ts#L631)
 
 Error sampling utilities
 
@@ -574,7 +574,7 @@ const FEATURES: Readonly<{
 }>;
 ```
 
-Defined in: [index.ts:8](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/index.ts#L8)
+Defined in: [index.ts:8](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/index.ts#L8)
 
 ***
 
@@ -584,7 +584,7 @@ Defined in: [index.ts:8](https://github.com/oconnorjohnson/try-error/blob/e3ae03
 const globalRegistry: MiddlewareRegistry;
 ```
 
-Defined in: [middleware.ts:142](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/middleware.ts#L142)
+Defined in: [middleware.ts:142](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/middleware.ts#L142)
 
 ***
 
@@ -603,7 +603,7 @@ const Performance: {
 };
 ```
 
-Defined in: [config.ts:915](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/config.ts#L915)
+Defined in: [config.ts:915](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/config.ts#L915)
 
 Performance monitoring utilities
 
@@ -670,7 +670,7 @@ Falls back gracefully based on environment
 const pluginManager: PluginManager;
 ```
 
-Defined in: [plugins.ts:369](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/plugins.ts#L369)
+Defined in: [plugins.ts:369](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/plugins.ts#L369)
 
 Global plugin manager instance
 
@@ -682,7 +682,7 @@ Global plugin manager instance
 const sentryPlugin: Plugin;
 ```
 
-Defined in: [plugins.ts:410](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/plugins.ts#L410)
+Defined in: [plugins.ts:410](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/plugins.ts#L410)
 
 Example plugin: Sentry integration
 
@@ -694,7 +694,7 @@ Example plugin: Sentry integration
 const VERSION: "1.0.0" = "1.0.0";
 ```
 
-Defined in: [index.ts:5](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/index.ts#L5)
+Defined in: [index.ts:5](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/index.ts#L5)
 
 ## Functions
 

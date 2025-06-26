@@ -1,8 +1,8 @@
-[**try-error API Documentation v0.0.1-alpha.1**](../index.md)
+[**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
 ***
 
-[try-error API Documentation](../index.md) / configure
+[tryError API Documentation](../index.md) / configure
 
 # Function: configure()
 
@@ -10,9 +10,9 @@
 function configure(config): void;
 ```
 
-Defined in: [config.ts:752](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/config.ts#L752)
+Defined in: [config.ts:752](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/config.ts#L752)
 
-Configure global try-error behavior
+Configure global tryError behavior
 
 ## Parameters
 

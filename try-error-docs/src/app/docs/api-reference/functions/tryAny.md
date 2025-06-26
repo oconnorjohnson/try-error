@@ -1,8 +1,8 @@
-[**try-error API Documentation v0.0.1-alpha.1**](../index.md)
+[**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
 ***
 
-[try-error API Documentation](../index.md) / tryAny
+[tryError API Documentation](../index.md) / tryAny
 
 # Function: tryAny()
 
@@ -10,7 +10,7 @@
 function tryAny<T>(attempts): TryResult<T, TryError<string>>;
 ```
 
-Defined in: [sync.ts:385](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/sync.ts#L385)
+Defined in: [sync.ts:385](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/sync.ts#L385)
 
 Try multiple operations, returning the first successful result
 

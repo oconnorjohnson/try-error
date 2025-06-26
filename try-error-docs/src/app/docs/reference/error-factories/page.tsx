@@ -34,7 +34,7 @@ export default function ErrorFactoriesPage() {
           <CardHeader>
             <CardTitle>Error Factory Philosophy</CardTitle>
             <CardDescription>
-              Understanding the design principles behind try-error factories
+              Understanding the design principles behind tryError factories
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -356,7 +356,7 @@ const userError = entityError('user', 'user_123', 'User not found');`}
               Core Error Factory
             </CardTitle>
             <CardDescription>
-              The primary function for creating custom try-error instances
+              The primary function for creating custom tryError instances
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">

@@ -1,8 +1,8 @@
-[**try-error API Documentation v0.0.1-alpha.1**](../index.md)
+[**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
 ***
 
-[try-error API Documentation](../index.md) / createAsyncQueue
+[tryError API Documentation](../index.md) / createAsyncQueue
 
 # Function: createAsyncQueue()
 
@@ -10,7 +10,7 @@
 function createAsyncQueue<T>(options?): AsyncQueue<T>;
 ```
 
-Defined in: [async.ts:773](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/async.ts#L773)
+Defined in: [async.ts:773](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/async.ts#L773)
 
 Create an async queue instance
 

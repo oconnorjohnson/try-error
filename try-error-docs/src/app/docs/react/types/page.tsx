@@ -6,7 +6,7 @@ export default function ReactTypesPage() {
       <div className="mb-8">
         <h1 className="text-4xl font-bold text-slate-900 mb-4">React Types</h1>
         <p className="text-xl text-slate-600">
-          TypeScript types and interfaces for React integration with try-error
+          TypeScript types and interfaces for React integration with tryError
         </p>
       </div>
 
@@ -249,7 +249,7 @@ interface TryFormState {
           </h2>
 
           <p className="text-slate-600 mb-4">
-            Understanding the generic constraints used in try-error React types:
+            Understanding the generic constraints used in tryError React types:
           </p>
 
           <CodeBlock
@@ -424,7 +424,7 @@ function useTypedTryAsync<T>(asyncFn: () => Promise<T>): AsyncState<T> {
             <div className="border border-slate-200 rounded-lg p-4">
               <h3 className="font-semibold text-slate-900 mb-2">Core Types</h3>
               <p className="text-slate-600 text-sm mb-3">
-                Learn about the core try-error types
+                Learn about the core tryError types
               </p>
               <a
                 href="/docs/concepts/error-types"

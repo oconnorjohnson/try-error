@@ -1,8 +1,8 @@
-[**try-error API Documentation v0.0.1-alpha.1**](../index.md)
+[**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
 ***
 
-[try-error API Documentation](../index.md) / tryChain
+[tryError API Documentation](../index.md) / tryChain
 
 # Function: tryChain()
 
@@ -10,7 +10,7 @@
 function tryChain<T, U, E1, E2>(result, chainer): TryResult<U, E1 | E2>;
 ```
 
-Defined in: [sync.ts:207](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/sync.ts#L207)
+Defined in: [sync.ts:207](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/sync.ts#L207)
 
 Chain operations that return TryResult, short-circuiting on errors
 

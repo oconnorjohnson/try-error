@@ -18,7 +18,7 @@ export default function ErrorTypesPage() {
           </h2>
 
           <p className="text-slate-600 mb-4">
-            All errors in try-error implement the TryError interface, providing
+            All errors in tryError implement the TryError interface, providing
             rich context and debugging information:
           </p>
 
@@ -118,7 +118,7 @@ export default function ErrorTypesPage() {
             showLineNumbers={true}
             className="mb-4"
           >
-            {`import { createTryError } from 'try-error';
+            {`import { createTryError } from 'tryError';
 
 // Basic custom error
 const validationError = createTryError(
@@ -312,7 +312,7 @@ const dbError = createDatabaseError('INSERT', 'users', originalError);`}
             showLineNumbers={true}
             className="mb-4"
           >
-            {`import { tryAsync, isTryError } from 'try-error';
+            {`import { tryAsync, isTryError } from 'tryError';
 
 async function handleUserOperation(userId: string) {
   const result = await tryAsync(() => fetchUser(userId));

@@ -1,8 +1,8 @@
-[**try-error API Documentation v0.0.1-alpha.1**](../index.md)
+[**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
 ***
 
-[try-error API Documentation](../index.md) / tryAsync
+[tryError API Documentation](../index.md) / tryAsync
 
 # Function: tryAsync()
 
@@ -10,7 +10,7 @@
 function tryAsync<T>(fn, options?): Promise<TryResult<T, TryError<string>>>;
 ```
 
-Defined in: [async.ts:62](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/async.ts#L62)
+Defined in: [async.ts:62](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/async.ts#L62)
 
 Wrap an asynchronous operation that might throw or reject
 Returns a Promise of either the result or a TryError

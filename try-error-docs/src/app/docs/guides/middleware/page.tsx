@@ -16,7 +16,7 @@ export default function MiddlewarePage() {
       <div>
         <h1 className="text-4xl font-bold mb-4">Middleware System</h1>
         <p className="text-xl text-muted-foreground">
-          Extend try-error with custom logic using a powerful middleware
+          Extend tryError with custom logic using a powerful middleware
           pipeline
         </p>
       </div>
@@ -25,7 +25,7 @@ export default function MiddlewarePage() {
         <AlertTitle>Flexible Extension</AlertTitle>
         <AlertDescription>
           The middleware system allows you to intercept and modify error
-          handling behavior without modifying try-error's core. Perfect for
+          handling behavior without modifying tryError's core. Perfect for
           logging, monitoring, transformation, and integration with external
           services.
         </AlertDescription>
@@ -41,7 +41,7 @@ export default function MiddlewarePage() {
           </p>
 
           <EnhancedCodeBlock language="typescript" showLineNumbers>
-            {`import { ErrorMiddleware, TryResult, TryError } from 'try-error';
+            {`import { ErrorMiddleware, TryResult, TryError } from 'tryError';
 
 // Basic middleware signature
 type ErrorMiddleware<T = any, E extends TryError = TryError> = (
@@ -71,7 +71,7 @@ const loggingMiddleware: ErrorMiddleware = (result, next) => {
 
             <TabsContent value="pipeline">
               <EnhancedCodeBlock language="typescript" showLineNumbers>
-                {`import { MiddlewarePipeline } from 'try-error';
+                {`import { MiddlewarePipeline } from 'tryError';
 
 // Create a middleware pipeline
 const pipeline = new MiddlewarePipeline();
@@ -99,7 +99,7 @@ const result = safeFn(16); // Middleware applied automatically`}
 
             <TabsContent value="global">
               <EnhancedCodeBlock language="typescript" showLineNumbers>
-                {`import { globalRegistry, MiddlewarePipeline } from 'try-error';
+                {`import { globalRegistry, MiddlewarePipeline } from 'tryError';
 
 // Create named pipelines
 const apiPipeline = new MiddlewarePipeline()
@@ -123,7 +123,7 @@ const result = apiMiddleware.execute(tryAsync(() => fetchData()));`}
 
             <TabsContent value="composition">
               <EnhancedCodeBlock language="typescript" showLineNumbers>
-                {`import { compose, filterMiddleware } from 'try-error';
+                {`import { compose, filterMiddleware } from 'tryError';
 
 // Compose multiple middleware into one
 const errorHandling = compose(
@@ -154,7 +154,7 @@ pipeline.use(errorHandling).use(networkErrorHandler);`}
         <section>
           <h2 className="text-3xl font-semibold mb-4">Built-in Middleware</h2>
           <p className="text-muted-foreground mb-6">
-            try-error provides a collection of common middleware patterns ready
+            tryError provides a collection of common middleware patterns ready
             to use.
           </p>
 
@@ -168,7 +168,7 @@ pipeline.use(errorHandling).use(networkErrorHandler);`}
               </CardHeader>
               <CardContent>
                 <EnhancedCodeBlock language="typescript">
-                  {`import { loggingMiddleware } from 'try-error';
+                  {`import { loggingMiddleware } from 'tryError';
 
 // Simple console logging
 pipeline.use(loggingMiddleware(console.error));
@@ -198,7 +198,7 @@ pipeline.use(loggingMiddleware(customLogger));`}
               </CardHeader>
               <CardContent>
                 <EnhancedCodeBlock language="typescript">
-                  {`import { retryMiddleware } from 'try-error';
+                  {`import { retryMiddleware } from 'tryError';
 
 // Retry up to 3 times
 pipeline.use(retryMiddleware(3));
@@ -227,7 +227,7 @@ pipeline.use(retryMiddleware(5, shouldRetry));
               </CardHeader>
               <CardContent>
                 <EnhancedCodeBlock language="typescript">
-                  {`import { transformMiddleware } from 'try-error';
+                  {`import { transformMiddleware } from 'tryError';
 
 // Add additional context
 const addRequestId = transformMiddleware(error => ({
@@ -259,7 +259,7 @@ pipeline.use(addRequestId).use(sanitize);`}
               </CardHeader>
               <CardContent>
                 <EnhancedCodeBlock language="typescript">
-                  {`import { circuitBreakerMiddleware } from 'try-error';
+                  {`import { circuitBreakerMiddleware } from 'tryError';
 
 const circuitBreaker = circuitBreakerMiddleware({
   threshold: 5,        // Open after 5 failures
@@ -290,7 +290,7 @@ pipeline.use(circuitBreaker);
               </CardHeader>
               <CardContent>
                 <EnhancedCodeBlock language="typescript">
-                  {`import { rateLimitMiddleware } from 'try-error';
+                  {`import { rateLimitMiddleware } from 'tryError';
 
 // Allow max 100 errors per second
 const rateLimiter = rateLimitMiddleware(1000, 100);
@@ -316,7 +316,7 @@ pipeline.use(rateLimiter);
               </CardHeader>
               <CardContent>
                 <EnhancedCodeBlock language="typescript">
-                  {`import { enrichContextMiddleware } from 'try-error';
+                  {`import { enrichContextMiddleware } from 'tryError';
 
 // Add static context
 pipeline.use(enrichContextMiddleware(() => ({

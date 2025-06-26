@@ -27,8 +27,8 @@ export default function CodeBlockDemoPage() {
           </p>
 
           <div className="space-y-4">
-            <InstallCommand packageName="try-error" />
-            <InstallCommand packageName="@try-error/react" />
+            <InstallCommand packageName="tryError" />
+            <InstallCommand packageName="@tryError/react" />
             <InstallCommand packageName="typescript" devDependency={true} />
           </div>
         </section>
@@ -45,7 +45,7 @@ export default function CodeBlockDemoPage() {
             showLineNumbers={true}
             className="mb-4"
           >
-            {`import { tryAsync, isTryError, createTryError } from 'try-error';
+            {`import { tryAsync, isTryError, createTryError } from 'tryError';
 
 interface User {
   id: string;
@@ -100,8 +100,8 @@ async function fetchUserWithRetry(userId: string, maxRetries = 3): Promise<User 
             className="mb-4"
           >
             {`import React from 'react';
-import { useTryAsync } from '@try-error/react';
-import { isTryError } from 'try-error';
+import { useTryAsync } from '@tryError/react';
+import { isTryError } from 'tryError';
 
 interface UserDashboardProps {
   userId: string;
@@ -169,9 +169,9 @@ export function UserDashboard({ userId }: UserDashboardProps) {
 
           <CodeBlock language="json" title="package.json" className="mb-4">
             {`{
-  "name": "my-try-error-app",
+  "name": "my-tryError-app",
   "version": "1.0.0",
-  "description": "Example app using try-error",
+  "description": "Example app using tryError",
   "main": "index.js",
   "scripts": {
     "dev": "next dev",
@@ -180,8 +180,8 @@ export function UserDashboard({ userId }: UserDashboardProps) {
     "test": "jest"
   },
   "dependencies": {
-    "try-error": "^1.0.0",
-    "@try-error/react": "^1.0.0",
+    "tryError": "^1.0.0",
+    "@tryError/react": "^1.0.0",
     "react": "^18.0.0",
     "next": "^14.0.0"
   },
@@ -202,8 +202,8 @@ export function UserDashboard({ userId }: UserDashboardProps) {
 
           <CodeBlock language="bash" title="Development Setup" className="mb-4">
             {`# Clone the repository
-git clone https://github.com/your-org/try-error-example.git
-cd try-error-example
+git clone https://github.com/your-org/tryError-example.git
+cd tryError-example
 
 # Install dependencies
 pnpm install

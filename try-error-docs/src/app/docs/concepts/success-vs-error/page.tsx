@@ -8,7 +8,7 @@ export default function SuccessVsErrorPage() {
           Success vs Error Paths
         </h1>
         <p className="text-xl text-slate-600">
-          Understanding how try-error handles success and error cases
+          Understanding how tryError handles success and error cases
         </p>
       </div>
 
@@ -20,7 +20,7 @@ export default function SuccessVsErrorPage() {
           </h2>
 
           <p className="text-slate-600 mb-4">
-            try-error uses a union type approach where functions return either a
+            tryError uses a union type approach where functions return either a
             successful value or a TryError. This eliminates the need for
             try/catch blocks and makes error handling explicit and type-safe.
           </p>
@@ -31,7 +31,7 @@ export default function SuccessVsErrorPage() {
             showLineNumbers={true}
             className="mb-4"
           >
-            {`import { tryAsync, isTryError } from 'try-error';
+            {`import { tryAsync, isTryError } from 'tryError';
 
 // Function returns either User or TryError
 const result = await tryAsync(() => fetchUser('123'));
@@ -83,7 +83,7 @@ if (isTryError(result)) {
           </h2>
 
           <p className="text-slate-600 mb-4">
-            try-error is designed with performance in mind, optimizing for the
+            tryError is designed with performance in mind, optimizing for the
             common success path while providing rich debugging information for
             errors.
           </p>
@@ -115,7 +115,7 @@ try {
   const result = JSON.parse(validJson);
 } catch (e) {}
 
-// try-error: 103ms for 1M operations (<3% overhead)
+// tryError: 103ms for 1M operations (<3% overhead)
 const result = trySync(() => JSON.parse(validJson));
 if (!isTryError(result)) {
   // Use result
@@ -208,7 +208,7 @@ const error = trySync(() => JSON.parse(invalidJson));
               title="Performance Optimization Strategies"
               showLineNumbers={true}
             >
-              {`import { configure, ConfigPresets } from 'try-error';
+              {`import { configure, ConfigPresets } from 'tryError';
 
 // High-performance parsing (expected errors)
 function parseUserInput(input: string) {
@@ -273,7 +273,7 @@ function processDataPipeline(data: unknown[]) {
 
           <p className="text-slate-600 mb-4">
             Type guards are essential for narrowing union types and enabling
-            TypeScript to understand which path you're on. try-error provides
+            TypeScript to understand which path you're on. tryError provides
             several type guards for different scenarios.
           </p>
 
@@ -292,7 +292,7 @@ function processDataPipeline(data: unknown[]) {
                 showLineNumbers={true}
                 className="mb-4"
               >
-                {`import { tryAsync, isTryError, TryResult } from 'try-error';
+                {`import { tryAsync, isTryError, TryResult } from 'tryError';
 
 async function handleUserFetch(userId: string) {
   const result = await tryAsync(() => fetchUser(userId));
@@ -345,7 +345,7 @@ function processResult<T>(result: TryResult<T, TryError>) {
                 showLineNumbers={true}
                 className="mb-4"
               >
-                {`import { tryAsync, isTrySuccess, isTryError } from 'try-error';
+                {`import { tryAsync, isTrySuccess, isTryError } from 'tryError';
 
 async function fetchMultipleUsers(userIds: string[]) {
   const results = await Promise.all(
@@ -398,7 +398,7 @@ function processValidResults<T>(results: TryResult<T, TryError>[]) {
                   The error types shown below (<code>ValidationError</code>,{" "}
                   <code>AuthenticationError</code>, <code>NetworkError</code>)
                   are examples of custom error types you would define in your
-                  application. try-error doesn't provide these types built-in -
+                  application. tryError doesn't provide these types built-in -
                   you create them based on your domain needs.
                 </p>
                 <div className="flex gap-2 text-sm">
@@ -424,7 +424,7 @@ function processValidResults<T>(results: TryResult<T, TryError>[]) {
                 showLineNumbers={true}
                 className="mb-4"
               >
-                {`import { createTryError } from 'try-error';
+                {`import { createTryError } from 'tryError';
 
 // Define your custom error types
 export const createValidationError = (message: string, field: string) =>
@@ -457,7 +457,7 @@ async function performUserOperation(userId: string) {
                 showLineNumbers={true}
                 className="mb-4"
               >
-                {`import { tryAsync, isTryError, hasErrorType } from 'try-error';
+                {`import { tryAsync, isTryError, hasErrorType } from 'tryError';
 
 async function handleUserOperation(userId: string) {
   const result = await tryAsync(() => performUserOperation(userId));
@@ -667,7 +667,7 @@ function matchWithErrorTypes<T, R>(
                 showLineNumbers={true}
                 className="mb-4"
               >
-                {`import { mapResult, flatMapResult } from 'try-error';
+                {`import { mapResult, flatMapResult } from 'tryError';
 
 // Chain transformations
 async function processUserChain(userId: string) {
@@ -748,7 +748,7 @@ async function processUserPipeline(userId: string) {
                 showLineNumbers={true}
                 className="mb-4"
               >
-                {`import { unwrapOr } from 'try-error';
+                {`import { unwrapOr } from 'tryError';
 
 // Simple fallback
 async function getUserWithFallback(userId: string) {
@@ -919,7 +919,7 @@ async function fetchUserMultiSource(userId: string) {
                 <li>• Use generic error handling for all error types</li>
                 <li>• Retry operations that will never succeed</li>
                 <li>• Create deeply nested if/else chains</li>
-                <li>• Mix try/catch with try-error patterns</li>
+                <li>• Mix try/catch with tryError patterns</li>
                 <li>
                   • Return undefined or null instead of proper error handling
                 </li>

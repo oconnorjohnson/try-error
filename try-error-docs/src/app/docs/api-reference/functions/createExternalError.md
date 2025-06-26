@@ -1,8 +1,8 @@
-[**try-error API Documentation v0.0.1-alpha.1**](../index.md)
+[**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
 ***
 
-[try-error API Documentation](../index.md) / createExternalError
+[tryError API Documentation](../index.md) / createExternalError
 
 # Function: createExternalError()
 
@@ -14,7 +14,7 @@ function createExternalError<T>(
 options?): ExternalError<T>;
 ```
 
-Defined in: [factories.ts:523](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/factories.ts#L523)
+Defined in: [factories.ts:523](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/factories.ts#L523)
 
 Pre-built factory for external service errors with validation
 

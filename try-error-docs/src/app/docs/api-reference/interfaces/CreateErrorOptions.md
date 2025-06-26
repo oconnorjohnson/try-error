@@ -1,12 +1,12 @@
-[**try-error API Documentation v0.0.1-alpha.1**](../index.md)
+[**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
 ***
 
-[try-error API Documentation](../index.md) / CreateErrorOptions
+[tryError API Documentation](../index.md) / CreateErrorOptions
 
 # Interface: CreateErrorOptions\<T\>
 
-Defined in: [errors.ts:66](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/errors.ts#L66)
+Defined in: [errors.ts:66](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/errors.ts#L66)
 
 Options for creating a TryError
 
@@ -24,7 +24,7 @@ Options for creating a TryError
 optional captureStackTrace: boolean;
 ```
 
-Defined in: [errors.ts:108](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/errors.ts#L108)
+Defined in: [errors.ts:108](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/errors.ts#L108)
 
 Whether to capture stack trace for this specific error
 Overrides global configuration
@@ -37,7 +37,7 @@ Overrides global configuration
 optional cause: unknown;
 ```
 
-Defined in: [errors.ts:85](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/errors.ts#L85)
+Defined in: [errors.ts:85](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/errors.ts#L85)
 
 The original error or thrown value that caused this error
 
@@ -49,7 +49,7 @@ The original error or thrown value that caused this error
 optional context: Record<string, unknown>;
 ```
 
-Defined in: [errors.ts:80](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/errors.ts#L80)
+Defined in: [errors.ts:80](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/errors.ts#L80)
 
 Additional context data for debugging
 
@@ -61,7 +61,7 @@ Additional context data for debugging
 message: string;
 ```
 
-Defined in: [errors.ts:75](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/errors.ts#L75)
+Defined in: [errors.ts:75](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/errors.ts#L75)
 
 Human-readable error message
 
@@ -73,7 +73,7 @@ Human-readable error message
 optional source: string;
 ```
 
-Defined in: [errors.ts:90](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/errors.ts#L90)
+Defined in: [errors.ts:90](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/errors.ts#L90)
 
 Override the automatically detected source location
 
@@ -85,7 +85,7 @@ Override the automatically detected source location
 optional stackOffset: number;
 ```
 
-Defined in: [errors.ts:102](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/errors.ts#L102)
+Defined in: [errors.ts:102](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/errors.ts#L102)
 
 Stack offset for source location detection
 Useful when wrapping error creation in utility functions
@@ -104,7 +104,7 @@ Useful when wrapping error creation in utility functions
 optional timestamp: number;
 ```
 
-Defined in: [errors.ts:95](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/errors.ts#L95)
+Defined in: [errors.ts:95](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/errors.ts#L95)
 
 Override the automatically generated timestamp
 
@@ -116,6 +116,6 @@ Override the automatically generated timestamp
 type: T;
 ```
 
-Defined in: [errors.ts:70](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/errors.ts#L70)
+Defined in: [errors.ts:70](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/errors.ts#L70)
 
 The error type - used for discriminated unions

@@ -37,7 +37,7 @@ export default function CustomErrorsPage() {
                 showLineNumbers={true}
                 className="mb-4"
               >
-                {`import { createTryError, TryError } from 'try-error';
+                {`import { createTryError, TryError } from 'tryError';
 
 // Define custom error interfaces
 interface ValidationErrorContext {
@@ -126,7 +126,7 @@ const businessError = createBusinessError(
                 showLineNumbers={true}
                 className="mb-4"
               >
-                {`import { isTryError, hasErrorType } from 'try-error';
+                {`import { isTryError, hasErrorType } from 'tryError';
 
 // Type guards for custom errors
 function isValidationError(error: TryError): error is TryError<ValidationErrorContext> {

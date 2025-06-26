@@ -1,8 +1,8 @@
-[**try-error API Documentation v0.0.1-alpha.1**](../index.md)
+[**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
 ***
 
-[try-error API Documentation](../index.md) / createScope
+[tryError API Documentation](../index.md) / createScope
 
 # Function: createScope()
 
@@ -37,7 +37,7 @@ function createScope(config): {
 };
 ```
 
-Defined in: [config.ts:820](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/config.ts#L820)
+Defined in: [config.ts:820](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/config.ts#L820)
 
 Create a scoped configuration that doesn't affect global state
 Useful for testing or isolated components

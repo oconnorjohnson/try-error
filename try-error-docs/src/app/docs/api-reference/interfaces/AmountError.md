@@ -1,12 +1,12 @@
-[**try-error API Documentation v0.0.1-alpha.1**](../index.md)
+[**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
 ***
 
-[try-error API Documentation](../index.md) / AmountError
+[tryError API Documentation](../index.md) / AmountError
 
 # Interface: AmountError\<T\>
 
-Defined in: [factories.ts:274](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/factories.ts#L274)
+Defined in: [factories.ts:274](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/factories.ts#L274)
 
 Base type for errors involving monetary amounts (payments, billing, etc.)
 
@@ -45,7 +45,7 @@ const error: PaymentError = {
 readonly amount: number;
 ```
 
-Defined in: [factories.ts:278](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/factories.ts#L278)
+Defined in: [factories.ts:278](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/factories.ts#L278)
 
 The monetary amount involved in the error
 
@@ -57,7 +57,7 @@ The monetary amount involved in the error
 readonly optional cause: unknown;
 ```
 
-Defined in: [types.ts:50](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/types.ts#L50)
+Defined in: [types.ts:50](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/types.ts#L50)
 
 The original error or thrown value that caused this error
 
@@ -73,7 +73,7 @@ The original error or thrown value that caused this error
 readonly optional context: Record<string, unknown>;
 ```
 
-Defined in: [types.ts:45](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/types.ts#L45)
+Defined in: [types.ts:45](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/types.ts#L45)
 
 Additional context data for debugging
 
@@ -89,7 +89,7 @@ Additional context data for debugging
 readonly currency: string;
 ```
 
-Defined in: [factories.ts:283](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/factories.ts#L283)
+Defined in: [factories.ts:283](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/factories.ts#L283)
 
 The currency code (ISO 4217)
 
@@ -101,7 +101,7 @@ The currency code (ISO 4217)
 readonly message: string;
 ```
 
-Defined in: [types.ts:25](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/types.ts#L25)
+Defined in: [types.ts:25](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/types.ts#L25)
 
 Human-readable error message
 
@@ -117,7 +117,7 @@ Human-readable error message
 readonly source: string;
 ```
 
-Defined in: [types.ts:35](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/types.ts#L35)
+Defined in: [types.ts:35](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/types.ts#L35)
 
 Source location where the error occurred (file:line:column)
 
@@ -133,7 +133,7 @@ Source location where the error occurred (file:line:column)
 readonly optional stack: string;
 ```
 
-Defined in: [types.ts:30](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/types.ts#L30)
+Defined in: [types.ts:30](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/types.ts#L30)
 
 Stack trace if available (may be stripped in production)
 
@@ -149,7 +149,7 @@ Stack trace if available (may be stripped in production)
 readonly timestamp: number;
 ```
 
-Defined in: [types.ts:40](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/types.ts#L40)
+Defined in: [types.ts:40](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/types.ts#L40)
 
 Timestamp when the error was created
 
@@ -165,7 +165,7 @@ Timestamp when the error was created
 readonly type: T;
 ```
 
-Defined in: [types.ts:20](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/types.ts#L20)
+Defined in: [types.ts:20](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/types.ts#L20)
 
 The type of error - used for discriminated unions
 

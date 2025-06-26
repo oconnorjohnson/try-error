@@ -1,8 +1,8 @@
-[**try-error API Documentation v0.0.1-alpha.1**](../index.md)
+[**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
 ***
 
-[try-error API Documentation](../index.md) / createValidationError
+[tryError API Documentation](../index.md) / createValidationError
 
 # Function: createValidationError()
 
@@ -15,7 +15,7 @@ function createValidationError<T>(
 options?): ValidationError<T>;
 ```
 
-Defined in: [factories.ts:563](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/factories.ts#L563)
+Defined in: [factories.ts:563](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/factories.ts#L563)
 
 Pre-built factory for validation errors with field validation
 

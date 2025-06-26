@@ -1,8 +1,8 @@
-[**try-error API Documentation v0.0.1-alpha.1**](../index.md)
+[**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
 ***
 
-[try-error API Documentation](../index.md) / trySync
+[tryError API Documentation](../index.md) / trySync
 
 # Function: trySync()
 
@@ -10,7 +10,7 @@
 function trySync<T>(fn, options?): TryResult<T, TryError<string>>;
 ```
 
-Defined in: [sync.ts:65](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/sync.ts#L65)
+Defined in: [sync.ts:65](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/sync.ts#L65)
 
 Wrap a synchronous operation that might throw
 Returns either the result or a TryError

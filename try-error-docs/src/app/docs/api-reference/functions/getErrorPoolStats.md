@@ -1,8 +1,8 @@
-[**try-error API Documentation v0.0.1-alpha.1**](../index.md)
+[**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
 ***
 
-[try-error API Documentation](../index.md) / getErrorPoolStats
+[tryError API Documentation](../index.md) / getErrorPoolStats
 
 # Function: getErrorPoolStats()
 
@@ -21,7 +21,7 @@ function getErrorPoolStats():
 };
 ```
 
-Defined in: [pool.ts:215](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/pool.ts#L215)
+Defined in: [pool.ts:215](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/pool.ts#L215)
 
 Get error pool statistics
 

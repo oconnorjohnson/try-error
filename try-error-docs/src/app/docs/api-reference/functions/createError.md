@@ -1,8 +1,8 @@
-[**try-error API Documentation v0.0.1-alpha.1**](../index.md)
+[**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
 ***
 
-[try-error API Documentation](../index.md) / createError
+[tryError API Documentation](../index.md) / createError
 
 # Function: createError()
 
@@ -10,7 +10,7 @@
 function createError<T>(options): TryError<T>;
 ```
 
-Defined in: [errors.ts:437](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/errors.ts#L437)
+Defined in: [errors.ts:437](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/errors.ts#L437)
 
 Create a TryError with automatic source location detection
 

@@ -1,12 +1,12 @@
-[**try-error API Documentation v0.0.1-alpha.1**](../index.md)
+[**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
 ***
 
-[try-error API Documentation](../index.md) / ProgressTracker
+[tryError API Documentation](../index.md) / ProgressTracker
 
 # Interface: ProgressTracker\<T\>
 
-Defined in: [async.ts:546](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/async.ts#L546)
+Defined in: [async.ts:546](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/async.ts#L546)
 
 Progress tracking for long-running async operations
 
@@ -24,7 +24,7 @@ Progress tracking for long-running async operations
 cancel: () => void;
 ```
 
-Defined in: [async.ts:549](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/async.ts#L549)
+Defined in: [async.ts:549](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/async.ts#L549)
 
 #### Returns
 
@@ -38,7 +38,7 @@ Defined in: [async.ts:549](https://github.com/oconnorjohnson/try-error/blob/e3ae
 getProgress: () => number;
 ```
 
-Defined in: [async.ts:548](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/async.ts#L548)
+Defined in: [async.ts:548](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/async.ts#L548)
 
 #### Returns
 
@@ -52,4 +52,4 @@ Defined in: [async.ts:548](https://github.com/oconnorjohnson/try-error/blob/e3ae
 promise: Promise<TryResult<T, TryError<string>>>;
 ```
 
-Defined in: [async.ts:547](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/async.ts#L547)
+Defined in: [async.ts:547](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/async.ts#L547)

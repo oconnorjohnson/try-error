@@ -1,8 +1,8 @@
-[**try-error API Documentation v0.0.1-alpha.1**](../index.md)
+[**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
 ***
 
-[try-error API Documentation](../index.md) / ContextualMiddleware
+[tryError API Documentation](../index.md) / ContextualMiddleware
 
 # Type Alias: ContextualMiddleware()\<T, E\>
 
@@ -10,7 +10,7 @@
 type ContextualMiddleware<T, E> = (result, context, next) => TryResult<T, E>;
 ```
 
-Defined in: [middleware.ts:37](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/middleware.ts#L37)
+Defined in: [middleware.ts:37](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/middleware.ts#L37)
 
 Enhanced middleware with context support
 

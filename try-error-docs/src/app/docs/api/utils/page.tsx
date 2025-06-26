@@ -436,7 +436,7 @@ function combineWithPartialSuccess<T extends Record<string, TryResult<any, any>>
                 showLineNumbers={true}
                 className="mb-4"
               >
-                {`import { raceResults } from 'try-error';
+                {`import { raceResults } from 'tryError';
 
 function raceResults<T>(
   results: Promise<TryResult<T, TryError>>[]
@@ -494,7 +494,7 @@ async function fetchWithTimeout<T>(
                 showLineNumbers={true}
                 className="mb-4"
               >
-                {`import { sequenceResults } from 'try-error';
+                {`import { sequenceResults } from 'tryError';
 
 function sequenceResults<T>(
   operations: (() => Promise<TryResult<T, TryError>>)[]
@@ -552,7 +552,7 @@ const pipelineResult = await processPipeline(userData, [
           </h2>
 
           <p className="text-slate-600 mb-4">
-            Additional helper functions for common try-error patterns and
+            Additional helper functions for common tryError patterns and
             operations.
           </p>
 
@@ -570,7 +570,7 @@ const pipelineResult = await processPipeline(userData, [
                 showLineNumbers={true}
                 className="mb-4"
               >
-                {`import { unwrapOr } from 'try-error';
+                {`import { unwrapOr } from 'tryError';
 
 function unwrapOr<T>(result: TryResult<T, TryError>, defaultValue: T): T
 
@@ -627,7 +627,7 @@ if (maybeUser) {
                 showLineNumbers={true}
                 className="mb-4"
               >
-                {`import { retry, RetryOptions } from 'try-error';
+                {`import { retry, RetryOptions } from 'tryError';
 
 interface RetryOptions {
   maxAttempts: number;
@@ -708,7 +708,7 @@ async function retryWithJitter<T>(
                 showLineNumbers={true}
                 className="mb-4"
               >
-                {`import { timeout } from 'try-error';
+                {`import { timeout } from 'tryError';
 
 function timeout<T>(
   operation: () => Promise<T>,
@@ -860,7 +860,7 @@ async function progressiveTimeout<T>(
           </h2>
 
           <p className="text-slate-600 mb-4">
-            Utilities for optimizing try-error performance in high-throughput
+            Utilities for optimizing tryError performance in high-throughput
             scenarios.
           </p>
 
@@ -884,7 +884,7 @@ async function progressiveTimeout<T>(
   configureErrorPool, 
   resetErrorPool,
   getErrorPoolStats 
-} from 'try-error';
+} from 'tryError';
 
 // Create a custom pool
 const pool = new ErrorPool(100); // Pool size
@@ -942,7 +942,7 @@ const stats = pool.getStats(); // Get pool statistics`}
   isLazyProperty, 
   forceLazyEvaluation,
   createDebugProxy 
-} from 'try-error';
+} from 'tryError';
 
 // Create error with lazy properties
 const error = createLazyError({
@@ -995,7 +995,7 @@ console.log(debugError.stack);`}
                 showLineNumbers={true}
                 className="mb-4"
               >
-                {`import { configure, ConfigPresets } from 'try-error';
+                {`import { configure, ConfigPresets } from 'tryError';
 
 // Maximum performance - minimal features
 configure(ConfigPresets.minimal());
@@ -1044,7 +1044,7 @@ configure({
           </h2>
 
           <p className="text-slate-600 mb-4">
-            Extend try-error with custom logic using middleware pipelines.
+            Extend tryError with custom logic using middleware pipelines.
           </p>
 
           <div className="space-y-6">
@@ -1061,7 +1061,7 @@ configure({
                 showLineNumbers={true}
                 className="mb-4"
               >
-                {`import { MiddlewarePipeline, ErrorMiddleware } from 'try-error';
+                {`import { MiddlewarePipeline, ErrorMiddleware } from 'tryError';
 
 // Create a pipeline
 const pipeline = new MiddlewarePipeline();
@@ -1115,7 +1115,7 @@ console.log(pipeline.length); // Number of middleware`}
   rateLimitMiddleware,
   filterMiddleware,
   compose
-} from 'try-error';
+} from 'tryError';
 
 // Logging
 pipeline.use(loggingMiddleware(console.error));
@@ -1177,7 +1177,7 @@ const errorHandling = compose(
                 showLineNumbers={true}
                 className="mb-4"
               >
-                {`import { globalRegistry } from 'try-error';
+                {`import { globalRegistry } from 'tryError';
 
 // Create named pipelines
 const apiPipeline = new MiddlewarePipeline()
@@ -1214,7 +1214,7 @@ globalRegistry.remove('api'); // returns boolean`}
           </h2>
 
           <p className="text-slate-600 mb-4">
-            Extend try-error with plugins that add new capabilities and
+            Extend tryError with plugins that add new capabilities and
             integrations.
           </p>
 
@@ -1224,7 +1224,7 @@ globalRegistry.remove('api'); // returns boolean`}
                 Plugin Manager
               </h3>
               <p className="text-slate-600 mb-3">
-                Install, enable, and manage plugins for try-error.
+                Install, enable, and manage plugins for tryError.
               </p>
               <CodeBlock
                 language="typescript"
@@ -1232,7 +1232,7 @@ globalRegistry.remove('api'); // returns boolean`}
                 showLineNumbers={true}
                 className="mb-4"
               >
-                {`import { pluginManager, Plugin } from 'try-error';
+                {`import { pluginManager, Plugin } from 'tryError';
 
 // Install a plugin
 await pluginManager.install(myPlugin);
@@ -1275,7 +1275,7 @@ await pluginManager.notifyConfigChange(newConfig);`}
                 Creating Plugins
               </h3>
               <p className="text-slate-600 mb-3">
-                Build custom plugins to extend try-error functionality.
+                Build custom plugins to extend tryError functionality.
               </p>
               <CodeBlock
                 language="typescript"
@@ -1283,7 +1283,7 @@ await pluginManager.notifyConfigChange(newConfig);`}
                 showLineNumbers={true}
                 className="mb-4"
               >
-                {`import { createPlugin, Plugin, PluginAPI } from 'try-error';
+                {`import { createPlugin, Plugin, PluginAPI } from 'tryError';
 
 // Using createPlugin helper
 const myPlugin = createPlugin(

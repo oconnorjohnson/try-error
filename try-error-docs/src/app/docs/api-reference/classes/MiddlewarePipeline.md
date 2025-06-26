@@ -1,12 +1,12 @@
-[**try-error API Documentation v0.0.1-alpha.1**](../index.md)
+[**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
 ***
 
-[try-error API Documentation](../index.md) / MiddlewarePipeline
+[tryError API Documentation](../index.md) / MiddlewarePipeline
 
 # Class: MiddlewarePipeline\<T, E\>
 
-Defined in: [middleware.ts:46](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/middleware.ts#L46)
+Defined in: [middleware.ts:46](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/middleware.ts#L46)
 
 Middleware pipeline for composing multiple middleware
 
@@ -42,7 +42,7 @@ new MiddlewarePipeline<T, E>(): MiddlewarePipeline<T, E>;
 get length(): number;
 ```
 
-Defined in: [middleware.ts:102](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/middleware.ts#L102)
+Defined in: [middleware.ts:102](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/middleware.ts#L102)
 
 Get the number of middleware in the pipeline
 
@@ -58,7 +58,7 @@ Get the number of middleware in the pipeline
 clone(): MiddlewarePipeline<T, E>;
 ```
 
-Defined in: [middleware.ts:93](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/middleware.ts#L93)
+Defined in: [middleware.ts:93](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/middleware.ts#L93)
 
 Clone the pipeline
 
@@ -74,7 +74,7 @@ Clone the pipeline
 execute(initialResult, finalHandler?): TryResult<T, E>;
 ```
 
-Defined in: [middleware.ts:60](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/middleware.ts#L60)
+Defined in: [middleware.ts:60](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/middleware.ts#L60)
 
 Execute the middleware pipeline
 
@@ -100,7 +100,7 @@ Execute the middleware pipeline
 use(middleware): this;
 ```
 
-Defined in: [middleware.ts:52](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/middleware.ts#L52)
+Defined in: [middleware.ts:52](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/middleware.ts#L52)
 
 Add middleware to the pipeline
 
@@ -122,7 +122,7 @@ Add middleware to the pipeline
 wrap<Args>(fn): (...args) => TryResult<T, E>;
 ```
 
-Defined in: [middleware.ts:81](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/middleware.ts#L81)
+Defined in: [middleware.ts:81](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/middleware.ts#L81)
 
 Create a wrapped function that applies the middleware pipeline
 

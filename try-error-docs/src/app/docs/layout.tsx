@@ -17,13 +17,13 @@ export default function DocsLayout({
           <div className="flex items-center">
             <SidebarTrigger />
             <div className="ml-4">
-              <h1 className="text-lg font-semibold">try-error Documentation</h1>
+              <h1 className="text-lg font-semibold">tryError Documentation</h1>
             </div>
           </div>
           <div className="flex items-center gap-2">
             <SearchDialog />
             <a
-              href="https://github.com/oconnorjohnson/try-error"
+              href="https://github.com/oconnorjohnson/tryError"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors border border-border rounded-md hover:bg-accent"

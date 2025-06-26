@@ -1,8 +1,8 @@
-[**try-error API Documentation v0.0.1-alpha.1**](../index.md)
+[**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
 ***
 
-[try-error API Documentation](../index.md) / chainError
+[tryError API Documentation](../index.md) / chainError
 
 # Function: chainError()
 
@@ -14,7 +14,7 @@ function chainError<T, E>(
    additionalFields?): E;
 ```
 
-Defined in: [factories.ts:385](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/factories.ts#L385)
+Defined in: [factories.ts:385](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/factories.ts#L385)
 
 Chain errors while preserving the original error context
 

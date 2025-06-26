@@ -1,6 +1,6 @@
 # Setting Up Algolia DocSearch
 
-The try-error documentation site has Algolia DocSearch integration ready to go! You just need to configure it with your Algolia credentials.
+The tryError documentation site has Algolia DocSearch integration ready to go! You just need to configure it with your Algolia credentials.
 
 ## Quick Setup
 
@@ -18,7 +18,7 @@ The try-error documentation site has Algolia DocSearch integration ready to go! 
    - Index Name
 
 3. **Configure environment variables**
-   Create a `.env.local` file in the `try-error-docs` directory:
+   Create a `.env.local` file in the `tryError-docs` directory:
 
    ```bash
    # Algolia DocSearch Configuration

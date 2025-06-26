@@ -1,8 +1,8 @@
-[**try-error API Documentation v0.0.1-alpha.1**](../index.md)
+[**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
 ***
 
-[try-error API Documentation](../index.md) / isErrorOfType
+[tryError API Documentation](../index.md) / isErrorOfType
 
 # Function: isErrorOfType()
 
@@ -10,7 +10,7 @@
 function isErrorOfType(value, errorType): value is TryError<string>;
 ```
 
-Defined in: [utils.ts:128](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/utils.ts#L128)
+Defined in: [utils.ts:128](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/utils.ts#L128)
 
 Check if a value is a specific type of error
 

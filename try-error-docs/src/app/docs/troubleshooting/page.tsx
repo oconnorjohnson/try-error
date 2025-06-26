@@ -15,13 +15,13 @@ export default function TroubleshootingPage() {
       <div>
         <h1 className="text-4xl font-bold mb-4">TypeScript Troubleshooting</h1>
         <p className="text-xl text-muted-foreground">
-          Common TypeScript issues and their solutions when using try-error.
+          Common TypeScript issues and their solutions when using tryError.
         </p>
       </div>
 
       <Alert>
         <AlertDescription>
-          Most TypeScript issues with try-error stem from union type inference
+          Most TypeScript issues with tryError stem from union type inference
           challenges. This guide provides practical solutions to common
           problems.
         </AlertDescription>
@@ -284,7 +284,7 @@ if (isTryError(result)) {
               React Component Type Issues
             </CardTitle>
             <CardDescription>
-              TypeScript issues when using try-error in React components
+              TypeScript issues when using tryError in React components
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -368,7 +368,7 @@ function UserProfile({ userId }: { userId: string }) {
           <CardHeader>
             <CardTitle>TypeScript Configuration</CardTitle>
             <CardDescription>
-              Recommended TypeScript settings for optimal try-error experience
+              Recommended TypeScript settings for optimal tryError experience
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -390,7 +390,7 @@ function UserProfile({ userId }: { userId: string }) {
           <CardHeader>
             <CardTitle>Quick Reference: Type Guards</CardTitle>
             <CardDescription>
-              Essential type guards for working with try-error results
+              Essential type guards for working with tryError results
             </CardDescription>
           </CardHeader>
           <CardContent>

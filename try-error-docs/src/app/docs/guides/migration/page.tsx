@@ -12,7 +12,7 @@ export default function MigrationGuidesPage() {
         </h1>
         <p className="text-xl text-slate-600">
           Step-by-step guides for migrating from other error handling approaches
-          to try-error
+          to tryError
         </p>
       </div>
 
@@ -25,7 +25,7 @@ export default function MigrationGuidesPage() {
 
           <p className="text-slate-600 mb-4">
             The most common migration scenario - moving from traditional
-            try/catch blocks to try-error.
+            try/catch blocks to tryError.
           </p>
 
           <div className="bg-slate-50 border border-slate-200 rounded-lg p-4 mb-4">
@@ -61,14 +61,14 @@ if (!user) {
 
           <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
             <h3 className="font-semibold text-green-800 mb-2">
-              After (try-error)
+              After (tryError)
             </h3>
             <CodeBlock
               language="typescript"
-              title="try-error Approach"
+              title="tryError Approach"
               showLineNumbers={true}
             >
-              {`import { tryAsync, isTryError } from 'try-error';
+              {`import { tryAsync, isTryError } from 'tryError';
 
 async function fetchUser(id: string): Promise<TryResult<User, TryError>> {
   return tryAsync(async () => {
@@ -114,7 +114,7 @@ if (isTryError(result)) {
 
           <p className="text-slate-600 mb-4">
             If you're coming from neverthrow or similar Result libraries,
-            try-error offers a more JavaScript-native approach.
+            tryError offers a more JavaScript-native approach.
           </p>
 
           <div className="bg-slate-50 border border-slate-200 rounded-lg p-4 mb-4">
@@ -152,14 +152,14 @@ result.match(
 
           <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
             <h3 className="font-semibold text-green-800 mb-2">
-              After (try-error)
+              After (tryError)
             </h3>
             <CodeBlock
               language="typescript"
-              title="try-error Equivalent"
+              title="tryError Equivalent"
               showLineNumbers={true}
             >
-              {`import { tryAsync, isTryError } from 'try-error';
+              {`import { tryAsync, isTryError } from 'tryError';
 
 async function fetchUser(id: string): Promise<TryResult<User, TryError>> {
   return tryAsync(async () => {
@@ -202,7 +202,7 @@ if (isTryError(result)) {
           </h2>
 
           <p className="text-slate-600 mb-4">
-            Moving from fp-ts Either to try-error for teams wanting functional
+            Moving from fp-ts Either to tryError for teams wanting functional
             error handling without the complexity.
           </p>
 
@@ -238,10 +238,10 @@ pipe(
 
           <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
             <h3 className="font-semibold text-green-800 mb-2">
-              After (try-error)
+              After (tryError)
             </h3>
-            <CodeBlock language="typescript" title="try-error Equivalent">
-              {`import { tryAsync, isTryError } from 'try-error';
+            <CodeBlock language="typescript" title="tryError Equivalent">
+              {`import { tryAsync, isTryError } from 'tryError';
 
 const fetchUser = (id: string) =>
   tryAsync(() => fetch(\`/api/users/\${id}\`).then(r => r.json()));
@@ -266,9 +266,9 @@ if (isTryError(result)) {
           <div className="space-y-4">
             <div className="border border-slate-200 rounded-lg p-4">
               <h3 className="font-semibold text-slate-900 mb-2">
-                1. Install try-error
+                1. Install tryError
               </h3>
-              <InstallCommand packageName="try-error" />
+              <InstallCommand packageName="tryError" />
             </div>
 
             <div className="border border-slate-200 rounded-lg p-4">
@@ -318,7 +318,7 @@ function parseJson(str: string): TryResult<any, TryError>`}
               </h3>
               <p className="text-slate-600 text-sm">
                 Work your way up the call stack, updating callers to handle the
-                new return types. You can mix try-error with existing patterns
+                new return types. You can mix tryError with existing patterns
                 during migration.
               </p>
             </div>
@@ -414,7 +414,7 @@ function parseJson(str: string): TryResult<any, TryError>`}
             <div className="space-y-3">
               <label className="flex items-center space-x-3">
                 <input type="checkbox" className="rounded" />
-                <span className="text-sm">Install try-error package</span>
+                <span className="text-sm">Install tryError package</span>
               </label>
               <label className="flex items-center space-x-3">
                 <input type="checkbox" className="rounded" />
@@ -474,7 +474,7 @@ function parseJson(str: string): TryResult<any, TryError>`}
             <div className="border border-slate-200 rounded-lg p-4">
               <h3 className="font-semibold text-slate-900 mb-2">Quick Start</h3>
               <p className="text-slate-600 text-sm mb-3">
-                Get up and running with try-error quickly
+                Get up and running with tryError quickly
               </p>
               <a
                 href="/docs/quick-start"

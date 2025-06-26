@@ -1,8 +1,8 @@
-[**try-error API Documentation v0.0.1-alpha.1**](../index.md)
+[**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
 ***
 
-[try-error API Documentation](../index.md) / transformMiddleware
+[tryError API Documentation](../index.md) / transformMiddleware
 
 # Function: transformMiddleware()
 
@@ -10,7 +10,7 @@
 function transformMiddleware<T, E>(transform): ErrorMiddleware<T, E>;
 ```
 
-Defined in: [middleware.ts:183](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/middleware.ts#L183)
+Defined in: [middleware.ts:183](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/middleware.ts#L183)
 
 Error transformation middleware
 

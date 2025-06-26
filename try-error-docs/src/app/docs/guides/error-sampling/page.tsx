@@ -34,7 +34,7 @@ export default function ErrorSamplingPage() {
         </Alert>
 
         <p className="text-slate-600 mb-4">
-          try-error's <code>onError</code> hook provides the perfect integration
+          tryError's <code>onError</code> hook provides the perfect integration
           point for implementing custom sampling strategies. This guide shows
           various sampling approaches you can use based on your needs.
         </p>
@@ -56,7 +56,7 @@ export default function ErrorSamplingPage() {
           showLineNumbers={true}
           className="mb-4"
         >
-          {`import { configure } from 'try-error';
+          {`import { configure } from 'tryError';
 import * as Sentry from '@sentry/nextjs';
 
 // Sample 10% of non-critical errors, 100% of critical errors
@@ -148,7 +148,7 @@ configure({
   }
 }
 
-// Usage with try-error
+// Usage with tryError
 const rateLimiter = new ErrorRateLimiter(100); // 100 errors per minute
 
 configure({
@@ -642,7 +642,7 @@ configure({
           showLineNumbers={true}
           className="mb-4"
         >
-          {`import { configure, TryError } from 'try-error';
+          {`import { configure, TryError } from 'tryError';
 import * as Sentry from '@sentry/nextjs';
 import { track } from '@vercel/analytics';
 
@@ -724,7 +724,7 @@ class ProductionErrorSampler {
 // Initialize the sampler
 const sampler = new ProductionErrorSampler();
 
-// Configure try-error with comprehensive sampling
+// Configure tryError with comprehensive sampling
 export function setupErrorSampling() {
   configure({
     onError: (error) => {
@@ -772,7 +772,7 @@ function logToLocalStorage(error: TryError, reason: string) {
   if (typeof window === 'undefined') return;
   
   try {
-    const key = 'try-error-unsampled';
+    const key = 'tryError-unsampled';
     const existing = JSON.parse(localStorage.getItem(key) || '[]');
     
     existing.push({

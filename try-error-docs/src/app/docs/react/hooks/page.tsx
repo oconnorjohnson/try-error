@@ -406,7 +406,7 @@ function TodoList({ todos, setTodos }: {
           <CardHeader>
             <CardTitle>Best Practices</CardTitle>
             <CardDescription>
-              Recommended patterns for using try-error hooks effectively
+              Recommended patterns for using tryError hooks effectively
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">

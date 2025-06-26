@@ -15,14 +15,14 @@ export default function CommonPitfallsPage() {
       <div>
         <h1 className="text-4xl font-bold mb-4">Common Pitfalls</h1>
         <p className="text-xl text-muted-foreground">
-          Learn from common mistakes and avoid gotchas when using try-error.
+          Learn from common mistakes and avoid gotchas when using tryError.
         </p>
       </div>
 
       <Alert>
         <AlertDescription>
           These are the most frequent issues developers encounter when adopting
-          try-error. Understanding these patterns will save you debugging time
+          tryError. Understanding these patterns will save you debugging time
           and improve code quality.
         </AlertDescription>
       </Alert>
@@ -35,7 +35,7 @@ export default function CommonPitfallsPage() {
               Accessing Error Properties Directly
             </CardTitle>
             <CardDescription>
-              Most common TypeScript error when working with try-error
+              Most common TypeScript error when working with tryError
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -95,7 +95,7 @@ if (isErr(result)) {
               Wrapping Every Function Call
             </CardTitle>
             <CardDescription>
-              Over-engineering with try-error leads to performance issues and
+              Over-engineering with tryError leads to performance issues and
               code bloat
             </CardDescription>
           </CardHeader>
@@ -121,7 +121,7 @@ function processUser(user: User) {
 
             <div>
               <h4 className="font-semibold text-green-600 mb-2">
-                ✅ Strategic Use of try-error
+                ✅ Strategic Use of tryError
               </h4>
               <CodeBlock
                 language="typescript"
@@ -164,7 +164,7 @@ function processUserSafely(user: User) {
 
             <div className="bg-yellow-50 p-4 rounded-lg">
               <p className="text-sm text-yellow-800">
-                <strong>Performance tip:</strong> try-error has zero overhead
+                <strong>Performance tip:</strong> tryError has zero overhead
                 for the success path, but each wrapper function call still has
                 JavaScript function call overhead. Use it strategically for
                 operations that can actually fail.
@@ -189,7 +189,7 @@ function processUserSafely(user: User) {
                 ❌ Inconsistent Error Handling
               </h4>
               <CodeBlock language="typescript" title="Mixed paradigms">
-                {`// ❌ Mixing try/catch with try-error
+                {`// ❌ Mixing try/catch with tryError
 async function fetchAndProcess(id: string) {
   try {
     const userData = await tryAsync(() => fetchUser(id));
@@ -214,8 +214,8 @@ async function fetchAndProcess(id: string) {
               <h4 className="font-semibold text-green-600 mb-2">
                 ✅ Consistent Error-as-Values
               </h4>
-              <CodeBlock language="typescript" title="Pure try-error approach">
-                {`// ✅ Pure try-error approach
+              <CodeBlock language="typescript" title="Pure tryError approach">
+                {`// ✅ Pure tryError approach
 async function fetchAndProcess(id: string): Promise<TryResult<ProcessedUser>> {
   const userData = await tryAsync(() => fetchUser(id));
   
@@ -670,7 +670,7 @@ if (isTryError(result)) {
           <CardHeader>
             <CardTitle>Quick Checklist</CardTitle>
             <CardDescription>
-              Avoid these common mistakes for better try-error usage
+              Avoid these common mistakes for better tryError usage
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -704,7 +704,7 @@ if (isTryError(result)) {
                 <ul className="space-y-2 text-sm">
                   <li>• Accessing error properties without type guards</li>
                   <li>• Wrapping every single function call</li>
-                  <li>• Mixing try/catch with try-error paradigms</li>
+                  <li>• Mixing try/catch with tryError paradigms</li>
                   <li>• Forgetting to handle loading states</li>
                   <li>• Using all-or-nothing error handling</li>
                   <li>• Creating generic, unhelpful error messages</li>

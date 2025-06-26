@@ -1,12 +1,12 @@
-[**try-error API Documentation v0.0.1-alpha.1**](../index.md)
+[**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
 ***
 
-[try-error API Documentation](../index.md) / RateLimiter
+[tryError API Documentation](../index.md) / RateLimiter
 
 # Class: RateLimiter
 
-Defined in: [async.ts:619](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/async.ts#L619)
+Defined in: [async.ts:619](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/async.ts#L619)
 
 Rate limiter for async operations
 
@@ -18,7 +18,7 @@ Rate limiter for async operations
 new RateLimiter(options): RateLimiter;
 ```
 
-Defined in: [async.ts:623](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/async.ts#L623)
+Defined in: [async.ts:623](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/async.ts#L623)
 
 #### Parameters
 
@@ -44,7 +44,7 @@ Defined in: [async.ts:623](https://github.com/oconnorjohnson/try-error/blob/e3ae
 execute<T>(fn): Promise<TryResult<T, TryError<string>>>;
 ```
 
-Defined in: [async.ts:633](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/async.ts#L633)
+Defined in: [async.ts:633](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/async.ts#L633)
 
 Execute an async operation with rate limiting
 
@@ -72,7 +72,7 @@ Execute an async operation with rate limiting
 getActiveCount(): number;
 ```
 
-Defined in: [async.ts:680](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/async.ts#L680)
+Defined in: [async.ts:680](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/async.ts#L680)
 
 Get number of active operations
 
@@ -88,7 +88,7 @@ Get number of active operations
 getQueueSize(): number;
 ```
 
-Defined in: [async.ts:673](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/async.ts#L673)
+Defined in: [async.ts:673](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/async.ts#L673)
 
 Get current queue size
 

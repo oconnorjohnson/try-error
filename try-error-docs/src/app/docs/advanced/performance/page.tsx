@@ -8,7 +8,7 @@ export default function PerformancePage() {
           Performance & Best Practices
         </h1>
         <p className="text-xl text-slate-600">
-          Optimize try-error for performance and follow best practices for
+          Optimize tryError for performance and follow best practices for
           robust error handling
         </p>
       </div>
@@ -46,7 +46,7 @@ export default function PerformancePage() {
                     <strong>Benchmark:</strong> 1M successful JSON.parse
                     operations
                     <br />
-                    Native: 100ms | try-error: 103ms (3% overhead)
+                    Native: 100ms | tryError: 103ms (3% overhead)
                   </p>
                 </div>
               </div>
@@ -101,7 +101,7 @@ export default function PerformancePage() {
               <div className="mt-4 p-3 bg-green-100 border border-green-300 rounded">
                 <p className="text-green-800 text-sm">
                   <strong>🚀 Did you know?</strong> With minimal configuration,
-                  try-error can actually be
+                  tryError can actually be
                   <strong> 15% FASTER</strong> than native try/catch for error
                   handling!
                   <a
@@ -116,7 +116,7 @@ export default function PerformancePage() {
           </div>
 
           <p className="text-slate-600 mb-6">
-            try-error is designed to be lightweight and performant, but there
+            tryError is designed to be lightweight and performant, but there
             are several ways to optimize it further for your specific use case.
           </p>
 
@@ -276,7 +276,7 @@ const errorPool = new ErrorPool();`}
                 showLineNumbers={true}
                 className="mb-3"
               >
-                {`import { configure, ConfigPresets } from 'try-error';
+                {`import { configure, ConfigPresets } from 'tryError';
 
 // Development: Full debugging (100-120% error overhead)
 configure(ConfigPresets.development());
@@ -371,7 +371,7 @@ async function fetchCriticalData(id: string) {
 }
 
 // Mixed scenario with scoped configs
-import { createScope } from 'try-error';
+import { createScope } from 'tryError';
 
 const validationScope = createScope({
   captureStackTrace: false,
@@ -472,7 +472,7 @@ async function processRequest(request: Request) {
               </h3>
               <p className="text-slate-600 mb-3">
                 The overhead in tight loops comes from JavaScript engine
-                optimizations, not try-error itself.
+                optimizations, not tryError itself.
               </p>
               <CodeBlock
                 language="typescript"
@@ -612,7 +612,7 @@ async function batchedOperation<T>(
                 Real-World Performance Comparison
               </h3>
               <p className="text-slate-600 mb-3">
-                Here's how try-error performs in realistic scenarios.
+                Here's how tryError performs in realistic scenarios.
               </p>
               <CodeBlock
                 language="typescript"
@@ -730,7 +730,7 @@ async function processLargeDataset(data: any[]) {
               </div>
               <div className="bg-amber-100 border border-amber-300 rounded-lg p-3 mt-4">
                 <p className="text-amber-800 text-sm">
-                  <strong>TL;DR:</strong> try-error works out of the box without
+                  <strong>TL;DR:</strong> tryError works out of the box without
                   any setup. Initialization is only needed when you want to
                   customize its behavior or optimize for production.
                 </p>
@@ -754,23 +754,23 @@ async function processLargeDataset(data: any[]) {
               className="mb-4"
             >
               {`// Node.js/Express - Automatic environment detection
-import { setupNode } from 'try-error/setup';
+import { setupNode } from 'tryError/setup';
 setupNode(); // ✨ That's it! Optimized for dev/prod automatically
 
 // React/Vite - Browser-optimized configuration  
-import { setupReact } from 'try-error/setup';
+import { setupReact } from 'tryError/setup';
 setupReact(); // ✨ Perfect for client-side apps
 
 // Next.js - Handles both SSR and client-side
-import { setupNextJs } from 'try-error/setup';
+import { setupNextJs } from 'tryError/setup';
 setupNextJs(); // ✨ Works for both server and client
 
 // Auto-detect environment (works everywhere)
-import { autoSetup } from 'try-error/setup';
+import { autoSetup } from 'tryError/setup';
 autoSetup(); // ✨ Detects Node.js, React, Next.js, etc.
 
 // High-performance (for critical applications)
-import { setupPerformance } from 'try-error/setup';
+import { setupPerformance } from 'tryError/setup';
 setupPerformance(); // ✨ Maximum performance, minimal overhead
 
 // With custom options (still easy!)
@@ -812,7 +812,7 @@ setupNode({
                 Node.js/Express Applications
               </h3>
               <p className="text-slate-600 mb-3">
-                Configure try-error early in your application startup, before
+                Configure tryError early in your application startup, before
                 importing other modules.
               </p>
               <CodeBlock
@@ -824,12 +824,12 @@ setupNode({
                 {`// Project structure:
 // src/
 //   config/
-//     try-error.config.ts
+//     tryError.config.ts
 //   app.ts
 //   server.ts
 
-// src/config/try-error.config.ts
-import { configureTryError, configurePerformance } from 'try-error';
+// src/config/tryError.config.ts
+import { configureTryError, configurePerformance } from 'tryError';
 
 export function initializeTryError() {
   // Configure based on environment
@@ -870,9 +870,9 @@ export function initializeTryError() {
 
 // src/app.ts
 import express from 'express';
-import { initializeTryError } from './config/try-error.config';
+import { initializeTryError } from './config/tryError.config';
 
-// Initialize try-error FIRST, before other imports
+// Initialize tryError FIRST, before other imports
 initializeTryError();
 
 // Now import your application modules
@@ -902,7 +902,7 @@ app.listen(PORT, () => {
                 Next.js Applications
               </h3>
               <p className="text-slate-600 mb-3">
-                Configure try-error in your Next.js app using the app directory
+                Configure tryError in your Next.js app using the app directory
                 structure and the instrumentation.ts file for server startup
                 initialization.
               </p>
@@ -918,11 +918,11 @@ app.listen(PORT, () => {
 //     layout.tsx
 //     globals.css
 //   lib/
-//     try-error.config.ts
+//     tryError.config.ts
 //   instrumentation.ts (for server initialization)
 
-// src/lib/try-error.config.ts
-import { configureTryError } from 'try-error';
+// src/lib/tryError.config.ts
+import { configureTryError } from 'tryError';
 
 export function initializeTryError() {
   configureTryError({
@@ -956,16 +956,16 @@ export function initializeTryError() {
 export async function register() {
   if (process.env.NEXT_RUNTIME === 'nodejs') {
     // Server-side initialization - runs once on server startup
-    const { initializeTryError } = await import('./src/lib/try-error.config');
+    const { initializeTryError } = await import('./src/lib/tryError.config');
     initializeTryError();
   }
 }
 
 // src/app/layout.tsx
-import { initializeTryError } from '@/lib/try-error.config';
+import { initializeTryError } from '@/lib/tryError.config';
 import './globals.css';
 
-// Initialize try-error on client-side
+// Initialize tryError on client-side
 if (typeof window !== 'undefined') {
   initializeTryError();
 }
@@ -983,7 +983,7 @@ export default function RootLayout({
 }
 
 // src/app/api/users/route.ts
-import { tryAsync, isTryError } from 'try-error';
+import { tryAsync, isTryError } from 'tryError';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
@@ -1021,7 +1021,7 @@ export async function GET(request: NextRequest) {
                 React Applications (Vite/CRA)
               </h3>
               <p className="text-slate-600 mb-3">
-                Configure try-error in your React app's entry point.
+                Configure tryError in your React app's entry point.
               </p>
               <CodeBlock
                 language="typescript"
@@ -1032,14 +1032,14 @@ export async function GET(request: NextRequest) {
                 {`// Project structure:
 // src/
 //   config/
-//     try-error.config.ts
+//     tryError.config.ts
 //   components/
 //   hooks/
 //   main.tsx (Vite) or index.tsx (CRA)
 //   App.tsx
 
-// src/config/try-error.config.ts
-import { configureTryError } from 'try-error';
+// src/config/tryError.config.ts
+import { configureTryError } from 'tryError';
 
 export function initializeTryError() {
   configureTryError({
@@ -1071,10 +1071,10 @@ export function initializeTryError() {
 // src/main.tsx (Vite) or src/index.tsx (CRA)
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { initializeTryError } from './config/try-error.config';
+import { initializeTryError } from './config/tryError.config';
 import App from './App';
 
-// Initialize try-error BEFORE rendering
+// Initialize tryError BEFORE rendering
 initializeTryError();
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
@@ -1084,7 +1084,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 );
 
 // src/App.tsx
-import { TryErrorBoundary } from '@try-error/react';
+import { TryErrorBoundary } from '@tryError/react';
 import { UserProfile } from './components/UserProfile';
 
 function App() {
@@ -1120,14 +1120,14 @@ export default App;`}
                 showLineNumbers={true}
                 className="mb-3"
               >
-                {`// config/try-error/
+                {`// config/tryError/
 //   index.ts
 //   development.ts
 //   production.ts
 //   test.ts
 
-// config/try-error/index.ts
-import { TryErrorConfig } from 'try-error';
+// config/tryError/index.ts
+import { TryErrorConfig } from 'tryError';
 
 const env = process.env.NODE_ENV || 'development';
 
@@ -1146,8 +1146,8 @@ switch (env) {
 
 export default config;
 
-// config/try-error/development.ts
-import { TryErrorConfig } from 'try-error';
+// config/tryError/development.ts
+import { TryErrorConfig } from 'tryError';
 
 const config: TryErrorConfig = {
   captureStackTrace: true,
@@ -1166,8 +1166,8 @@ const config: TryErrorConfig = {
 
 export default config;
 
-// config/try-error/production.ts
-import { TryErrorConfig } from 'try-error';
+// config/tryError/production.ts
+import { TryErrorConfig } from 'tryError';
 
 const config: TryErrorConfig = {
   captureStackTrace: false,
@@ -1189,8 +1189,8 @@ export default config;
 
 // Usage in your app:
 // src/app.ts
-import { configureTryError } from 'try-error';
-import tryErrorConfig from '../config/try-error';
+import { configureTryError } from 'tryError';
+import tryErrorConfig from '../config/tryError';
 
 // Apply configuration
 configureTryError(tryErrorConfig);`}
@@ -1220,7 +1220,7 @@ configureTryError(tryErrorConfig);`}
     "start:staging": "NODE_ENV=staging node dist/server.js"
   },
   "dependencies": {
-    "try-error": "^1.0.0"
+    "tryError": "^1.0.0"
   },
   "devDependencies": {
     "tsx": "^4.0.0",
@@ -1241,7 +1241,7 @@ configureTryError(tryErrorConfig);`}
                 (setupNode, setupReact, etc.) for instant optimization
               </li>
               <li>
-                • <strong>Initialize Early:</strong> Configure try-error before
+                • <strong>Initialize Early:</strong> Configure tryError before
                 importing other modules
               </li>
               <li>

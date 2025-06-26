@@ -1,8 +1,8 @@
-[**try-error API Documentation v0.0.1-alpha.1**](../index.md)
+[**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
 ***
 
-[try-error API Documentation](../index.md) / combineErrors
+[tryError API Documentation](../index.md) / combineErrors
 
 # Function: combineErrors()
 
@@ -13,7 +13,7 @@ function combineErrors<E>(
    message): TryError;
 ```
 
-Defined in: [utils.ts:390](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/utils.ts#L390)
+Defined in: [utils.ts:390](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/utils.ts#L390)
 
 Combine multiple errors into a single error
 

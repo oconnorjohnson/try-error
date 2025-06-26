@@ -9,7 +9,7 @@ export default function InstallationPage() {
       <div className="mb-8">
         <h1 className="text-4xl font-bold text-slate-900 mb-4">Installation</h1>
         <p className="text-xl text-slate-600">
-          Get started with try-error in your TypeScript project
+          Get started with tryError in your TypeScript project
         </p>
       </div>
 
@@ -20,18 +20,18 @@ export default function InstallationPage() {
             Package Installation
           </h2>
 
-          <InstallCommand packageName="try-error" className="mb-4" />
+          <InstallCommand packageName="tryError" className="mb-4" />
 
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
             <p className="text-blue-800">
-              <strong>Note:</strong> try-error has zero runtime dependencies and
+              <strong>Note:</strong> tryError has zero runtime dependencies and
               works with TypeScript 4.5+
             </p>
           </div>
 
           <div className="bg-green-50 border border-green-200 rounded-lg p-4 mt-4">
             <p className="text-green-800">
-              <strong>Performance:</strong> try-error adds &lt;3% overhead to
+              <strong>Performance:</strong> tryError adds &lt;3% overhead to
               successful operations. Error handling overhead (20%-120%) is
               configurable based on your debugging needs. No configuration
               required to start!
@@ -52,12 +52,12 @@ export default function InstallationPage() {
             <p className="text-slate-600 text-sm mb-3">
               You install the same{" "}
               <code className="bg-slate-200 px-1 py-0.5 rounded">
-                try-error
+                tryError
               </code>{" "}
               package regardless of which module you use. The different imports
               are just entry points within the package.
             </p>
-            <InstallCommand packageName="try-error" className="mt-2" />
+            <InstallCommand packageName="tryError" className="mt-2" />
           </div>
 
           <p className="text-slate-600 mb-4">
@@ -74,7 +74,7 @@ export default function InstallationPage() {
                 <span className="text-xs text-slate-500">Hover to copy →</span>
               </div>
               <CodeBlock language="typescript" className="mb-2">
-                {`import { trySync, tryAsync, isTryError } from 'try-error';`}
+                {`import { trySync, tryAsync, isTryError } from 'tryError';`}
               </CodeBlock>
               <p className="text-sm text-slate-600">
                 ~8KB minified • Use when you need both sync and async operations
@@ -89,7 +89,7 @@ export default function InstallationPage() {
                 <span className="text-xs text-green-700">Hover to copy →</span>
               </div>
               <CodeBlock language="typescript" className="mb-2">
-                {`import { trySync, isTryError } from 'try-error/sync';`}
+                {`import { trySync, isTryError } from 'tryError/sync';`}
               </CodeBlock>
               <p className="text-sm text-green-800">
                 ~4KB minified (50% smaller!) • Perfect for CLI tools, scripts,
@@ -105,7 +105,7 @@ export default function InstallationPage() {
                 <span className="text-xs text-blue-700">Hover to copy →</span>
               </div>
               <CodeBlock language="typescript" className="mb-2">
-                {`import { tryAsync, isTryError } from 'try-error/async';`}
+                {`import { tryAsync, isTryError } from 'tryError/async';`}
               </CodeBlock>
               <p className="text-sm text-blue-800">
                 ~4KB minified (50% smaller!) • Ideal for modern async-first
@@ -119,7 +119,7 @@ export default function InstallationPage() {
                 <span className="text-xs text-purple-700">Hover to copy →</span>
               </div>
               <CodeBlock language="typescript" className="mb-2">
-                {`import { isTryError, createError } from 'try-error/core';`}
+                {`import { isTryError, createError } from 'tryError/core';`}
               </CodeBlock>
               <p className="text-sm text-purple-800">
                 ~3KB minified • For building custom error handling utilities
@@ -177,7 +177,7 @@ export default function InstallationPage() {
             showLineNumbers={true}
             className="mb-4"
           >
-            {`import { trySync, tryAsync, isTryError } from 'try-error';
+            {`import { trySync, tryAsync, isTryError } from 'tryError';
 
 // Synchronous operations
 const result = trySync(() => JSON.parse(jsonString));
@@ -224,7 +224,7 @@ if (isTryError(asyncResult)) {
                 Core Concepts
               </h3>
               <p className="text-slate-600 text-sm mb-3">
-                Understand the philosophy behind try-error
+                Understand the philosophy behind tryError
               </p>
               <a
                 href="/docs/concepts/philosophy"

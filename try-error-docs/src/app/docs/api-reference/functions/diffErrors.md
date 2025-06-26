@@ -1,8 +1,8 @@
-[**try-error API Documentation v0.0.1-alpha.1**](../index.md)
+[**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
 ***
 
-[try-error API Documentation](../index.md) / diffErrors
+[tryError API Documentation](../index.md) / diffErrors
 
 # Function: diffErrors()
 
@@ -35,7 +35,7 @@ function diffErrors<E1, E2>(error1, error2): {
 };
 ```
 
-Defined in: [utils.ts:524](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/utils.ts#L524)
+Defined in: [utils.ts:524](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/utils.ts#L524)
 
 Diff two errors to see what changed
 

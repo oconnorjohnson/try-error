@@ -1,8 +1,8 @@
-[**try-error API Documentation v0.0.1-alpha.1**](../index.md)
+[**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
 ***
 
-[try-error API Documentation](../index.md) / loggingMiddleware
+[tryError API Documentation](../index.md) / loggingMiddleware
 
 # Function: loggingMiddleware()
 
@@ -10,7 +10,7 @@
 function loggingMiddleware<T, E>(logger): ErrorMiddleware<T, E>;
 ```
 
-Defined in: [middleware.ts:151](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/middleware.ts#L151)
+Defined in: [middleware.ts:151](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/middleware.ts#L151)
 
 Logging middleware
 

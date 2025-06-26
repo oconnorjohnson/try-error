@@ -1,14 +1,14 @@
-[**try-error API Documentation v0.0.1-alpha.1**](../index.md)
+[**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
 ***
 
-[try-error API Documentation](../index.md) / TryErrorConfig
+[tryError API Documentation](../index.md) / TryErrorConfig
 
 # Interface: TryErrorConfig
 
-Defined in: [config.ts:108](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/config.ts#L108)
+Defined in: [config.ts:108](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/config.ts#L108)
 
-Configuration options for try-error behavior
+Configuration options for tryError behavior
 
 ## Properties
 
@@ -18,7 +18,7 @@ Configuration options for try-error behavior
 optional captureStackTrace: boolean;
 ```
 
-Defined in: [config.ts:113](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/config.ts#L113)
+Defined in: [config.ts:113](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/config.ts#L113)
 
 Whether to capture stack traces (expensive operation)
 
@@ -36,7 +36,7 @@ true in development, false in production
 optional defaultErrorType: string;
 ```
 
-Defined in: [config.ts:178](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/config.ts#L178)
+Defined in: [config.ts:178](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/config.ts#L178)
 
 Default error type for untyped errors
 
@@ -54,7 +54,7 @@ Default error type for untyped errors
 optional developmentMode: boolean;
 ```
 
-Defined in: [config.ts:184](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/config.ts#L184)
+Defined in: [config.ts:184](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/config.ts#L184)
 
 Enable development mode features (verbose logging, etc.)
 
@@ -76,7 +76,7 @@ optional environmentHandlers: {
 };
 ```
 
-Defined in: [config.ts:206](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/config.ts#L206)
+Defined in: [config.ts:206](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/config.ts#L206)
 
 Environment-specific error handlers (used with runtimeDetection)
 
@@ -136,7 +136,7 @@ optional server: (error) => TryError;
 optional includeSource: boolean;
 ```
 
-Defined in: [config.ts:125](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/config.ts#L125)
+Defined in: [config.ts:125](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/config.ts#L125)
 
 Include source location in errors
 
@@ -154,7 +154,7 @@ true
 optional minimalErrors: boolean;
 ```
 
-Defined in: [config.ts:131](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/config.ts#L131)
+Defined in: [config.ts:131](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/config.ts#L131)
 
 Enable minimal error mode for ultra-lightweight errors
 
@@ -172,7 +172,7 @@ false
 optional onError: (error) => TryError;
 ```
 
-Defined in: [config.ts:194](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/config.ts#L194)
+Defined in: [config.ts:194](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/config.ts#L194)
 
 Global error transformation hook
 
@@ -194,7 +194,7 @@ Global error transformation hook
 optional performance: PerformanceConfig;
 ```
 
-Defined in: [config.ts:215](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/config.ts#L215)
+Defined in: [config.ts:215](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/config.ts#L215)
 
 Performance optimization configuration
 
@@ -206,7 +206,7 @@ Performance optimization configuration
 optional runtimeDetection: boolean;
 ```
 
-Defined in: [config.ts:201](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/config.ts#L201)
+Defined in: [config.ts:201](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/config.ts#L201)
 
 Runtime environment detection for isomorphic apps (Next.js, Nuxt, etc.)
 When enabled, environment-specific handlers are called based on runtime detection
@@ -225,7 +225,7 @@ false
 optional serializer: (error) => Record<string, unknown>;
 ```
 
-Defined in: [config.ts:189](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/config.ts#L189)
+Defined in: [config.ts:189](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/config.ts#L189)
 
 Custom error serialization function
 
@@ -247,7 +247,7 @@ Custom error serialization function
 optional skipContext: boolean;
 ```
 
-Defined in: [config.ts:143](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/config.ts#L143)
+Defined in: [config.ts:143](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/config.ts#L143)
 
 Skip context processing
 
@@ -265,7 +265,7 @@ false
 optional skipTimestamp: boolean;
 ```
 
-Defined in: [config.ts:137](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/config.ts#L137)
+Defined in: [config.ts:137](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/config.ts#L137)
 
 Skip timestamp generation (Date.now() calls)
 
@@ -288,7 +288,7 @@ optional sourceLocation: {
 };
 ```
 
-Defined in: [config.ts:148](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/config.ts#L148)
+Defined in: [config.ts:148](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/config.ts#L148)
 
 Source location configuration
 
@@ -369,7 +369,7 @@ false (just filename)
 optional stackTraceLimit: number;
 ```
 
-Defined in: [config.ts:119](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/config.ts#L119)
+Defined in: [config.ts:119](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/config.ts#L119)
 
 Maximum stack trace depth to capture
 

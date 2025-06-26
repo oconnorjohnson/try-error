@@ -25,7 +25,7 @@ export default function ErrorPerformancePage() {
         </h1>
 
         <p className="text-xl text-muted-foreground">
-          How try-error can be <strong>faster</strong> than native try/catch for
+          How tryError can be <strong>faster</strong> than native try/catch for
           error handling
         </p>
       </div>
@@ -35,7 +35,7 @@ export default function ErrorPerformancePage() {
         <Zap className="h-4 w-4 text-green-500" />
         <AlertDescription>
           <strong className="text-foreground">Surprising Fact:</strong> With
-          minimal configuration, try-error is <strong>15% faster</strong> than
+          minimal configuration, tryError is <strong>15% faster</strong> than
           native try/catch when handling errors. This isn't magic – it's because
           JavaScript has a hidden performance cost that most developers don't
           know about.
@@ -150,14 +150,14 @@ export default function ErrorPerformancePage() {
         </div>
       </section>
 
-      {/* How try-error is Faster */}
+      {/* How tryError is Faster */}
       <section className="space-y-4">
         <h2 className="text-2xl font-semibold">
-          How try-error Beats Native Performance
+          How tryError Beats Native Performance
         </h2>
 
         <p className="text-muted-foreground">
-          With minimal configuration, try-error skips all the unnecessary work:
+          With minimal configuration, tryError skips all the unnecessary work:
         </p>
 
         <div className="grid md:grid-cols-2 gap-4">
@@ -194,7 +194,7 @@ export default function ErrorPerformancePage() {
             <CardHeader>
               <CardTitle className="text-base flex items-center gap-2">
                 <CheckCircle className="h-4 w-4 text-green-500" />
-                try-error (minimal)
+                tryError (minimal)
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -226,7 +226,7 @@ export default function ErrorPerformancePage() {
         <h2 className="text-2xl font-semibold">Real-World Example</h2>
 
         <p className="text-muted-foreground">
-          Here's how to configure try-error for maximum performance in
+          Here's how to configure tryError for maximum performance in
           production:
         </p>
 
@@ -234,7 +234,7 @@ export default function ErrorPerformancePage() {
           language="typescript"
           title="High-Performance Error Handling"
         >
-          {`import { configure, ConfigPresets, trySync } from 'try-error';
+          {`import { configure, ConfigPresets, trySync } from 'tryError';
 
 // Configure for production performance
 configure({
@@ -325,7 +325,7 @@ if (isTryError(result)) {
           <CardContent className="pt-6">
             <div className="space-y-3">
               <p className="font-medium">
-                try-error isn't just about better error handling – it can
+                tryError isn't just about better error handling – it can
                 actually be
                 <strong> faster</strong> than native JavaScript error handling.
               </p>

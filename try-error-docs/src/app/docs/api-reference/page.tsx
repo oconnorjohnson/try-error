@@ -61,7 +61,7 @@ export default function ApiReferencePage() {
       <div>
         <h1 className="text-3xl font-bold mb-2">API Reference</h1>
         <p className="text-muted-foreground">
-          Complete API documentation for try-error, auto-generated from the
+          Complete API documentation for tryError, auto-generated from the
           TypeScript source code.
         </p>
       </div>
@@ -142,7 +142,7 @@ export default function ApiReferencePage() {
         <Info className="h-4 w-4" />
         <AlertDescription>
           <strong>Pro tip:</strong> Use your IDE's "Go to Definition" feature
-          (usually Cmd/Ctrl + Click) on any try-error function to see its full
+          (usually Cmd/Ctrl + Click) on any tryError function to see its full
           documentation, parameters, and return types.
         </AlertDescription>
       </Alert>

@@ -1,8 +1,8 @@
-[**try-error API Documentation v0.0.1-alpha.1**](../index.md)
+[**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
 ***
 
-[try-error API Documentation](../index.md) / tryCall
+[tryError API Documentation](../index.md) / tryCall
 
 # Function: tryCall()
 
@@ -12,7 +12,7 @@
 function tryCall<TArgs, TReturn>(fn, ...args): TryResult<TReturn, TryError<string>>;
 ```
 
-Defined in: [sync.ts:122](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/sync.ts#L122)
+Defined in: [sync.ts:122](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/sync.ts#L122)
 
 Call a function with arguments, wrapping any thrown errors
 
@@ -65,7 +65,7 @@ function tryCall<TArgs, TReturn>(
 args): TryResult<TReturn, TryError<string>>;
 ```
 
-Defined in: [sync.ts:126](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/sync.ts#L126)
+Defined in: [sync.ts:126](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/sync.ts#L126)
 
 Call a function with arguments, wrapping any thrown errors
 

@@ -1,8 +1,8 @@
-[**try-error API Documentation v0.0.1-alpha.1**](../index.md)
+[**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
 ***
 
-[try-error API Documentation](../index.md) / internError
+[tryError API Documentation](../index.md) / internError
 
 # Function: internError()
 
@@ -17,7 +17,7 @@ function internError(
 };
 ```
 
-Defined in: [intern.ts:171](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/intern.ts#L171)
+Defined in: [intern.ts:171](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/intern.ts#L171)
 
 Intern common error properties
 

@@ -8,7 +8,7 @@ export default function ErrorCodesPage() {
           Error Codes Reference
         </h1>
         <p className="text-xl text-slate-600">
-          Complete reference of standard error types and codes used in try-error
+          Complete reference of standard error types and codes used in tryError
         </p>
       </div>
 
@@ -20,7 +20,7 @@ export default function ErrorCodesPage() {
           </h2>
 
           <p className="text-slate-600 mb-6">
-            try-error provides a set of standard error types that cover common
+            tryError provides a set of standard error types that cover common
             error scenarios. These types help categorize errors for better
             handling and debugging.
           </p>

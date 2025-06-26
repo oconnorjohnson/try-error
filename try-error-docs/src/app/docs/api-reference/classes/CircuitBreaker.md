@@ -1,12 +1,12 @@
-[**try-error API Documentation v0.0.1-alpha.1**](../index.md)
+[**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
 ***
 
-[try-error API Documentation](../index.md) / CircuitBreaker
+[tryError API Documentation](../index.md) / CircuitBreaker
 
 # Class: CircuitBreaker
 
-Defined in: [sync.ts:467](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/sync.ts#L467)
+Defined in: [sync.ts:467](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/sync.ts#L467)
 
 Circuit breaker pattern for synchronous operations
 
@@ -29,7 +29,7 @@ const result = breaker.execute(() => riskyOperation());
 new CircuitBreaker(options): CircuitBreaker;
 ```
 
-Defined in: [sync.ts:472](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/sync.ts#L472)
+Defined in: [sync.ts:472](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/sync.ts#L472)
 
 #### Parameters
 
@@ -63,7 +63,7 @@ Defined in: [sync.ts:472](https://github.com/oconnorjohnson/try-error/blob/e3ae0
 execute<T>(fn): TryResult<T, TryError<string>>;
 ```
 
-Defined in: [sync.ts:481](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/sync.ts#L481)
+Defined in: [sync.ts:481](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/sync.ts#L481)
 
 #### Type Parameters
 
@@ -89,7 +89,7 @@ Defined in: [sync.ts:481](https://github.com/oconnorjohnson/try-error/blob/e3ae0
 getState(): "closed" | "open" | "half-open";
 ```
 
-Defined in: [sync.ts:525](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/sync.ts#L525)
+Defined in: [sync.ts:525](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/sync.ts#L525)
 
 #### Returns
 
@@ -103,7 +103,7 @@ Defined in: [sync.ts:525](https://github.com/oconnorjohnson/try-error/blob/e3ae0
 reset(): void;
 ```
 
-Defined in: [sync.ts:519](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/sync.ts#L519)
+Defined in: [sync.ts:519](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/sync.ts#L519)
 
 #### Returns
 

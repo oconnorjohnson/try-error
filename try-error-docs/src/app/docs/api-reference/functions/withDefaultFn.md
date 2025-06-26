@@ -1,8 +1,8 @@
-[**try-error API Documentation v0.0.1-alpha.1**](../index.md)
+[**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
 ***
 
-[try-error API Documentation](../index.md) / withDefaultFn
+[tryError API Documentation](../index.md) / withDefaultFn
 
 # Function: withDefaultFn()
 
@@ -10,7 +10,7 @@
 function withDefaultFn<T, E>(result, getDefault): T;
 ```
 
-Defined in: [utils.ts:287](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/utils.ts#L287)
+Defined in: [utils.ts:287](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/utils.ts#L287)
 
 Provide a default value using a function for error cases
 

@@ -1,8 +1,8 @@
-[**try-error API Documentation v0.0.1-alpha.1**](../index.md)
+[**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
 ***
 
-[try-error API Documentation](../index.md) / tryAll
+[tryError API Documentation](../index.md) / tryAll
 
 # Function: tryAll()
 
@@ -10,7 +10,7 @@
 function tryAll<T>(results): TryResult<{ [K in string | number | symbol]: T[K<K>] extends any ? U : never }, TryError<string>>;
 ```
 
-Defined in: [sync.ts:352](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/sync.ts#L352)
+Defined in: [sync.ts:352](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/sync.ts#L352)
 
 Combine multiple TryResults, succeeding only if all succeed
 

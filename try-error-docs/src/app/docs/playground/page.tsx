@@ -5,7 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { InfoIcon } from "lucide-react";
 
-const basicExample = `import { trySync } from 'try-error';
+const basicExample = `import { trySync } from 'tryError';
 
 // Basic synchronous example
 const divide = (a: number, b: number) => {
@@ -27,7 +27,7 @@ const divide = (a: number, b: number) => {
 console.log('10 / 2 =', divide(10, 2));
 console.log('10 / 0 =', divide(10, 0));`;
 
-const asyncExample = `import { tryAsync } from 'try-error';
+const asyncExample = `import { tryAsync } from 'tryError';
 
 // Simulated API call
 const fetchUserData = async (userId: string) => {
@@ -62,7 +62,7 @@ const getUser = async (userId: string) => {
   await getUser('invalid');
 })();`;
 
-const errorHandlingExample = `import { trySync, createError, isTryError } from 'try-error';
+const errorHandlingExample = `import { trySync, createError, isTryError } from 'tryError';
 
 // Custom error types
 const ValidationError = createError('ValidationError');
@@ -102,7 +102,7 @@ validateEmail('invalid-email');
 validateEmail('user@example.com');`;
 
 const reactExample = `// React Hook Example (conceptual - won't run in playground)
-import { useTry } from 'try-error/react';
+import { useTry } from 'tryError/react';
 
 function UserProfile({ userId }: { userId: string }) {
   const { data: user, error, loading } = useTry(
@@ -147,7 +147,7 @@ export default function PlaygroundPage() {
       <div>
         <h1 className="text-3xl font-bold mb-2">Interactive Playground</h1>
         <p className="text-muted-foreground">
-          Experiment with try-error in a live environment. Edit the code and
+          Experiment with tryError in a live environment. Edit the code and
           click "Run" to see the results.
         </p>
       </div>
@@ -239,7 +239,7 @@ export default function PlaygroundPage() {
               <div>
                 <h3 className="text-lg font-medium mb-2">React Integration</h3>
                 <p className="text-sm text-muted-foreground mb-4">
-                  See how try-error integrates with React hooks (conceptual
+                  See how tryError integrates with React hooks (conceptual
                   example).
                 </p>
               </div>
@@ -247,7 +247,7 @@ export default function PlaygroundPage() {
                 defaultCode={reactExample}
                 height="500px"
                 title="React Example"
-                description="Conceptual example of using try-error with React hooks"
+                description="Conceptual example of using tryError with React hooks"
                 language="javascript"
               />
             </div>
@@ -265,7 +265,7 @@ export default function PlaygroundPage() {
             • Use the toolbar buttons to reset, share, or download your code
           </li>
           <li>• Network requests won't work in this environment</li>
-          <li>• For real projects, install try-error via npm/pnpm/yarn</li>
+          <li>• For real projects, install tryError via npm/pnpm/yarn</li>
         </ul>
       </Card>
     </div>

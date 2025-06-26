@@ -1,8 +1,8 @@
-[**try-error API Documentation v0.0.1-alpha.1**](../index.md)
+[**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
 ***
 
-[try-error API Documentation](../index.md) / retryMiddleware
+[tryError API Documentation](../index.md) / retryMiddleware
 
 # Function: retryMiddleware()
 
@@ -10,7 +10,7 @@
 function retryMiddleware<T, E>(maxAttempts, shouldRetry): ErrorMiddleware<T, E>;
 ```
 
-Defined in: [middleware.ts:165](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/middleware.ts#L165)
+Defined in: [middleware.ts:165](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/middleware.ts#L165)
 
 Retry middleware
 

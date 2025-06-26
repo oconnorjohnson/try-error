@@ -8,7 +8,7 @@ export default function IntegrationGuidesPage() {
           Integration Guides
         </h1>
         <p className="text-xl text-slate-600">
-          Learn how to integrate try-error with popular frameworks, libraries,
+          Learn how to integrate tryError with popular frameworks, libraries,
           and tools
         </p>
       </div>
@@ -21,7 +21,7 @@ export default function IntegrationGuidesPage() {
           </h2>
 
           <p className="text-slate-600 mb-4">
-            Integrate try-error with Express.js for consistent error handling
+            Integrate tryError with Express.js for consistent error handling
             across your API routes.
           </p>
 
@@ -32,7 +32,7 @@ export default function IntegrationGuidesPage() {
             className="mb-4"
           >
             {`import express from 'express';
-import { tryAsync, isTryError } from 'try-error';
+import { tryAsync, isTryError } from 'tryError';
 
 const app = express();
 
@@ -107,7 +107,7 @@ app.post('/users', handleTryError(async (req, res) => {
           </h2>
 
           <p className="text-slate-600 mb-4">
-            Use try-error in Next.js API routes and server components for robust
+            Use tryError in Next.js API routes and server components for robust
             error handling.
           </p>
 
@@ -118,12 +118,12 @@ app.post('/users', handleTryError(async (req, res) => {
               </h3>
               <CodeBlock
                 language="typescript"
-                title="Next.js API Route with try-error"
+                title="Next.js API Route with tryError"
                 showLineNumbers={true}
               >
                 {`// pages/api/users/[id].ts
 import { NextApiRequest, NextApiResponse } from 'next';
-import { tryAsync, isTryError } from 'try-error';
+import { tryAsync, isTryError } from 'tryError';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'GET') {
@@ -163,12 +163,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
               </h3>
               <CodeBlock
                 language="typescript"
-                title="Next.js App Router with try-error"
+                title="Next.js App Router with tryError"
                 showLineNumbers={true}
               >
                 {`// app/api/users/[id]/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import { tryAsync, isTryError } from 'try-error';
+import { tryAsync, isTryError } from 'tryError';
 
 export async function GET(
   request: NextRequest,
@@ -221,22 +221,22 @@ export default async function UserPage({ params }: { params: { id: string } }) {
           </h2>
 
           <p className="text-slate-600 mb-4">
-            Wrap Prisma operations with try-error for consistent database error
+            Wrap Prisma operations with tryError for consistent database error
             handling.
           </p>
 
           <CodeBlock
             language="typescript"
-            title="Prisma Service with try-error"
+            title="Prisma Service with tryError"
             showLineNumbers={true}
             className="mb-4"
           >
             {`import { PrismaClient, Prisma } from '@prisma/client';
-import { tryAsync, isTryError, createTryError } from 'try-error';
+import { tryAsync, isTryError, createTryError } from 'tryError';
 
 const prisma = new PrismaClient();
 
-// Database service with try-error
+// Database service with tryError
 export class UserService {
   static async findById(id: string) {
     return tryAsync(async () => {
@@ -334,18 +334,18 @@ async function handleUserRequest(userId: string) {
           </h2>
 
           <p className="text-slate-600 mb-4">
-            Combine try-error with Zod for robust input validation and error
+            Combine tryError with Zod for robust input validation and error
             handling.
           </p>
 
           <CodeBlock
             language="typescript"
-            title="Zod Validation with try-error"
+            title="Zod Validation with tryError"
             showLineNumbers={true}
             className="mb-4"
           >
             {`import { z } from 'zod';
-import { trySync, isTryError, createTryError } from 'try-error';
+import { trySync, isTryError, createTryError } from 'tryError';
 
 // Schema definitions
 const UserSchema = z.object({
@@ -430,7 +430,7 @@ function validateBody<T>(schema: z.ZodSchema<T>) {
           </h2>
 
           <p className="text-slate-600 mb-4">
-            Test your try-error implementations effectively with Jest custom
+            Test your tryError implementations effectively with Jest custom
             matchers and utilities.
           </p>
 
@@ -441,11 +441,11 @@ function validateBody<T>(schema: z.ZodSchema<T>) {
               </h3>
               <CodeBlock
                 language="typescript"
-                title="Jest Custom Matchers for try-error"
+                title="Jest Custom Matchers for tryError"
                 showLineNumbers={true}
               >
                 {`// jest-setup.ts
-import { isTryError } from 'try-error';
+import { isTryError } from 'tryError';
 
 declare global {
   namespace jest {
@@ -548,7 +548,7 @@ expect.extend({
               </h3>
               <CodeBlock
                 language="typescript"
-                title="Jest Tests with try-error"
+                title="Jest Tests with tryError"
                 showLineNumbers={true}
               >
                 {`// user.test.ts
@@ -645,7 +645,7 @@ describe('User validation', () => {
           </h2>
 
           <p className="text-slate-600 mb-4">
-            Optimize your TypeScript configuration for the best try-error
+            Optimize your TypeScript configuration for the best tryError
             experience.
           </p>
 
@@ -721,7 +721,7 @@ describe('User validation', () => {
           </h2>
 
           <p className="text-slate-600 mb-4">
-            Integrate try-error with popular error monitoring and analytics
+            Integrate tryError with popular error monitoring and analytics
             services to track, analyze, and debug errors in production.
           </p>
 
@@ -733,7 +733,7 @@ describe('User validation', () => {
               </h3>
               <p className="text-slate-600 mb-3">
                 Sentry provides real-time error tracking and performance
-                monitoring. Integrate it with try-error for comprehensive error
+                monitoring. Integrate it with tryError for comprehensive error
                 insights.
               </p>
 
@@ -761,8 +761,8 @@ Sentry.init({
   replaysOnErrorSampleRate: 1.0,
 });
 
-// 3. Configure try-error with Sentry
-import { configure } from 'try-error';
+// 3. Configure tryError with Sentry
+import { configure } from 'tryError';
 
 configure({
   onError: (error) => {
@@ -843,11 +843,11 @@ export async function processOrder(orderId: string) {
 
               <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
                 <h4 className="font-semibold text-green-800 mb-2">
-                  Sentry Benefits with try-error
+                  Sentry Benefits with tryError
                 </h4>
                 <ul className="space-y-1 text-green-700 text-sm">
                   <li>• Automatic error grouping by TryError type</li>
-                  <li>• Rich context from try-error's structured errors</li>
+                  <li>• Rich context from tryError's structured errors</li>
                   <li>• Source location tracking for better debugging</li>
                   <li>• Performance monitoring with error correlation</li>
                   <li>• Session replay on errors for debugging</li>
@@ -877,9 +877,9 @@ export async function processOrder(orderId: string) {
 // 2. Setup Analytics in your layout
 import { Analytics } from '@vercel/analytics/react';
 import { track } from '@vercel/analytics';
-import { configure } from 'try-error';
+import { configure } from 'tryError';
 
-// 3. Configure try-error to track errors
+// 3. Configure tryError to track errors
 configure({
   onError: (error) => {
     // Track error occurrence
@@ -980,7 +980,7 @@ export function RootLayout({ children }) {
 
               <div className="bg-purple-50 border border-purple-200 rounded-lg p-4 mb-4">
                 <h4 className="font-semibold text-purple-800 mb-2">
-                  Analytics Insights with try-error
+                  Analytics Insights with tryError
                 </h4>
                 <ul className="space-y-1 text-purple-700 text-sm">
                   <li>• Error rate tracking by type and severity</li>
@@ -998,7 +998,7 @@ export function RootLayout({ children }) {
                 Other Monitoring Services
               </h3>
               <p className="text-slate-600 mb-3">
-                try-error can integrate with any error monitoring service
+                tryError can integrate with any error monitoring service
                 through its flexible configuration API.
               </p>
 
@@ -1008,7 +1008,7 @@ export function RootLayout({ children }) {
                 showLineNumbers={true}
                 className="mb-4"
               >
-                {`import { configure } from 'try-error';
+                {`import { configure } from 'tryError';
 import { Bugsnag, LogRocket, Rollbar, DataDog } from './monitoring-services';
 
 configure({

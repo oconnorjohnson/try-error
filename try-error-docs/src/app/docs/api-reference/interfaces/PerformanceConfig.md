@@ -1,12 +1,12 @@
-[**try-error API Documentation v0.0.1-alpha.1**](../index.md)
+[**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
 ***
 
-[try-error API Documentation](../index.md) / PerformanceConfig
+[tryError API Documentation](../index.md) / PerformanceConfig
 
 # Interface: PerformanceConfig
 
-Defined in: [config.ts:221](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/config.ts#L221)
+Defined in: [config.ts:221](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/config.ts#L221)
 
 Performance-specific configuration options
 
@@ -22,7 +22,7 @@ optional contextCapture: {
 };
 ```
 
-Defined in: [config.ts:254](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/config.ts#L254)
+Defined in: [config.ts:254](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/config.ts#L254)
 
 Context capture optimization settings
 
@@ -81,7 +81,7 @@ optional errorCreation: {
 };
 ```
 
-Defined in: [config.ts:225](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/config.ts#L225)
+Defined in: [config.ts:225](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/config.ts#L225)
 
 Error creation optimization settings
 
@@ -153,7 +153,7 @@ optional memory: {
 };
 ```
 
-Defined in: [config.ts:277](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/config.ts#L277)
+Defined in: [config.ts:277](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/config.ts#L277)
 
 Memory management settings
 

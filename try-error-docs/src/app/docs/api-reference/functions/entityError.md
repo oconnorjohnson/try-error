@@ -1,8 +1,8 @@
-[**try-error API Documentation v0.0.1-alpha.1**](../index.md)
+[**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
 ***
 
-[try-error API Documentation](../index.md) / entityError
+[tryError API Documentation](../index.md) / entityError
 
 # Function: entityError()
 
@@ -14,7 +14,7 @@ function entityError<T>(
 context?): EntityError<T>;
 ```
 
-Defined in: [factories.ts:698](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/factories.ts#L698)
+Defined in: [factories.ts:698](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/factories.ts#L698)
 
 IMPROVED: Quick entity error factory
 

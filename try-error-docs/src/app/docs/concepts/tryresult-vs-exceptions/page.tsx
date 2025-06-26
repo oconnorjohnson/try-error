@@ -8,7 +8,7 @@ export default function TryResultVsExceptionsPage() {
           TryResult vs Exceptions
         </h1>
         <p className="text-xl text-slate-600">
-          A detailed comparison between try-error and traditional exception
+          A detailed comparison between tryError and traditional exception
           handling
         </p>
       </div>
@@ -28,7 +28,7 @@ export default function TryResultVsExceptionsPage() {
                     Aspect
                   </th>
                   <th className="border border-slate-300 px-4 py-2 text-left">
-                    try-error
+                    tryError
                   </th>
                   <th className="border border-slate-300 px-4 py-2 text-left">
                     Exceptions
@@ -136,9 +136,9 @@ const result = parseJSON(userInput);
 
             <div>
               <h4 className="text-sm font-semibold text-green-600 mb-2">
-                ✅ try-error
+                ✅ tryError
               </h4>
-              <CodeBlock language="typescript" title="try-error Approach">
+              <CodeBlock language="typescript" title="tryError Approach">
                 {`// Clear error possibility in return type
 function parseJSON(input: string): TryResult<object, TryError> {
   return trySync(() => JSON.parse(input));
@@ -162,7 +162,7 @@ if (isTryError(result)) {
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
             <p className="text-blue-800">
               <strong>Performance Impact:</strong> Exception throwing involves
-              stack unwinding, which is expensive. try-error has zero overhead
+              stack unwinding, which is expensive. tryError has zero overhead
               for success cases and minimal overhead for errors.
             </p>
           </div>
@@ -182,7 +182,7 @@ try {
   return null;
 }
 
-// try-error performance
+// tryError performance
 const result = trySync(() => riskyOperation());
 if (isTryError(result)) {
   // No stack unwinding, just a return value
@@ -218,9 +218,9 @@ return result; // Zero overhead for success`}
 
             <div>
               <h4 className="text-sm font-semibold text-slate-600 mb-2">
-                try-error
+                tryError
               </h4>
-              <CodeBlock language="typescript" title="try-error Propagation">
+              <CodeBlock language="typescript" title="tryError Propagation">
                 {`async function processData() {
   const step1 = await tryAsync(() => fetchData());
   if (isTryError(step1)) return step1;
@@ -245,7 +245,7 @@ return result; // Zero overhead for success`}
           <div className="grid md:grid-cols-2 gap-6">
             <div className="bg-green-50 border border-green-200 rounded-lg p-4">
               <h3 className="text-lg font-semibold text-green-800 mb-3">
-                ✅ Use try-error for:
+                ✅ Use tryError for:
               </h3>
               <ul className="space-y-2 text-green-700 text-sm">
                 <li>• New code where you control the API</li>
@@ -295,9 +295,9 @@ return result; // Zero overhead for success`}
             showLineNumbers={true}
             className="mb-4"
           >
-            {`// Use try-error internally, exceptions at boundaries
+            {`// Use tryError internally, exceptions at boundaries
 class UserService {
-  // Internal methods use try-error
+  // Internal methods use tryError
   private async fetchUserData(id: string): Promise<TryResult<User, TryError>> {
     const result = await tryAsync(() => this.api.getUser(id));
     return result;
@@ -322,12 +322,12 @@ class UserService {
             title="Adapter Pattern"
             className="mb-4"
           >
-            {`// Wrap exception-based APIs with try-error
+            {`// Wrap exception-based APIs with tryError
 function safeFetch(url: string): Promise<TryResult<Response, TryError>> {
   return tryAsync(() => fetch(url));
 }
 
-// Convert try-error to exceptions when needed
+// Convert tryError to exceptions when needed
 function throwingParse(json: string): object {
   const result = trySync(() => JSON.parse(json));
   if (isTryError(result)) {
@@ -347,7 +347,7 @@ function throwingParse(json: string): object {
           <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
             <p className="text-yellow-800">
               <strong>Benchmark Results:</strong> In typical scenarios,
-              try-error shows 2-10x better performance for error cases and
+              tryError shows 2-10x better performance for error cases and
               identical performance for success cases compared to try/catch.
             </p>
           </div>
@@ -372,7 +372,7 @@ function parseWithExceptions(inputs: string[]) {
   return results;
 }
 
-// try-error version: ~20ms for 1000 errors
+// tryError version: ~20ms for 1000 errors
 function parseWithTryError(inputs: string[]) {
   const results = [];
   for (const input of inputs) {
@@ -409,7 +409,7 @@ function parseWithTryError(inputs: string[]) {
                 Migration Guide
               </h3>
               <p className="text-slate-600 text-sm mb-3">
-                Step-by-step guide to adopting try-error
+                Step-by-step guide to adopting tryError
               </p>
               <a
                 href="/docs/migration"

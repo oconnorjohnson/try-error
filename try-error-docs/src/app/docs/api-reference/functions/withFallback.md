@@ -1,8 +1,8 @@
-[**try-error API Documentation v0.0.1-alpha.1**](../index.md)
+[**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
 ***
 
-[try-error API Documentation](../index.md) / withFallback
+[tryError API Documentation](../index.md) / withFallback
 
 # Function: withFallback()
 
@@ -13,7 +13,7 @@ function withFallback<T>(
 shouldFallback?): TryResult<T, TryError<string>>;
 ```
 
-Defined in: [sync.ts:559](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/sync.ts#L559)
+Defined in: [sync.ts:559](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/sync.ts#L559)
 
 Error recovery pattern - try operation with fallback
 

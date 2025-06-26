@@ -9,7 +9,7 @@ export default function TypeScriptTypesPage() {
         </h1>
         <p className="text-xl text-slate-600">
           Complete reference for all TypeScript types, interfaces, and utilities
-          in try-error
+          in tryError
         </p>
       </div>
 
@@ -406,7 +406,7 @@ type ErrorContext = Record<string, Serializable> | Serializable;`}</code>
           </h2>
 
           <p className="text-slate-600 mb-4">
-            Type declarations for extending try-error functionality.
+            Type declarations for extending tryError functionality.
           </p>
 
           <div className="bg-slate-900 text-slate-100 p-4 rounded-lg mb-4">
@@ -419,7 +419,7 @@ declare global {
 }
 
 // Module augmentation for custom error types
-declare module 'try-error' {
+declare module 'tryError' {
   interface TryErrorTypeMap {
     ValidationError: { field: string; value: unknown };
     NetworkError: { url: string; status?: number };
@@ -491,7 +491,7 @@ async function fetchUser(id: string): Promise<FetchUserResult> {
               </h3>
               <div className="bg-slate-900 text-slate-100 p-4 rounded-lg">
                 <pre>
-                  <code>{`// Service interface with try-error
+                  <code>{`// Service interface with tryError
 interface UserService {
   findById(id: string): Promise<TryResult<User, TryError>>;
   create(data: CreateUserData): Promise<TryResult<User, TryError>>;

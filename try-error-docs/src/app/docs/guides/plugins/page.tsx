@@ -16,7 +16,7 @@ export default function PluginsPage() {
       <div>
         <h1 className="text-4xl font-bold mb-4">Plugin System</h1>
         <p className="text-xl text-muted-foreground">
-          Extend try-error with reusable plugins that add new capabilities,
+          Extend tryError with reusable plugins that add new capabilities,
           integrations, and error types
         </p>
       </div>
@@ -24,7 +24,7 @@ export default function PluginsPage() {
       <Alert>
         <AlertTitle>Extensible Architecture</AlertTitle>
         <AlertDescription>
-          The plugin system allows third-party packages to extend try-error
+          The plugin system allows third-party packages to extend tryError
           without modifying its core. Plugins can add configuration, middleware,
           custom error types, utilities, and more.
         </AlertDescription>
@@ -35,11 +35,11 @@ export default function PluginsPage() {
           <h2 className="text-3xl font-semibold mb-4">Plugin Architecture</h2>
           <p className="text-muted-foreground mb-6">
             Plugins are self-contained modules that can hook into various
-            aspects of try-error.
+            aspects of tryError.
           </p>
 
           <EnhancedCodeBlock language="typescript" showLineNumbers>
-            {`import { Plugin, PluginMetadata, PluginHooks, PluginCapabilities } from 'try-error';
+            {`import { Plugin, PluginMetadata, PluginHooks, PluginCapabilities } from 'tryError';
 
 interface Plugin {
   // Plugin identification and dependencies
@@ -93,22 +93,22 @@ interface PluginCapabilities {
 
             <TabsContent value="install">
               <EnhancedCodeBlock language="typescript" showLineNumbers>
-                {`import { pluginManager } from 'try-error';
-import sentryPlugin from 'try-error-sentry';
-import datadogPlugin from 'try-error-datadog';
+                {`import { pluginManager } from 'tryError';
+import sentryPlugin from 'tryError-sentry';
+import datadogPlugin from 'tryError-datadog';
 
 // Install plugins
 await pluginManager.install(sentryPlugin);
 await pluginManager.install(datadogPlugin);
 
 // Enable plugins
-await pluginManager.enable('try-error-sentry');
-await pluginManager.enable('try-error-datadog');
+await pluginManager.enable('tryError-sentry');
+await pluginManager.enable('tryError-datadog');
 
 // Plugins with dependencies
-import advancedPlugin from 'try-error-advanced';
+import advancedPlugin from 'tryError-advanced';
 
-// This plugin requires 'try-error-sentry'
+// This plugin requires 'tryError-sentry'
 // The plugin manager ensures dependencies are installed
 await pluginManager.install(advancedPlugin);`}
               </EnhancedCodeBlock>
@@ -125,22 +125,22 @@ const enabled = pluginManager.getEnabled();
 console.log('Active plugins:', enabled);
 
 // Check plugin status
-if (pluginManager.isInstalled('try-error-sentry')) {
+if (pluginManager.isInstalled('tryError-sentry')) {
   console.log('Sentry plugin is installed');
 }
 
-if (pluginManager.isEnabled('try-error-sentry')) {
+if (pluginManager.isEnabled('tryError-sentry')) {
   console.log('Sentry plugin is active');
 }
 
 // Disable a plugin temporarily
-await pluginManager.disable('try-error-datadog');
+await pluginManager.disable('tryError-datadog');
 
 // Uninstall a plugin
-await pluginManager.uninstall('try-error-datadog');
+await pluginManager.uninstall('tryError-datadog');
 
 // Get a specific plugin
-const sentryPlugin = pluginManager.get('try-error-sentry');
+const sentryPlugin = pluginManager.get('tryError-sentry');
 console.log(sentryPlugin?.metadata);`}
               </EnhancedCodeBlock>
             </TabsContent>
@@ -187,7 +187,7 @@ await pluginManager.notifyConfigChange(newConfig);`}
             <TabsContent value="basic">
               <EnhancedCodeBlock language="typescript" showLineNumbers>
                 {`// my-plugin.ts
-import { Plugin } from 'try-error';
+import { Plugin } from 'tryError';
 
 export const myPlugin: Plugin = {
   metadata: {
@@ -258,7 +258,7 @@ export const myPlugin: Plugin = {
 
             <TabsContent value="helper">
               <EnhancedCodeBlock language="typescript" showLineNumbers>
-                {`import { createPlugin } from 'try-error';
+                {`import { createPlugin } from 'tryError';
 
 // Use the helper function for better type safety
 export const myPlugin = createPlugin(
@@ -266,7 +266,7 @@ export const myPlugin = createPlugin(
     name: 'my-plugin',
     version: '2.0.0',
     description: 'Enhanced plugin with helpers',
-    dependencies: ['try-error-core'] // Require other plugins
+    dependencies: ['tryError-core'] // Require other plugins
   },
   (api) => {
     // api provides helper methods
@@ -317,17 +317,17 @@ export const myPlugin = createPlugin(
             <TabsContent value="advanced">
               <EnhancedCodeBlock language="typescript" showLineNumbers>
                 {`// Advanced plugin with external service integration
-import { Plugin, TryError, isTryError } from 'try-error';
+import { Plugin, TryError, isTryError } from 'tryError';
 import { SentryClient } from '@sentry/node';
 
 class SentryIntegrationPlugin implements Plugin {
   private client?: SentryClient;
   
   metadata = {
-    name: 'try-error-sentry',
+    name: 'tryError-sentry',
     version: '1.0.0',
     description: 'Sentry error reporting integration',
-    author: 'try-error team'
+    author: 'tryError team'
   };
   
   hooks = {
@@ -397,7 +397,7 @@ class SentryIntegrationPlugin implements Plugin {
     },
     
     config: {
-      // Extend try-error config
+      // Extend tryError config
       integrations: {
         sentry: {
           enabled: true,
@@ -435,21 +435,21 @@ export default new SentryIntegrationPlugin();`}
               <CardContent>
                 <div className="space-y-4">
                   <div>
-                    <Badge className="mb-2">try-error-sentry</Badge>
+                    <Badge className="mb-2">tryError-sentry</Badge>
                     <p className="text-sm text-muted-foreground">
                       Full Sentry integration with error tracking, breadcrumbs,
                       and user context
                     </p>
                   </div>
                   <div>
-                    <Badge className="mb-2">try-error-datadog</Badge>
+                    <Badge className="mb-2">tryError-datadog</Badge>
                     <p className="text-sm text-muted-foreground">
                       DataDog APM integration with custom metrics and
                       distributed tracing
                     </p>
                   </div>
                   <div>
-                    <Badge className="mb-2">try-error-newrelic</Badge>
+                    <Badge className="mb-2">tryError-newrelic</Badge>
                     <p className="text-sm text-muted-foreground">
                       New Relic integration with error insights and custom
                       attributes
@@ -469,21 +469,21 @@ export default new SentryIntegrationPlugin();`}
               <CardContent>
                 <div className="space-y-4">
                   <div>
-                    <Badge className="mb-2">try-error-devtools</Badge>
+                    <Badge className="mb-2">tryError-devtools</Badge>
                     <p className="text-sm text-muted-foreground">
-                      Browser DevTools extension for debugging try-error in
+                      Browser DevTools extension for debugging tryError in
                       development
                     </p>
                   </div>
                   <div>
-                    <Badge className="mb-2">try-error-prettier</Badge>
+                    <Badge className="mb-2">tryError-prettier</Badge>
                     <p className="text-sm text-muted-foreground">
                       Pretty-print errors with syntax highlighting and
                       formatting
                     </p>
                   </div>
                   <div>
-                    <Badge className="mb-2">try-error-testing</Badge>
+                    <Badge className="mb-2">tryError-testing</Badge>
                     <p className="text-sm text-muted-foreground">
                       Testing utilities and matchers for Jest, Vitest, and Mocha
                     </p>
@@ -502,19 +502,19 @@ export default new SentryIntegrationPlugin();`}
               <CardContent>
                 <div className="space-y-4">
                   <div>
-                    <Badge className="mb-2">try-error-nextjs</Badge>
+                    <Badge className="mb-2">tryError-nextjs</Badge>
                     <p className="text-sm text-muted-foreground">
                       Next.js integration with API routes and middleware support
                     </p>
                   </div>
                   <div>
-                    <Badge className="mb-2">try-error-express</Badge>
+                    <Badge className="mb-2">tryError-express</Badge>
                     <p className="text-sm text-muted-foreground">
                       Express middleware for automatic error handling in routes
                     </p>
                   </div>
                   <div>
-                    <Badge className="mb-2">try-error-graphql</Badge>
+                    <Badge className="mb-2">tryError-graphql</Badge>
                     <p className="text-sm text-muted-foreground">
                       GraphQL resolver error handling with proper error
                       formatting
@@ -541,16 +541,16 @@ export default new SentryIntegrationPlugin();`}
                   {`// Declare peer dependencies in package.json
 {
   "peerDependencies": {
-    "try-error": "^1.0.0"
+    "tryError": "^1.0.0"
   },
   "devDependencies": {
-    "try-error": "^1.0.0"
+    "tryError": "^1.0.0"
   }
 }
 
 // Check version compatibility
 if (!isCompatibleVersion(tryErrorVersion, '1.0.0')) {
-  throw new Error('This plugin requires try-error v1.0.0 or higher');
+  throw new Error('This plugin requires tryError v1.0.0 or higher');
 }`}
                 </EnhancedCodeBlock>
               </CardContent>

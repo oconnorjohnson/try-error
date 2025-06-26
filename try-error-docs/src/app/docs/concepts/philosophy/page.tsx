@@ -8,7 +8,7 @@ export default function PhilosophyPage() {
           Error Handling Philosophy
         </h1>
         <p className="text-xl text-slate-600">
-          Understanding the principles and design decisions behind try-error
+          Understanding the principles and design decisions behind tryError
         </p>
       </div>
 
@@ -38,7 +38,7 @@ export default function PhilosophyPage() {
               </h3>
               <p className="text-slate-600">
                 You shouldn't need to rewrite your entire codebase to get
-                benefits. try-error works alongside existing error handling
+                benefits. tryError works alongside existing error handling
                 patterns, allowing gradual adoption.
               </p>
             </div>
@@ -48,7 +48,7 @@ export default function PhilosophyPage() {
                 Minimal Runtime Cost
               </h3>
               <p className="text-slate-600">
-                Error handling shouldn't slow down your application. try-error
+                Error handling shouldn't slow down your application. tryError
                 adds &lt;3% overhead for successful operations. Error paths have
                 configurable overhead (20%-120%) based on debugging needs - this
                 is acceptable because errors should be exceptional.
@@ -75,7 +75,7 @@ export default function PhilosophyPage() {
           </h2>
 
           <p className="text-slate-600 mb-4">
-            Traditional exception handling has several issues that try-error
+            Traditional exception handling has several issues that tryError
             addresses:
           </p>
 
@@ -132,15 +132,15 @@ try {
           </CodeBlock>
         </section>
 
-        {/* The try-error Solution */}
+        {/* The tryError Solution */}
         <section>
           <h2 className="text-2xl font-semibold text-slate-900 mb-4">
-            The try-error Solution
+            The tryError Solution
           </h2>
 
           <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
             <h3 className="text-lg font-semibold text-green-800 mb-3">
-              ✅ Benefits of try-error
+              ✅ Benefits of tryError
             </h3>
             <ul className="space-y-2 text-green-700">
               <li>
@@ -168,7 +168,7 @@ try {
 
           <CodeBlock
             language="typescript"
-            title="try-error Solution"
+            title="tryError Solution"
             showLineNumbers={true}
             className="mb-4"
           >
@@ -208,7 +208,7 @@ console.log('User name:', result.name);`}
           </h3>
           <p className="text-slate-600 mb-4">
             While functional programming languages often use Result/Either
-            monads, try-error uses simple union types because they're more
+            monads, tryError uses simple union types because they're more
             familiar to JavaScript developers and integrate better with existing
             TypeScript patterns.
           </p>
@@ -234,7 +234,7 @@ interface Result<T, E> {
           </h3>
           <p className="text-slate-600 mb-4">
             Existing Result libraries often require a paradigm shift and have
-            steep learning curves. try-error provides similar benefits with a
+            steep learning curves. tryError provides similar benefits with a
             more approachable API that feels natural to JavaScript developers.
           </p>
 
@@ -242,7 +242,7 @@ interface Result<T, E> {
             Rich Error Context (With Trade-offs)
           </h3>
           <p className="text-slate-600 mb-4">
-            try-error errors include rich context like stack traces, timestamps,
+            tryError errors include rich context like stack traces, timestamps,
             and source information to aid in debugging. This causes higher error
             path overhead (20%-120%) but is configurable. The trade-off is worth
             it because errors should be rare, and debugging time saved outweighs
@@ -266,10 +266,10 @@ interface Result<T, E> {
           </CodeBlock>
         </section>
 
-        {/* When to Use try-error */}
+        {/* When to Use tryError */}
         <section>
           <h2 className="text-2xl font-semibold text-slate-900 mb-4">
-            When to Use try-error
+            When to Use tryError
           </h2>
 
           <div className="grid md:grid-cols-2 gap-6">
@@ -346,7 +346,7 @@ interface Result<T, E> {
             <div className="border border-slate-200 rounded-lg p-4">
               <h3 className="font-semibold text-slate-900 mb-2">Quick Start</h3>
               <p className="text-slate-600 text-sm mb-3">
-                Start using try-error in your project
+                Start using tryError in your project
               </p>
               <a
                 href="/docs/quick-start"

@@ -1,8 +1,8 @@
-[**try-error API Documentation v0.0.1-alpha.1**](../index.md)
+[**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
 ***
 
-[try-error API Documentation](../index.md) / enrichContextMiddleware
+[tryError API Documentation](../index.md) / enrichContextMiddleware
 
 # Function: enrichContextMiddleware()
 
@@ -10,7 +10,7 @@
 function enrichContextMiddleware<T, E>(enricher): ErrorMiddleware<T, E>;
 ```
 
-Defined in: [middleware.ts:197](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/middleware.ts#L197)
+Defined in: [middleware.ts:197](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/middleware.ts#L197)
 
 Context enrichment middleware
 
