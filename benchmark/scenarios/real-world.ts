@@ -199,7 +199,7 @@ export async function benchmarkNestedErrorHandling() {
             type: result.type,
             message: result.message,
             context: result.context,
-            chain: [],
+            chain: [] as string[],
           };
 
           // Trace error chain
