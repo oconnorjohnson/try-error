@@ -69,6 +69,34 @@
     --sidebar-border: 220 13% 91%;
 
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* Algolia DocSearch Dark Theme Customization */
+    --docsearch-primary-color: hsl(var(--primary));
+    --docsearch-text-color: hsl(var(--foreground));
+    --docsearch-spacing: 12px;
+    --docsearch-icon-stroke-width: 1.4;
+    --docsearch-highlight-color: hsl(var(--primary));
+    --docsearch-muted-color: hsl(var(--muted-foreground));
+    --docsearch-container-background: rgba(0, 0, 0, 0.8);
+    --docsearch-modal-background: hsl(var(--background));
+    --docsearch-modal-shadow: inset 1px 1px 0 0 hsla(0, 0%, 100%, 0.05),
+      0 3px 8px 0 rgba(0, 0, 0, 0.6);
+    --docsearch-searchbox-background: hsl(var(--muted));
+    --docsearch-searchbox-focus-background: hsl(var(--muted));
+    --docsearch-searchbox-shadow: inset 0 0 0 2px hsl(var(--primary));
+    --docsearch-hit-color: hsl(var(--foreground));
+    --docsearch-hit-active-color: hsl(var(--primary-foreground));
+    --docsearch-hit-background: hsl(var(--muted));
+    --docsearch-hit-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    --docsearch-key-gradient: linear-gradient(
+      -225deg,
+      hsl(var(--muted)),
+      hsl(var(--muted))
+    );
+    --docsearch-key-shadow: inset 0 -2px 0 0 hsl(var(--border)),
+      inset 0 0 1px 1px hsl(var(--background)), 0 1px 2px 1px rgba(0, 0, 0, 0.1);
+    --docsearch-footer-background: hsl(var(--muted));
+    --docsearch-footer-shadow: 0 -1px 0 0 hsl(var(--border));
   }
   .dark {
     /* Main backgrounds - classic dark grey developer theme */
@@ -124,6 +152,14 @@
     --sidebar-accent-foreground: 220 9% 95%; /* Light text */
     --sidebar-border: 220 13% 18%; /* Subtle borders */
     --sidebar-ring: 217 91% 60%; /* Focus rings */
+
+    /* Algolia DocSearch Dark Theme Customization */
+    --docsearch-container-background: rgba(0, 0, 0, 0.9);
+    --docsearch-modal-background: hsl(var(--background));
+    --docsearch-searchbox-background: hsl(var(--muted));
+    --docsearch-hit-background: hsl(var(--muted));
+    --docsearch-hit-active-color: hsl(var(--primary-foreground));
+    --docsearch-footer-background: hsl(var(--muted));
   }
 }
 
@@ -328,4 +364,35 @@
   .dark .border-orange-500 {
     border-color: hsl(38 92% 60%) !important;
   }
+}
+
+/* Additional DocSearch styling */
+.DocSearch-Button {
+  @apply bg-background;
+}
+
+.DocSearch-Button:hover {
+  @apply bg-muted;
+}
+
+.DocSearch-Button-Placeholder {
+  @apply text-muted-foreground;
+}
+
+.DocSearch-Search-Icon {
+  @apply text-muted-foreground;
+}
+
+/* Fix modal z-index to be above sidebar */
+.DocSearch-Container {
+  z-index: 9999;
+}
+
+/* Smooth transitions */
+.DocSearch-Hit a {
+  @apply transition-colors;
+}
+
+.DocSearch-Hit[aria-selected="true"] a {
+  @apply bg-primary text-primary-foreground;
 }

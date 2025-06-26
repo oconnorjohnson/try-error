@@ -1,7 +1,7 @@
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/layout/app-sidebar";
 import { Github } from "lucide-react";
-import { SearchButton } from "@/components/SearchButton";
+import { SearchDialog } from "@/components/SearchDialog";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 
 export default function DocsLayout({
@@ -21,7 +21,7 @@ export default function DocsLayout({
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <SearchButton />
+            <SearchDialog />
             <a
               href="https://github.com/oconnorjohnson/try-error"
               target="_blank"

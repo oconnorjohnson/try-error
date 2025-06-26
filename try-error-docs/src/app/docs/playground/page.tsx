@@ -1,6 +1,9 @@
 import { PlaygroundAdvanced } from "@/components/PlaygroundAdvanced";
+import { SandboxPlayground } from "@/components/SandboxPlayground";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { InfoIcon } from "lucide-react";
 
 const basicExample = `import { trySync } from 'try-error';
 
@@ -129,6 +132,16 @@ function UserProfile({ userId }: { userId: string }) {
 console.log('Component would render:', UserProfile({ userId: '123' }));`;
 
 export default function PlaygroundPage() {
+  // Check if we're in development or have sandbox credentials
+  const hasSandboxAuth =
+    process.env.VERCEL_OIDC_TOKEN ||
+    (process.env.VERCEL_TEAM_ID &&
+      process.env.VERCEL_PROJECT_ID &&
+      process.env.VERCEL_TOKEN);
+
+  // For now, always use the mock playground until sandbox is properly configured
+  const useSandbox = false; // Set to true when sandbox is configured
+
   return (
     <div className="space-y-6 max-w-6xl">
       <div>
@@ -138,6 +151,21 @@ export default function PlaygroundPage() {
           click "Run" to see the results.
         </p>
       </div>
+
+      {useSandbox && (
+        <Alert>
+          <InfoIcon className="h-4 w-4" />
+          <AlertDescription>
+            <strong>Note:</strong> The live playground requires Vercel Sandbox
+            authentication. For local development, run{" "}
+            <code className="text-xs bg-muted px-1 py-0.5 rounded">
+              vercel env pull
+            </code>{" "}
+            to authenticate. The mock playground below demonstrates the API but
+            doesn't execute real code.
+          </AlertDescription>
+        </Alert>
+      )}
 
       <Card className="p-6">
         <h2 className="text-xl font-semibold mb-4">Try it yourself</h2>
