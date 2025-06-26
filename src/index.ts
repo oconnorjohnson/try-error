@@ -194,6 +194,22 @@ export {
   getErrorPoolStats,
 } from "./pool";
 
+// Plugin system
+export type {
+  PluginMetadata,
+  PluginHooks,
+  PluginCapabilities,
+  Plugin,
+  PluginAPI,
+} from "./plugins";
+
+export {
+  PluginManager,
+  pluginManager,
+  createPlugin,
+  sentryPlugin,
+} from "./plugins";
+
 // Re-export commonly used functions with clearer names
 export { trySync as try$ } from "./sync";
 

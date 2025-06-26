@@ -7,15 +7,34 @@ import {
   createError,
 } from "try-error";
 
-export interface UseTryMutationOptions<T> {
-  onSuccess?: (data: T) => void;
-  onError?: (error: TryError) => void;
-  onSettled?: () => void;
+export interface UseTryMutationOptions<T, TVariables = void> {
+  onSuccess?: (data: T, variables: TVariables) => void;
+  onError?: (error: TryError, variables: TVariables) => void;
+  onSettled?: (
+    data: T | null,
+    error: TryError | null,
+    variables: TVariables
+  ) => void;
   abortMessage?: string;
   // Optimistic update support
-  optimisticData?: T;
+  optimisticData?: T | ((variables: TVariables, currentData: T | null) => T);
   // Rollback function for failed optimistic updates
-  rollbackOnError?: (error: TryError) => void;
+  rollbackOnError?: (
+    error: TryError,
+    variables: TVariables,
+    previousData: T | null
+  ) => void;
+  // Whether to retry on error
+  retry?:
+    | boolean
+    | number
+    | ((failureCount: number, error: TryError) => boolean);
+  // Retry delay in milliseconds
+  retryDelay?: number | ((failureCount: number) => number);
+  // Cache time in milliseconds
+  cacheTime?: number;
+  // Whether to invalidate cache on success
+  invalidateOnSuccess?: boolean;
 }
 
 export interface UseTryMutationResult<T, TVariables> {
@@ -24,10 +43,15 @@ export interface UseTryMutationResult<T, TVariables> {
   isLoading: boolean;
   isSuccess: boolean;
   isError: boolean;
+  isIdle: boolean;
+  failureCount: number;
   mutate: (variables: TVariables) => Promise<TryResult<T, TryError>>;
   mutateAsync: (variables: TVariables) => Promise<TryResult<T, TryError>>;
   reset: () => void;
   abort: () => void;
+  // New methods for optimistic updates
+  setData: (data: T | ((prev: T | null) => T)) => void;
+  invalidate: () => void;
 }
 
 // Mutation queue for managing multiple mutations
@@ -37,8 +61,17 @@ interface QueuedMutation<TVariables> {
   reject: (error: any) => void;
 }
 
+// Cache entry
+interface CacheEntry<T> {
+  data: T;
+  timestamp: number;
+}
+
+// Global mutation cache
+const mutationCache = new Map<string, CacheEntry<any>>();
+
 /**
- * Hook for handling mutations with try-error integration and AbortController support
+ * Hook for handling mutations with try-error integration and enhanced optimistic updates
  *
  * Similar to React Query's useMutation but with try-error patterns
  *
@@ -55,34 +88,38 @@ interface QueuedMutation<TVariables> {
  *     return response.json();
  *   },
  *   {
+ *     // Optimistic update with function
+ *     optimisticData: (userData, currentData) => ({
+ *       ...userData,
+ *       id: 'temp-' + Date.now(),
+ *       createdAt: new Date().toISOString()
+ *     }),
  *     onSuccess: (user) => {
  *       toast.success(`User ${user.name} created!`);
  *       router.push(`/users/${user.id}`);
  *     },
- *     onError: (error) => {
+ *     onError: (error, userData) => {
  *       toast.error(error.message);
- *     }
+ *     },
+ *     rollbackOnError: (error, userData, previousData) => {
+ *       // Custom rollback logic if needed
+ *       console.log('Rolling back to:', previousData);
+ *     },
+ *     retry: 3,
+ *     retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 30000)
  *   }
  * );
- *
- * // Cleanup on unmount
- * useEffect(() => {
- *   return () => abort();
- * }, []);
- *
- * <form onSubmit={(e) => {
- *   e.preventDefault();
- *   mutate(formData);
- * }}>
  * ```
  */
 export function useTryMutation<T, TVariables = void>(
   mutationFn: (variables: TVariables, signal: AbortSignal) => Promise<T>,
-  options: UseTryMutationOptions<T> = {}
+  options: UseTryMutationOptions<T, TVariables> = {},
+  deps: React.DependencyList = []
 ): UseTryMutationResult<T, TVariables> {
-  const [data, setData] = useState<T | null>(null);
+  const [data, setDataState] = useState<T | null>(null);
   const [error, setError] = useState<TryError | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [failureCount, setFailureCount] = useState(0);
 
   const {
     onSuccess,
@@ -91,6 +128,10 @@ export function useTryMutation<T, TVariables = void>(
     abortMessage = "Mutation aborted",
     optimisticData,
     rollbackOnError,
+    retry = false,
+    retryDelay = 1000,
+    cacheTime = 5 * 60 * 1000, // 5 minutes
+    invalidateOnSuccess = true,
   } = options;
 
   // AbortController ref for cancelling in-flight mutations
@@ -106,11 +147,20 @@ export function useTryMutation<T, TVariables = void>(
   // Previous data for rollback
   const previousDataRef = useRef<T | null>(null);
 
+  // Cache key for this mutation
+  const cacheKeyRef = useRef<string | null>(null);
+
+  // Retry timeout
+  const retryTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   // Cleanup on unmount
   useEffect(() => {
     return () => {
       isMountedRef.current = false;
       abortControllerRef.current?.abort();
+      if (retryTimeoutRef.current) {
+        clearTimeout(retryTimeoutRef.current);
+      }
       // Clear the queue
       mutationQueueRef.current.forEach(({ reject }) => {
         reject(
@@ -126,15 +176,66 @@ export function useTryMutation<T, TVariables = void>(
 
   const abort = useCallback(() => {
     abortControllerRef.current?.abort();
+    if (retryTimeoutRef.current) {
+      clearTimeout(retryTimeoutRef.current);
+      retryTimeoutRef.current = null;
+    }
   }, []);
 
   const reset = useCallback(() => {
-    abortControllerRef.current?.abort();
-    setData(null);
+    abort();
+    setDataState(null);
     setError(null);
     setIsLoading(false);
+    setFailureCount(0);
     previousDataRef.current = null;
+  }, [abort]);
+
+  // Enhanced setData that supports functional updates
+  const setData = useCallback((updater: T | ((prev: T | null) => T)) => {
+    setDataState((prev) => {
+      const newData =
+        typeof updater === "function"
+          ? (updater as (prev: T | null) => T)(prev)
+          : updater;
+
+      // Update cache if we have a cache key
+      if (cacheKeyRef.current && newData !== null) {
+        mutationCache.set(cacheKeyRef.current, {
+          data: newData,
+          timestamp: Date.now(),
+        });
+      }
+
+      return newData;
+    });
   }, []);
+
+  const invalidate = useCallback(() => {
+    if (cacheKeyRef.current) {
+      mutationCache.delete(cacheKeyRef.current);
+    }
+  }, []);
+
+  const shouldRetry = useCallback(
+    (count: number, error: TryError): boolean => {
+      if (!retry) return false;
+      if (typeof retry === "boolean") return retry && count < 3;
+      if (typeof retry === "number") return count < retry;
+      return retry(count, error);
+    },
+    [retry]
+  );
+
+  const getRetryDelay = useCallback(
+    (count: number): number => {
+      if (typeof retryDelay === "function") {
+        return retryDelay(count);
+      }
+      return retryDelay;
+    },
+    [retryDelay]
+  );
 
   const processMutationQueue = useCallback(async () => {
     if (isProcessingQueueRef.current || mutationQueueRef.current.length === 0) {
@@ -159,7 +260,10 @@ export function useTryMutation<T, TVariables = void>(
   }, []);
 
   const mutateAsyncInternal = useCallback(
-    async (variables: TVariables): Promise<TryResult<T, TryError>> => {
+    async (
+      variables: TVariables,
+      retryCount = 0
+    ): Promise<TryResult<T, TryError>> => {
       // Abort any previous mutation
       abortControllerRef.current?.abort();
 
@@ -174,12 +278,29 @@ export function useTryMutation<T, TVariables = void>(
         });
       }
 
+      // Generate cache key based on variables
+      cacheKeyRef.current = JSON.stringify({
+        fn: mutationFn.toString(),
+        variables,
+      });
+
+      // Check cache first
+      const cached = mutationCache.get(cacheKeyRef.current);
+      if (cached && Date.now() - cached.timestamp < cacheTime) {
+        setData(cached.data);
+        return cached.data;
+      }
+
       // Store previous data for potential rollback
       previousDataRef.current = data;
 
       // Apply optimistic update if provided
       if (optimisticData !== undefined && isMountedRef.current) {
-        setData(optimisticData);
+        const optimisticValue =
+          typeof optimisticData === "function"
+            ? optimisticData(variables, data)
+            : optimisticData;
+        setData(optimisticValue);
       }
 
       setIsLoading(true);
@@ -212,27 +333,64 @@ export function useTryMutation<T, TVariables = void>(
         }
 
         if (isTryError(result)) {
+          // Check if we should retry
+          if (shouldRetry(retryCount, result)) {
+            const delay = getRetryDelay(retryCount);
+
+            return new Promise((resolve) => {
+              retryTimeoutRef.current = setTimeout(() => {
+                if (isMountedRef.current) {
+                  setFailureCount(retryCount + 1);
+                  resolve(mutateAsyncInternal(variables, retryCount + 1));
+                } else {
+                  resolve(
+                    createError({
+                      type: "COMPONENT_UNMOUNTED",
+                      message: "Component unmounted during retry",
+                    })
+                  );
+                }
+              }, delay);
+            });
+          }
+
           // Rollback optimistic update on error
           if (
             optimisticData !== undefined &&
             previousDataRef.current !== undefined
           ) {
             setData(previousDataRef.current);
-            rollbackOnError?.(result);
+            rollbackOnError?.(result, variables, previousDataRef.current);
           }
 
           setError(result);
           setData(null);
-          onError?.(result);
+          setFailureCount(retryCount);
+          onError?.(result, variables);
         } else {
+          // Success - update cache
+          if (cacheKeyRef.current) {
+            mutationCache.set(cacheKeyRef.current, {
+              data: result,
+              timestamp: Date.now(),
+            });
+          }
+
+          // Invalidate cache if requested
+          if (invalidateOnSuccess) {
+            // Invalidate related cache entries (simplified - in real app would be more sophisticated)
+            mutationCache.clear();
+          }
+
           setData(result);
           setError(null);
-          onSuccess?.(result);
+          setFailureCount(0);
+          onSuccess?.(result, variables);
         }
 
         if (isMountedRef.current) {
           setIsLoading(false);
-          onSettled?.();
+          onSettled?.(data, error, variables);
         }
 
         return result;
@@ -253,13 +411,13 @@ export function useTryMutation<T, TVariables = void>(
               previousDataRef.current !== undefined
             ) {
               setData(previousDataRef.current);
-              rollbackOnError?.(abortError);
+              rollbackOnError?.(abortError, variables, previousDataRef.current);
             }
 
             setError(abortError);
             setIsLoading(false);
-            onError?.(abortError);
-            onSettled?.();
+            onError?.(abortError, variables);
+            onSettled?.(null, abortError, variables);
           }
 
           return abortError;
@@ -279,18 +437,23 @@ export function useTryMutation<T, TVariables = void>(
             previousDataRef.current !== undefined
           ) {
             setData(previousDataRef.current);
-            rollbackOnError?.(unexpectedError);
+            rollbackOnError?.(
+              unexpectedError,
+              variables,
+              previousDataRef.current
+            );
           }
 
           setError(unexpectedError);
           setIsLoading(false);
-          onError?.(unexpectedError);
-          onSettled?.();
+          onError?.(unexpectedError, variables);
+          onSettled?.(null, unexpectedError, variables);
         }
 
         return unexpectedError;
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [
       mutationFn,
       onSuccess,
@@ -300,6 +463,12 @@ export function useTryMutation<T, TVariables = void>(
       data,
       optimisticData,
       rollbackOnError,
+      shouldRetry,
+      getRetryDelay,
+      cacheTime,
+      invalidateOnSuccess,
+      setData,
+      ...deps,
     ]
   );
 
@@ -335,10 +504,14 @@ export function useTryMutation<T, TVariables = void>(
     isLoading,
     isSuccess: data !== null && error === null,
     isError: error !== null,
+    isIdle: !isLoading && data === null && error === null,
+    failureCount,
     mutate,
     mutateAsync,
     reset,
     abort,
+    setData,
+    invalidate,
   };
 }
 
