@@ -57,7 +57,7 @@ export default function PerformancePage() {
                 </h4>
                 <ul className="space-y-2 text-orange-700 text-sm">
                   <li>
-                    • <strong>50% to 1700% overhead</strong> (configurable)
+                    • <strong>20% to 120% overhead</strong> (configurable)
                   </li>
                   <li>• Default config: ~1700% overhead (rich debugging)</li>
                   <li>• Production config: ~400% overhead (no stack traces)</li>

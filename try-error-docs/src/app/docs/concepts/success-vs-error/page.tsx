@@ -144,7 +144,7 @@ if (!isTryError(result)) {
                 title="Error Path - Configurable Overhead"
                 className="mt-3"
               >
-                {`// Default config: Rich debugging info (1700% overhead)
+                {`// Default config: Rich debugging info (100-120% overhead)
 const error = trySync(() => JSON.parse(invalidJson));
 // Full stack trace, source location, context, timestamp
 
