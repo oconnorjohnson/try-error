@@ -36,7 +36,10 @@ interface SearchResult {
     lvl2?: string;
     lvl3?: string;
   };
-  [key: string]: any;
+  _highlightResult?: Record<string, unknown>;
+  _snippetResult?: Record<string, unknown>;
+  _rankingInfo?: Record<string, unknown>;
+  _distinctSeqID?: number;
 }
 
 export function SearchDialog() {
