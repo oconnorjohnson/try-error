@@ -4,6 +4,7 @@ import {
   RenderOptions,
   renderHook,
   RenderHookOptions,
+  RenderResult,
 } from "@testing-library/react";
 import { TryError, createError } from "try-error";
 import {
@@ -19,7 +20,7 @@ interface CustomRenderOptions extends Omit<RenderOptions, "wrapper"> {
 export function renderWithErrorBoundary(
   ui: ReactElement,
   options?: CustomRenderOptions
-) {
+): RenderResult {
   const { errorBoundaryProps, ...renderOptions } = options || {};
 
   function Wrapper({ children }: { children: React.ReactNode }) {

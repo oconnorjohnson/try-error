@@ -463,3 +463,473 @@ export function createErrorReport(errors: TryError[]): string {
 
   return report.join("\n");
 }
+
+/**
+ * Create an enhanced error with additional debugging information
+ *
+ * @param type - Error type
+ * @param message - Error message
+ * @param debug - Debug information to include
+ * @returns Enhanced TryError with debug context
+ *
+ * @example
+ * ```typescript
+ * const error = createEnhancedError(
+ *   "DatabaseError",
+ *   "Query failed",
+ *   { query: sql, params, duration: 1234 }
+ * );
+ * ```
+ */
+export function createEnhancedError<T extends string = string>(
+  type: T,
+  message: string,
+  debug: Record<string, unknown>
+): TryError<T> {
+  const isDevelopment =
+    typeof process !== "undefined" &&
+    process.env &&
+    process.env.NODE_ENV === "development";
+
+  return {
+    [TRY_ERROR_BRAND]: true,
+    type,
+    message,
+    source: "unknown",
+    timestamp: Date.now(),
+    context: {
+      ...debug,
+      // Include stack trace in development
+      ...(isDevelopment && {
+        stackTrace: new Error().stack,
+      }),
+    },
+  };
+}
+
+/**
+ * Filter an array to only successful results (type-safe)
+ * Optimized to process in a single pass
+ *
+ * @param results - Array of TryResults
+ * @returns Array of success values only
+ *
+ * @example
+ * ```typescript
+ * const results = await Promise.all([
+ *   tryAsync(() => fetchUser(1)),
+ *   tryAsync(() => fetchUser(2)),
+ *   tryAsync(() => fetchUser(3))
+ * ]);
+ *
+ * const users = filterSuccess(results); // User[]
+ * ```
+ */
+export function filterSuccess<T, E extends TryError>(
+  results: TryResult<T, E>[]
+): T[] {
+  return results.reduce<T[]>((acc, result) => {
+    if (!isTryError(result)) {
+      acc.push(result);
+    }
+    return acc;
+  }, []);
+}
+
+/**
+ * Filter an array to only error results (type-safe)
+ * Optimized to process in a single pass
+ *
+ * @param results - Array of TryResults
+ * @returns Array of errors only
+ *
+ * @example
+ * ```typescript
+ * const results = await Promise.all([
+ *   tryAsync(() => fetchUser(1)),
+ *   tryAsync(() => fetchUser(2)),
+ *   tryAsync(() => fetchUser(3))
+ * ]);
+ *
+ * const errors = filterErrors(results); // TryError[]
+ * if (errors.length > 0) {
+ *   console.error(`${errors.length} requests failed`);
+ * }
+ * ```
+ */
+export function filterErrors<T, E extends TryError>(
+  results: TryResult<T, E>[]
+): E[] {
+  return results.reduce<E[]>((acc, result) => {
+    if (isTryError(result)) {
+      acc.push(result);
+    }
+    return acc;
+  }, []);
+}
+
+/**
+ * Partition results into successes and errors
+ * Processes the array only once for efficiency
+ *
+ * @param results - Array of TryResults
+ * @returns Tuple of [successes, errors]
+ *
+ * @example
+ * ```typescript
+ * const results = await Promise.all(operations);
+ * const [successes, errors] = partition(results);
+ *
+ * console.log(`${successes.length} succeeded, ${errors.length} failed`);
+ * ```
+ */
+export function partition<T, E extends TryError>(
+  results: TryResult<T, E>[]
+): [T[], E[]] {
+  const successes: T[] = [];
+  const errors: E[] = [];
+
+  for (const result of results) {
+    if (isTryError(result)) {
+      errors.push(result);
+    } else {
+      successes.push(result);
+    }
+  }
+
+  return [successes, errors];
+}
+
+/**
+ * Format an error for logging with efficient string building
+ *
+ * @param error - Error to format
+ * @param options - Formatting options
+ * @returns Formatted error string
+ *
+ * @example
+ * ```typescript
+ * const error = createError({
+ *   type: "ValidationError",
+ *   message: "Invalid input",
+ *   context: { field: "email", value: "invalid" }
+ * });
+ *
+ * console.log(formatErrorForLogging(error));
+ * // [ValidationError] Invalid input | Context: {"field":"email","value":"invalid"} | Source: utils.ts:15:3
+ * ```
+ */
+export function formatErrorForLogging(
+  error: TryError,
+  options: {
+    includeContext?: boolean;
+    includeSource?: boolean;
+    includeTimestamp?: boolean;
+    includeStack?: boolean;
+  } = {}
+): string {
+  const {
+    includeContext = true,
+    includeSource = true,
+    includeTimestamp = false,
+    includeStack = false,
+  } = options;
+
+  // Use template literal for efficient string building
+  let result = `[${error.type}] ${error.message}`;
+
+  if (includeContext && error.context) {
+    result += ` | Context: ${JSON.stringify(error.context)}`;
+  }
+
+  if (includeSource && error.source !== "unknown") {
+    result += ` | Source: ${error.source}`;
+  }
+
+  if (includeTimestamp) {
+    result += ` | Time: ${new Date(error.timestamp).toISOString()}`;
+  }
+
+  if (includeStack && error.stack) {
+    result += `\nStack: ${error.stack}`;
+  }
+
+  return result;
+}
+
+/**
+ * Diff two errors to see what changed
+ *
+ * @param error1 - First error
+ * @param error2 - Second error
+ * @returns Object describing the differences
+ *
+ * @example
+ * ```typescript
+ * const diff = diffErrors(originalError, modifiedError);
+ * console.log(diff);
+ * // {
+ * //   type: { from: "ValidationError", to: "SchemaError" },
+ * //   context: { added: { schema: "user" }, removed: { field: "email" } }
+ * // }
+ * ```
+ */
+export function diffErrors<E1 extends TryError, E2 extends TryError>(
+  error1: E1,
+  error2: E2
+): {
+  type?: { from: string; to: string };
+  message?: { from: string; to: string };
+  source?: { from: string; to: string };
+  timestamp?: { from: number; to: number };
+  context?: {
+    added: Record<string, unknown>;
+    removed: Record<string, unknown>;
+    changed: Record<string, { from: unknown; to: unknown }>;
+  };
+} {
+  const diff: any = {};
+
+  if (error1.type !== error2.type) {
+    diff.type = { from: error1.type, to: error2.type };
+  }
+
+  if (error1.message !== error2.message) {
+    diff.message = { from: error1.message, to: error2.message };
+  }
+
+  if (error1.source !== error2.source) {
+    diff.source = { from: error1.source, to: error2.source };
+  }
+
+  if (error1.timestamp !== error2.timestamp) {
+    diff.timestamp = { from: error1.timestamp, to: error2.timestamp };
+  }
+
+  // Diff context
+  if (error1.context || error2.context) {
+    const ctx1 = error1.context || {};
+    const ctx2 = error2.context || {};
+
+    const added: Record<string, unknown> = {};
+    const removed: Record<string, unknown> = {};
+    const changed: Record<string, { from: unknown; to: unknown }> = {};
+
+    // Check for added/changed fields
+    for (const key in ctx2) {
+      if (!(key in ctx1)) {
+        added[key] = ctx2[key];
+      } else if (ctx1[key] !== ctx2[key]) {
+        changed[key] = { from: ctx1[key], to: ctx2[key] };
+      }
+    }
+
+    // Check for removed fields
+    for (const key in ctx1) {
+      if (!(key in ctx2)) {
+        removed[key] = ctx1[key];
+      }
+    }
+
+    if (
+      Object.keys(added).length ||
+      Object.keys(removed).length ||
+      Object.keys(changed).length
+    ) {
+      diff.context = { added, removed, changed };
+    }
+  }
+
+  return diff;
+}
+
+/**
+ * Group errors by a specific field
+ *
+ * @param errors - Array of errors to group
+ * @param keyFn - Function to extract grouping key
+ * @returns Map of grouped errors
+ *
+ * @example
+ * ```typescript
+ * const errors = [
+ *   createError({ type: "ValidationError", message: "Invalid email" }),
+ *   createError({ type: "ValidationError", message: "Invalid password" }),
+ *   createError({ type: "NetworkError", message: "Timeout" })
+ * ];
+ *
+ * const grouped = groupErrors(errors, error => error.type);
+ * // Map { "ValidationError" => [...], "NetworkError" => [...] }
+ * ```
+ */
+export function groupErrors<E extends TryError, K>(
+  errors: E[],
+  keyFn: (error: E) => K
+): Map<K, E[]> {
+  const groups = new Map<K, E[]>();
+
+  for (const error of errors) {
+    const key = keyFn(error);
+    const group = groups.get(key) || [];
+    group.push(error);
+    groups.set(key, group);
+  }
+
+  return groups;
+}
+
+/**
+ * Error sampling utilities
+ */
+export const ErrorSampling = {
+  /**
+   * Random sampling - include error based on probability
+   *
+   * @param probability - Probability of including error (0-1)
+   * @returns Whether to include the error
+   *
+   * @example
+   * ```typescript
+   * if (ErrorSampling.random(0.1)) { // 10% sampling
+   *   logError(error);
+   * }
+   * ```
+   */
+  random(probability: number): boolean {
+    return Math.random() < probability;
+  },
+
+  /**
+   * Rate-based sampling - include every Nth error
+   *
+   * @param counter - Current counter value
+   * @param rate - Sample every Nth error
+   * @returns Whether to include the error
+   *
+   * @example
+   * ```typescript
+   * let errorCount = 0;
+   * if (ErrorSampling.rate(++errorCount, 100)) { // Every 100th error
+   *   logError(error);
+   * }
+   * ```
+   */
+  rate(counter: number, rate: number): boolean {
+    return counter % rate === 0;
+  },
+
+  /**
+   * Time-based sampling - include one error per time window
+   *
+   * @param lastSampleTime - Last time an error was sampled
+   * @param windowMs - Time window in milliseconds
+   * @returns Whether to include the error
+   *
+   * @example
+   * ```typescript
+   * let lastSample = 0;
+   * if (ErrorSampling.timeBased(lastSample, 60000)) { // Once per minute
+   *   lastSample = Date.now();
+   *   logError(error);
+   * }
+   * ```
+   */
+  timeBased(lastSampleTime: number, windowMs: number): boolean {
+    return Date.now() - lastSampleTime >= windowMs;
+  },
+
+  /**
+   * Error type sampling - different rates for different error types
+   *
+   * @param error - The error to check
+   * @param rates - Map of error types to sampling rates
+   * @returns Whether to include the error
+   *
+   * @example
+   * ```typescript
+   * const samplingRates = new Map([
+   *   ["ValidationError", 0.01], // 1% of validation errors
+   *   ["NetworkError", 0.5],     // 50% of network errors
+   *   ["CriticalError", 1.0]     // 100% of critical errors
+   * ]);
+   *
+   * if (ErrorSampling.byType(error, samplingRates)) {
+   *   logError(error);
+   * }
+   * ```
+   */
+  byType(error: TryError, rates: Map<string, number>): boolean {
+    const rate = rates.get(error.type) || 0.1; // Default 10%
+    return Math.random() < rate;
+  },
+};
+
+/**
+ * Correlate related errors across operations
+ *
+ * @param errors - Array of errors to correlate
+ * @param correlationFn - Function to determine if errors are related
+ * @returns Array of correlated error groups
+ *
+ * @example
+ * ```typescript
+ * const errors = await collectErrors();
+ * const correlated = correlateErrors(errors, (e1, e2) => {
+ *   // Errors are related if they have the same transaction ID
+ *   return e1.context?.transactionId === e2.context?.transactionId;
+ * });
+ * ```
+ */
+export function correlateErrors<E extends TryError>(
+  errors: E[],
+  correlationFn: (error1: E, error2: E) => boolean
+): E[][] {
+  const groups: E[][] = [];
+  const processed = new Set<E>();
+
+  for (const error of errors) {
+    if (processed.has(error)) continue;
+
+    const group = [error];
+    processed.add(error);
+
+    for (const other of errors) {
+      if (!processed.has(other) && correlationFn(error, other)) {
+        group.push(other);
+        processed.add(other);
+      }
+    }
+
+    groups.push(group);
+  }
+
+  return groups;
+}
+
+/**
+ * Create a fingerprint for an error for deduplication
+ *
+ * @param error - Error to fingerprint
+ * @param fields - Fields to include in fingerprint
+ * @returns Fingerprint string
+ *
+ * @example
+ * ```typescript
+ * const fingerprint = getErrorFingerprint(error, ["type", "message", "source"]);
+ * if (!seenFingerprints.has(fingerprint)) {
+ *   seenFingerprints.add(fingerprint);
+ *   logError(error);
+ * }
+ * ```
+ */
+export function getErrorFingerprint(
+  error: TryError,
+  fields: Array<keyof TryError> = ["type", "message"]
+): string {
+  const parts = fields.map((field) => {
+    const value = error[field];
+    return typeof value === "object" ? JSON.stringify(value) : String(value);
+  });
+
+  return parts.join("|");
+}
