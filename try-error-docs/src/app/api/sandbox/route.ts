@@ -13,17 +13,10 @@ export async function POST(request: NextRequest) {
     const sandboxId = Math.random().toString(36).substring(7);
 
     // Create the sandbox using a minimal git repo as base
-    const sandboxConfig: {
-      source: { type: string; url: string };
-      resources: { vcpus: number };
-      timeout: number;
-      runtime: string;
-      teamId?: string;
-      projectId?: string;
-      token?: string;
-    } = {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const sandboxConfig: any = {
       source: {
-        type: "git",
+        type: "git" as const,
         url: "https://github.com/vercel/sandbox-example-node.git",
       },
       resources: { vcpus: 2 }, // Use 2 vCPUs for playground
