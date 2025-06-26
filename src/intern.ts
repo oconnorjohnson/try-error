@@ -5,11 +5,25 @@
  * by reusing common string instances instead of creating duplicates.
  */
 
+// WeakRef is available in ES2021+, provide fallback for older environments
+declare global {
+  interface WeakRef<T extends object> {
+    deref(): T | undefined;
+  }
+
+  interface WeakRefConstructor {
+    new <T extends object>(target: T): WeakRef<T>;
+  }
+
+  const WeakRef: WeakRefConstructor | undefined;
+}
+
 /**
  * String intern pool with weak references for garbage collection
  */
 class StringInternPool {
-  private pool = new Map<string, WeakRef<string>>();
+  private pool = new Map<string, string>();
+  private weakPool: Map<string, WeakRef<any>> | null = null;
   private strongRefs = new Set<string>();
   private stats = {
     hits: 0,
@@ -17,32 +31,57 @@ class StringInternPool {
     evictions: 0,
   };
 
+  constructor() {
+    // Use WeakRef if available
+    if (typeof WeakRef !== "undefined") {
+      this.weakPool = new Map();
+    }
+  }
+
   /**
    * Intern a string
    */
   intern(str: string): string {
-    // Check if we have a weak reference
-    const weakRef = this.pool.get(str);
-    if (weakRef) {
-      const interned = weakRef.deref();
-      if (interned !== undefined) {
+    // Try weak pool first if available
+    if (this.weakPool) {
+      const weakRef = this.weakPool.get(str);
+      if (weakRef) {
+        const interned = weakRef.deref();
+        if (interned !== undefined) {
+          this.stats.hits++;
+          return interned;
+        } else {
+          // Weak reference was garbage collected
+          this.weakPool.delete(str);
+          this.stats.evictions++;
+        }
+      }
+    } else {
+      // Fallback to regular map
+      const cached = this.pool.get(str);
+      if (cached) {
         this.stats.hits++;
-        return interned;
-      } else {
-        // Weak reference was garbage collected
-        this.pool.delete(str);
-        this.stats.evictions++;
+        return cached;
       }
     }
 
     // Create new interned string
     this.stats.misses++;
     const interned = String(str); // Create a new string instance
-    this.pool.set(str, new WeakRef(interned));
 
-    // Keep strong references for common strings
-    if (this.isCommonString(str)) {
-      this.strongRefs.add(interned);
+    if (
+      this.weakPool &&
+      !this.isCommonString(str) &&
+      typeof WeakRef !== "undefined"
+    ) {
+      // Use weak reference for non-common strings
+      this.weakPool.set(str, new WeakRef(interned as any));
+    } else {
+      // Use strong reference for common strings or when WeakRef unavailable
+      this.pool.set(str, interned);
+      if (this.isCommonString(str)) {
+        this.strongRefs.add(interned);
+      }
     }
 
     return interned;
@@ -92,7 +131,7 @@ class StringInternPool {
    */
   getStats() {
     return {
-      poolSize: this.pool.size,
+      poolSize: this.pool.size + (this.weakPool?.size || 0),
       strongRefCount: this.strongRefs.size,
       ...this.stats,
       hitRate: this.stats.hits / (this.stats.hits + this.stats.misses) || 0,
@@ -104,6 +143,7 @@ class StringInternPool {
    */
   clear(): void {
     this.pool.clear();
+    this.weakPool?.clear();
     this.strongRefs.clear();
     this.stats = {
       hits: 0,
