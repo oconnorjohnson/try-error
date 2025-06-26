@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { DocSearchModal, useDocSearchKeyboardEvents } from "@docsearch/react";
 import "@docsearch/css";
@@ -11,6 +11,17 @@ export function SearchDialog() {
   const searchButtonRef = useRef<HTMLButtonElement>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [initialQuery, setInitialQuery] = useState<string>("");
+
+  // Debug: Log the environment variables
+  useEffect(() => {
+    console.log("Algolia Config:", {
+      appId: process.env.NEXT_PUBLIC_ALGOLIA_APP_ID || "NOT SET",
+      indexName: process.env.NEXT_PUBLIC_ALGOLIA_INDEX_NAME || "NOT SET",
+      apiKey: process.env.NEXT_PUBLIC_ALGOLIA_SEARCH_API_KEY
+        ? "SET"
+        : "NOT SET",
+    });
+  }, []);
 
   const onOpen = useCallback(() => setIsOpen(true), []);
   const onClose = useCallback(() => setIsOpen(false), []);
@@ -56,13 +67,12 @@ export function SearchDialog() {
               "YOUR_SEARCH_API_KEY"
             }
             placeholder="Search documentation..."
-            searchParameters={{
-              facetFilters: ["version:latest"],
-            }}
             transformItems={(items) => {
               return items.map((item) => ({
                 ...item,
-                url: item.url.replace("https://try-error.dev", ""),
+                url: item.url
+                  .replace("https://www.tryerror.dev", "")
+                  .replace("http://www.tryerror.dev", ""),
               }));
             }}
             onClose={onClose}
