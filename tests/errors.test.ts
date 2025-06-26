@@ -217,15 +217,18 @@ describe("Error Creation Utilities", () => {
 
     it("should handle missing stack trace gracefully", () => {
       // Mock Error constructor to not provide stack
-      const originalError = Error;
+      const originalError = global.Error;
       const originalCaptureStackTrace = Error.captureStackTrace;
 
-      global.Error = class extends originalError {
-        constructor(message?: string) {
-          super(message);
-          this.stack = undefined;
-        }
+      // Create a mock Error class that doesn't have stack traces
+      const MockError = function (this: any, message?: string) {
+        this.message = message || "";
+        this.stack = undefined;
       } as any;
+      MockError.prototype = Object.create(originalError.prototype);
+      MockError.prototype.constructor = MockError;
+
+      global.Error = MockError;
 
       // Also remove captureStackTrace if it exists
       if (typeof Error.captureStackTrace === "function") {

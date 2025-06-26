@@ -1087,7 +1087,13 @@ configure({
                 </li>
                 <li>
                   <strong>2. Use sampling in production:</strong> For
-                  high-traffic apps, sample errors to control costs
+                  high-traffic apps, sample errors to control costs. See our{" "}
+                  <a
+                    href="/docs/guides/error-sampling"
+                    className="text-yellow-900 underline font-medium"
+                  >
+                    comprehensive sampling guide
+                  </a>
                 </li>
                 <li>
                   <strong>3. Set up alerts:</strong> Configure alerts for
