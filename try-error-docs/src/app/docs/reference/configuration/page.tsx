@@ -743,6 +743,28 @@ setupMyApp({ developmentMode: true }); // Override specific options`}
    * Called for every error created, allows modification
    */
   onError?: (error: TryError) => TryError;
+
+  /**
+   * Performance optimization settings
+   * Configure advanced performance features
+   */
+  performance?: {
+    errorCreation?: {
+      objectPooling?: boolean;
+      poolSize?: number;
+      lazyStackTrace?: boolean;
+      lazySourceLocation?: boolean;
+    };
+    contextCapture?: {
+      maxDepth?: number;
+      maxProperties?: number;
+      excludePatterns?: string[];
+    };
+    memoryManagement?: {
+      maxErrorsInMemory?: number;
+      errorTTL?: number;
+    };
+  };
 }`}
               </CodeBlock>
             </div>
@@ -959,6 +981,49 @@ configure({
       version: process.env.APP_VERSION
     }
   };
+}`}
+                  </CodeBlock>
+                </div>
+
+                <div className="border border-slate-200 rounded-lg p-4">
+                  <h4 className="font-semibold text-slate-800 mb-2">
+                    performance
+                  </h4>
+                  <p className="text-slate-600 text-sm mb-2">
+                    Advanced performance optimization settings for
+                    high-throughput scenarios.
+                  </p>
+                  <CodeBlock
+                    language="typescript"
+                    title="Performance Configuration"
+                    showLineNumbers={true}
+                    className="mt-2"
+                  >
+                    {`performance: {
+  errorCreation: {
+    // Enable object pooling to reduce GC pressure
+    objectPooling: true,
+    poolSize: 200, // Number of pre-allocated errors
+    
+    // Defer expensive computations
+    lazyStackTrace: true,
+    lazySourceLocation: true
+  },
+  
+  contextCapture: {
+    // Limit context object depth
+    maxDepth: 3,
+    maxProperties: 50,
+    
+    // Exclude sensitive fields
+    excludePatterns: ['password', 'token', 'secret', 'apiKey']
+  },
+  
+  memoryManagement: {
+    // Limit error history
+    maxErrorsInMemory: 1000,
+    errorTTL: 60000 // 1 minute
+  }
 }`}
                   </CodeBlock>
                 </div>
