@@ -134,10 +134,10 @@ if (!isTryError(result)) {
                 <li>
                   • <strong>20% to 120% overhead</strong> (configurable)
                 </li>
-                <li>• Stack trace capture: ~1200% overhead</li>
-                <li>• Context deep cloning: ~300% overhead</li>
-                <li>• Source location: ~200% overhead</li>
-                <li>• Timestamp generation: ~50% overhead</li>
+                <li>• Stack trace capture: ~80% overhead</li>
+                <li>• Context deep cloning: ~30% overhead</li>
+                <li>• Source location: ~10% overhead</li>
+                <li>• Timestamp generation: ~5% overhead</li>
               </ul>
               <CodeBlock
                 language="typescript"
