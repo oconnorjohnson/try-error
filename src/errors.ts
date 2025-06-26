@@ -362,12 +362,24 @@ export function createError<T extends string = string>(
       cause: options.cause,
     };
 
+    // Apply transformations
+    let transformedError = error;
+
     // Apply global error transformation if configured
     if (config.onError) {
-      return config.onError(error) as TryError<T>;
+      transformedError = config.onError(transformedError) as TryError<T>;
     }
 
-    return error;
+    // Apply runtime-specific handlers if enabled
+    if (config.runtimeDetection && config.environmentHandlers) {
+      const runtime = detectRuntime();
+      const handler = config.environmentHandlers[runtime];
+      if (handler) {
+        transformedError = handler(transformedError) as TryError<T>;
+      }
+    }
+
+    return transformedError;
   }
 
   // Normal path with all features
@@ -420,12 +432,24 @@ export function createError<T extends string = string>(
     cause: options.cause,
   };
 
+  // Apply transformations
+  let transformedError = error;
+
   // Apply global error transformation if configured
   if (config.onError) {
-    return config.onError(error) as TryError<T>;
+    transformedError = config.onError(transformedError) as TryError<T>;
   }
 
-  return error;
+  // Apply runtime-specific handlers if enabled
+  if (config.runtimeDetection && config.environmentHandlers) {
+    const runtime = detectRuntime();
+    const handler = config.environmentHandlers[runtime];
+    if (handler) {
+      transformedError = handler(transformedError) as TryError<T>;
+    }
+  }
+
+  return transformedError;
 }
 
 /**
@@ -536,4 +560,35 @@ export function fromThrown(
   }
 
   return wrapError("UnknownError", cause, "An unknown error occurred", context);
+}
+
+/**
+ * Detect the current runtime environment
+ * @returns The detected runtime environment
+ */
+function detectRuntime(): "server" | "client" | "edge" {
+  // Edge runtime detection (Cloudflare Workers, Vercel Edge, etc.)
+  if (
+    typeof globalThis !== "undefined" &&
+    // @ts-ignore
+    (globalThis.EdgeRuntime ||
+      globalThis.caches ||
+      // @ts-ignore
+      (typeof process !== "undefined" && process.env?.NEXT_RUNTIME === "edge"))
+  ) {
+    return "edge";
+  }
+
+  // Server-side detection
+  if (
+    typeof window === "undefined" &&
+    typeof process !== "undefined" &&
+    process.versions &&
+    process.versions.node
+  ) {
+    return "server";
+  }
+
+  // Client-side (browser)
+  return "client";
 }
