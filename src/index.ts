@@ -155,6 +155,36 @@ export {
   getErrorFingerprint,
 } from "./utils";
 
+// Middleware system
+export type {
+  ErrorMiddleware,
+  AsyncErrorMiddleware,
+  MiddlewareContext,
+  ContextualMiddleware,
+} from "./middleware";
+
+export {
+  MiddlewarePipeline,
+  globalRegistry,
+  loggingMiddleware,
+  retryMiddleware,
+  transformMiddleware,
+  enrichContextMiddleware,
+  circuitBreakerMiddleware,
+  compose,
+  filterMiddleware,
+  rateLimitMiddleware,
+} from "./middleware";
+
+// Lazy evaluation utilities
+export {
+  createLazyError,
+  makeLazy,
+  isLazyProperty,
+  forceLazyEvaluation,
+  createDebugProxy,
+} from "./lazy";
+
 // Performance utilities
 export {
   ErrorPool,
