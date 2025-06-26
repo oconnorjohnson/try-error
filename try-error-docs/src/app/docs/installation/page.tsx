@@ -39,6 +39,78 @@ export default function InstallationPage() {
           </div>
         </section>
 
+        {/* Modular Imports */}
+        <section>
+          <h2 className="text-2xl font-semibold text-slate-900 mb-4">
+            Modular Imports for Smaller Bundles
+          </h2>
+
+          <p className="text-slate-600 mb-4">
+            try-error supports modular imports to reduce bundle size by up to
+            50% when you only need specific functionality:
+          </p>
+
+          <div className="grid gap-4 mb-6">
+            <div className="border border-slate-200 rounded-lg p-4">
+              <h3 className="font-semibold text-slate-900 mb-2">
+                Full Bundle (Default)
+              </h3>
+              <CodeBlock language="typescript" className="mb-2">
+                {`import { trySync, tryAsync, isTryError } from 'try-error';`}
+              </CodeBlock>
+              <p className="text-sm text-slate-600">
+                ~8KB minified • Use when you need both sync and async operations
+              </p>
+            </div>
+
+            <div className="border border-green-200 bg-green-50 rounded-lg p-4">
+              <h3 className="font-semibold text-green-900 mb-2">
+                Sync-Only Module
+              </h3>
+              <CodeBlock language="typescript" className="mb-2">
+                {`import { trySync, isTryError } from 'try-error/sync';`}
+              </CodeBlock>
+              <p className="text-sm text-green-800">
+                ~4KB minified (50% smaller!) • Perfect for CLI tools, scripts,
+                or sync-only apps
+              </p>
+            </div>
+
+            <div className="border border-blue-200 bg-blue-50 rounded-lg p-4">
+              <h3 className="font-semibold text-blue-900 mb-2">
+                Async-Only Module
+              </h3>
+              <CodeBlock language="typescript" className="mb-2">
+                {`import { tryAsync, isTryError } from 'try-error/async';`}
+              </CodeBlock>
+              <p className="text-sm text-blue-800">
+                ~4KB minified (50% smaller!) • Ideal for modern async-first
+                applications
+              </p>
+            </div>
+
+            <div className="border border-purple-200 bg-purple-50 rounded-lg p-4">
+              <h3 className="font-semibold text-purple-900 mb-2">
+                Core Module
+              </h3>
+              <CodeBlock language="typescript" className="mb-2">
+                {`import { isTryError, createError } from 'try-error/core';`}
+              </CodeBlock>
+              <p className="text-sm text-purple-800">
+                ~3KB minified • For building custom error handling utilities
+              </p>
+            </div>
+          </div>
+
+          <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+            <p className="text-amber-800">
+              <strong>Tree-shaking:</strong> Modern bundlers (webpack, rollup,
+              esbuild, vite) will automatically eliminate unused code when using
+              modular imports.
+            </p>
+          </div>
+        </section>
+
         {/* TypeScript Configuration */}
         <section>
           <h2 className="text-2xl font-semibold text-slate-900 mb-4">
