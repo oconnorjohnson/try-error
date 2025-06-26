@@ -97,6 +97,21 @@ export default function PerformancePage() {
                   </ul>
                 </div>
               </div>
+
+              <div className="mt-4 p-3 bg-green-100 border border-green-300 rounded">
+                <p className="text-green-800 text-sm">
+                  <strong>🚀 Did you know?</strong> With minimal configuration,
+                  try-error can actually be
+                  <strong> 15% FASTER</strong> than native try/catch for error
+                  handling!
+                  <a
+                    href="/docs/advanced/error-performance"
+                    className="underline font-semibold ml-1"
+                  >
+                    Learn why →
+                  </a>
+                </p>
+              </div>
             </div>
           </div>
 

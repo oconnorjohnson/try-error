@@ -169,6 +169,11 @@ const navigation = [
         url: "/docs/advanced/performance",
         icon: Zap,
       },
+      {
+        title: "Error Performance Secrets",
+        url: "/docs/advanced/error-performance",
+        icon: Zap,
+      },
     ],
   },
   {

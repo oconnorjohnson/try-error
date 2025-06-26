@@ -216,19 +216,29 @@ export const ConfigPresets = {
   production: (): TryErrorConfig => ({
     captureStackTrace: false,
     stackTraceLimit: 0,
-    includeSource: false,
+    includeSource: true, // Keep source for debugging in logs
     developmentMode: false,
     serializer: (error) => ({
       type: error.type,
       message: error.message,
       timestamp: error.timestamp,
-      // Don't include sensitive information in production
+      source: error.source,
+      // Omit sensitive context in serialization
     }),
     onError: (error) => {
-      // Minimal logging in production
-      if (typeof console !== "undefined") {
-        console.error(`Error: ${error.type} - ${error.message}`);
-      }
+      // Production: Send to monitoring, not console
+      // Users should integrate their error service here
+
+      // Example integrations (commented out):
+      // if (typeof window !== 'undefined' && window.Sentry) {
+      //   window.Sentry.captureException(error);
+      // }
+      // if (typeof process !== 'undefined' && global.logger) {
+      //   global.logger.error('Application error', error);
+      // }
+
+      // By default: No console logging in production
+      // This keeps end-user console clean
       return error;
     },
   }),
@@ -288,6 +298,93 @@ export const ConfigPresets = {
     minimalErrors: true,
     skipTimestamp: true,
     skipContext: true,
+  }),
+
+  /**
+   * Server production with logging
+   */
+  serverProduction: (): TryErrorConfig => ({
+    captureStackTrace: false,
+    stackTraceLimit: 0,
+    includeSource: true,
+    developmentMode: false,
+    onError: (error) => {
+      // Server: Log to your logging service
+      // This is where you'd integrate with Winston, Pino, etc.
+
+      // Example (implement based on your logger):
+      // logger.error({
+      //   type: error.type,
+      //   message: error.message,
+      //   source: error.source,
+      //   timestamp: error.timestamp,
+      //   context: error.context,
+      // });
+
+      return error;
+    },
+  }),
+
+  /**
+   * Client production with error tracking
+   */
+  clientProduction: (): TryErrorConfig => ({
+    captureStackTrace: false,
+    stackTraceLimit: 0,
+    includeSource: true,
+    developmentMode: false,
+    serializer: (error) => ({
+      // Only send non-sensitive data to tracking services
+      type: error.type,
+      message: error.message,
+      timestamp: error.timestamp,
+      source: error.source,
+      // Omit potentially sensitive context
+    }),
+    onError: (error) => {
+      // Client: Send to error tracking, no console
+
+      // Common integrations (implement as needed):
+      // if (window.Sentry) {
+      //   window.Sentry.captureException(error);
+      // }
+      // if (window.LogRocket) {
+      //   window.LogRocket.captureException(error);
+      // }
+      // if (window.bugsnag) {
+      //   window.bugsnag.notify(error);
+      // }
+
+      // No console output - keeps user console clean
+      return error;
+    },
+  }),
+
+  /**
+   * Edge/Serverless optimized
+   */
+  edge: (): TryErrorConfig => ({
+    captureStackTrace: false,
+    stackTraceLimit: 0,
+    includeSource: false, // Minimize overhead
+    developmentMode: false,
+    minimalErrors: true,
+    skipTimestamp: false, // Keep timestamp for logs
+    skipContext: false, // Keep context for debugging
+    onError: (error) => {
+      // Edge: Use platform-specific logging
+
+      // Cloudflare Workers example:
+      // if (typeof caches !== 'undefined') {
+      //   console.log(JSON.stringify({
+      //     type: error.type,
+      //     message: error.message,
+      //     timestamp: error.timestamp,
+      //   }));
+      // }
+
+      return error;
+    },
   }),
 } as const;
 
@@ -412,6 +509,52 @@ export function createEnvConfig(configs: {
       : "development";
 
   return configs[env] || configs.development || {};
+}
+
+/**
+ * Helper to create production config with error service integration
+ *
+ * @example
+ * ```typescript
+ * // Sentry integration
+ * configure(withErrorService((error) => {
+ *   Sentry.captureException(error);
+ * }));
+ *
+ * // Multiple services
+ * configure(withErrorService((error) => {
+ *   Sentry.captureException(error);
+ *   analytics.track('error', { type: error.type });
+ * }));
+ * ```
+ */
+export function withErrorService(
+  handler: (error: TryError) => void,
+  options?: Partial<TryErrorConfig>
+): TryErrorConfig {
+  const isServer = typeof window === "undefined";
+  const baseConfig = isServer
+    ? ConfigPresets.serverProduction()
+    : ConfigPresets.clientProduction();
+
+  return {
+    ...baseConfig,
+    ...options,
+    onError: (error) => {
+      try {
+        handler(error);
+      } catch (e) {
+        // Don't let error service failures break the app
+        if (
+          typeof console !== "undefined" &&
+          process.env.NODE_ENV !== "production"
+        ) {
+          console.warn("Error service integration failed:", e);
+        }
+      }
+      return options?.onError ? options.onError(error) : error;
+    },
+  };
 }
 
 /**

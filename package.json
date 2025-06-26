@@ -16,6 +16,7 @@
     "test:types": "tsc --noEmit",
     "dev": "tsc --watch",
     "benchmark": "ts-node benchmark/performance.ts",
+    "benchmark:minimal": "tsx benchmark/minimal-overhead.ts",
     "clean": "rm -rf dist && pnpm -r clean",
     "pack": "pnpm build && pnpm pack",
     "prepublishOnly": "pnpm build && pnpm build:browser",

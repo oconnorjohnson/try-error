@@ -216,77 +216,112 @@ return result; // Type-safe success value`}
       <section className="space-y-4">
         <h2 className="text-2xl font-semibold">Performance Characteristics</h2>
 
-        <div className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-lg p-6">
-          <h3 className="text-lg font-semibold text-green-900 mb-3">
+        <div className="border border-border rounded-lg p-6 bg-card">
+          <h3 className="text-lg font-semibold mb-6">
             Real-World Performance Impact
           </h3>
 
           <div className="grid md:grid-cols-2 gap-6">
-            <div>
-              <h4 className="font-semibold text-green-800 mb-2">
-                ✅ Success Path (Common Case)
-              </h4>
-              <ul className="space-y-2 text-green-700 text-sm">
-                <li>
-                  • <strong>&lt;3% overhead</strong> compared to raw try/catch
-                </li>
-                <li>• Direct value return, no wrapper objects</li>
-                <li>• No performance penalty for successful operations</li>
-                <li>• Ideal for hot paths and performance-critical code</li>
-              </ul>
-            </div>
+            <Card className="border-green-500/20 bg-green-500/5">
+              <CardHeader>
+                <CardTitle className="text-base flex items-center gap-2">
+                  <CheckCircle className="h-5 w-5 text-green-500" />
+                  Success Path (Common Case)
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <Badge
+                    variant="secondary"
+                    className="bg-green-500/10 text-green-500 border-green-500/20"
+                  >
+                    &lt;3% overhead
+                  </Badge>
+                  <span className="text-sm text-muted-foreground">
+                    vs raw try/catch
+                  </span>
+                </div>
+                <ul className="space-y-1 text-sm text-muted-foreground">
+                  <li>• Direct value return, no wrapper objects</li>
+                  <li>• No performance penalty for successful operations</li>
+                  <li>• Ideal for hot paths and performance-critical code</li>
+                </ul>
+              </CardContent>
+            </Card>
 
-            <div>
-              <h4 className="font-semibold text-orange-800 mb-2">
-                ⚠️ Error Path (Exceptional Case)
-              </h4>
-              <ul className="space-y-2 text-orange-700 text-sm">
-                <li>
-                  • <strong>50% to 1700% overhead</strong> (configurable)
-                </li>
-                <li>• Stack trace capture: ~1200% of overhead</li>
-                <li>• Context cloning: ~300% of overhead</li>
-                <li>• Source location: ~200% of overhead</li>
-              </ul>
-            </div>
+            <Card className="border-orange-500/20 bg-orange-500/5">
+              <CardHeader>
+                <CardTitle className="text-base flex items-center gap-2">
+                  <AlertTriangle className="h-5 w-5 text-orange-500" />
+                  Error Path (Exceptional Case)
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <Badge
+                    variant="secondary"
+                    className="bg-orange-500/10 text-orange-500 border-orange-500/20"
+                  >
+                    50%-1700% overhead
+                  </Badge>
+                  <span className="text-sm text-muted-foreground">
+                    configurable
+                  </span>
+                </div>
+                <ul className="space-y-1 text-sm text-muted-foreground">
+                  <li>• Stack trace capture: ~1200% of overhead</li>
+                  <li>• Context cloning: ~300% of overhead</li>
+                  <li>• Source location: ~200% of overhead</li>
+                </ul>
+              </CardContent>
+            </Card>
           </div>
 
-          <div className="mt-4 p-4 bg-blue-100 rounded-lg">
-            <h4 className="font-semibold text-blue-900 mb-2">
-              💡 Why the Error Overhead?
-            </h4>
-            <p className="text-blue-800 text-sm mb-2">
-              Error overhead is high because try-error captures rich debugging
-              information:
-            </p>
-            <ul className="space-y-1 text-blue-700 text-sm">
-              <li>
-                • <strong>Stack traces:</strong> Essential for debugging but
-                expensive to capture
-              </li>
-              <li>
-                • <strong>Source location:</strong> Shows exactly where errors
-                occurred
-              </li>
-              <li>
-                • <strong>Context objects:</strong> Preserves state at error
-                time
-              </li>
-              <li>
-                • <strong>Timestamps:</strong> Tracks when errors happened
-              </li>
-            </ul>
-            <p className="text-blue-800 text-sm mt-2">
-              <strong>
-                This is usually fine because errors should be exceptional!
-              </strong>{" "}
-              If you have high error rates, use{" "}
-              <code className="bg-blue-200 px-1 rounded">
-                ConfigPresets.minimal()
-              </code>
-              for &lt;50% overhead.
-            </p>
-          </div>
+          <Alert className="mt-6 border-blue-500/20 bg-blue-500/5">
+            <AlertTriangle className="h-4 w-4 text-blue-500" />
+            <AlertDescription>
+              <div className="space-y-3">
+                <div>
+                  <strong className="text-foreground">
+                    Why the Error Overhead?
+                  </strong>
+                </div>
+                <p className="text-sm">
+                  Error overhead is high because try-error captures rich
+                  debugging information:
+                </p>
+                <ul className="space-y-1 text-sm">
+                  <li>
+                    • <strong>Stack traces:</strong> Essential for debugging but
+                    expensive to capture
+                  </li>
+                  <li>
+                    • <strong>Source location:</strong> Shows exactly where
+                    errors occurred
+                  </li>
+                  <li>
+                    • <strong>Context objects:</strong> Preserves state at error
+                    time
+                  </li>
+                  <li>
+                    • <strong>Timestamps:</strong> Tracks when errors happened
+                  </li>
+                </ul>
+                <div className="pt-2 border-t border-border mt-3">
+                  <p className="text-sm">
+                    <strong>
+                      This is usually fine because errors should be exceptional!
+                    </strong>{" "}
+                    If you have high error rates, use{" "}
+                    <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">
+                      ConfigPresets.minimal()
+                    </code>{" "}
+                    for &lt;50% overhead.
+                  </p>
+                </div>
+              </div>
+            </AlertDescription>
+          </Alert>
         </div>
       </section>
 
