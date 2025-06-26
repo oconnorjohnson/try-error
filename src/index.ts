@@ -150,6 +150,31 @@ export {
   createErrorReport,
 } from "./utils";
 
+// Stage 3: Advanced utilities
+export {
+  createEnhancedError,
+  isErrorOfType,
+  isErrorOfTypes,
+  getErrorMessage,
+  getErrorContext,
+  hasErrorContext,
+  transformResult,
+  withDefault,
+  withDefaultFn,
+  filterSuccess,
+  filterErrors,
+  partitionResults,
+  combineErrors,
+  getErrorSummary,
+  formatErrorForLogging,
+  createErrorReport,
+  diffErrors,
+  groupErrors,
+  ErrorSampling,
+  correlateErrors,
+  getErrorFingerprint,
+} from "./utils";
+
 // Re-export commonly used functions with clearer names
 export { trySync as try$ } from "./sync";
 
