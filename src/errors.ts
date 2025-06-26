@@ -1,5 +1,5 @@
 import { TryError, TRY_ERROR_BRAND } from "./types";
-import { getConfig } from "./config";
+import { getConfig, getConfigVersion } from "./config";
 
 // Performance optimization: Use WeakMap for config cache
 const configCache = new WeakMap<
@@ -34,7 +34,7 @@ export function invalidateEnvironmentCache(): void {
  * Get cached config or fetch new one if changed
  */
 function getCachedConfig() {
-  const currentVersion = (getConfig as any).version || 0;
+  const currentVersion = getConfigVersion();
   const cached = configCache.get(getConfig);
 
   if (!cached || configVersion !== currentVersion) {

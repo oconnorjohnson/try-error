@@ -17,6 +17,48 @@ let globalConfig: TryErrorConfig | null = null;
 const presetCache = new Map<string, TryErrorConfig>();
 
 /**
+ * Configuration version tracker for cache invalidation
+ * More robust than attaching version to function objects
+ */
+class ConfigVersionTracker {
+  private version = 0;
+  private listeners = new Set<() => void>();
+
+  increment(): void {
+    this.version++;
+    // Notify all listeners about version change
+    this.listeners.forEach((listener) => listener());
+  }
+
+  getVersion(): number {
+    return this.version;
+  }
+
+  addListener(listener: () => void): void {
+    this.listeners.add(listener);
+  }
+
+  removeListener(listener: () => void): void {
+    this.listeners.delete(listener);
+  }
+}
+
+const configVersionTracker = new ConfigVersionTracker();
+
+// Export for use in errors.ts
+export function getConfigVersion(): number {
+  return configVersionTracker.getVersion();
+}
+
+export function addConfigChangeListener(listener: () => void): void {
+  configVersionTracker.addListener(listener);
+}
+
+export function removeConfigChangeListener(listener: () => void): void {
+  configVersionTracker.removeListener(listener);
+}
+
+/**
  * Configuration options for try-error behavior
  */
 export interface TryErrorConfig {
@@ -674,7 +716,7 @@ export function configure(
     globalConfig = globalConfig ? deepMerge(globalConfig, config) : config;
   }
   // Increment version to invalidate caches
-  (getConfig as any).version = ((getConfig as any).version || 0) + 1;
+  configVersionTracker.increment();
 }
 
 /**
@@ -702,7 +744,7 @@ export function getConfig(): TryErrorConfig {
 export function resetConfig(): void {
   globalConfig = null;
   // Increment version to invalidate caches
-  (getConfig as any).version = ((getConfig as any).version || 0) + 1;
+  configVersionTracker.increment();
 }
 
 /**

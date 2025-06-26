@@ -1,7 +1,7 @@
 // Type definitions for React integration
 // TODO: Implement React-specific types for error handling
 
-import { TryError, TryResult } from "try-error";
+import { TryError, TryResult, TRY_ERROR_BRAND } from "try-error";
 import { ReactNode, ErrorInfo } from "react";
 
 // ============================================================================
@@ -133,6 +133,7 @@ export function isReactTryError(error: unknown): error is ReactTryError {
   return (
     typeof error === "object" &&
     error !== null &&
+    TRY_ERROR_BRAND in error &&
     "type" in error &&
     "message" in error &&
     "timestamp" in error
@@ -189,6 +190,132 @@ export function isComponentUnmountedError(
 
 export function isUnexpectedError(error: unknown): error is UnexpectedError {
   return isReactTryError(error) && error.type === "UNEXPECTED_ERROR";
+}
+
+// Additional utility type predicates
+
+/**
+ * Check if an error is any type of React error
+ */
+export function isReactError(error: unknown): error is ReactError {
+  return (
+    isReactTryError(error) &&
+    (isComponentError(error) ||
+      isRenderError(error) ||
+      isEffectError(error) ||
+      isEventHandlerError(error) ||
+      isFormSubmissionError(error) ||
+      isValidationError(error) ||
+      isAsyncComponentError(error) ||
+      isStateUpdateError(error) ||
+      isAbortedError(error) ||
+      isComponentUnmountedError(error) ||
+      isUnexpectedError(error))
+  );
+}
+
+/**
+ * Check if an error has field errors (form-related)
+ */
+export function hasFieldErrors(
+  error: unknown
+): error is FormSubmissionError | ValidationError {
+  return (
+    isFormSubmissionError(error) ||
+    (isValidationError(error) && "field" in error)
+  );
+}
+
+/**
+ * Check if an error is retryable
+ */
+export function isRetryableError(error: unknown): boolean {
+  if (!isReactTryError(error)) return false;
+
+  // Don't retry validation errors or component unmounted errors
+  return !(
+    isValidationError(error) ||
+    isComponentUnmountedError(error) ||
+    (isAbortedError(error) && error.reason === "unmount")
+  );
+}
+
+/**
+ * Get the React component name from an error
+ */
+export function getComponentName(error: unknown): string | undefined {
+  if (isReactTryError(error)) {
+    return error.componentName;
+  }
+  return undefined;
+}
+
+/**
+ * Get field errors from a form error
+ */
+export function getFieldErrors(
+  error: unknown
+): Record<string, string[]> | undefined {
+  if (isFormSubmissionError(error)) {
+    return error.fieldErrors;
+  }
+  if (isValidationError(error) && error.field) {
+    return { [error.field]: [error.message] };
+  }
+  return undefined;
+}
+
+/**
+ * Check if error happened in a specific component
+ */
+export function isErrorFromComponent(
+  error: unknown,
+  componentName: string
+): boolean {
+  return isReactTryError(error) && error.componentName === componentName;
+}
+
+/**
+ * Type guard for TryState
+ */
+export function isTryState<T>(value: unknown): value is TryState<T> {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    "data" in value &&
+    "error" in value &&
+    "isLoading" in value &&
+    "isSuccess" in value &&
+    "isError" in value
+  );
+}
+
+/**
+ * Type guard for RetryableTryState
+ */
+export function isRetryableTryState<T>(
+  value: unknown
+): value is RetryableTryState<T> {
+  return (
+    isTryState<T>(value) &&
+    "retryCount" in value &&
+    "isRetrying" in value &&
+    "maxRetriesReached" in value
+  );
+}
+
+/**
+ * Type guard for FormTryState
+ */
+export function isFormTryState<T>(value: unknown): value is FormTryState<T> {
+  return (
+    isTryState<T>(value) &&
+    "fieldErrors" in value &&
+    "isValidating" in value &&
+    "isValid" in value &&
+    "isDirty" in value &&
+    "isSubmitted" in value
+  );
 }
 
 // ============================================================================
