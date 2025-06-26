@@ -72,7 +72,8 @@ describe("Telemetry System", () => {
   afterEach(() => {
     telemetry.clearProviders();
     // Reset global state
-    telemetry.setGlobalTags({});
+    telemetry.clearGlobalTags();
+    telemetry.clearGlobalContext();
     telemetry.setEnabled(true);
   });
 

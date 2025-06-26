@@ -9,9 +9,23 @@
 import { TryError, TRY_ERROR_BRAND } from "./types";
 
 /**
+ * Mutable version of TryError for pooling
+ */
+interface MutableTryError<T extends string = string> {
+  [TRY_ERROR_BRAND]: true;
+  type: T;
+  message: string;
+  source: string;
+  timestamp: number;
+  stack?: string;
+  context?: Record<string, unknown>;
+  cause?: unknown;
+}
+
+/**
  * Poolable error object that can be reset and reused
  */
-interface PoolableError extends TryError {
+interface PoolableError<T extends string = string> extends MutableTryError<T> {
   _pooled: boolean;
   _reset(): void;
 }
@@ -21,7 +35,7 @@ interface PoolableError extends TryError {
  */
 export class ErrorPool {
   private pool: PoolableError[] = [];
-  private readonly maxSize: number;
+  private maxSize: number;
   private activeCount = 0;
   private stats = {
     hits: 0,
@@ -49,7 +63,7 @@ export class ErrorPool {
    * Create a new poolable error
    */
   private createPoolableError(): PoolableError {
-    const error = {
+    const error: PoolableError = {
       [TRY_ERROR_BRAND]: true,
       type: "",
       message: "",
@@ -59,7 +73,7 @@ export class ErrorPool {
       context: undefined,
       cause: undefined,
       _pooled: true,
-      _reset(this: PoolableError) {
+      _reset() {
         this.type = "";
         this.message = "";
         this.source = "";
@@ -68,7 +82,7 @@ export class ErrorPool {
         this.context = undefined;
         this.cause = undefined;
       },
-    } as PoolableError;
+    };
 
     this.stats.creates++;
     return error;
@@ -77,7 +91,7 @@ export class ErrorPool {
   /**
    * Acquire an error from the pool
    */
-  acquire<T extends string = string>(): PoolableError & TryError<T> {
+  acquire<T extends string = string>(): PoolableError<T> & TryError<T> {
     let error: PoolableError;
 
     if (this.pool.length > 0) {
@@ -89,7 +103,8 @@ export class ErrorPool {
     }
 
     this.activeCount++;
-    return error as PoolableError & TryError<T>;
+    // Cast to both PoolableError<T> and TryError<T> for compatibility
+    return error as PoolableError<T> & TryError<T>;
   }
 
   /**
@@ -100,7 +115,7 @@ export class ErrorPool {
       return; // Not a pooled error
     }
 
-    const poolable = error as PoolableError;
+    const poolable = error as unknown as PoolableError;
     poolable._reset();
 
     if (this.pool.length < this.maxSize) {
