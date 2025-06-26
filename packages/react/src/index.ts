@@ -1,6 +1,23 @@
 // React integration for try-error
 // This package provides React-specific hooks and components for error handling
 
+// Check React version compatibility
+if (typeof process !== "undefined" && process.env.NODE_ENV !== "production") {
+  try {
+    const React = require("react");
+    const version = React.version;
+    const major = parseInt(version.split(".")[0], 10);
+    if (major < 16) {
+      console.warn(
+        "try-error-react: This package requires React 16.8 or higher for hooks support. " +
+          `You are using React ${version}.`
+      );
+    }
+  } catch (e) {
+    // React not found, will fail at runtime
+  }
+}
+
 // Re-export core try-error APIs that React developers commonly need
 export {
   // Core types
@@ -79,17 +96,38 @@ export * from "./hooks/useTryMutation";
 // Export React components
 export * from "./components/TryErrorBoundary";
 
-// Re-export specific types for convenience
-export type {
-  TryState,
-  TryHookReturn,
-  AsyncTryHookReturn,
-  FormTryHookReturn,
-  ReactTryError,
-  ReactErrorType,
-  TryReactConfig,
-  AsyncTryConfig,
-  FormTryConfig,
-  ErrorBoundaryProps,
-  ErrorBoundaryState,
-} from "./types";
+// Export context utilities
+export * from "./context/ErrorContext";
+
+// Re-export all types
+export * from "./types";
+
+// Version info
+export const VERSION = process.env.npm_package_version || "unknown";
+
+// Utility to check try-error core version compatibility
+export function checkCoreVersion(): boolean {
+  try {
+    const tryError = require("try-error");
+    const coreVersion = tryError.VERSION || "0.0.0";
+    const [coreMajor] = coreVersion.split(".").map(Number);
+    const [reactMajor] = VERSION.split(".").map(Number);
+
+    if (coreMajor !== reactMajor) {
+      console.warn(
+        `try-error-react: Version mismatch detected. ` +
+          `try-error-react@${VERSION} may not be compatible with try-error@${coreVersion}. ` +
+          `Consider updating to matching major versions.`
+      );
+      return false;
+    }
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+// Check version compatibility in development
+if (typeof process !== "undefined" && process.env.NODE_ENV !== "production") {
+  checkCoreVersion();
+}
