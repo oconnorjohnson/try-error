@@ -258,3 +258,58 @@ This file tracks key decisions, progress, and context for the try-error library 
 ## Context for Next Session
 
 The codebase has been significantly improved based on the comprehensive analysis in improvements.md. Most bugs and inefficiencies have been fixed, and many missing features have been added. The main remaining work is fixing test failures and implementing the more advanced features like object pooling, async stack traces, and monitoring integrations.
+
+## Async Performance Investigation & Solution
+
+### Investigation Summary (2024-01-XX)
+
+**Problem**: tryAsync has 145% overhead compared to native try/catch due to V8's inability to optimize async functions created inside loops.
+
+**Key Findings**:
+
+- Function creation in loops: 451% overhead
+- Pre-defined functions: Only 3.6% overhead
+- Promise.then() approach: 64.2% overhead (best alternative)
+- tryPromise pattern: 101.7% overhead
+- Root cause: V8 deoptimizes async/await when functions are created dynamically
+
+### Implementation Plan
+
+**Phase 1: Core Performance APIs (HIGH PRIORITY)**
+
+1. Add `tryPromise(promise)` - Fast path for existing promises (64% overhead)
+2. Add `tryAwait` alias - Intuitive naming for migration
+3. Optimize `tryAsync` - Use tryPromise internally when no options
+
+**Phase 2: Advanced Patterns (MEDIUM PRIORITY)**
+
+1. `tryLazy` - Deferred execution pattern
+2. `TryChain` - Fluent API for error handling chains
+3. Chainable methods: map, flatMap, recover
+
+**Phase 3: Migration Strategy (HIGH PRIORITY)**
+
+1. `tryAuto` - Smart detection of promise vs function
+2. ESLint rule - Suggest tryPromise for performance
+3. Compatibility layer for gradual migration
+
+**Phase 4: Documentation (HIGH PRIORITY)**
+
+1. Performance guide with decision tree
+2. Migration examples
+3. Benchmark comparisons
+4. API reference updates
+
+**Phase 5: Internal Optimizations (LOW PRIORITY)**
+
+1. Cache commonly used functions
+2. Pre-compile error messages
+3. Use Promise.then() internally where possible
+
+### Success Metrics
+
+- tryPromise: <70% overhead (currently 64%)
+- tryAsync optimized: <100% overhead (from 145%)
+- Zero breaking changes
+- Clear migration path
+- Performance regression tests

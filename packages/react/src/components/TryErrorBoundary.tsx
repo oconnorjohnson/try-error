@@ -138,7 +138,7 @@ export class TryErrorBoundary extends Component<
   private retryTimeoutId: ReturnType<typeof setTimeout> | null = null;
   private errorLogMap = new WeakMap<Error, boolean>();
   private isRetrying = false;
-  private isMounted = false;
+  private _isMounted = false;
 
   constructor(props: TryErrorBoundaryProps) {
     super(props);
@@ -152,7 +152,7 @@ export class TryErrorBoundary extends Component<
   }
 
   componentDidMount() {
-    this.isMounted = true;
+    this._isMounted = true;
 
     // Register this boundary for async errors if enabled
     if (this.props.catchAsyncErrors || this.props.catchEventHandlerErrors) {
@@ -162,7 +162,7 @@ export class TryErrorBoundary extends Component<
   }
 
   componentWillUnmount() {
-    this.isMounted = false;
+    this._isMounted = false;
 
     if (this.retryTimeoutId !== null) {
       clearTimeout(this.retryTimeoutId);
@@ -192,7 +192,7 @@ export class TryErrorBoundary extends Component<
     error: Error,
     source: "unhandledRejection" | "globalError"
   ) => {
-    if (!this.isMounted || this.state.hasError) return;
+    if (!this._isMounted || this.state.hasError) return;
 
     // Check if we should catch this error
     if (this.props.errorFilter && !this.props.errorFilter(error)) {
