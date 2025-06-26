@@ -228,21 +228,36 @@ Pre-defined async function: 4.92ms (-0.5%)
 
 ## 🧪 Experiments
 
-### Experiment 1: Minimal Async Wrapper
+### Experiment 1: Optimized tryAsync Implementation
 
-```typescript
-// Code for experiment
-```
+Created optimized versions that:
 
-**Results**:
-
-### Experiment 2: [Title]
-
-```typescript
-// Code for experiment
-```
+- Pre-define helper functions to avoid creation in hot path
+- Skip Promise.race when no timeout/signal
+- Ultra-minimal version with just try-catch
 
 **Results**:
+
+```
+Native baseline: 5.16ms
+Original tryAsync: +146.4%
+Optimized tryAsync: +147.3% (no improvement!)
+Ultra-optimized: +118.7% (11.3% better)
+```
+
+**Conclusion**: The overhead is NOT primarily from function creation inside tryAsync. The ultra-minimal version still has 118% overhead!
+
+### Experiment 2: The Real Culprit Investigation
+
+The problem appears to be that passing a function to another async function breaks V8's optimization. Even this minimal wrapper has huge overhead:
+
+```typescript
+async function wrapper<T>(fn: () => Promise<T>): Promise<T> {
+  return await fn();
+}
+```
+
+This suggests the issue is fundamental to how V8 optimizes async/await with function parameters.
 
 ## 📈 Progress Tracking
 
