@@ -1108,6 +1108,290 @@ const globalError = createTryError('GlobalError', 'Uses global config');`}
           </div>
         </section>
 
+        {/* Next.js Configuration Guide */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold text-slate-900 mb-4">
+            Next.js Configuration Guide
+          </h2>
+
+          <Alert className="mb-6 border-blue-500/20 bg-blue-500/5">
+            <AlertTriangle className="h-4 w-4 text-blue-500" />
+            <AlertDescription>
+              <strong className="text-foreground">
+                Next.js Apps Need Special Handling:
+              </strong>{" "}
+              Server components, API routes, and client components often need
+              different error handling strategies. try-error makes this easy
+              with environment-aware configuration.
+            </AlertDescription>
+          </Alert>
+
+          <div className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Basic Next.js Setup</CardTitle>
+                <CardDescription>
+                  The simplest approach - one configuration for both server and
+                  client
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <CodeBlock
+                  language="typescript"
+                  title="app/layout.tsx"
+                  showLineNumbers={true}
+                >
+                  {`import { setupNextJs } from 'try-error/setup';
+
+// This runs on both server and client
+// setupNextJs() automatically detects the environment
+setupNextJs();
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en">
+      <body>{children}</body>
+    </html>
+  );
+}`}
+                </CodeBlock>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Advanced: Separate Server/Client Configs</CardTitle>
+                <CardDescription>
+                  Different error handling for server components, API routes,
+                  and client components
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <CodeBlock
+                  language="typescript"
+                  title="app/layout.tsx - Production-Ready Setup"
+                  showLineNumbers={true}
+                >
+                  {`import { setupNextJs, withErrorService } from 'try-error/setup';
+
+// Configure with separate server and client settings
+setupNextJs({
+  // Shared configuration
+  includeSource: true,
+  developmentMode: process.env.NODE_ENV === 'development',
+  
+  // Server-specific (API routes, server components, server actions)
+  server: {
+    captureStackTrace: false, // Performance optimization
+    onError: (error) => {
+      // Log to your server-side logging service
+      if (process.env.NODE_ENV === 'production') {
+        // Example: Winston, Pino, or cloud logging
+        logger.error({
+          type: error.type,
+          message: error.message,
+          source: error.source,
+          timestamp: error.timestamp,
+          context: error.context,
+        });
+      }
+      return error;
+    }
+  },
+  
+  // Client-specific (client components, browser code)
+  client: {
+    captureStackTrace: false, // Don't expose stack traces to users
+    skipContext: true, // Don't send sensitive context to client
+    onError: (error) => {
+      // Send to client-side error tracking
+      if (typeof window !== 'undefined' && window.Sentry) {
+        window.Sentry.captureException(error);
+      }
+      // No console output in production
+      return error;
+    }
+  }
+});`}
+                </CodeBlock>
+
+                <Alert>
+                  <AlertDescription>
+                    <strong>Pro tip:</strong> The configuration runs once per
+                    environment. On the server, it runs when the server starts.
+                    On the client, it runs when the page loads.
+                  </AlertDescription>
+                </Alert>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Server Actions & API Routes</CardTitle>
+                <CardDescription>
+                  Special considerations for Next.js server-side code
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <CodeBlock
+                  language="typescript"
+                  title="app/actions/user-actions.ts"
+                  showLineNumbers={true}
+                >
+                  {`'use server';
+
+import { tryAsync, isTryError } from 'try-error';
+import { revalidatePath } from 'next/cache';
+
+export async function updateUser(userId: string, data: UpdateUserData) {
+  const result = await tryAsync(async () => {
+    // Validate input
+    const validation = validateUserData(data);
+    if (!validation.valid) {
+      throw createError({
+        type: 'ValidationError',
+        message: 'Invalid user data',
+        context: { errors: validation.errors }
+      });
+    }
+    
+    // Update in database
+    const user = await db.user.update({
+      where: { id: userId },
+      data: data
+    });
+    
+    revalidatePath(\`/users/\${userId}\`);
+    return user;
+  });
+  
+  if (isTryError(result)) {
+    // Server actions can't throw serializable errors
+    // Return error as data
+    return {
+      success: false,
+      error: {
+        type: result.type,
+        message: result.message,
+        // Don't send full error details to client
+      }
+    };
+  }
+  
+  return { success: true, data: result };
+}`}
+                </CodeBlock>
+
+                <CodeBlock
+                  language="typescript"
+                  title="app/api/users/route.ts"
+                  showLineNumbers={true}
+                >
+                  {`import { tryAsync, isTryError } from 'try-error';
+import { NextRequest, NextResponse } from 'next/server';
+
+export async function GET(request: NextRequest) {
+  const result = await tryAsync(async () => {
+    const users = await fetchUsers();
+    return users;
+  });
+
+  if (isTryError(result)) {
+    // Log server-side error (will use server config)
+    console.error('API Error:', result);
+    
+    return NextResponse.json(
+      { error: 'Failed to fetch users' },
+      { status: 500 }
+    );
+  }
+
+  return NextResponse.json(result);
+}`}
+                </CodeBlock>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Error Monitoring Integration</CardTitle>
+                <CardDescription>
+                  Connect to popular error tracking services
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <CodeBlock
+                  language="typescript"
+                  title="lib/try-error-setup.ts"
+                  showLineNumbers={true}
+                >
+                  {`import { setupNextJs } from 'try-error/setup';
+import * as Sentry from '@sentry/nextjs';
+import { Logger } from 'winston';
+
+// Your server logger
+const serverLogger = new Logger({
+  // ... winston config
+});
+
+export function initializeTryError() {
+  setupNextJs({
+    server: {
+      captureStackTrace: process.env.NODE_ENV === 'development',
+      onError: (error) => {
+        // Server: Use Winston or similar
+        serverLogger.error('Application error', {
+          error: {
+            type: error.type,
+            message: error.message,
+            source: error.source,
+            context: error.context,
+            stack: error.stack,
+          },
+          timestamp: new Date().toISOString(),
+        });
+        
+        // Also send to Sentry on server
+        Sentry.captureException(error);
+        return error;
+      }
+    },
+    
+    client: {
+      captureStackTrace: false,
+      skipContext: true, // Don't expose server context to client
+      onError: (error) => {
+        // Client: Send to Sentry
+        Sentry.captureException(error, {
+          tags: {
+            errorType: error.type,
+            source: 'client',
+          },
+          extra: {
+            timestamp: error.timestamp,
+          }
+        });
+        
+        // In development, log to console
+        if (process.env.NODE_ENV === 'development') {
+          console.error('[Client Error]', error);
+        }
+        
+        return error;
+      }
+    }
+  });
+}`}
+                </CodeBlock>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+
         {/* Configuration Options */}
         <section>
           <h2 className="text-2xl font-semibold text-slate-900 mb-4">
