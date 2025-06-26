@@ -76,7 +76,7 @@ export default function ConfigurationPage() {
         {/* Where to Configure */}
         <section
           id="where-to-configure"
-          className="bg-purple-500 border-2 border-purple-300 rounded-lg p-6 mb-8"
+          className="bg-purple-50 border-2 border-purple-300 rounded-lg p-6 mb-8"
         >
           <h2 className="text-2xl font-semibold text-purple-900 mb-4">
             📍 Where to Configure try-error
@@ -310,10 +310,8 @@ autoSetup(); // Automatically detects environment`}
           </div>
 
           <div className="bg-yellow-50 border border-yellow-300 rounded-lg p-4 mt-4">
-            <h3 className="font-semibold text-yellow-800 mb-2">
-              💡 Testing Tip
-            </h3>
-            <p className="text-yellow-700">
+            <h3 className="font-semibold text-black mb-2">💡 Testing Tip</h3>
+            <p className="text-black">
               For testing, you might want to reconfigure try-error. Use a test
               setup file:
             </p>
@@ -356,7 +354,7 @@ beforeAll(() => {
           </p>
 
           <div className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-lg p-6 mb-6">
-            <h3 className="text-lg font-semibold text-green-900 mb-3">
+            <h3 className="text-lg font-semibold text-black mb-3">
               ⚡ Environment-Specific Setup
             </h3>
             <CodeBlock
@@ -388,7 +386,7 @@ setupPerformance(); // ✨ Maximum performance, minimal overhead
 import { setupTesting } from 'try-error/setup';
 setupTesting(); // ✨ Test-friendly configuration`}
             </CodeBlock>
-            <div className="bg-green-100 border border-green-300 rounded-lg p-3">
+            <div className="bg-green-900 border border-green-300 rounded-lg p-3">
               <h4 className="font-semibold text-green-900 text-sm mb-1">
                 🎯 Benefits of Quick Setup
               </h4>
