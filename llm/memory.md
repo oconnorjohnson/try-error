@@ -498,6 +498,17 @@ This completes the documentation requirements for the performance optimization a
 
 ### Bundle Size
 
+- [x] **Modular Builds** (2024-12-30) - Implemented separate sync/async imports
+
+  - Created `src/core.ts` with shared types and utilities
+  - Created `src/sync-only.ts` exporting only sync functionality
+  - Created `src/async-only.ts` exporting only async functionality
+  - Updated `package.json` with proper exports field for module resolution
+  - Added browser builds for each module (full, sync, async)
+  - Bundle size reduction: ~50% when using sync-only or async-only
+  - Full documentation in `docs/modular-imports.md`
+  - Test coverage in `tests/modular-imports.test.ts`
+
 - [ ] Modular builds (separate sync/async imports)
 - [ ] Compression-friendly code structure
 
