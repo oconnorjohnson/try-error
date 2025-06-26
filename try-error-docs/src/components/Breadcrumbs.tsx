@@ -3,7 +3,7 @@
 import React from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { ChevronRight, Home } from "lucide-react";
+import { Home } from "lucide-react";
 import {
   Breadcrumb,
   BreadcrumbItem,

@@ -115,7 +115,7 @@ export function PlaygroundAdvanced({
   }, [output]);
 
   const addOutput = useCallback(
-    (type: ConsoleOutput["type"], ...args: any[]) => {
+    (type: ConsoleOutput["type"], ...args: unknown[]) => {
       const message = args
         .map((arg) => {
           if (typeof arg === "object") {
@@ -141,10 +141,10 @@ export function PlaygroundAdvanced({
 
     // Create a custom console for capturing output
     const customConsole = {
-      log: (...args: any[]) => addOutput("log", ...args),
-      error: (...args: any[]) => addOutput("error", ...args),
-      warn: (...args: any[]) => addOutput("warn", ...args),
-      info: (...args: any[]) => addOutput("info", ...args),
+      log: (...args: unknown[]) => addOutput("log", ...args),
+      error: (...args: unknown[]) => addOutput("error", ...args),
+      warn: (...args: unknown[]) => addOutput("warn", ...args),
+      info: (...args: unknown[]) => addOutput("info", ...args),
     };
 
     try {

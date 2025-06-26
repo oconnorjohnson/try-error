@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 
 import {
   Sidebar,
@@ -305,7 +306,13 @@ export function AppSidebar() {
     <Sidebar>
       <SidebarHeader className="border-b px-6 py-4">
         <div className="flex items-center gap-3">
-          <img src="/logo.png" alt="try-error logo" className="h-10 w-10" />
+          <Image
+            src="/logo.png"
+            alt="try-error logo"
+            width={40}
+            height={40}
+            className="h-10 w-10"
+          />
           <div>
             <h2 className="text-lg font-semibold">try-error</h2>
             <p className="text-xs text-muted-foreground">Documentation</p>

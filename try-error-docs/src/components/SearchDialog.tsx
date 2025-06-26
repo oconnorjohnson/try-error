@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef } from "react";
 import { createPortal } from "react-dom";
 import { DocSearchModal, useDocSearchKeyboardEvents } from "@docsearch/react";
 import "@docsearch/css";
