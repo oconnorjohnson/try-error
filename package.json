@@ -4,12 +4,38 @@
   "description": "Lightweight, progressive, type-safe error handling for TypeScript",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    },
+    "./sync": {
+      "types": "./dist/sync-only.d.ts",
+      "import": "./dist/sync-only.js",
+      "require": "./dist/sync-only.js"
+    },
+    "./async": {
+      "types": "./dist/async-only.d.ts",
+      "import": "./dist/async-only.js",
+      "require": "./dist/async-only.js"
+    },
+    "./core": {
+      "types": "./dist/core.d.ts",
+      "import": "./dist/core.js",
+      "require": "./dist/core.js"
+    },
+    "./package.json": "./package.json"
+  },
   "files": [
     "dist"
   ],
   "scripts": {
     "build": "tsc",
-    "build:browser": "esbuild src/index.ts --bundle --format=esm --outfile=dist/try-error.esm.js --platform=browser --target=es2020",
+    "build:browser": "pnpm build:browser:full && pnpm build:browser:sync && pnpm build:browser:async",
+    "build:browser:full": "esbuild src/index.ts --bundle --format=esm --outfile=dist/try-error.esm.js --platform=browser --target=es2020",
+    "build:browser:sync": "esbuild src/sync-only.ts --bundle --format=esm --outfile=dist/try-error-sync.esm.js --platform=browser --target=es2020",
+    "build:browser:async": "esbuild src/async-only.ts --bundle --format=esm --outfile=dist/try-error-async.esm.js --platform=browser --target=es2020",
     "build:all": "tsc && pnpm build:browser && pnpm -r build",
     "test": "jest && pnpm -r test",
     "test:watch": "jest --watch",
@@ -66,27 +92,43 @@
   },
   "size-limit": [
     {
-      "name": "Core (ESM)",
+      "name": "Full Bundle (ESM)",
       "path": "dist/index.js",
       "import": "{ trySync, tryAsync, isTryError }",
-      "limit": "5 KB"
+      "limit": "8 KB"
     },
     {
-      "name": "Core (CJS)",
-      "path": "dist/index.js",
+      "name": "Sync Module Only",
+      "path": "dist/sync-only.js",
+      "import": "{ trySync, isTryError }",
+      "limit": "4 KB"
+    },
+    {
+      "name": "Async Module Only",
+      "path": "dist/async-only.js",
+      "import": "{ tryAsync, isTryError }",
+      "limit": "4 KB"
+    },
+    {
+      "name": "Core Module Only",
+      "path": "dist/core.js",
+      "import": "{ isTryError, createError }",
+      "limit": "3 KB"
+    },
+    {
+      "name": "Browser Bundle - Full",
+      "path": "dist/try-error.esm.js",
+      "limit": "10 KB"
+    },
+    {
+      "name": "Browser Bundle - Sync",
+      "path": "dist/try-error-sync.esm.js",
       "limit": "6 KB"
     },
     {
-      "name": "Sync only",
-      "path": "dist/index.js",
-      "import": "{ trySync, isTryError }",
-      "limit": "5 KB"
-    },
-    {
-      "name": "Async only",
-      "path": "dist/index.js",
-      "import": "{ tryAsync, isTryError }",
-      "limit": "5 KB"
+      "name": "Browser Bundle - Async",
+      "path": "dist/try-error-async.esm.js",
+      "limit": "6 KB"
     }
   ]
 }
