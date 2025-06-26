@@ -192,8 +192,10 @@ export function useTryMutation<T, TVariables = void>(
   }, [abort]);
 
   // Enhanced setData that supports functional updates
-  const setData = useCallback((updater: T | ((prev: T | null) => T)) => {
+  const setData = useCallback((updater: T | ((prev: T | null) => T) | null) => {
     setDataState((prev) => {
+      if (updater === null) return null;
+
       const newData =
         typeof updater === "function"
           ? (updater as (prev: T | null) => T)(prev)
@@ -298,7 +300,12 @@ export function useTryMutation<T, TVariables = void>(
       if (optimisticData !== undefined && isMountedRef.current) {
         const optimisticValue =
           typeof optimisticData === "function"
-            ? optimisticData(variables, data)
+            ? (
+                optimisticData as (
+                  variables: TVariables,
+                  currentData: T | null
+                ) => T
+              )(variables, data)
             : optimisticData;
         setData(optimisticValue);
       }
