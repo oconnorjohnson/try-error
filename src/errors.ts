@@ -137,7 +137,13 @@ function detectEnvironmentAndRuntime(): {
   // Check cache first
   if (cachedEnvironment !== null && cachedRuntime !== null) {
     return {
-      environment: cachedEnvironment as any,
+      environment: cachedEnvironment as
+        | "node"
+        | "chrome"
+        | "firefox"
+        | "safari"
+        | "edge"
+        | "unknown",
       runtime: cachedRuntime,
     };
   }
