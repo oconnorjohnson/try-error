@@ -50,7 +50,7 @@ export interface UseTryMutationResult<T, TVariables> {
   reset: () => void;
   abort: () => void;
   // New methods for optimistic updates
-  setData: (data: T | ((prev: T | null) => T)) => void;
+  setData: (data: T | ((prev: T | null) => T) | null) => void;
   invalidate: () => void;
 }
 
@@ -540,7 +540,7 @@ export function useTryMutation<T, TVariables = void>(
  */
 export function useFormMutation<T>(
   submitFn: (formData: FormData, signal: AbortSignal) => Promise<T>,
-  options: UseTryMutationOptions<T> = {}
+  options: UseTryMutationOptions<T, FormData> = {}
 ) {
   const mutation = useTryMutation(submitFn, options);
 
