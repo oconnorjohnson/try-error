@@ -98,14 +98,6 @@ export function SearchDialog() {
               "hierarchy.lvl2",
               "hierarchy.lvl3",
             ],
-            restrictSearchableAttributes: [
-              "title",
-              "hierarchy.lvl0",
-              "hierarchy.lvl1",
-              "hierarchy.lvl2",
-              "hierarchy.lvl3",
-              "content",
-            ],
             highlightPreTag: "<mark>",
             highlightPostTag: "</mark>",
             snippetEllipsisText: "...",
@@ -115,6 +107,9 @@ export function SearchDialog() {
             minWordSizefor2Typos: 8,
             advancedSyntax: true,
             distinct: true,
+            // Ranking settings
+            typoTolerance: "strict",
+            removeWordsIfNoResults: "allOptional",
           },
         ],
       });
