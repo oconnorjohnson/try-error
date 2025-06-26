@@ -1,9 +1,9 @@
 import {
   trySync,
   tryAsync,
-  tryAsyncMap,
-  trySyncChain,
-  tryAsyncChain,
+  tryMapAsync,
+  tryChain,
+  tryChainAsync,
   tryAllAsync,
   tryAnyAsync,
   unwrapOr,
@@ -67,7 +67,7 @@ describe("Integration Tests", () => {
       const userId = 1;
 
       const userResult = await tryAsync(() => mockApiClient.fetchUser(userId));
-      const emailValidation = trySyncChain(userResult, (user) =>
+      const emailValidation = tryChain(userResult, (user: any) =>
         trySync(() => mockApiClient.validateEmail(user.email))
       );
       const postsResult = await tryAsyncChain(
