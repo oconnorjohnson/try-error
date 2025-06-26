@@ -90,6 +90,11 @@ const navigation = [
     title: "API Reference",
     items: [
       {
+        title: "Complete API Reference",
+        url: "/docs/api-reference",
+        icon: BookOpen,
+      },
+      {
         title: "Synchronous Operations",
         url: "/docs/api/sync",
         icon: Code,

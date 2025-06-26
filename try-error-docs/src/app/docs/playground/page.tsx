@@ -1,4 +1,4 @@
-import { Playground } from "@/components/Playground";
+import { PlaygroundAdvanced } from "@/components/PlaygroundAdvanced";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -159,7 +159,12 @@ export default function PlaygroundPage() {
                   Learn how to handle synchronous operations with trySync.
                 </p>
               </div>
-              <Playground defaultCode={basicExample} height="500px" />
+              <PlaygroundAdvanced
+                defaultCode={basicExample}
+                height="500px"
+                title="Basic Example"
+                description="Try modifying the code and running it to see how trySync works"
+              />
             </div>
           </TabsContent>
 
@@ -173,7 +178,12 @@ export default function PlaygroundPage() {
                   Handle promises and async functions with tryAsync.
                 </p>
               </div>
-              <Playground defaultCode={asyncExample} height="500px" />
+              <PlaygroundAdvanced
+                defaultCode={asyncExample}
+                height="500px"
+                title="Async Example"
+                description="See how tryAsync handles asynchronous operations and errors"
+              />
             </div>
           </TabsContent>
 
@@ -187,7 +197,12 @@ export default function PlaygroundPage() {
                   Create custom error types and handle them appropriately.
                 </p>
               </div>
-              <Playground defaultCode={errorHandlingExample} height="500px" />
+              <PlaygroundAdvanced
+                defaultCode={errorHandlingExample}
+                height="500px"
+                title="Error Handling Example"
+                description="Learn how to create and handle custom error types"
+              />
             </div>
           </TabsContent>
 
@@ -200,7 +215,13 @@ export default function PlaygroundPage() {
                   example).
                 </p>
               </div>
-              <Playground defaultCode={reactExample} height="500px" />
+              <PlaygroundAdvanced
+                defaultCode={reactExample}
+                height="500px"
+                title="React Example"
+                description="Conceptual example of using try-error with React hooks"
+                language="javascript"
+              />
             </div>
           </TabsContent>
         </Tabs>
@@ -212,6 +233,9 @@ export default function PlaygroundPage() {
           <li>• The playground runs in a sandboxed environment for safety</li>
           <li>• Console output is captured and displayed in the Console tab</li>
           <li>• You can modify the code and run it multiple times</li>
+          <li>
+            • Use the toolbar buttons to reset, share, or download your code
+          </li>
           <li>• Network requests won't work in this environment</li>
           <li>• For real projects, install try-error via npm/pnpm/yarn</li>
         </ul>

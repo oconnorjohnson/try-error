@@ -1,0 +1,43 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "name": "try-error API Documentation",
+  "entryPoints": ["src/index.ts"],
+  "out": "try-error-docs/src/app/docs/api-reference",
+  "plugin": ["typedoc-plugin-markdown"],
+  "exclude": [
+    "**/node_modules/**",
+    "**/tests/**",
+    "**/test/**",
+    "**/*.test.ts",
+    "**/*.spec.ts",
+    "**/benchmark/**"
+  ],
+  "excludePrivate": true,
+  "excludeProtected": true,
+  "excludeInternal": true,
+  "excludeExternals": false,
+  "includeVersion": true,
+  "categorizeByGroup": true,
+  "categoryOrder": [
+    "Core Functions",
+    "Error Types",
+    "Utilities",
+    "Configuration",
+    "Advanced",
+    "*"
+  ],
+  "navigationLinks": {
+    "Documentation": "/docs",
+    "GitHub": "https://github.com/oconnorjohnson/try-error"
+  },
+  "readme": "README.md",
+  "theme": "markdown",
+  "hideGenerator": true,
+  "hideBreadcrumbs": false,
+  "useCodeBlocks": true,
+  "expandObjects": true,
+  "outputFileStrategy": "members",
+  "membersWithOwnFile": ["Class", "Interface", "Enum", "Function", "TypeAlias"],
+  "entryFileName": "index",
+  "mergeReadme": true
+}

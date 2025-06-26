@@ -51,7 +51,9 @@
     "pack": "pnpm build && pnpm pack",
     "prepublishOnly": "pnpm build && pnpm build:browser",
     "size": "size-limit",
-    "analyze": "size-limit --why"
+    "analyze": "size-limit --why",
+    "docs:api": "typedoc",
+    "docs:api:watch": "typedoc --watch"
   },
   "keywords": [
     "typescript",
@@ -86,6 +88,8 @@
     "try-error": "workspace:*",
     "ts-jest": "^29.1.0",
     "ts-node": "^10.9.2",
+    "typedoc": "^0.28.5",
+    "typedoc-plugin-markdown": "^4.7.0",
     "typescript": "^5.0.0"
   },
   "engines": {

@@ -2,6 +2,7 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/layout/app-sidebar";
 import { Github } from "lucide-react";
 import { SearchButton } from "@/components/SearchButton";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 
 export default function DocsLayout({
   children,
@@ -32,7 +33,10 @@ export default function DocsLayout({
             </a>
           </div>
         </div>
-        <div className="flex-1 space-y-4 p-4 lg:p-6">{children}</div>
+        <div className="flex-1 space-y-4 p-4 lg:p-6">
+          <Breadcrumbs />
+          {children}
+        </div>
       </main>
     </SidebarProvider>
   );
