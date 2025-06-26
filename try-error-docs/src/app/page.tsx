@@ -9,7 +9,15 @@ export default function HomePage() {
         <div className="px-3 py-1 bg-yellow-900/50 text-yellow-200 rounded-full text-sm border border-yellow-700">
           🚧 Alpha Version - Not Production Ready
         </div>
-
+        <div className="flex flex-row items-center justify-center">
+          {/* Logo */}
+          <img
+            src="/logo.png"
+            alt="try-error logo"
+            className="w-16 h-16 md:w-24 md:h-24"
+          />
+          <h1 className="text-2xl lg:text-4xl font-light">try-error</h1>
+        </div>
         <h1 className="text-4xl font-bold tracking-tight sm:text-6xl text-slate-100">
           Type-Safe Error Handling
           <br />

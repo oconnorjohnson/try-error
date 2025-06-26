@@ -17,6 +17,9 @@ export const metadata: Metadata = {
   title: "try-error Documentation",
   description:
     "Lightweight, progressive, type-safe error handling for TypeScript",
+  icons: {
+    icon: "/try-error-logo.svg",
+  },
 };
 
 export default function RootLayout({
