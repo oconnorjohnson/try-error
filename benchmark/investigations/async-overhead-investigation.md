@@ -259,12 +259,30 @@ async function wrapper<T>(fn: () => Promise<T>): Promise<T> {
 
 This suggests the issue is fundamental to how V8 optimizes async/await with function parameters.
 
+### Experiment 3: Alternative API Approaches
+
+Tested different API designs that don't involve passing functions:
+
+**Results**:
+
+```
+Native async/await: 5.11ms (baseline)
+Original tryAsync: +145.0% (passing function)
+tryPromise: +101.7% (passing promise directly)
+tryThen: +64.2% (using promise.then)
+Inline try-catch: +0.3% (baseline check)
+```
+
+**BREAKTHROUGH**: Using `promise.then()` instead of async/await reduces overhead from 145% to 64%!
+
 ## 📈 Progress Tracking
 
-| Date    | Overhead  | Change | Notes                    |
-| ------- | --------- | ------ | ------------------------ |
-| Initial | +184-234% | -      | Baseline measurement     |
-| TBD     | TBD       | TBD    | After first optimization |
+| Date            | Overhead  | Change | Notes                     |
+| --------------- | --------- | ------ | ------------------------- |
+| Initial         | +184-234% | -      | Baseline measurement      |
+| Dec 2024        | +145%     | -39%   | More accurate measurement |
+| Optimization 1  | +118%     | -27%   | Ultra-minimal tryAsync    |
+| Alternative API | +64%      | -81%   | Using promise.then()      |
 
 ## 🤓 Learning Resources
 
