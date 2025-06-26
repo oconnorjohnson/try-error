@@ -466,7 +466,9 @@ export function createError<T extends string = string>(
     const lazyError = createLazyError({
       type: options.type,
       message: options.message,
-      getSource: () => options.source ?? getSourceLocation(stackOffset),
+      getSource: () =>
+        options.source ??
+        (config.includeSource ? getSourceLocation(stackOffset) : "disabled"),
       getStack: shouldCaptureStack
         ? () => {
             try {
@@ -587,7 +589,9 @@ export function createError<T extends string = string>(
   // Normal path with all features
   const stackOffset =
     options.stackOffset ?? config.sourceLocation?.defaultStackOffset ?? 3;
-  const source = options.source ?? getSourceLocation(stackOffset);
+  const source =
+    options.source ??
+    (config.includeSource ? getSourceLocation(stackOffset) : "disabled");
   const timestamp = config.skipTimestamp ? 0 : options.timestamp ?? Date.now();
 
   // Capture stack trace if enabled
