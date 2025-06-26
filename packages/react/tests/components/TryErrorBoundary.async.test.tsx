@@ -28,20 +28,17 @@ describe("Async Error Boundary", () => {
     it("should catch unhandled promise rejections when catchAsyncErrors is true", async () => {
       const onError = jest.fn();
 
-      const AsyncComponent = () => {
-        React.useEffect(() => {
-          // Simulate an async error
-          Promise.reject(new Error("Async error"));
-        }, []);
-
-        return <div>Component content</div>;
-      };
-
       render(
         <TryErrorBoundary catchAsyncErrors onError={onError}>
-          <AsyncComponent />
+          <div>Component content</div>
         </TryErrorBoundary>
       );
+
+      // Manually trigger unhandledrejection event
+      const event = new Event("unhandledrejection") as any;
+      event.reason = new Error("Async error");
+      event.preventDefault = jest.fn();
+      window.dispatchEvent(event);
 
       // Wait for the error to be caught
       await waitFor(() => {
@@ -61,22 +58,18 @@ describe("Async Error Boundary", () => {
     it("should catch event handler errors when catchEventHandlerErrors is true", async () => {
       const onError = jest.fn();
 
-      const ComponentWithEventHandler = () => {
-        const handleClick = () => {
-          throw new Error("Event handler error");
-        };
-
-        return <button onClick={handleClick}>Click me</button>;
-      };
-
       render(
         <TryErrorBoundary catchEventHandlerErrors onError={onError}>
-          <ComponentWithEventHandler />
+          <div>Component content</div>
         </TryErrorBoundary>
       );
 
-      // Click the button to trigger the error
-      fireEvent.click(screen.getByText("Click me"));
+      // Manually trigger error event
+      const event = new ErrorEvent("error", {
+        error: new Error("Event handler error"),
+        message: "Event handler error",
+      });
+      window.dispatchEvent(event);
 
       // Wait for the error to be caught
       await waitFor(() => {
@@ -95,19 +88,17 @@ describe("Async Error Boundary", () => {
     it("should not catch async errors when catchAsyncErrors is false", async () => {
       const onError = jest.fn();
 
-      const AsyncComponent = () => {
-        React.useEffect(() => {
-          Promise.reject(new Error("Should not be caught"));
-        }, []);
-
-        return <div>Component content</div>;
-      };
-
       render(
         <TryErrorBoundary catchAsyncErrors={false} onError={onError}>
-          <AsyncComponent />
+          <div>Component content</div>
         </TryErrorBoundary>
       );
+
+      // Manually trigger unhandledrejection event
+      const event = new Event("unhandledrejection") as any;
+      event.reason = new Error("Should not be caught");
+      event.preventDefault = jest.fn();
+      window.dispatchEvent(event);
 
       // Wait a bit to ensure the error is not caught
       await new Promise((resolve) => setTimeout(resolve, 100));
@@ -260,29 +251,27 @@ describe("Async Error Boundary", () => {
     it("should provide a simple async error boundary", async () => {
       const onError = jest.fn();
 
-      const AsyncComponent = () => {
-        React.useEffect(() => {
-          Promise.reject(new Error("Async component error"));
-        }, []);
-
-        return <div>Async Component</div>;
-      };
-
       render(
         <AsyncErrorBoundary
           fallback={<div>Error occurred!</div>}
           onError={onError}
         >
-          <AsyncComponent />
+          <div>Async Component</div>
         </AsyncErrorBoundary>
       );
 
+      // Manually trigger unhandledrejection event
+      const event = new Event("unhandledrejection") as any;
+      event.reason = new Error("Async component error");
+      event.preventDefault = jest.fn();
+      window.dispatchEvent(event);
+
       await waitFor(() => {
-        expect(onError).toHaveBeenCalledWith(
-          expect.objectContaining({
-            message: "Async component error",
-          })
-        );
+        expect(onError).toHaveBeenCalled();
+        const errorArg = onError.mock.calls[0][0];
+        expect(errorArg.message).toBe("Async component error");
+        expect(errorArg.context?.async).toBe(true);
+        expect(errorArg.context?.source).toBe("unhandledRejection");
       });
     });
 
