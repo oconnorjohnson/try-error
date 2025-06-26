@@ -80,7 +80,7 @@ export {
 } from "./sync";
 
 // Asynchronous error handling
-export type { TryAsyncOptions } from "./async";
+export type { TryAsyncOptions, ProgressTracker } from "./async";
 
 export {
   tryAsync,
@@ -93,6 +93,11 @@ export {
   tryAnySequential,
   withTimeout,
   retry,
+  withProgress,
+  RateLimiter,
+  createRateLimiter,
+  AsyncQueue,
+  createAsyncQueue,
 } from "./async";
 
 // Stage 2: Domain-specific error factories and base types
