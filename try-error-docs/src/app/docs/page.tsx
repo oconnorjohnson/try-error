@@ -269,9 +269,9 @@ return result; // Type-safe success value`}
                   </span>
                 </div>
                 <ul className="space-y-1 text-sm text-muted-foreground">
-                  <li>• Stack trace capture: ~80% of overhead</li>
-                  <li>• Context cloning: ~30% of overhead</li>
-                  <li>• Source location: ~10% of overhead</li>
+                  <li>• Stack trace capture: ~65% of total overhead</li>
+                  <li>• Context cloning: ~25% of total overhead</li>
+                  <li>• Source location: ~10% of total overhead</li>
                 </ul>
               </CardContent>
             </Card>

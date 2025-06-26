@@ -81,10 +81,10 @@ export default function PerformancePage() {
                 <div>
                   <strong>What causes the overhead:</strong>
                   <ul className="mt-1 space-y-1">
-                    <li>• Stack trace capture: ~80% overhead</li>
-                    <li>• Context deep cloning: ~30% overhead</li>
-                    <li>• Source location parsing: ~10% overhead</li>
-                    <li>• Timestamp generation: ~5% overhead</li>
+                    <li>• Stack trace capture: ~60% of total overhead</li>
+                    <li>• Context deep cloning: ~25% of total overhead</li>
+                    <li>• Source location parsing: ~10% of total overhead</li>
+                    <li>• Timestamp generation: ~5% of total overhead</li>
                   </ul>
                 </div>
                 <div>
@@ -296,9 +296,9 @@ configure(ConfigPresets.minimal());
 
 // Custom configuration for specific needs
 configure({
-  captureStackTrace: false,    // -80% overhead
-  skipTimestamp: true,         // -5% overhead
-  skipContext: true,           // -30% overhead
+  captureStackTrace: false,    // Removes ~60% of error overhead
+  skipTimestamp: true,         // Removes ~5% of error overhead
+  skipContext: true,           // Removes ~25% of error overhead
   minimalErrors: true          // Enable all optimizations
 });`}
               </CodeBlock>
