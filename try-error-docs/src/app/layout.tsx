@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "tryError Documentation",
+  title: "tryError",
   description:
     "Lightweight, progressive, type-safe error handling for TypeScript",
   icons: {
