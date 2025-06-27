@@ -18,7 +18,7 @@ const pathNames: Record<string, string> = {
   docs: "Documentation",
   installation: "Installation",
   "quick-start": "Quick Start",
-  playground: "Interactive Playground",
+
   migration: "Migration Guide",
   concepts: "Core Concepts",
   philosophy: "Error Handling Philosophy",
