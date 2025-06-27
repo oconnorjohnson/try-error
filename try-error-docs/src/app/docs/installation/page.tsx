@@ -68,7 +68,7 @@ export default function InstallationPage() {
           </p>
 
           <div className="grid gap-3 sm:gap-4 mb-4 sm:mb-6">
-            <div className="border border-slate-200 rounded-lg p-3 sm:p-4 hover:border-slate-300 transition-colors">
+            <div className="border border-slate-200 rounded-lg p-3 sm:p-4 hover:border-slate-300 transition-colors overflow-hidden">
               <div className="flex items-center justify-between mb-2">
                 <h3 className="font-semibold text-slate-900 text-sm sm:text-base">
                   Full Bundle (Default)
@@ -77,18 +77,20 @@ export default function InstallationPage() {
                   Hover to copy →
                 </span>
               </div>
-              <CodeBlock
-                language="typescript"
-                className="mb-2 text-xs sm:text-sm"
-              >
-                {`import { trySync, tryAsync, isTryError } from 'tryError';`}
-              </CodeBlock>
+              <div className="overflow-x-auto -mx-3 px-3 sm:-mx-4 sm:px-4">
+                <CodeBlock
+                  language="typescript"
+                  className="mb-2 text-xs sm:text-sm"
+                >
+                  {`import { trySync, tryAsync, isTryError } from 'tryError';`}
+                </CodeBlock>
+              </div>
               <p className="text-xs sm:text-sm text-slate-600">
                 ~8KB minified • Use when you need both sync and async operations
               </p>
             </div>
 
-            <div className="border border-green-200 bg-green-50 rounded-lg p-3 sm:p-4 hover:border-green-300 transition-colors">
+            <div className="border border-green-200 bg-green-50 rounded-lg p-3 sm:p-4 hover:border-green-300 transition-colors overflow-hidden">
               <div className="flex items-center justify-between mb-2">
                 <h3 className="font-semibold text-green-900 text-sm sm:text-base">
                   Sync-Only Module
@@ -97,19 +99,21 @@ export default function InstallationPage() {
                   Hover to copy →
                 </span>
               </div>
-              <CodeBlock
-                language="typescript"
-                className="mb-2 text-xs md:text-sm"
-              >
-                {`import { trySync, isTryError } from 'tryError/sync';`}
-              </CodeBlock>
+              <div className="overflow-x-auto -mx-3 px-3 sm:-mx-4 sm:px-4">
+                <CodeBlock
+                  language="typescript"
+                  className="mb-2 text-xs md:text-sm"
+                >
+                  {`import { trySync, isTryError } from 'tryError/sync';`}
+                </CodeBlock>
+              </div>
               <p className="text-xs sm:text-sm text-green-800">
                 ~4KB minified (50% smaller!) • Perfect for CLI tools, scripts,
                 or sync-only apps
               </p>
             </div>
 
-            <div className="border border-blue-200 bg-blue-50 rounded-lg p-3 sm:p-4 hover:border-blue-300 transition-colors">
+            <div className="border border-blue-200 bg-blue-50 rounded-lg p-3 sm:p-4 hover:border-blue-300 transition-colors overflow-hidden">
               <div className="flex items-center justify-between mb-2">
                 <h3 className="font-semibold text-blue-900 text-sm sm:text-base">
                   Async-Only Module
@@ -118,19 +122,21 @@ export default function InstallationPage() {
                   Hover to copy →
                 </span>
               </div>
-              <CodeBlock
-                language="typescript"
-                className="mb-2 text-xs sm:text-sm"
-              >
-                {`import { tryAsync, isTryError } from 'tryError/async';`}
-              </CodeBlock>
+              <div className="overflow-x-auto -mx-3 px-3 sm:-mx-4 sm:px-4">
+                <CodeBlock
+                  language="typescript"
+                  className="mb-2 text-xs sm:text-sm"
+                >
+                  {`import { tryAsync, isTryError } from 'tryError/async';`}
+                </CodeBlock>
+              </div>
               <p className="text-xs sm:text-sm text-blue-800">
                 ~4KB minified (50% smaller!) • Ideal for modern async-first
                 applications
               </p>
             </div>
 
-            <div className="border border-purple-200 bg-purple-50 rounded-lg p-3 sm:p-4 hover:border-purple-300 transition-colors">
+            <div className="border border-purple-200 bg-purple-50 rounded-lg p-3 sm:p-4 hover:border-purple-300 transition-colors overflow-hidden">
               <div className="flex items-center justify-between mb-2">
                 <h3 className="font-semibold text-purple-900 text-sm sm:text-base">
                   Core Module
@@ -139,12 +145,14 @@ export default function InstallationPage() {
                   Hover to copy →
                 </span>
               </div>
-              <CodeBlock
-                language="typescript"
-                className="mb-2 text-xs sm:text-sm"
-              >
-                {`import { isTryError, createError } from 'tryError/core';`}
-              </CodeBlock>
+              <div className="overflow-x-auto -mx-3 px-3 sm:-mx-4 sm:px-4">
+                <CodeBlock
+                  language="typescript"
+                  className="mb-2 text-xs sm:text-sm"
+                >
+                  {`import { isTryError, createError } from 'tryError/core';`}
+                </CodeBlock>
+              </div>
               <p className="text-xs sm:text-sm text-purple-800">
                 ~3KB minified • For building custom error handling utilities
               </p>

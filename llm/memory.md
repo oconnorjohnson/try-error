@@ -913,3 +913,14 @@ Continue through remaining 37 pages, focusing on:
   - Added `shrink-0` to prevent button compression
   - Removed redundant container padding from individual pages since layout handles it
 - **Result**: All documentation pages now properly respond to mobile viewports without horizontal overflow
+
+### CodeBlock Mobile Responsiveness Fix
+
+- **Issue**: Import statement CodeBlocks in the installation page were overflowing on mobile
+- **Root Cause**: Long import statements without natural break points were constrained by their parent containers
+- **Solution**:
+  - Added `overflow-hidden` to card containers
+  - Wrapped each CodeBlock in a scrollable div with `overflow-x-auto`
+  - Used negative margins (`-mx-3`) to extend the scrollable area beyond the card padding
+  - Added padding back (`px-3`) to maintain visual consistency
+- **Result**: Code blocks now scroll horizontally on mobile without breaking the layout
