@@ -897,3 +897,19 @@ Continue through remaining 37 pages, focusing on:
 - API reference pages
 - Guide pages
 - Example pages
+
+## 2025-06-26
+
+### Mobile Responsiveness Fix for Documentation
+
+- **Issue**: All pages under `/docs/*` (except the introduction page at `/docs`) had content overflowing on mobile devices
+- **Root Cause**: The `/docs/layout.tsx` had fixed padding values and lacked proper overflow handling
+- **Solution**:
+  - Added `min-w-0` to main container to prevent flex children from overflowing
+  - Made header sticky with proper z-index for better mobile navigation
+  - Added `overflow-x-hidden` to prevent horizontal scrolling
+  - Adjusted padding to be more responsive (px-2 on mobile, scaling up)
+  - Added `truncate` classes to prevent text overflow in header
+  - Added `shrink-0` to prevent button compression
+  - Removed redundant container padding from individual pages since layout handles it
+- **Result**: All documentation pages now properly respond to mobile viewports without horizontal overflow
