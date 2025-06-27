@@ -139,9 +139,9 @@ This document tracks the mobile responsiveness audit and fixes for all pages in 
 ## Progress Summary
 
 - Total Pages: 39
-- Completed: 2
+- Completed: 3
 - In Progress: 0
-- Remaining: 37
+- Remaining: 36
 
 ## Notes
 
