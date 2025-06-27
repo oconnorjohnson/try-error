@@ -50,14 +50,16 @@ export function InstallCommand({
   return (
     <div className={`relative ${className}`}>
       <div className="flex items-center gap-2 mb-2">
-        <Package className="h-4 w-4 text-slate-600" />
-        <span className="text-sm font-medium text-slate-700">Installation</span>
+        <Package className="h-3 w-3 sm:h-4 sm:w-4 text-slate-600" />
+        <span className="text-xs sm:text-sm font-medium text-slate-700">
+          Installation
+        </span>
 
         {/* Package Manager Selector */}
         <div className="relative ml-auto">
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="flex items-center gap-1 px-3 py-1 text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-md border border-slate-300 transition-colors"
+            className="flex items-center gap-1 px-2 sm:px-3 py-1 text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-md border border-slate-300 transition-colors"
           >
             {packageManagers[selectedPM].name}
             <ChevronDown
@@ -87,13 +89,13 @@ export function InstallCommand({
       </div>
 
       {/* Command Display */}
-      <div className="relative group">
-        <div className="flex items-center bg-slate-900 text-slate-100 px-4 py-3 rounded-lg font-mono text-sm">
-          <span className="text-green-400 mr-2">$</span>
-          <span className="flex-1">{currentCommand}</span>
+      <div className="relative group overflow-hidden rounded-lg">
+        <div className="flex items-center bg-slate-900 text-slate-100 px-3 sm:px-4 py-2.5 sm:py-3 font-mono text-xs sm:text-sm overflow-x-auto">
+          <span className="text-green-400 mr-2 shrink-0">$</span>
+          <span className="whitespace-nowrap">{currentCommand}</span>
           <button
             onClick={copyToClipboard}
-            className="ml-3 p-1.5 rounded-md bg-slate-700 hover:bg-slate-600 text-slate-300 hover:text-white transition-colors opacity-0 group-hover:opacity-100"
+            className="ml-3 p-1 sm:p-1.5 rounded-md bg-slate-700 hover:bg-slate-600 text-slate-300 hover:text-white transition-colors opacity-0 group-hover:opacity-100 shrink-0"
             title="Copy command"
           >
             {copied ? (

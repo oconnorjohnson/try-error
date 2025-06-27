@@ -99,7 +99,7 @@ export default function InstallationPage() {
               </div>
               <CodeBlock
                 language="typescript"
-                className="mb-2 text-xs sm:text-sm"
+                className="mb-2 text-xs md:text-sm"
               >
                 {`import { trySync, isTryError } from 'tryError/sync';`}
               </CodeBlock>
