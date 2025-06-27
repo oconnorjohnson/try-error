@@ -2,30 +2,35 @@ import { CodeBlock } from "../../../components/EnhancedCodeBlock";
 
 export default function QuickStartPage() {
   return (
-    <div className="max-w-4xl mx-auto py-8 px-6">
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold text-slate-900 mb-4">Quick Start</h1>
-        <p className="text-xl text-slate-600">
+    <div className="max-w-4xl mx-auto py-6 sm:py-8 px-4 sm:px-6">
+      <div className="mb-6 sm:mb-8">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-900 mb-3 sm:mb-4">
+          Quick Start
+        </h1>
+        <p className="text-base sm:text-lg md:text-xl text-slate-600">
           Learn the essentials of tryError with practical examples
         </p>
       </div>
 
-      <div className="space-y-8">
+      <div className="space-y-6 sm:space-y-8">
         {/* Basic Synchronous Operations */}
         <section>
-          <h2 className="text-2xl font-semibold text-slate-900 mb-4">
+          <h2 className="text-xl sm:text-2xl font-semibold text-slate-900 mb-3 sm:mb-4">
             Synchronous Operations
           </h2>
 
-          <p className="text-slate-600 mb-4">
-            Use <code className="bg-slate-100 px-2 py-1 rounded">trySync</code>{" "}
+          <p className="text-slate-600 mb-3 sm:mb-4 text-sm sm:text-base">
+            Use{" "}
+            <code className="bg-slate-100 px-1 sm:px-2 py-0.5 sm:py-1 rounded text-xs sm:text-sm">
+              trySync
+            </code>{" "}
             for operations that might throw:
           </p>
 
           <CodeBlock
             language="typescript"
             title="Synchronous Examples"
-            className="mb-4"
+            className="mb-3 sm:mb-4 text-xs sm:text-sm"
           >
             {`import { trySync, isTryError } from 'tryError';
 
@@ -49,19 +54,22 @@ return JSON.parse(fileResult);`}
 
         {/* Asynchronous Operations */}
         <section>
-          <h2 className="text-2xl font-semibold text-slate-900 mb-4">
+          <h2 className="text-xl sm:text-2xl font-semibold text-slate-900 mb-3 sm:mb-4">
             Asynchronous Operations
           </h2>
 
-          <p className="text-slate-600 mb-4">
-            Use <code className="bg-slate-100 px-2 py-1 rounded">tryAsync</code>{" "}
+          <p className="text-slate-600 mb-3 sm:mb-4 text-sm sm:text-base">
+            Use{" "}
+            <code className="bg-slate-100 px-1 sm:px-2 py-0.5 sm:py-1 rounded text-xs sm:text-sm">
+              tryAsync
+            </code>{" "}
             for async operations:
           </p>
 
           <CodeBlock
             language="typescript"
             title="Async Examples"
-            className="mb-4"
+            className="mb-3 sm:mb-4 text-xs sm:text-sm"
           >
             {`import { tryAsync, isTryError } from 'tryError';
 
@@ -96,17 +104,17 @@ const saveUser = async (user: User) => {
 
         {/* Error Handling Patterns */}
         <section>
-          <h2 className="text-2xl font-semibold text-slate-900 mb-4">
+          <h2 className="text-xl sm:text-2xl font-semibold text-slate-900 mb-3 sm:mb-4">
             Common Patterns
           </h2>
 
-          <h3 className="text-lg font-semibold text-slate-900 mb-3">
+          <h3 className="text-base sm:text-lg font-semibold text-slate-900 mb-2 sm:mb-3">
             Early Returns
           </h3>
           <CodeBlock
             language="typescript"
             title="Early Return Pattern"
-            className="mb-4"
+            className="mb-3 sm:mb-4 text-xs sm:text-sm"
           >
             {`function processData(input: string) {
   const parseResult = trySync(() => JSON.parse(input));
@@ -123,13 +131,13 @@ const saveUser = async (user: User) => {
 }`}
           </CodeBlock>
 
-          <h3 className="text-lg font-semibold text-slate-900 mb-3">
+          <h3 className="text-base sm:text-lg font-semibold text-slate-900 mb-2 sm:mb-3">
             Default Values
           </h3>
           <CodeBlock
             language="typescript"
             title="Default Values Pattern"
-            className="mb-4"
+            className="mb-3 sm:mb-4 text-xs sm:text-sm"
           >
             {`function getConfig() {
   const result = trySync(() => JSON.parse(configString));
@@ -143,13 +151,13 @@ async function getUserPreferences(userId: string) {
 }`}
           </CodeBlock>
 
-          <h3 className="text-lg font-semibold text-slate-900 mb-3">
+          <h3 className="text-base sm:text-lg font-semibold text-slate-900 mb-2 sm:mb-3">
             Error Aggregation
           </h3>
           <CodeBlock
             language="typescript"
             title="Error Aggregation Pattern"
-            className="mb-4"
+            className="mb-3 sm:mb-4 text-xs sm:text-sm"
           >
             {`async function validateForm(data: FormData) {
   const errors: string[] = [];
@@ -171,11 +179,11 @@ async function getUserPreferences(userId: string) {
 
         {/* Type Safety */}
         <section>
-          <h2 className="text-2xl font-semibold text-slate-900 mb-4">
+          <h2 className="text-xl sm:text-2xl font-semibold text-slate-900 mb-3 sm:mb-4">
             Type Safety
           </h2>
 
-          <p className="text-slate-600 mb-4">
+          <p className="text-slate-600 mb-3 sm:mb-4 text-sm sm:text-base">
             tryError provides full TypeScript support with intelligent type
             inference:
           </p>
@@ -184,7 +192,7 @@ async function getUserPreferences(userId: string) {
             language="typescript"
             title="Type Safety Examples"
             showLineNumbers={true}
-            className="mb-4"
+            className="mb-3 sm:mb-4 text-xs sm:text-sm"
           >
             {`// Return type is automatically inferred
 const result = trySync(() => JSON.parse(jsonString));
@@ -213,49 +221,51 @@ const userResult = trySync((): User => {
 
         {/* Next Steps */}
         <section>
-          <h2 className="text-2xl font-semibold text-slate-900 mb-4">
+          <h2 className="text-xl sm:text-2xl font-semibold text-slate-900 mb-3 sm:mb-4">
             Next Steps
           </h2>
 
-          <div className="grid md:grid-cols-3 gap-4">
-            <div className="border border-slate-200 rounded-lg p-4">
-              <h3 className="font-semibold text-slate-900 mb-2">
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
+            <div className="border border-slate-200 rounded-lg p-3 sm:p-4">
+              <h3 className="font-semibold text-slate-900 mb-2 text-sm sm:text-base">
                 Core Concepts
               </h3>
-              <p className="text-slate-600 text-sm mb-3">
+              <p className="text-slate-600 text-xs sm:text-sm mb-2 sm:mb-3">
                 Learn the philosophy and design principles
               </p>
               <a
                 href="/docs/concepts/philosophy"
-                className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                className="text-blue-600 hover:text-blue-800 text-xs sm:text-sm font-medium"
               >
                 Read Concepts →
               </a>
             </div>
 
-            <div className="border border-slate-200 rounded-lg p-4">
-              <h3 className="font-semibold text-slate-900 mb-2">
+            <div className="border border-slate-200 rounded-lg p-3 sm:p-4">
+              <h3 className="font-semibold text-slate-900 mb-2 text-sm sm:text-base">
                 API Reference
               </h3>
-              <p className="text-slate-600 text-sm mb-3">
+              <p className="text-slate-600 text-xs sm:text-sm mb-2 sm:mb-3">
                 Complete API documentation
               </p>
               <a
                 href="/docs/api/sync"
-                className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                className="text-blue-600 hover:text-blue-800 text-xs sm:text-sm font-medium"
               >
                 View API →
               </a>
             </div>
 
-            <div className="border border-slate-200 rounded-lg p-4">
-              <h3 className="font-semibold text-slate-900 mb-2">Examples</h3>
-              <p className="text-slate-600 text-sm mb-3">
+            <div className="border border-slate-200 rounded-lg p-3 sm:p-4">
+              <h3 className="font-semibold text-slate-900 mb-2 text-sm sm:text-base">
+                Examples
+              </h3>
+              <p className="text-slate-600 text-xs sm:text-sm mb-2 sm:mb-3">
                 Real-world usage examples
               </p>
               <a
                 href="/docs/examples/basic"
-                className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                className="text-blue-600 hover:text-blue-800 text-xs sm:text-sm font-medium"
               >
                 See Examples →
               </a>
