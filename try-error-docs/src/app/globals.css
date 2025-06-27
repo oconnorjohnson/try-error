@@ -164,6 +164,28 @@
     }
   }
 
+  @keyframes slide-in-from-left {
+    from {
+      transform: translateX(-10px);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes slide-in-from-right {
+    from {
+      transform: translateX(10px);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
   @keyframes scale-in {
     from {
       transform: scale(0.95);
@@ -199,6 +221,14 @@
     animation: slide-in-from-bottom var(--animation-base) ease-out;
   }
 
+  .animate-slide-in-from-left {
+    animation: slide-in-from-left var(--animation-base) ease-out;
+  }
+
+  .animate-slide-in-from-right {
+    animation: slide-in-from-right var(--animation-base) ease-out;
+  }
+
   .animate-scale-in {
     animation: scale-in var(--animation-base) ease-out;
   }
@@ -206,6 +236,27 @@
   .animate-gradient {
     background-size: 200% 200%;
     animation: gradient 3s ease infinite;
+  }
+
+  /* Animation delays for staggered effects */
+  .animation-delay-100 {
+    animation-delay: 100ms;
+  }
+
+  .animation-delay-200 {
+    animation-delay: 200ms;
+  }
+
+  .animation-delay-300 {
+    animation-delay: 300ms;
+  }
+
+  .animation-delay-400 {
+    animation-delay: 400ms;
+  }
+
+  .animation-delay-500 {
+    animation-delay: 500ms;
   }
 }
 
