@@ -94,37 +94,37 @@ This document tracks the mobile responsiveness audit and fixes for all pages in 
 
 1. **Navigation/Sidebar**
 
-   - Issues:
-   - Fixed:
+   - Issues: GitHub link text not hidden on mobile, title text too large
+   - Fixed: Hide GitHub text on mobile (hidden sm:inline), responsive title sizes, adjusted spacing
 
 2. **Content Width**
 
-   - Issues:
-   - Fixed:
+   - Issues: Too much padding on mobile screens (px-6)
+   - Fixed: Reduced padding from px-6 to px-4 on mobile, sm:px-6 on larger screens
 
 3. **Code Blocks**
 
-   - Issues:
-   - Fixed:
+   - Issues: Text too small to read on mobile, no responsive sizing
+   - Fixed: Added text-xs sm:text-sm classes to all code blocks
 
 4. **Tables**
 
-   - Issues:
-   - Fixed:
+   - Issues: Not yet encountered in completed pages
+   - Fixed: N/A
 
 5. **Typography**
 
-   - Issues:
-   - Fixed:
+   - Issues: Headings and body text too large on mobile (text-4xl, text-2xl)
+   - Fixed: Implemented responsive text sizes (text-2xl sm:text-3xl md:text-4xl pattern)
 
 6. **Spacing/Padding**
 
-   - Issues:
-   - Fixed:
+   - Issues: Excessive spacing consuming valuable mobile screen space (py-8, mb-8)
+   - Fixed: Reduced margins and padding with responsive values (mb-3 sm:mb-4, py-6 sm:py-8)
 
 7. **Interactive Elements**
-   - Issues:
-   - Fixed:
+   - Issues: Buttons too large and not stacking properly, grids not responsive
+   - Fixed: Made buttons stack vertically on mobile, reduced padding, responsive grid columns
 
 ## Testing Devices/Viewports
 
@@ -148,3 +148,5 @@ This document tracks the mobile responsiveness audit and fixes for all pages in 
 - Date Started: June 26, 2025
 - Last Updated: June 26, 2025
 - Primary Issues: Button layouts, text sizes, padding/spacing on mobile
+- Created comprehensive pattern guide at `MOBILE_RESPONSIVENESS_PATTERNS.md` for remaining pages
+- Established consistent responsive patterns using Tailwind's sm/md/lg modifiers
