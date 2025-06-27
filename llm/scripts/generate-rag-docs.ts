@@ -181,7 +181,7 @@ class RagDocGenerator {
     };
 
     visitNode(node.body!);
-    return [...new Set(dependencies)];
+    return Array.from(new Set(dependencies));
   }
 
   private findExamples(functionName: string): string[] {
