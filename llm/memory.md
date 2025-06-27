@@ -751,3 +751,114 @@ The interactive playground feature was removed from the documentation as it was 
 The playground feature added unnecessary complexity and dependencies to the documentation site. Users can test tryError by installing it directly in their projects, making an interactive playground redundant.
 
 All Week 3 goals have been completed ahead of schedule!
+
+## 2025-06-26 - Runtime Context Injection Evaluation
+
+### Current State Analysis
+
+The try-error library already has excellent support for runtime context injection. The API is well-designed for dynamic context:
+
+1. **Direct Context Injection**: The `createError()` function accepts a `context` parameter that can contain any runtime values:
+
+   ```typescript
+   const error = createError({
+     type: "ValidationError",
+     message: "Invalid input",
+     context: { userId: currentUserId, requestId: req.id }, // Runtime values
+   });
+   ```
+
+2. **Context Enrichment via Middleware**: The `enrichContextMiddleware` allows adding context dynamically:
+
+   ```typescript
+   pipeline.use(
+     enrichContextMiddleware(() => ({
+       timestamp: Date.now(),
+       requestId: getCurrentRequestId(),
+       userId: getCurrentUserId(),
+     }))
+   );
+   ```
+
+3. **Context Wrapping**: The `wrapWithContext()` utility adds context to existing errors:
+
+   ```typescript
+   const contextualError = wrapWithContext(error, {
+     requestId: "req_123",
+     userId: "user_456",
+   });
+   ```
+
+4. **Options-based Context**: Both `trySync` and `tryAsync` accept context in options:
+   ```typescript
+   const result = await tryAsync(() => fetchUser(), {
+     context: { userId, operation: "user-fetch" },
+   });
+   ```
+
+### Key Strengths
+
+1. **Already Runtime-Ready**: The context parameter is not hardcoded - it accepts any object at runtime
+2. **Multiple Injection Points**: Context can be added at error creation, via middleware, or through wrapping
+3. **Type Safety**: Full TypeScript support with generics for context types
+4. **Lazy Evaluation**: The library supports lazy context evaluation for expensive computations
+
+### Potential Improvements
+
+While the API is already strong, here are some potential enhancements:
+
+1. **Context Providers Pattern**: Add a React-like context provider system for ambient context:
+
+   ```typescript
+   const UserContext = createErrorContext<{ userId: string }>();
+
+   // Set context once at app boundary
+   UserContext.provide({ userId: currentUser.id }, () => {
+     // All errors created here automatically get userId
+     const error = createError({ type: "Error", message: "Failed" });
+     // error.context would include { userId: currentUser.id }
+   });
+   ```
+
+2. **Context Transformers**: Allow registering global context transformers:
+
+   ```typescript
+   registerContextTransformer((context) => ({
+     ...context,
+     environment: process.env.NODE_ENV,
+     version: process.env.APP_VERSION,
+   }));
+   ```
+
+3. **Async Context Tracking**: Integration with Node.js AsyncLocalStorage for automatic context propagation:
+
+   ```typescript
+   const requestContext = new AsyncLocalStorage<RequestContext>();
+
+   // Automatically include request context in all errors
+   configure({
+     contextProvider: () => requestContext.getStore(),
+   });
+   ```
+
+4. **Context Templates**: Pre-defined context shapes for common use cases:
+   ```typescript
+   const error = createError({
+     type: "ApiError",
+     message: "Failed",
+     context: contexts.httpRequest(req), // Extracts common HTTP context
+   });
+   ```
+
+### Recommendation
+
+The current API is already well-designed for runtime context injection. The example in the docs showing `userId: '123'` is just a simplified example - in practice, developers would use runtime values. The library doesn't need major API changes for this use case.
+
+However, adding the Context Provider pattern or AsyncLocalStorage integration would make it even easier to inject ambient context without explicitly passing it everywhere. This would be particularly valuable for:
+
+- Request IDs in web servers
+- User context in authenticated apps
+- Correlation IDs in distributed systems
+- Environment/deployment context
+
+The current approach is explicit and clear, while these enhancements would add implicit context propagation for cases where that's beneficial.
