@@ -872,3 +872,76 @@ Continue through remaining 37 pages, focusing on:
   - Used negative margins (`-mx-3`) to extend the scrollable area beyond the card padding
   - Added padding back (`px-3`) to maintain visual consistency
 - **Result**: Code blocks now scroll horizontally on mobile without breaking the layout
+
+## 2025-06-29: API Framework Integration Guide & API Insights
+
+### Created Comprehensive API Framework Integration Guide
+
+Created new guide at `try-error-docs/src/app/docs/guides/api-frameworks/page.tsx` covering:
+
+1. **tRPC Integration**:
+
+   - Server-side error transformation from TryError to TRPCError
+   - Custom middleware for automatic error handling
+   - Client-side wrapping with tryAsync for consistent patterns
+   - Type-safe error handling across client/server boundary
+
+2. **GraphQL Integration**:
+
+   - Apollo Server resolver integration
+   - TryError to ApolloError transformation
+   - Client-side error handling with Apollo Client
+   - Custom React hooks for GraphQL operations
+
+3. **OpenAPI/REST Integration**:
+   - Wrapping OpenAPI-generated clients
+   - Custom REST client with built-in tryError support
+   - HTTP status code to error type mapping
+   - Type-safe API error handling
+
+### Key API Insights Discovered
+
+While creating these integration guides, several potential improvements to the try-error API were identified:
+
+1. **HTTP Error Mapping Utilities**:
+
+   - Could provide built-in HTTP status to error type mapping
+   - Common patterns emerged across all integrations
+   - Potential for `@try-error/http` companion package
+
+2. **Framework Error Transformers**:
+
+   - Each framework needs custom error transformation
+   - Could provide pre-built transformers as optional utilities
+   - Keep them separate to maintain zero-dependency core
+
+3. **Error Context Standards**:
+
+   - Common fields emerged: statusCode, endpoint, requestId, retryAfter
+   - Could document recommended context fields for API errors
+   - But should avoid enforcing structure to maintain flexibility
+
+4. **Retry and Circuit Breaker Integration**:
+   - API calls commonly need retry logic
+   - try-error's middleware system works well for this
+   - Could provide more examples of retry middleware
+
+### Decision: Focus on Patterns, Not Features
+
+After analysis, decided NOT to add API-specific features to try-error because:
+
+1. **Scope Clarity**: try-error should remain focused on error handling primitives
+2. **Existing Solutions**: Teams needing cross-repo type sharing already use OpenAPI/tRPC/GraphQL
+3. **Composition Over Integration**: try-error works well WITH these tools rather than replacing them
+4. **Zero Dependencies**: Adding API features would require HTTP client dependencies
+
+### What We Should Do Instead
+
+1. **Documentation**: Show how to integrate with popular API tools (completed)
+2. **Patterns**: Document common patterns for API error handling
+3. **Examples**: Provide example repositories showing integrations
+4. **Companion Packages**: Consider optional packages like `@try-error/http` for common utilities
+
+### Key Takeaway
+
+try-error's strength is being a focused, composable error handling primitive that works well with existing API tooling rather than trying to replace it. The integration guides show this philosophy in action - try-error enhances what teams already use rather than forcing a new approach.

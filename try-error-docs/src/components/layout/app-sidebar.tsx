@@ -222,6 +222,11 @@ const navigation = [
         icon: FileText,
       },
       {
+        title: "API Framework Integration",
+        url: "/docs/guides/api-frameworks",
+        icon: Code,
+      },
+      {
         title: "Error Sampling",
         url: "/docs/guides/error-sampling",
         icon: FileText,
