@@ -752,116 +752,64 @@ The playground feature added unnecessary complexity and dependencies to the docu
 
 All Week 3 goals have been completed ahead of schedule!
 
-## 2025-06-26 - Runtime Context Injection Evaluation
+## 2025-06-26 - Runtime Context Injection Analysis
 
-### Current State Analysis
+**Context**: User asked about improving API for runtime context injection, noting that documentation examples show hardcoded values.
 
-The try-error library already has excellent support for runtime context injection. The API is well-designed for dynamic context:
+**Discovery**: try-error already has excellent runtime context injection support:
 
-1. **Direct Context Injection**: The `createError()` function accepts a `context` parameter that can contain any runtime values:
+1. Direct context injection via `createError()` function
+2. Middleware support via `enrichContextMiddleware`
+3. Context wrapping via `wrapWithContext()` utility
+4. Options-based context in `trySync` and `tryAsync`
 
-   ```typescript
-   const error = createError({
-     type: "ValidationError",
-     message: "Invalid input",
-     context: { userId: currentUserId, requestId: req.id }, // Runtime values
-   });
-   ```
+**Conclusion**: The API is already well-designed for runtime context injection. The hardcoded examples in docs are just simplified for clarity.
 
-2. **Context Enrichment via Middleware**: The `enrichContextMiddleware` allows adding context dynamically:
+**Potential Future Improvements**:
 
-   ```typescript
-   pipeline.use(
-     enrichContextMiddleware(() => ({
-       timestamp: Date.now(),
-       requestId: getCurrentRequestId(),
-       userId: getCurrentUserId(),
-     }))
-   );
-   ```
+- Context Providers pattern (similar to React Context)
+- AsyncLocalStorage integration for automatic context propagation
+- Context inheritance through error chains
+- Type-safe context schemas
 
-3. **Context Wrapping**: The `wrapWithContext()` utility adds context to existing errors:
+## 2025-06-29: RAG Documentation Generation
 
-   ```typescript
-   const contextualError = wrapWithContext(error, {
-     requestId: "req_123",
-     userId: "user_456",
-   });
-   ```
+**Context**: Created comprehensive RAG (Retrieval Augmented Generation) documentation system for try-error library.
 
-4. **Options-based Context**: Both `trySync` and `tryAsync` accept context in options:
-   ```typescript
-   const result = await tryAsync(() => fetchUser(), {
-     context: { userId, operation: "user-fetch" },
-   });
-   ```
+**What Was Built**:
 
-### Key Strengths
+1. **Documentation Generator Script** (`llm/scripts/generate-rag-docs.js`):
 
-1. **Already Runtime-Ready**: The context parameter is not hardcoded - it accepts any object at runtime
-2. **Multiple Injection Points**: Context can be added at error creation, via middleware, or through wrapping
-3. **Type Safety**: Full TypeScript support with generics for context types
-4. **Lazy Evaluation**: The library supports lazy context evaluation for expensive computations
+   - Automatically discovers and analyzes all source files
+   - Extracts functions, classes, and types with deep analysis
+   - Detects characteristics: async behavior, side effects, complexity, dependencies
+   - Generates individual documentation for each function
+   - Creates architecture, performance, and pattern documentation
 
-### Potential Improvements
+2. **Generated Documentation** (`llm/rag-docs/`):
 
-While the API is already strong, here are some potential enhancements:
+   - 206 function documents with deep technical details
+   - Architecture overview with module organization
+   - Performance analysis with complexity distribution
+   - Pattern catalog organizing functions by usage patterns
+   - Comprehensive index with statistics
 
-1. **Context Providers Pattern**: Add a React-like context provider system for ambient context:
+3. **Key Stats from Generation**:
+   - Total Functions: 206
+   - Total Classes: 9
+   - Total Types: 94
+   - Modules: 9
+   - Async Functions: 33
+   - High Complexity Functions: 7
 
-   ```typescript
-   const UserContext = createErrorContext<{ userId: string }>();
+**Benefits**:
 
-   // Set context once at app boundary
-   UserContext.provide({ userId: currentUser.id }, () => {
-     // All errors created here automatically get userId
-     const error = createError({ type: "Error", message: "Failed" });
-     // error.context would include { userId: currentUser.id }
-   });
-   ```
+- Enables AI assistants to answer detailed technical questions about internals
+- Provides performance characteristics and implementation details
+- Documents patterns and best practices automatically
+- Goes far beyond typical user-facing documentation
 
-2. **Context Transformers**: Allow registering global context transformers:
-
-   ```typescript
-   registerContextTransformer((context) => ({
-     ...context,
-     environment: process.env.NODE_ENV,
-     version: process.env.APP_VERSION,
-   }));
-   ```
-
-3. **Async Context Tracking**: Integration with Node.js AsyncLocalStorage for automatic context propagation:
-
-   ```typescript
-   const requestContext = new AsyncLocalStorage<RequestContext>();
-
-   // Automatically include request context in all errors
-   configure({
-     contextProvider: () => requestContext.getStore(),
-   });
-   ```
-
-4. **Context Templates**: Pre-defined context shapes for common use cases:
-   ```typescript
-   const error = createError({
-     type: "ApiError",
-     message: "Failed",
-     context: contexts.httpRequest(req), // Extracts common HTTP context
-   });
-   ```
-
-### Recommendation
-
-The current API is already well-designed for runtime context injection. The example in the docs showing `userId: '123'` is just a simplified example - in practice, developers would use runtime values. The library doesn't need major API changes for this use case.
-
-However, adding the Context Provider pattern or AsyncLocalStorage integration would make it even easier to inject ambient context without explicitly passing it everywhere. This would be particularly valuable for:
-
-- Request IDs in web servers
-- User context in authenticated apps
-- Correlation IDs in distributed systems
-- Environment/deployment context
-
-The current approach is explicit and clear, while these enhancements would add implicit context propagation for cases where that's beneficial.
+**Note**: This RAG documentation complements the user-facing docs by providing deep technical insights optimized for AI retrieval systems.
 
 ## 2025-06-26: Mobile Responsiveness Audit
 
