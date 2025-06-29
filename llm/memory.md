@@ -945,3 +945,67 @@ After analysis, decided NOT to add API-specific features to try-error because:
 ### Key Takeaway
 
 try-error's strength is being a focused, composable error handling primitive that works well with existing API tooling rather than trying to replace it. The integration guides show this philosophy in action - try-error enhances what teams already use rather than forcing a new approach.
+
+## Test Suite Investigation - 2025-06-29
+
+### Overview
+
+Ran full test suite to identify failing tests across the monorepo. Found significant failures in the React package while the core try-error package tests are passing.
+
+### Test Results Summary
+
+#### Core Package (try-error)
+
+- Status: All tests passing ✅
+- 233 tests total
+
+#### React Package (@try-error/react)
+
+- Status: Multiple failures ❌
+- Test Suites: 5 failed, 6 passed, 11 total
+- Tests: 37 failed, 144 passed, 181 total
+- Time: ~64.5s
+- Critical Issue: Memory allocation failure (heap limit) during test run
+
+### Failing Test Categories
+
+1. **TryErrorBoundary Component Tests**
+
+   - Error propagation issues with HOC components
+   - Retry functionality text mismatch ("Retry attempt: 1" expected but showing "Retry attempt: 1 of 3")
+   - Context not being undefined when expected (includes componentStack)
+
+2. **useTryMutation Hook Tests**
+
+   - Retry functionality not working (0 attempts instead of 2)
+   - Caching tests failing
+   - Callback parameters mismatch (receiving extra empty object parameter)
+   - Loading states not updating correctly
+   - AbortController support issues
+
+3. **useErrorRecovery Hook Tests**
+
+   - Timeout exceeded (5000ms) for retry operations
+   - Multiple TypeErrors: "Cannot read properties of null"
+   - Timer warnings about APIs not being replaced
+   - React state update warnings (not wrapped in act)
+
+4. **Memory Issues**
+   - Fatal error: "Ineffective mark-compacts near heap limit Allocation failed"
+   - Jest worker process terminated (signal 9)
+
+### Root Causes Identified
+
+1. **Extra Parameter Issue**: Many mutation functions are receiving an unexpected empty object `{}` as a second parameter
+2. **Timer/Async Issues**: Tests using fake timers have synchronization problems
+3. **React 18 Compatibility**: State updates not properly wrapped in act()
+4. **Memory Leak**: Possible memory leak causing heap exhaustion during test runs
+
+### Next Steps
+
+1. Fix the extra parameter issue in useTryMutation
+2. Update timer-based tests to properly handle async operations
+3. Wrap state updates in act() calls
+4. Investigate memory usage in test suite
+5. Update retry text formatting in TryErrorBoundary
+6. Fix error context handling in boundary tests
