@@ -288,11 +288,11 @@ interface Result<T, E> {
               </ul>
             </div>
 
-            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-              <h3 className="text-lg font-semibold text-yellow-800 mb-3">
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <h3 className="text-lg font-semibold text-red-600 mb-3">
                 ⚠️ Consider alternatives for:
               </h3>
-              <ul className="space-y-2 text-yellow-700 text-sm">
+              <ul className="space-y-2 text-red-700 text-sm">
                 <li>• Programming errors (use assertions)</li>
                 <li>• Truly exceptional conditions</li>
                 <li>
