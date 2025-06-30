@@ -381,16 +381,52 @@ describe("Setup Utilities", () => {
   });
 
   describe("autoSetup", () => {
+    let originalJestWorkerId: string | undefined;
+
+    beforeEach(() => {
+      // Save original values
+      process.env = { ...originalEnv };
+      originalJestWorkerId = process.env.JEST_WORKER_ID;
+
+      // Clear test environment indicators for these tests
+      delete process.env.JEST_WORKER_ID;
+      delete process.env.NODE_ENV; // Remove test env
+    });
+
+    afterEach(() => {
+      process.env = originalEnv;
+      // Restore Jest worker ID
+      if (originalJestWorkerId !== undefined) {
+        process.env.JEST_WORKER_ID = originalJestWorkerId;
+      }
+      // Clean up any global modifications
+      // @ts-ignore
+      delete globalThis.Deno;
+      // @ts-ignore
+      delete globalThis.Bun;
+    });
+
     it("should detect Node.js environment", () => {
       // @ts-ignore
       global.window = undefined;
-      // @ts-ignore
-      process.versions = { node: "16.0.0" };
+
+      // Mock process.versions.node
+      const originalVersions = process.versions;
+      Object.defineProperty(process, "versions", {
+        value: { ...originalVersions, node: "16.0.0" },
+        configurable: true,
+      });
 
       autoSetup();
 
       const validation = validateSetup();
       expect(validation.activeSetups).toContain("node");
+
+      // Restore
+      Object.defineProperty(process, "versions", {
+        value: originalVersions,
+        configurable: true,
+      });
     });
 
     it("should detect browser environment", () => {
@@ -408,7 +444,7 @@ describe("Setup Utilities", () => {
     });
 
     it("should detect Next.js environment", () => {
-      process.env = { ...originalEnv, NEXT_RUNTIME: "nodejs" };
+      process.env.NEXT_RUNTIME = "nodejs";
       // @ts-ignore
       global.window = undefined;
 
@@ -419,7 +455,7 @@ describe("Setup Utilities", () => {
     });
 
     it("should detect test environment via NODE_ENV", () => {
-      process.env = { ...originalEnv, NODE_ENV: "test" };
+      process.env.NODE_ENV = "test";
 
       autoSetup();
 
@@ -428,7 +464,7 @@ describe("Setup Utilities", () => {
     });
 
     it("should detect test environment via JEST_WORKER_ID", () => {
-      process.env = { ...originalEnv, JEST_WORKER_ID: "1" };
+      process.env.JEST_WORKER_ID = "1";
 
       autoSetup();
 
@@ -444,9 +480,6 @@ describe("Setup Utilities", () => {
 
       const validation = validateSetup();
       expect(validation.activeSetups).toContain("deno");
-
-      // @ts-ignore
-      delete globalThis.Deno;
     });
 
     it("should detect Bun environment", () => {
@@ -457,9 +490,6 @@ describe("Setup Utilities", () => {
 
       const validation = validateSetup();
       expect(validation.activeSetups).toContain("bun");
-
-      // @ts-ignore
-      delete globalThis.Bun;
     });
 
     it("should detect React Native environment", () => {
@@ -473,13 +503,23 @@ describe("Setup Utilities", () => {
     });
 
     it("should detect Electron environment", () => {
-      // @ts-ignore
-      process.versions = { ...process.versions, electron: "13.0.0" };
+      // Mock process.versions.electron
+      const originalVersions = process.versions;
+      Object.defineProperty(process, "versions", {
+        value: { ...originalVersions, electron: "13.0.0" },
+        configurable: true,
+      });
 
       autoSetup();
 
       const validation = validateSetup();
       expect(validation.activeSetups).toContain("electron");
+
+      // Restore
+      Object.defineProperty(process, "versions", {
+        value: originalVersions,
+        configurable: true,
+      });
     });
 
     it("should fall back to basic configuration", () => {
@@ -490,13 +530,24 @@ describe("Setup Utilities", () => {
       global.document = undefined;
       // @ts-ignore
       global.navigator = undefined;
-      // @ts-ignore
-      process.versions = {};
+
+      // Mock empty process.versions
+      const originalVersions = process.versions;
+      Object.defineProperty(process, "versions", {
+        value: {},
+        configurable: true,
+      });
 
       autoSetup();
 
       const validation = validateSetup();
       expect(validation.activeSetups).toContain("fallback");
+
+      // Restore
+      Object.defineProperty(process, "versions", {
+        value: originalVersions,
+        configurable: true,
+      });
     });
 
     it("should apply custom options", () => {

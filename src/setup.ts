@@ -357,9 +357,17 @@ export function autoSetup(options: TryErrorConfig = {}): void {
   } else if (isBrowser) {
     setupReact(options);
     setupType = "react";
-  } else if (isNode || isDeno || isBun) {
+  } else if (isDeno) {
+    // Check Deno before Node since Deno might have process.versions.node
     setupNode(options);
-    setupType = isNode ? "node" : isDeno ? "deno" : "bun";
+    setupType = "deno";
+  } else if (isBun) {
+    // Check Bun before Node since Bun might have process.versions.node
+    setupNode(options);
+    setupType = "bun";
+  } else if (isNode) {
+    setupNode(options);
+    setupType = "node";
   } else {
     // Fallback to basic configuration
     configure({
