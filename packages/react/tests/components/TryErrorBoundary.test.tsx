@@ -209,15 +209,15 @@ describe("TryErrorBoundary", () => {
 
       // First retry
       fireEvent.click(screen.getByText("Try Again"));
-      expect(screen.getByText("Retry attempt: 1")).toBeInTheDocument();
+      expect(screen.getByText(/Retry attempt: 1 of 3/)).toBeInTheDocument();
 
       // Second retry
       fireEvent.click(screen.getByText("Try Again"));
-      expect(screen.getByText("Retry attempt: 2")).toBeInTheDocument();
+      expect(screen.getByText(/Retry attempt: 2 of 3/)).toBeInTheDocument();
 
       // Third retry
       fireEvent.click(screen.getByText("Try Again"));
-      expect(screen.getByText("Retry attempt: 3")).toBeInTheDocument();
+      expect(screen.getByText(/Retry attempt: 3 of 3/)).toBeInTheDocument();
       expect(screen.getByText("Max retries reached")).toBeInTheDocument();
       expect(screen.getByText("Max retries reached")).toBeDisabled();
     });
@@ -267,7 +267,14 @@ describe("TryErrorBoundary", () => {
       );
 
       expect(onError).toHaveBeenCalledWith(
-        tryError,
+        expect.objectContaining({
+          type: "TestError",
+          message: "TryError test",
+          context: expect.objectContaining({
+            componentStack: expect.any(String),
+            errorBoundary: true,
+          }),
+        }),
         expect.objectContaining({ componentStack: expect.any(String) })
       );
     });

@@ -3,12 +3,14 @@ import { renderHook, act, waitFor } from "@testing-library/react";
 import {
   useTryMutation,
   useFormMutation,
+  __clearMutationCache,
 } from "../../src/hooks/useTryMutation";
 import { createError, isTryError } from "try-error";
 
 describe("useTryMutation", () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    __clearMutationCache();
   });
 
   describe("basic functionality", () => {
@@ -28,7 +30,10 @@ describe("useTryMutation", () => {
         await result.current.mutate("test-input");
       });
 
-      expect(mutationFn).toHaveBeenCalledWith("test-input");
+      expect(mutationFn).toHaveBeenCalledWith(
+        "test-input",
+        expect.any(AbortSignal)
+      );
       expect(result.current.data).toEqual(mockData);
       expect(result.current.error).toBeNull();
       expect(result.current.isLoading).toBe(false);
@@ -101,7 +106,7 @@ describe("useTryMutation", () => {
         await result.current.mutate("input");
       });
 
-      expect(onSuccess).toHaveBeenCalledWith(mockData);
+      expect(onSuccess).toHaveBeenCalledWith(mockData, "input");
       expect(onError).not.toHaveBeenCalled();
       expect(onSettled).toHaveBeenCalled();
     });
@@ -293,7 +298,10 @@ describe("useTryMutation", () => {
         await result.current.mutate();
       });
 
-      expect(mutationFn).toHaveBeenCalledWith(undefined);
+      expect(mutationFn).toHaveBeenCalledWith(
+        undefined,
+        expect.any(AbortSignal)
+      );
       expect(result.current.data).toBe("result");
     });
   });
@@ -556,7 +564,7 @@ describe("useFormMutation", () => {
     });
 
     expect(mockEvent.preventDefault).toHaveBeenCalled();
-    expect(submitFn).toHaveBeenCalledWith(formData);
+    expect(submitFn).toHaveBeenCalledWith(formData, expect.any(AbortSignal));
     expect(result.current.submitData).toEqual(mockResponse);
     expect(result.current.submitError).toBeNull();
 

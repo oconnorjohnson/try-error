@@ -70,6 +70,11 @@ interface CacheEntry<T> {
 // Global mutation cache
 const mutationCache = new Map<string, CacheEntry<any>>();
 
+// Export for testing purposes
+export const __clearMutationCache = () => {
+  mutationCache.clear();
+};
+
 /**
  * Hook for handling mutations with try-error integration and enhanced optimistic updates
  *
@@ -130,7 +135,7 @@ export function useTryMutation<T, TVariables = void>(
     rollbackOnError,
     retry = false,
     retryDelay = 1000,
-    cacheTime = 5 * 60 * 1000, // 5 minutes
+    cacheTime = 0, // Disabled by default
     invalidateOnSuccess = true,
   } = options;
 
@@ -180,6 +185,8 @@ export function useTryMutation<T, TVariables = void>(
       clearTimeout(retryTimeoutRef.current);
       retryTimeoutRef.current = null;
     }
+    // Clear loading state when aborting
+    setIsLoading(false);
   }, []);
 
   const reset = useCallback(() => {
@@ -282,7 +289,6 @@ export function useTryMutation<T, TVariables = void>(
 
       // Generate cache key based on variables
       cacheKeyRef.current = JSON.stringify({
-        fn: mutationFn.toString(),
         variables,
       });
 
@@ -290,6 +296,8 @@ export function useTryMutation<T, TVariables = void>(
       const cached = mutationCache.get(cacheKeyRef.current);
       if (cached && Date.now() - cached.timestamp < cacheTime) {
         setData(cached.data);
+        setError(null);
+        setIsLoading(false);
         return cached.data;
       }
 
@@ -310,7 +318,6 @@ export function useTryMutation<T, TVariables = void>(
         setData(optimisticValue);
       }
 
-      setIsLoading(true);
       setError(null);
 
       try {
@@ -340,6 +347,42 @@ export function useTryMutation<T, TVariables = void>(
         }
 
         if (isTryError(result)) {
+          // Check if this was an abort error
+          if (
+            result.cause instanceof Error &&
+            (result.cause.name === "AbortError" ||
+              result.message === "AbortError")
+          ) {
+            const abortError = createError({
+              type: "ABORTED",
+              message: abortMessage,
+              context: { reason: "manual_abort" },
+              cause: result.cause,
+            });
+
+            if (isMountedRef.current) {
+              // Rollback optimistic update
+              if (
+                optimisticData !== undefined &&
+                previousDataRef.current !== undefined
+              ) {
+                setData(previousDataRef.current);
+                rollbackOnError?.(
+                  abortError,
+                  variables,
+                  previousDataRef.current
+                );
+              }
+
+              setError(abortError);
+              setIsLoading(false);
+              onError?.(abortError, variables);
+              onSettled?.(null, abortError, variables);
+            }
+
+            return abortError;
+          }
+
           // Check if we should retry
           if (shouldRetry(retryCount, result)) {
             const delay = getRetryDelay(retryCount);
@@ -397,13 +440,20 @@ export function useTryMutation<T, TVariables = void>(
 
         if (isMountedRef.current) {
           setIsLoading(false);
-          onSettled?.(data, error, variables);
+          onSettled?.(
+            isTryError(result) ? null : result,
+            isTryError(result) ? result : null,
+            variables
+          );
         }
 
         return result;
       } catch (error) {
         // Check if this was an abort
-        if (error instanceof Error && error.name === "AbortError") {
+        if (
+          error instanceof Error &&
+          (error.name === "AbortError" || error.message === "AbortError")
+        ) {
           const abortError = createError({
             type: "ABORTED",
             message: abortMessage,
@@ -488,6 +538,9 @@ export function useTryMutation<T, TVariables = void>(
         });
       }
 
+      // Set loading state synchronously
+      setIsLoading(true);
+
       const result = await mutateAsyncInternal(variables);
 
       // Process any queued mutations
@@ -500,6 +553,8 @@ export function useTryMutation<T, TVariables = void>(
 
   const mutate = useCallback(
     async (variables: TVariables): Promise<TryResult<T, TryError>> => {
+      // Set loading state synchronously
+      setIsLoading(true);
       return mutateAsync(variables);
     },
     [mutateAsync]

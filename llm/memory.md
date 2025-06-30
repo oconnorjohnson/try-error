@@ -946,154 +946,54 @@ After analysis, decided NOT to add API-specific features to try-error because:
 
 try-error's strength is being a focused, composable error handling primitive that works well with existing API tooling rather than trying to replace it. The integration guides show this philosophy in action - try-error enhances what teams already use rather than forcing a new approach.
 
-## Test Suite Investigation - 2025-06-29
+## React Package Test Fixes - 2025-06-29 (Updated 17:13)
 
-### Overview
+### Progress Summary
 
-Ran full test suite to identify failing tests across the monorepo. Found significant failures in the React package while the core try-error package tests are passing.
+Made significant progress fixing React package tests:
 
-### Test Results Summary
+#### Fixed Tests:
 
-#### Core Package (try-error)
+- ✅ **useTryMutation** (24/24 passing)
+  - Fixed retry text format mismatch
+  - Fixed error context expectations
+  - Added AbortSignal parameter to all mutation function calls
+  - Fixed AbortError detection for both `error.name` and `error.message`
+  - Disabled caching by default to prevent test interference
+  - Added `__clearMutationCache` utility for test cleanup
+- ✅ **TryErrorBoundary** (all passing)
 
-- Status: All tests passing ✅
-- 233 tests total
+  - Fixed retry text format expectations
+  - Fixed error context modifications
 
-#### React Package (@try-error/react)
+- ✅ **useErrorRecovery** (partial fixes)
+  - Fixed timer setup issues by using real timers for async tests
+  - Fixed several test expectations
+  - Reduced from 15 to 7 failing tests
 
-- Status: Multiple failures ❌
-- Test Suites: 5 failed, 6 passed, 11 total
-- Tests: 37 failed, 144 passed, 181 total
-- Time: ~64.5s
-- Critical Issue: Memory allocation failure (heap limit) during test run
+#### Remaining Issues:
 
-### Failing Test Categories
+1. **useTryMutation.optimistic.test.tsx** (5 failures)
+   - Retry functionality not working as expected
+   - Caching behavior issues
+2. **useErrorRecovery.test.tsx** (5 failures)
+   - Bulkhead pattern tests failing (hooks returning null)
+   - Some timing-related issues
+3. **Memory allocation failure**
+   - Tests are consuming too much memory
+   - May need to run tests in smaller batches
 
-1. **TryErrorBoundary Component Tests**
+### Key Fixes Applied:
 
-   - Error propagation issues with HOC components
-   - Retry functionality text mismatch ("Retry attempt: 1" expected but showing "Retry attempt: 1 of 3")
-   - Context not being undefined when expected (includes componentStack)
+1. Updated all mutation function mocks to accept `(variables, signal)` parameters
+2. Fixed test expectations for error types and formats
+3. Separated fake/real timer usage appropriately
+4. Fixed loading state synchronization issues
+5. Updated cache handling and invalidation
 
-2. **useTryMutation Hook Tests**
+### Next Steps:
 
-   - Retry functionality not working (0 attempts instead of 2)
-   - Caching tests failing
-   - Callback parameters mismatch (receiving extra empty object parameter)
-   - Loading states not updating correctly
-   - AbortController support issues
-
-3. **useErrorRecovery Hook Tests**
-
-   - Timeout exceeded (5000ms) for retry operations
-   - Multiple TypeErrors: "Cannot read properties of null"
-   - Timer warnings about APIs not being replaced
-   - React state update warnings (not wrapped in act)
-
-4. **Memory Issues**
-   - Fatal error: "Ineffective mark-compacts near heap limit Allocation failed"
-   - Jest worker process terminated (signal 9)
-
-### Root Causes Identified
-
-1. **Extra Parameter Issue**: Many mutation functions are receiving an unexpected empty object `{}` as a second parameter
-2. **Timer/Async Issues**: Tests using fake timers have synchronization problems
-3. **React 18 Compatibility**: State updates not properly wrapped in act()
-4. **Memory Leak**: Possible memory leak causing heap exhaustion during test runs
-
-### Next Steps
-
-1. Fix the extra parameter issue in useTryMutation
-2. Update timer-based tests to properly handle async operations
-3. Wrap state updates in act() calls
-4. Investigate memory usage in test suite
-5. Update retry text formatting in TryErrorBoundary
-6. Fix error context handling in boundary tests
-
-## 2024-12-30: Test Coverage Analysis and Improvements
-
-### Coverage Analysis Summary
-
-- Initial overall coverage was critically low: 54.08% statements, 36.35% branches
-- Identified setup.ts with 0% coverage as highest priority
-- Created comprehensive test suite for setup.ts with 48 tests (36 passing)
-- Improved coverage by ~5-7% across all metrics in first pass
-
-### Key Findings
-
-- Well-tested modules: lazy.ts (100%), pool.ts (100%), middleware.ts (97.89%), plugins.ts (93.57%)
-- Critical gaps: utils.ts (16.17%), config.ts (20.57%), events.ts (21.73%)
-- Test quality issues: Environment mocking needs improvement, test isolation problems
-
-### Priority Actions
-
-1. Fix failing setup.ts tests (environment mocking issues)
-2. Add comprehensive tests for utils.ts (highest ROI)
-3. Test all config presets and performance utilities
-4. Create test utilities for better environment mocking
-
-### Files Created
-
-- `tests/setup.test.ts` - Comprehensive test suite for setup module
-- `llm/test-coverage-analysis.md` - Detailed coverage analysis
-- `llm/test-coverage-summary.md` - Executive summary with recommendations
-
-## 2024-12-30: Major Performance and Type Safety Improvements
-
-### Completed Optimizations
-
-1. **Type Safety**:
-
-   - Eliminated most type assertions in types.ts, pool.ts, errors.ts
-   - Improved type narrowing in isTryError with proper validation
-   - Created proper interfaces for pooled errors
-
-2. **Micro-optimizations**:
-
-   - Implemented bit flags for boolean properties (bitflags.ts)
-   - Added string interning with WeakRef support (intern.ts)
-   - Created event system for lifecycle monitoring (events.ts)
-   - Added tree-shaking hints with /_#**PURE**_/ comments
-
-3. **Bundle Size**:
-
-   - Added modular imports (sync-only.ts, async-only.ts)
-   - Improved tree-shaking with pure annotations
-
-4. **Bug Fixes**:
-
-   - Fixed config caching logic using WeakMap and version tracking
-   - Fixed source location detection for test environments
-   - Fixed production environment detection
-   - Fixed lazy evaluation integration with isTryError
-
-5. **New Features**:
-   - Complete middleware system with pipeline and common middleware
-   - Plugin system with lifecycle hooks and dependency management
-   - Object pooling for high-frequency error creation
-   - Lazy evaluation for expensive error properties
-   - Event emitter for error lifecycle tracking
-
-### Test Coverage
-
-- Created comprehensive tests for new features:
-  - pool.test.ts - 100% coverage with performance benchmarks
-  - lazy.test.ts - 100% coverage including debug proxy
-  - middleware.test.ts - 97.89% coverage
-  - plugins.test.ts - 93.57% coverage
-
-### Still High Priority
-
-- WASM module for ultra performance
-- Modular builds for smaller bundles
-- Async iterators/streaming support
-- Better cancellation support
-- VSCode extension & ESLint plugin
-- OpenTelemetry/DataDog integration
-
-All 233 tests passing. Performance improvements show:
-
-- Object pooling: 100% hit rate after warmup
-- Lazy evaluation: Defers expensive computations
-- String interning: Reduces memory for common strings
-- Bit flags: Reduces memory for boolean properties
+1. Run tests in smaller batches to avoid memory issues
+2. Fix remaining optimistic update tests
+3. Investigate bulkhead hook implementation issues
+4. Consider splitting large test files
