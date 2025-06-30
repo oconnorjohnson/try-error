@@ -87,6 +87,17 @@ describe("Setup Utilities", () => {
   });
 
   describe("setupReact", () => {
+    beforeEach(() => {
+      // Save original NODE_ENV
+      process.env = { ...originalEnv };
+      // Set to development for React tests
+      process.env.NODE_ENV = "development";
+    });
+
+    afterEach(() => {
+      process.env = originalEnv;
+    });
+
     it("should detect development environment via localhost", () => {
       // @ts-ignore
       global.window = {
@@ -152,6 +163,9 @@ describe("Setup Utilities", () => {
     });
 
     it("should configure for production when not localhost", () => {
+      // Set to production
+      process.env.NODE_ENV = "production";
+
       // @ts-ignore
       global.window = {
         location: {
