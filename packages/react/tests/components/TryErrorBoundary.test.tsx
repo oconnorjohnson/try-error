@@ -420,10 +420,21 @@ describe("withTryErrorBoundary", () => {
       errorMessage: "Custom HOC error message",
     });
 
+    // Expect the error to be logged - this is normal React behavior in tests
+    const consoleErrorSpy = jest
+      .spyOn(console, "error")
+      .mockImplementation(() => {});
+
     render(<SafeComponent />);
 
     expect(screen.getByText("Custom HOC error message")).toBeInTheDocument();
     expect(onError).toHaveBeenCalled();
+
+    // Verify console.error was called (expected React behavior)
+    expect(consoleErrorSpy).toHaveBeenCalled();
+
+    // Clean up
+    consoleErrorSpy.mockRestore();
   });
 
   it("should set correct display name", () => {

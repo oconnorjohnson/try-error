@@ -1046,80 +1046,38 @@ Made significant progress fixing React package tests:
 3. Investigate bulkhead hook implementation issues
 4. Consider splitting large test files
 
-## 2025-06-30 - Logging Factory APIs Decision
+## 2025-06-30 - React Package Test Failures Investigation
 
-After analyzing the try-error library architecture and existing patterns, decided NOT to add logging factory APIs to the core library. Key reasons:
+Investigated failing tests in the React package. Found 10 failing tests across 3 test suites:
 
-1. **Existing Infrastructure is Sufficient**:
+### TryErrorBoundary Tests (1 failure)
 
-   - `onError` hook in configuration allows integration with any logging service
-   - `loggingMiddleware` function available for middleware pipeline
-   - `formatErrorForLogging` utility for formatting errors
-   - React package has `ConsoleProvider` for telemetry
+- `withTryErrorBoundary` test is failing due to expected React behavior where errors are logged even when caught by error boundaries in test environment
 
-2. **Philosophy Alignment**:
+### useTryMutation.optimistic Tests (5 failures)
 
-   - Library follows "bring your own logger" approach
-   - Zero-dependency philosophy would be violated
-   - Current approach is more flexible than prescriptive factories
+1. **Custom retry function test**: Expected 2 attempts but only got 1 - the retry logic may not be triggering properly when using custom retry functions
+2. **Exponential backoff test**: `delays` array is undefined - timing measurements not being captured correctly
+3. **Cache tests**: Caching functionality appears to not be working as expected - mutations are being called when they should be cached
 
-3. **Performance & Complexity**:
+### useErrorRecovery Tests (5 failures)
 
-   - Logging is a hot path - current minimal overhead approach is optimal
-   - Can't match features of Winston, Pino, Bunyan without significant effort
-   - Users already have logging infrastructure they prefer
+1. **Retry delay function test**: Throwing "Retry" error instead of expected behavior
+2. **Exponential backoff test**: Same "Retry" error issue
+3. **Bulkhead concurrency test**: Expected max 2 concurrent but got 5 - concurrency limiting not working
+4. **Queue full test**: Test timeout after 10 seconds - deadlock or infinite wait condition
+5. **Timeout operations test**: Expected BULKHEAD_TIMEOUT error type but got undefined
 
-4. **Current Integration Pattern Works Well**:
-   ```typescript
-   configure({
-     onError: (error) => {
-       logger.error(error); // Any logger works
-       return error;
-     },
-   });
-   ```
+### useTry Tests (1 failure)
 
-**Decision**: Keep logging concerns separate. Library's strength is error handling, not logging. Users can integrate best-in-class logging solutions while benefiting from try-error's error handling.
+- Memory heap allocation failure causing test suite to crash - likely an infinite loop or memory leak in one of the tests
 
-## 2025-06-30 12:54: Test Coverage Improvement Progress
+### Key Issues Identified:
 
-### Coverage Improvements Achieved
+- Retry logic in useTryMutation not working correctly with custom retry functions
+- Caching mechanism in useTryMutation not functioning as expected
+- Bulkhead pattern implementation in useErrorRecovery has concurrency control issues
+- Potential memory leak in useTry tests causing heap exhaustion
+- Console error suppression in TryErrorBoundary tests needs adjustment
 
-- Created comprehensive test suite for utils.ts (64 tests, 63 passing)
-- Improved overall coverage significantly:
-  - Statements: 54.08% → 66.19% (+12.11%)
-  - Branches: 36.35% → 53.26% (+16.91%)
-  - Functions: 35.33% → 46.25% (+10.92%)
-  - Lines: 54.5% → 66.88% (+12.38%)
-
-### Utils.ts Test Coverage
-
-- Tested all major utility functions:
-  - createEnhancedError with options
-  - Error type checking (isErrorOfType, isErrorOfTypes)
-  - Error message/context extraction
-  - Result transformation utilities (transformResult, withDefault, withDefaultFn)
-  - Result filtering (filterSuccess, filterErrors, partitionResults)
-  - Error aggregation (combineErrors, getErrorSummary)
-  - Debugging utilities (formatErrorForLogging, createErrorReport)
-  - Error diffing and grouping
-  - Error sampling strategies (random, rate-based, time-based, type-based)
-  - Error correlation and fingerprinting
-
-### Key Learnings
-
-- TypeScript type inference can be tricky with generic functions
-- Source location is automatically populated by createError
-- The `cause` property may not be fully implemented in createError
-- Using function returns for TryResult helps with type inference
-
-### Next Priority Areas
-
-1. config.ts - 20.57% coverage (test all presets)
-2. events.ts - 21.73% coverage (event system)
-3. bitflags.ts - 22.85% coverage (bit manipulation)
-4. Fix failing setup.ts tests (environment mocking issues)
-
-## 2024-12-30: Test Coverage Analysis and Improvements
-
-// ... existing code ...
+All core package tests (378) are passing. React package needs focused debugging on these specific areas.
