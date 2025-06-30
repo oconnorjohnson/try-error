@@ -997,3 +997,38 @@ Made significant progress fixing React package tests:
 2. Fix remaining optimistic update tests
 3. Investigate bulkhead hook implementation issues
 4. Consider splitting large test files
+
+## 2025-06-30 - Logging Factory APIs Decision
+
+After analyzing the try-error library architecture and existing patterns, decided NOT to add logging factory APIs to the core library. Key reasons:
+
+1. **Existing Infrastructure is Sufficient**:
+
+   - `onError` hook in configuration allows integration with any logging service
+   - `loggingMiddleware` function available for middleware pipeline
+   - `formatErrorForLogging` utility for formatting errors
+   - React package has `ConsoleProvider` for telemetry
+
+2. **Philosophy Alignment**:
+
+   - Library follows "bring your own logger" approach
+   - Zero-dependency philosophy would be violated
+   - Current approach is more flexible than prescriptive factories
+
+3. **Performance & Complexity**:
+
+   - Logging is a hot path - current minimal overhead approach is optimal
+   - Can't match features of Winston, Pino, Bunyan without significant effort
+   - Users already have logging infrastructure they prefer
+
+4. **Current Integration Pattern Works Well**:
+   ```typescript
+   configure({
+     onError: (error) => {
+       logger.error(error); // Any logger works
+       return error;
+     },
+   });
+   ```
+
+**Decision**: Keep logging concerns separate. Library's strength is error handling, not logging. Users can integrate best-in-class logging solutions while benefiting from try-error's error handling.
