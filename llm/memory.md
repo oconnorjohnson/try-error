@@ -488,6 +488,54 @@ This completes the documentation requirements for the performance optimization a
 - Source location tests updated for reliability
 - Performance tests made more stable
 
+## 2025-06-30 13:12 - Test Coverage Improvement
+
+### Test Coverage Analysis & Improvement:
+
+**Initial Coverage Status:**
+
+- Statements: 54.08%
+- Branches: 36.35%
+- Functions: 35.33%
+- Lines: 54.5%
+
+**Files Created:**
+
+1. `tests/setup.test.ts` - 48 tests for setup module (36 passing, 12 failing due to environment mocking)
+2. `tests/utils.test.ts` - 64 comprehensive tests for utils module (63 passing)
+3. `tests/config.test.ts` - 27 tests for config module (23 passing)
+4. `llm/test-coverage-analysis.md` - Comprehensive coverage analysis document
+5. `llm/test-coverage-summary.md` - Executive summary of coverage improvements
+
+**Final Coverage Achievement:**
+
+- Statements: 69.84% (+15.76%)
+- Branches: 54.46% (+18.11%)
+- Functions: 49.25% (+13.92%)
+- Lines: 70.47% (+15.97%)
+
+**Key Findings:**
+
+- utils.ts had many useful utilities that were completely untested
+- setup.ts tests failing due to read-only process.versions property
+- config.ts tests revealed some missing exports and type issues
+- Total tests increased from 233 to 378 (+145 tests)
+
+**Next Priority Areas:**
+
+1. Fix failing setup.ts tests (environment mocking issues)
+2. Add tests for events.ts (21.73% coverage)
+3. Add tests for bitflags.ts (22.85% coverage)
+4. Add tests for intern.ts (25% coverage)
+5. Fix failing config.ts tests (caching expectations)
+
+**Technical Challenges:**
+
+- TypeScript type inference with TryResult<T, E>
+- Environment detection mocking in Jest
+- Source location automatically populated by createError
+- Config caching behavior not matching test expectations
+
 ## Next High-Priority Items
 
 ### Performance
@@ -1032,3 +1080,46 @@ After analyzing the try-error library architecture and existing patterns, decide
    ```
 
 **Decision**: Keep logging concerns separate. Library's strength is error handling, not logging. Users can integrate best-in-class logging solutions while benefiting from try-error's error handling.
+
+## 2025-06-30 12:54: Test Coverage Improvement Progress
+
+### Coverage Improvements Achieved
+
+- Created comprehensive test suite for utils.ts (64 tests, 63 passing)
+- Improved overall coverage significantly:
+  - Statements: 54.08% → 66.19% (+12.11%)
+  - Branches: 36.35% → 53.26% (+16.91%)
+  - Functions: 35.33% → 46.25% (+10.92%)
+  - Lines: 54.5% → 66.88% (+12.38%)
+
+### Utils.ts Test Coverage
+
+- Tested all major utility functions:
+  - createEnhancedError with options
+  - Error type checking (isErrorOfType, isErrorOfTypes)
+  - Error message/context extraction
+  - Result transformation utilities (transformResult, withDefault, withDefaultFn)
+  - Result filtering (filterSuccess, filterErrors, partitionResults)
+  - Error aggregation (combineErrors, getErrorSummary)
+  - Debugging utilities (formatErrorForLogging, createErrorReport)
+  - Error diffing and grouping
+  - Error sampling strategies (random, rate-based, time-based, type-based)
+  - Error correlation and fingerprinting
+
+### Key Learnings
+
+- TypeScript type inference can be tricky with generic functions
+- Source location is automatically populated by createError
+- The `cause` property may not be fully implemented in createError
+- Using function returns for TryResult helps with type inference
+
+### Next Priority Areas
+
+1. config.ts - 20.57% coverage (test all presets)
+2. events.ts - 21.73% coverage (event system)
+3. bitflags.ts - 22.85% coverage (bit manipulation)
+4. Fix failing setup.ts tests (environment mocking issues)
+
+## 2024-12-30: Test Coverage Analysis and Improvements
+
+// ... existing code ...
