@@ -206,28 +206,28 @@ describe("Error Utilities", () => {
   describe("Result Transformation", () => {
     describe("transformResult", () => {
       it("should transform success values", () => {
-        const result: TryResult<number> = 42;
-        const transformed = transformResult(result, (n) => n * 2);
+        const result: TryResult<number, TryError> = 42;
+        const transformed = transformResult(result, (n: number) => n * 2);
         expect(transformed).toBe(84);
       });
 
       it("should preserve errors", () => {
         const error = createError({ type: "TestError", message: "Test" });
-        const result: TryResult<number> = error;
-        const transformed = transformResult(result, (n) => n * 2);
+        const result: TryResult<number, TryError> = error;
+        const transformed = transformResult(result, (n: number) => n * 2);
         expect(transformed).toBe(error);
       });
     });
 
     describe("withDefault", () => {
       it("should return success value", () => {
-        const result: TryResult<string> = "success";
+        const result: TryResult<string, TryError> = "success";
         expect(withDefault(result, "default")).toBe("success");
       });
 
       it("should return default for errors", () => {
         const error = createError({ type: "TestError", message: "Test" });
-        const result: TryResult<string> = error;
+        const result: TryResult<string, TryError> = error;
         expect(withDefault(result, "default")).toBe("default");
       });
     });
@@ -555,7 +555,7 @@ describe("Error Utilities", () => {
       });
 
       it("should handle empty array", () => {
-        const grouped = groupErrors([], (e) => e.type);
+        const grouped = groupErrors([] as TryError[], (e) => e.type);
         expect(grouped.size).toBe(0);
       });
     });
