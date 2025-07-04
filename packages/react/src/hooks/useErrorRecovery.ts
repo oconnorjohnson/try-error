@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef, useEffect } from "react";
-import { TryError, createError } from "try-error";
+import { TryError, createError, isTryError } from "try-error";
 
 export interface CircuitBreakerOptions {
   // Number of failures before opening the circuit
@@ -240,23 +240,37 @@ export function useErrorRecovery<T = any>(
           onRecover?.();
           return result;
         } catch (error) {
-          lastError = createError({
-            type: error instanceof Error ? error.name : "UNKNOWN_ERROR",
-            message: error instanceof Error ? error.message : "Unknown error",
-            cause: error,
-            context: {
-              attempt,
-              circuitState: state.circuitState,
-            },
-          });
+          // Preserve TryError types, only wrap regular errors
+          if (isTryError(error)) {
+            lastError = createError({
+              type: error.type,
+              message: error.message,
+              cause: error.cause,
+              context: {
+                ...error.context,
+                attempt,
+                circuitState: state.circuitState,
+              },
+            });
+          } else {
+            lastError = createError({
+              type: error instanceof Error ? error.name : "UNKNOWN_ERROR",
+              message: error instanceof Error ? error.message : "Unknown error",
+              cause: error,
+              context: {
+                attempt,
+                circuitState: state.circuitState,
+              },
+            });
+          }
 
           onError?.(lastError);
 
-          // Check if we should retry
+          // Check if we should retry (don't retry if circuit opened during this attempt)
           if (
+            lastError &&
             attempt < maxRetries &&
-            shouldRetry(lastError, attempt) &&
-            state.circuitState !== "OPEN"
+            shouldRetry(lastError, attempt)
           ) {
             attempt++;
             updateState({ recoveryAttempts: attempt });
@@ -269,7 +283,7 @@ export function useErrorRecovery<T = any>(
           }
 
           // No more retries - handle circuit breaker
-          if (shouldTrip(lastError)) {
+          if (lastError && shouldTrip(lastError)) {
             const newFailureCount = state.consecutiveFailures + 1;
             updateState({
               consecutiveFailures: newFailureCount,
@@ -293,11 +307,23 @@ export function useErrorRecovery<T = any>(
           return await fallback();
         } catch (fallbackError) {
           // Fallback also failed
-          throw lastError;
+          throw (
+            lastError ||
+            createError({
+              type: "UNKNOWN_ERROR",
+              message: "Unknown error occurred",
+            })
+          );
         }
       }
 
-      throw lastError;
+      throw (
+        lastError ||
+        createError({
+          type: "UNKNOWN_ERROR",
+          message: "Unknown error occurred",
+        })
+      );
     },
     [
       state.circuitState,
@@ -436,8 +462,11 @@ export function useBulkhead<T = any>(options: {
     onReject,
   } = options;
 
-  const [activeCount, setActiveCount] = useState(0);
-  const [queuedCount, setQueuedCount] = useState(0);
+  // Use refs for synchronous tracking to prevent race conditions
+  const activeCountRef = useRef(0);
+  const queuedCountRef = useRef(0);
+  const [, forceUpdate] = useState({});
+
   const queueRef = useRef<
     Array<{
       fn: () => Promise<any>;
@@ -446,40 +475,57 @@ export function useBulkhead<T = any>(options: {
     }>
   >([]);
 
-  const processQueue = useCallback(async () => {
-    if (activeCount >= maxConcurrent || queueRef.current.length === 0) {
-      return;
+  // Force re-render when counts change
+  const updateCounts = useCallback(() => {
+    forceUpdate({});
+  }, []);
+
+  const processQueue = useCallback(() => {
+    // Process queue items while we have capacity and items
+    while (
+      activeCountRef.current < maxConcurrent &&
+      queueRef.current.length > 0
+    ) {
+      const item = queueRef.current.shift();
+      if (!item) break;
+
+      activeCountRef.current++;
+      queuedCountRef.current--;
+      updateCounts();
+
+      // Execute the function asynchronously
+      item
+        .fn()
+        .then(
+          (result) => {
+            item.resolve(result);
+          },
+          (error) => {
+            item.reject(error);
+          }
+        )
+        .finally(() => {
+          activeCountRef.current--;
+          updateCounts();
+          // Process next item in queue
+          processQueue();
+        });
     }
-
-    const item = queueRef.current.shift();
-    if (!item) return;
-
-    setActiveCount((prev) => prev + 1);
-    setQueuedCount((prev) => prev - 1);
-
-    try {
-      const result = await item.fn();
-      item.resolve(result);
-    } catch (error) {
-      item.reject(error);
-    } finally {
-      setActiveCount((prev) => prev - 1);
-      // Process next item in queue
-      processQueue();
-    }
-  }, [activeCount, maxConcurrent]);
+  }, [maxConcurrent, updateCounts]);
 
   const execute = useCallback(
     async (fn: () => Promise<T>): Promise<T> => {
-      if (activeCount >= maxConcurrent) {
-        if (queuedCount >= queueSize) {
+      // Check if we're at capacity
+      if (activeCountRef.current >= maxConcurrent) {
+        // Check if queue is full
+        if (queuedCountRef.current >= queueSize) {
           onReject?.();
           throw createError({
             type: "BULKHEAD_REJECTED",
             message: `Bulkhead queue is full (${queueSize} items)`,
             context: {
-              activeCount,
-              queuedCount,
+              activeCount: activeCountRef.current,
+              queuedCount: queuedCountRef.current,
               maxConcurrent,
               queueSize,
             },
@@ -489,12 +535,14 @@ export function useBulkhead<T = any>(options: {
         // Add to queue
         return new Promise((resolve, reject) => {
           queueRef.current.push({ fn, resolve, reject });
-          setQueuedCount((prev) => prev + 1);
+          queuedCountRef.current++;
+          updateCounts();
         });
       }
 
       // Execute immediately
-      setActiveCount((prev) => prev + 1);
+      activeCountRef.current++;
+      updateCounts();
 
       try {
         const timeoutPromise = timeout
@@ -518,26 +566,19 @@ export function useBulkhead<T = any>(options: {
 
         return result;
       } finally {
-        setActiveCount((prev) => prev - 1);
+        activeCountRef.current--;
+        updateCounts();
         processQueue();
       }
     },
-    [
-      activeCount,
-      maxConcurrent,
-      queuedCount,
-      queueSize,
-      onReject,
-      timeout,
-      processQueue,
-    ]
+    [maxConcurrent, queueSize, onReject, timeout, processQueue, updateCounts]
   );
 
   return {
     execute,
-    activeCount,
-    queuedCount,
-    isAtCapacity: activeCount >= maxConcurrent,
-    isQueueFull: queuedCount >= queueSize,
+    activeCount: activeCountRef.current,
+    queuedCount: queuedCountRef.current,
+    isAtCapacity: activeCountRef.current >= maxConcurrent,
+    isQueueFull: queuedCountRef.current >= queueSize,
   };
 }

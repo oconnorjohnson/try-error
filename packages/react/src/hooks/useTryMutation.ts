@@ -321,9 +321,64 @@ export function useTryMutation<T, TVariables = void>(
       setError(null);
 
       try {
-        const result = await tryAsync(() =>
-          mutationFn(variables, abortController.signal)
-        );
+        // Call mutation function directly to preserve error types for retry logic
+        const result = await mutationFn(variables, abortController.signal);
+
+        // Check if component is still mounted and request wasn't aborted
+        if (!isMountedRef.current || abortController.signal.aborted) {
+          // Rollback optimistic update if needed
+          if (
+            optimisticData !== undefined &&
+            previousDataRef.current !== undefined
+          ) {
+            setData(previousDataRef.current);
+          }
+
+          return createError({
+            type: "ABORTED",
+            message: abortMessage,
+            context: {
+              reason: abortController.signal.aborted
+                ? "manual_abort"
+                : "unmount",
+            },
+          });
+        }
+
+        // Success case - update cache and state
+        if (cacheKeyRef.current) {
+          mutationCache.set(cacheKeyRef.current, {
+            data: result,
+            timestamp: Date.now(),
+          });
+        }
+
+        // Invalidate cache if requested
+        if (invalidateOnSuccess) {
+          // Invalidate related cache entries (simplified - in real app would be more sophisticated)
+          mutationCache.clear();
+        }
+
+        setData(result);
+        setError(null);
+        setFailureCount(0);
+        onSuccess?.(result, variables);
+
+        if (isMountedRef.current) {
+          setIsLoading(false);
+          onSettled?.(result, null, variables);
+        }
+
+        return result;
+      } catch (thrownError: unknown) {
+        // Convert thrown error to TryError if needed, preserving original type
+        const result = isTryError(thrownError) 
+          ? thrownError 
+          : createError({
+              type: thrownError instanceof Error ? thrownError.name : "UNKNOWN_ERROR",
+              message: thrownError instanceof Error ? thrownError.message : "Unknown error",
+              cause: thrownError,
+            });
 
         // Check if component is still mounted and request wasn't aborted
         if (!isMountedRef.current || abortController.signal.aborted) {
@@ -384,13 +439,14 @@ export function useTryMutation<T, TVariables = void>(
           }
 
           // Check if we should retry
-          if (shouldRetry(retryCount, result)) {
-            const delay = getRetryDelay(retryCount);
+          const currentFailureCount = retryCount + 1;
+          if (shouldRetry(currentFailureCount, result)) {
+            const delay = getRetryDelay(currentFailureCount);
 
             return new Promise((resolve) => {
               retryTimeoutRef.current = setTimeout(() => {
                 if (isMountedRef.current) {
-                  setFailureCount(retryCount + 1);
+                  setFailureCount(currentFailureCount);
                   resolve(mutateAsyncInternal(variables, retryCount + 1));
                 } else {
                   resolve(
@@ -448,67 +504,6 @@ export function useTryMutation<T, TVariables = void>(
         }
 
         return result;
-      } catch (error) {
-        // Check if this was an abort
-        if (
-          error instanceof Error &&
-          (error.name === "AbortError" || error.message === "AbortError")
-        ) {
-          const abortError = createError({
-            type: "ABORTED",
-            message: abortMessage,
-            context: { reason: "manual_abort" },
-            cause: error,
-          });
-
-          if (isMountedRef.current) {
-            // Rollback optimistic update
-            if (
-              optimisticData !== undefined &&
-              previousDataRef.current !== undefined
-            ) {
-              setData(previousDataRef.current);
-              rollbackOnError?.(abortError, variables, previousDataRef.current);
-            }
-
-            setError(abortError);
-            setIsLoading(false);
-            onError?.(abortError, variables);
-            onSettled?.(null, abortError, variables);
-          }
-
-          return abortError;
-        }
-
-        // Handle unexpected errors
-        const unexpectedError = createError({
-          type: "UNEXPECTED_ERROR",
-          message: error instanceof Error ? error.message : "Unknown error",
-          cause: error,
-        });
-
-        if (isMountedRef.current && !abortController.signal.aborted) {
-          // Rollback optimistic update
-          if (
-            optimisticData !== undefined &&
-            previousDataRef.current !== undefined
-          ) {
-            setData(previousDataRef.current);
-            rollbackOnError?.(
-              unexpectedError,
-              variables,
-              previousDataRef.current
-            );
-          }
-
-          setError(unexpectedError);
-          setIsLoading(false);
-          onError?.(unexpectedError, variables);
-          onSettled?.(null, unexpectedError, variables);
-        }
-
-        return unexpectedError;
-      }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [

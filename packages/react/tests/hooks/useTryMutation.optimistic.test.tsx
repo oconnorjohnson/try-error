@@ -166,18 +166,30 @@ describe("useTryMutation - Optimistic Updates", () => {
       let attemptCount = 0;
       const mutationFn = jest.fn().mockImplementation(async () => {
         attemptCount++;
+        console.log(
+          `Attempt ${attemptCount}: throwing ${
+            attemptCount === 1 ? "NETWORK_ERROR" : "VALIDATION_ERROR"
+          }`
+        );
         throw createError({
           type: attemptCount === 1 ? "NETWORK_ERROR" : "VALIDATION_ERROR",
           message: `Error ${attemptCount}`,
         });
       });
 
+      const retryFn = jest.fn((failureCount, error) => {
+        console.log(
+          `Retry function called: failureCount=${failureCount}, error.type=${error.type}`
+        );
+        // Only retry network errors
+        const shouldRetry = error.type === "NETWORK_ERROR" && failureCount < 2;
+        console.log(`Should retry: ${shouldRetry}`);
+        return shouldRetry;
+      });
+
       const { result } = renderHook(() =>
         useTryMutation(mutationFn, {
-          retry: (failureCount, error) => {
-            // Only retry network errors
-            return error.type === "NETWORK_ERROR" && failureCount < 2;
-          },
+          retry: retryFn,
           retryDelay: 10,
         })
       );
@@ -185,6 +197,12 @@ describe("useTryMutation - Optimistic Updates", () => {
       await act(async () => {
         await result.current.mutate("test");
       });
+
+      console.log(`Final attemptCount: ${attemptCount}`);
+      console.log(
+        `Retry function was called ${retryFn.mock.calls.length} times`
+      );
+      console.log(`Retry function calls:`, retryFn.mock.calls);
 
       // Should have tried twice (initial + 1 retry)
       expect(attemptCount).toBe(2);
