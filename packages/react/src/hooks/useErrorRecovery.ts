@@ -507,8 +507,8 @@ export function useBulkhead<T = any>(options: {
         .finally(() => {
           activeCountRef.current--;
           updateCounts();
-          // Process next item in queue
-          processQueue();
+          // Use setTimeout to avoid infinite recursion
+          setTimeout(() => processQueue(), 0);
         });
     }
   }, [maxConcurrent, updateCounts]);
@@ -544,10 +544,12 @@ export function useBulkhead<T = any>(options: {
       activeCountRef.current++;
       updateCounts();
 
+      let timeoutId: ReturnType<typeof setTimeout> | null = null;
+
       try {
         const timeoutPromise = timeout
-          ? new Promise<never>((_, reject) =>
-              setTimeout(
+          ? new Promise<never>((_, reject) => {
+              timeoutId = setTimeout(
                 () =>
                   reject(
                     createError({
@@ -556,16 +558,25 @@ export function useBulkhead<T = any>(options: {
                     })
                   ),
                 timeout
-              )
-            )
+              );
+            })
           : null;
 
         const result = timeoutPromise
           ? await Promise.race([fn(), timeoutPromise])
           : await fn();
 
+        // Clear timeout if operation completed successfully
+        if (timeoutId) {
+          clearTimeout(timeoutId);
+        }
+
         return result;
       } finally {
+        // Clear timeout in case of error
+        if (timeoutId) {
+          clearTimeout(timeoutId);
+        }
         activeCountRef.current--;
         updateCounts();
         processQueue();

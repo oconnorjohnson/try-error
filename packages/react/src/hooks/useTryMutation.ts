@@ -372,11 +372,17 @@ export function useTryMutation<T, TVariables = void>(
         return result;
       } catch (thrownError: unknown) {
         // Convert thrown error to TryError if needed, preserving original type
-        const result = isTryError(thrownError) 
-          ? thrownError 
+        const result = isTryError(thrownError)
+          ? thrownError
           : createError({
-              type: thrownError instanceof Error ? thrownError.name : "UNKNOWN_ERROR",
-              message: thrownError instanceof Error ? thrownError.message : "Unknown error",
+              type:
+                thrownError instanceof Error
+                  ? thrownError.name
+                  : "UNKNOWN_ERROR",
+              message:
+                thrownError instanceof Error
+                  ? thrownError.message
+                  : "Unknown error",
               cause: thrownError,
             });
 
@@ -504,6 +510,7 @@ export function useTryMutation<T, TVariables = void>(
         }
 
         return result;
+      }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [
