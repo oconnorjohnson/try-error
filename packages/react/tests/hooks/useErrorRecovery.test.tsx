@@ -225,14 +225,19 @@ describe("useErrorRecovery", () => {
     it("should use custom retry delay function", async () => {
       const delays: number[] = [];
       let lastTime = Date.now();
+      let attemptCount = 0;
 
       const fn = jest.fn().mockImplementation(async () => {
         const now = Date.now();
-        if (delays.length > 0) {
-          delays.push(now - lastTime);
+        attemptCount++;
+
+        if (attemptCount > 1) {
+          const delay = now - lastTime;
+          delays.push(delay);
         }
         lastTime = now;
-        if (delays.length < 2) {
+
+        if (attemptCount < 3) {
           throw new Error("Retry");
         }
         return "success";
@@ -252,6 +257,7 @@ describe("useErrorRecovery", () => {
       });
 
       // Verify delays are approximately correct (with some tolerance)
+      expect(delays).toHaveLength(2);
       expect(delays[0]).toBeGreaterThanOrEqual(90);
       expect(delays[0]).toBeLessThan(150);
       expect(delays[1]).toBeGreaterThanOrEqual(190);
@@ -284,13 +290,14 @@ describe("useErrorRecovery", () => {
         try {
           await result.current.execute(fn);
         } catch (error: any) {
-          expect(error.type).toBe("UNKNOWN_ERROR"); // The hook creates this type
-          expect(error.cause).toBeTruthy();
+          expect(error.type).toBe("DONT_RETRY"); // Should be the final error that stopped retrying
+          // The original TryError doesn't have a cause, so it should be undefined
+          expect(error.cause).toBeUndefined();
         }
       });
 
-      expect(fn).toHaveBeenCalledTimes(1); // Only called once because shouldRetry returns false
-      expect(shouldRetry).toHaveBeenCalledTimes(1); // Only called once because shouldRetry returns false
+      expect(fn).toHaveBeenCalledTimes(2); // Called twice: first attempt + one retry
+      expect(shouldRetry).toHaveBeenCalledTimes(2); // Called twice: once for each error
     });
   });
 

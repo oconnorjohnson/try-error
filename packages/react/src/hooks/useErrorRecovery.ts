@@ -507,8 +507,14 @@ export function useBulkhead<T = any>(options: {
         .finally(() => {
           activeCountRef.current--;
           updateCounts();
-          // Use setTimeout to avoid infinite recursion
-          setTimeout(() => processQueue(), 0);
+          // Process queue immediately if there are more items and capacity
+          if (
+            activeCountRef.current < maxConcurrent &&
+            queueRef.current.length > 0
+          ) {
+            // Use microtask to avoid stack overflow but ensure immediate processing
+            Promise.resolve().then(() => processQueue());
+          }
         });
     }
   }, [maxConcurrent, updateCounts]);
