@@ -217,17 +217,22 @@ describe("useTryMutation - Optimistic Updates", () => {
     it("should use exponential backoff for retry delay", async () => {
       const delays: number[] = [];
       let lastCallTime = Date.now();
+      let attemptCount = 0;
 
       const mutationFn = jest.fn().mockImplementation(async () => {
         const now = Date.now();
-        const delay = now - lastCallTime;
-        if (delays.length > 0) {
+        attemptCount++;
+
+        // Record delay for retries (not the first attempt)
+        if (attemptCount > 1) {
+          const delay = now - lastCallTime;
           delays.push(delay);
         }
         lastCallTime = now;
 
-        if (delays.length < 2) {
-          throw new Error("Retry me");
+        // Fail first two attempts, succeed on third
+        if (attemptCount < 3) {
+          throw new Error(`Retry me - attempt ${attemptCount}`);
         }
         return { success: true };
       });
@@ -243,11 +248,17 @@ describe("useTryMutation - Optimistic Updates", () => {
         await result.current.mutate("test");
       });
 
-      // Check that delays are increasing
-      expect(delays[0]).toBeGreaterThanOrEqual(50);
+      // Should have 2 delays (for 2nd and 3rd attempts)
+      expect(delays).toHaveLength(2);
+
+      // Check that delays are increasing (exponential backoff)
+      expect(delays[0]).toBeGreaterThanOrEqual(50); // First retry delay
       expect(delays[0]).toBeLessThan(150);
-      expect(delays[1]).toBeGreaterThanOrEqual(100);
+      expect(delays[1]).toBeGreaterThanOrEqual(100); // Second retry delay
       expect(delays[1]).toBeLessThan(250);
+
+      // Verify exponential growth
+      expect(delays[1]).toBeGreaterThan(delays[0]);
     });
   });
 
