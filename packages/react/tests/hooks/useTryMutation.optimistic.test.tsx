@@ -1,11 +1,15 @@
 import React from "react";
 import { renderHook, act, waitFor } from "@testing-library/react";
-import { useTryMutation } from "../../src/hooks/useTryMutation";
+import {
+  useTryMutation,
+  __clearMutationCache,
+} from "../../src/hooks/useTryMutation";
 import { createError } from "try-error";
 
 describe("useTryMutation - Optimistic Updates", () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    __clearMutationCache(); // Clear cache between tests
   });
 
   describe("optimistic updates", () => {

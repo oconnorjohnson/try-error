@@ -354,9 +354,9 @@ export function useTryMutation<T, TVariables = void>(
         }
 
         // Invalidate cache if requested
-        if (invalidateOnSuccess) {
-          // Invalidate related cache entries (simplified - in real app would be more sophisticated)
-          mutationCache.clear();
+        if (invalidateOnSuccess && cacheKeyRef.current) {
+          // Only invalidate this specific cache entry, not the entire cache
+          mutationCache.delete(cacheKeyRef.current);
         }
 
         setData(result);
@@ -489,9 +489,9 @@ export function useTryMutation<T, TVariables = void>(
           }
 
           // Invalidate cache if requested
-          if (invalidateOnSuccess) {
-            // Invalidate related cache entries (simplified - in real app would be more sophisticated)
-            mutationCache.clear();
+          if (invalidateOnSuccess && cacheKeyRef.current) {
+            // Only invalidate this specific cache entry, not the entire cache
+            mutationCache.delete(cacheKeyRef.current);
           }
 
           setData(result);

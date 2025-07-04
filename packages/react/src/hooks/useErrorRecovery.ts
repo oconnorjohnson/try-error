@@ -545,20 +545,20 @@ export function useBulkhead<T = any>(options: {
       updateCounts();
 
       let timeoutId: ReturnType<typeof setTimeout> | null = null;
+      let timeoutFired = false;
 
       try {
         const timeoutPromise = timeout
           ? new Promise<never>((_, reject) => {
-              timeoutId = setTimeout(
-                () =>
-                  reject(
-                    createError({
-                      type: "BULKHEAD_TIMEOUT",
-                      message: `Operation timed out after ${timeout}ms`,
-                    })
-                  ),
-                timeout
-              );
+              timeoutId = setTimeout(() => {
+                timeoutFired = true;
+                reject(
+                  createError({
+                    type: "BULKHEAD_TIMEOUT",
+                    message: `Operation timed out after ${timeout}ms`,
+                  })
+                );
+              }, timeout);
             })
           : null;
 
@@ -567,14 +567,14 @@ export function useBulkhead<T = any>(options: {
           : await fn();
 
         // Clear timeout if operation completed successfully
-        if (timeoutId) {
+        if (timeoutId && !timeoutFired) {
           clearTimeout(timeoutId);
         }
 
         return result;
       } finally {
-        // Clear timeout in case of error
-        if (timeoutId) {
+        // Only clear timeout if it hasn't fired yet
+        if (timeoutId && !timeoutFired) {
           clearTimeout(timeoutId);
         }
         activeCountRef.current--;
