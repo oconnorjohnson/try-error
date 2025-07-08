@@ -294,10 +294,13 @@ describe("Serialization Edge Cases", () => {
       const serialized = serializeTryError(originalError);
       const deserialized = deserializeTryError(serialized);
 
-      expect(isTryError(deserialized)).toBe(true);
-      expect(deserialized.type).toBe(originalError.type);
-      expect(deserialized.message).toBe(originalError.message);
-      expect(deserialized.context).toEqual(originalError.context);
+      expect(deserialized).not.toBeNull();
+      if (deserialized) {
+        expect(isTryError(deserialized)).toBe(true);
+        expect(deserialized.type).toBe(originalError.type);
+        expect(deserialized.message).toBe(originalError.message);
+        expect(deserialized.context).toEqual(originalError.context);
+      }
     });
 
     it("should handle different timestamp formats", () => {
