@@ -17,11 +17,14 @@ describe("Event System Reliability", () => {
   });
 
   describe("Basic Event Emission", () => {
-    it("should emit error:created events when errors are created", () => {
+    it("should emit error:created events when errors are created", async () => {
       const listener = jest.fn();
       errorEvents.on("error:created", listener);
 
       const error = createError({ type: "Test", message: "Test error" });
+
+      // Wait for microtask to complete (events are processed asynchronously)
+      await new Promise((resolve) => process.nextTick(resolve));
 
       // The event should be emitted automatically when creating errors
       expect(listener).toHaveBeenCalledWith(
@@ -35,7 +38,7 @@ describe("Event System Reliability", () => {
       );
     });
 
-    it("should emit error:transformed events", () => {
+    it("should emit error:transformed events", async () => {
       const listener = jest.fn();
       errorEvents.on("error:transformed", listener);
 
@@ -46,6 +49,9 @@ describe("Event System Reliability", () => {
       });
 
       emitErrorTransformed(original, transformed);
+
+      // Wait for microtask to complete
+      await new Promise((resolve) => process.nextTick(resolve));
 
       expect(listener).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -58,7 +64,7 @@ describe("Event System Reliability", () => {
   });
 
   describe("Event Listener Management", () => {
-    it("should handle multiple listeners", () => {
+    it("should handle multiple listeners", async () => {
       const listener1 = jest.fn();
       const listener2 = jest.fn();
       const listener3 = jest.fn();
@@ -69,12 +75,15 @@ describe("Event System Reliability", () => {
 
       emitErrorCreated(createError({ type: "Test", message: "Test" }));
 
+      // Wait for microtask to complete
+      await new Promise((resolve) => process.nextTick(resolve));
+
       expect(listener1).toHaveBeenCalled();
       expect(listener2).toHaveBeenCalled();
       expect(listener3).toHaveBeenCalled();
     });
 
-    it("should handle listener removal", () => {
+    it("should handle listener removal", async () => {
       const listener1 = jest.fn();
       const listener2 = jest.fn();
 
@@ -86,11 +95,14 @@ describe("Event System Reliability", () => {
 
       emitErrorCreated(createError({ type: "Test", message: "Test" }));
 
+      // Wait for microtask to complete
+      await new Promise((resolve) => process.nextTick(resolve));
+
       expect(listener1).toHaveBeenCalled();
       expect(listener2).not.toHaveBeenCalled();
     });
 
-    it("should handle listeners that throw errors", () => {
+    it("should handle listeners that throw errors", async () => {
       const throwingListener = jest.fn(() => {
         throw new Error("Listener failed");
       });
@@ -104,13 +116,16 @@ describe("Event System Reliability", () => {
         emitErrorCreated(createError({ type: "Test", message: "Test" }));
       }).not.toThrow();
 
+      // Wait for microtask to complete
+      await new Promise((resolve) => process.nextTick(resolve));
+
       expect(throwingListener).toHaveBeenCalled();
       expect(normalListener).toHaveBeenCalled();
     });
   });
 
   describe("Integration with Error Creation", () => {
-    it("should automatically emit events during error creation", () => {
+    it("should automatically emit events during error creation", async () => {
       const createdListener = jest.fn();
       errorEvents.on("error:created", createdListener);
 
@@ -120,6 +135,9 @@ describe("Event System Reliability", () => {
         message: "Should auto-emit event",
         context: { test: true },
       });
+
+      // Wait for microtask to complete (events are processed asynchronously)
+      await new Promise((resolve) => process.nextTick(resolve));
 
       expect(isTryError(error)).toBe(true);
       expect(createdListener).toHaveBeenCalledWith(

@@ -7,6 +7,7 @@ import {
 } from "./config";
 import { getGlobalErrorPool } from "./pool";
 import { createLazyError } from "./lazy";
+import { emitErrorCreated } from "./events";
 
 // Performance optimization: Use WeakMap for config cache
 const configCache = new WeakMap<
@@ -548,6 +549,9 @@ export function createError<T extends string = string>(
     }
     errorCache.set(cacheKey, transformedError);
 
+    // Emit error created event
+    emitErrorCreated(transformedError);
+
     return transformedError;
   }
 
@@ -627,6 +631,9 @@ export function createError<T extends string = string>(
       }
     }
     errorCache.set(cacheKey, transformedError);
+
+    // Emit error created event
+    emitErrorCreated(transformedError);
 
     return transformedError;
   }
@@ -739,6 +746,9 @@ export function createError<T extends string = string>(
   }
   errorCache.set(cacheKey, transformedError);
 
+  // Emit error created event
+  emitErrorCreated(transformedError);
+
   return transformedError;
 }
 
@@ -797,7 +807,7 @@ export function createMinimalError<T extends string = string>(
 ): TryError<T> {
   const config = getCachedConfig();
 
-  return {
+  const error = {
     [TRY_ERROR_BRAND]: true,
     type,
     message,
@@ -806,7 +816,12 @@ export function createMinimalError<T extends string = string>(
     stack: undefined,
     context: config.skipContext ? undefined : context,
     cause: undefined,
-  };
+  } as TryError<T>;
+
+  // Emit error created event
+  emitErrorCreated(error);
+
+  return error;
 }
 
 /**
