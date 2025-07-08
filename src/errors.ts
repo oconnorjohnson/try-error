@@ -409,6 +409,28 @@ function getSourceLocation(stackOffset: number = 2): string {
 }
 
 /**
+ * Safe JSON stringification that handles circular references
+ */
+function safeStringify(obj: any): string {
+  const seen = new WeakSet();
+
+  try {
+    return JSON.stringify(obj, (key, value) => {
+      if (typeof value === "object" && value !== null) {
+        if (seen.has(value)) {
+          return "[Circular]";
+        }
+        seen.add(value);
+      }
+      return value;
+    });
+  } catch (error) {
+    // Fallback for any other JSON.stringify errors
+    return "[Unstringifiable]";
+  }
+}
+
+/**
  * Generate a cache key for error deduplication
  */
 function getErrorCacheKey(
@@ -416,7 +438,7 @@ function getErrorCacheKey(
   message: string,
   context?: Record<string, unknown>
 ): string {
-  const contextStr = context ? JSON.stringify(context) : "";
+  const contextStr = context ? safeStringify(context) : "";
   return `${type}:${message}:${contextStr}`;
 }
 

@@ -176,26 +176,78 @@ export function unwrapTryResult<T, E extends TryError>(
 }
 
 /**
+ * Safe JSON stringification that handles circular references
+ */
+function safeStringify(obj: any): any {
+  const seen = new WeakSet();
+
+  const replacer = (key: string, value: any): any => {
+    if (typeof value === "object" && value !== null) {
+      if (seen.has(value)) {
+        return "[Circular]";
+      }
+      seen.add(value);
+    }
+    return value;
+  };
+
+  try {
+    // Use JSON.parse(JSON.stringify()) with replacer to handle circular references
+    return JSON.parse(JSON.stringify(obj, replacer));
+  } catch (error) {
+    // Fallback for any other serialization errors
+    return "[Unstringifiable]";
+  }
+}
+
+/**
  * Serialize a TryError to a JSON-safe format
  * Removes the Symbol property and converts to a plain object
+ * Handles circular references in context
  */
 export function serializeTryError<E extends TryError>(
   error: E
 ): Record<string, unknown> {
   const { [TRY_ERROR_BRAND]: _, ...serializable } = error;
+
+  // Handle circular references in context and other properties
+  const safeSerializable = safeStringify(serializable);
+
   return {
-    ...serializable,
+    ...safeSerializable,
     __tryError: true, // Marker for deserialization
   };
 }
 
 /**
- * Deserialize a JSON object back to a TryError
+ * Deserialize a JSON object or string back to a TryError
  * Adds back the Symbol property
+ * Handles both parsed objects and JSON strings
  */
 export function deserializeTryError<T extends string = string>(
-  obj: Record<string, unknown>
+  input: Record<string, unknown> | string | null | undefined
 ): TryError<T> | null {
+  // Handle null/undefined input
+  if (input === null || input === undefined) {
+    return null;
+  }
+
+  let obj: Record<string, unknown>;
+
+  // Handle string input (JSON string)
+  if (typeof input === "string") {
+    try {
+      obj = JSON.parse(input);
+    } catch (error) {
+      return null; // Invalid JSON string
+    }
+  } else if (typeof input === "object") {
+    obj = input;
+  } else {
+    return null; // Invalid input type
+  }
+
+  // Validate the object structure
   if (
     typeof obj === "object" &&
     obj !== null &&
@@ -211,6 +263,7 @@ export function deserializeTryError<T extends string = string>(
       ...rest,
     } as TryError<T>;
   }
+
   return null;
 }
 
