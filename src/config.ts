@@ -71,7 +71,16 @@ class ConfigVersionTracker {
   increment(): void {
     this.version++;
     // Notify all listeners about version change
-    this.listeners.forEach((listener) => listener());
+    this.listeners.forEach((listener) => {
+      try {
+        listener();
+      } catch (error) {
+        // Log warning but continue with other listeners
+        if (typeof console !== "undefined") {
+          console.warn("Config change listener failed:", error);
+        }
+      }
+    });
   }
 
   getVersion(): number {
