@@ -19,6 +19,115 @@ import {
 const activeSetups = new Set<string>();
 
 /**
+ * Detect the current runtime environment type
+ *
+ * @returns The detected runtime type: 'server', 'client', or 'edge'
+ */
+export function detectRuntime(): "server" | "client" | "edge" {
+  try {
+    const hasProcess = typeof process !== "undefined";
+    const hasWindow = typeof window !== "undefined";
+    const hasDocument = typeof document !== "undefined";
+    const hasNavigator = typeof navigator !== "undefined";
+
+    // Edge runtime detection (Vercel Edge, Cloudflare Workers, Deno)
+    const isVercelEdge = typeof (globalThis as any).EdgeRuntime !== "undefined";
+    const isCloudflareWorkers =
+      typeof (globalThis as any).caches !== "undefined" &&
+      typeof (globalThis as any).addEventListener === "function" &&
+      !hasWindow;
+    const isDeno = typeof (globalThis as any).Deno !== "undefined";
+
+    if (isVercelEdge || isCloudflareWorkers || isDeno) {
+      return "edge";
+    }
+
+    // Browser/client detection
+    if (hasWindow && hasDocument && hasNavigator) {
+      return "client";
+    }
+
+    // Node.js/server detection
+    if (hasProcess && process.versions?.node !== undefined && !hasWindow) {
+      return "server";
+    }
+
+    // Fallback based on globals
+    if (hasWindow) {
+      return "client";
+    }
+
+    if (hasProcess) {
+      return "server";
+    }
+
+    // Final fallback
+    return "server";
+  } catch {
+    // Gracefully handle any errors in detection
+    return "server";
+  }
+}
+
+/**
+ * Detect the current environment (development, production, test, etc.)
+ *
+ * @returns The detected environment string
+ */
+export function detectEnvironment(): string {
+  try {
+    const hasProcess = typeof process !== "undefined";
+    const hasWindow = typeof window !== "undefined";
+
+    // Test environment detection
+    if (hasProcess) {
+      if (
+        process.env.NODE_ENV === "test" ||
+        process.env.JEST_WORKER_ID !== undefined ||
+        process.env.VITEST !== undefined
+      ) {
+        return "test";
+      }
+
+      if (process.env.NODE_ENV) {
+        return process.env.NODE_ENV;
+      }
+    }
+
+    if (hasWindow) {
+      // Karma test environment
+      if ((window as any).__karma__ !== undefined) {
+        return "test";
+      }
+
+      // Cypress test environment
+      if ((window as any).Cypress !== undefined) {
+        return "test";
+      }
+
+      // Development detection for browsers
+      if (
+        window.location.hostname === "localhost" ||
+        window.location.hostname === "127.0.0.1" ||
+        window.location.hostname.startsWith("192.168.") ||
+        window.location.hostname.startsWith("10.") ||
+        window.location.hostname === "[::1]"
+      ) {
+        return "development";
+      }
+
+      return "production";
+    }
+
+    // Fallback to production
+    return "production";
+  } catch {
+    // Gracefully handle any errors in detection
+    return "production";
+  }
+}
+
+/**
  * Quick setup for Node.js/Express applications
  * Automatically configures based on NODE_ENV with sensible defaults
  *
