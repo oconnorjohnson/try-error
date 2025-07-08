@@ -1,9 +1,9 @@
+import { createError } from "../../src/errors";
 import {
-  createError,
+  isTryError,
   serializeTryError,
   deserializeTryError,
-} from "../../src/errors";
-import { isTryError } from "../../src/types";
+} from "../../src/types";
 import { configure, resetConfig } from "../../src/config";
 
 describe("Serialization Edge Cases", () => {
