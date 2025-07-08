@@ -777,6 +777,16 @@ export function configure(
     }
     globalConfig = globalConfig ? deepMerge(globalConfig, config) : config;
   }
+
+  // Apply performance configuration to object pooling
+  if (globalConfig?.performance?.errorCreation?.objectPooling) {
+    const { configureErrorPool } = require("./pool");
+    configureErrorPool({
+      enabled: true,
+      maxSize: globalConfig.performance.errorCreation.poolSize || 100,
+    });
+  }
+
   // Increment version to invalidate caches
   configVersionTracker.increment();
 }

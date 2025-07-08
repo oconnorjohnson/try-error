@@ -512,7 +512,15 @@ export function createError<T extends string = string>(
     let transformedError = lazyError;
 
     if (config.onError) {
-      transformedError = config.onError(transformedError) as TryError<T>;
+      try {
+        transformedError = config.onError(transformedError) as TryError<T>;
+      } catch (error) {
+        // Log warning but continue with untransformed error
+        if (typeof console !== "undefined") {
+          console.warn("onError handler failed:", error);
+        }
+        // Continue with original error
+      }
     }
 
     if (config.runtimeDetection && config.environmentHandlers) {
@@ -582,7 +590,15 @@ export function createError<T extends string = string>(
 
     // Apply global error transformation if configured
     if (config.onError) {
-      transformedError = config.onError(transformedError) as TryError<T>;
+      try {
+        transformedError = config.onError(transformedError) as TryError<T>;
+      } catch (error) {
+        // Log warning but continue with untransformed error
+        if (typeof console !== "undefined") {
+          console.warn("onError handler failed:", error);
+        }
+        // Continue with original error
+      }
     }
 
     // Apply runtime-specific handlers if enabled
@@ -685,7 +701,15 @@ export function createError<T extends string = string>(
 
   // Apply global error transformation if configured
   if (config.onError) {
-    transformedError = config.onError(transformedError) as TryError<T>;
+    try {
+      transformedError = config.onError(transformedError) as TryError<T>;
+    } catch (error) {
+      // Log warning but continue with untransformed error
+      if (typeof console !== "undefined") {
+        console.warn("onError handler failed:", error);
+      }
+      // Continue with original error
+    }
   }
 
   // Apply runtime-specific handlers if enabled
