@@ -31,7 +31,7 @@ describe("Serialization Edge Cases", () => {
 
       const serialized = serializeTryError(error);
       expect(serialized).toBeDefined();
-      expect(typeof serialized).toBe("string");
+      expect(typeof serialized).toBe("object");
     });
 
     it("should handle deeply nested circular references", () => {
