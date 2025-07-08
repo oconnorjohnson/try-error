@@ -104,7 +104,9 @@ describe("Configuration Edge Cases", () => {
       addConfigChangeListener(goodListener);
       addConfigChangeListener(faultyListener);
 
-      configure({ captureStackTrace: false });
+      expect(() => configure({ captureStackTrace: false })).toThrow(
+        "Listener failed"
+      );
 
       expect(goodListener).toHaveBeenCalled();
       expect(faultyListener).toHaveBeenCalled();
