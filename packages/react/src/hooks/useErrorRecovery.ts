@@ -467,13 +467,8 @@ export function useBulkhead<T = any>(options: {
   const queuedCountRef = useRef(0);
   const [, forceUpdate] = useState({});
 
-  const queueRef = useRef<
-    Array<{
-      fn: () => Promise<any>;
-      resolve: (value: any) => void;
-      reject: (error: any) => void;
-    }>
-  >([]);
+  // Queue for waiting operations
+  const queueRef = useRef<Array<() => void>>([]);
 
   // Force re-render when counts change
   const updateCounts = useCallback(() => {
@@ -481,41 +476,14 @@ export function useBulkhead<T = any>(options: {
   }, []);
 
   const processQueue = useCallback(() => {
-    // Process queue items while we have capacity and items
-    while (
-      activeCountRef.current < maxConcurrent &&
-      queueRef.current.length > 0
-    ) {
-      const item = queueRef.current.shift();
-      if (!item) break;
-
-      activeCountRef.current++;
-      queuedCountRef.current--;
-      updateCounts();
-
-      // Execute the function asynchronously
-      item
-        .fn()
-        .then(
-          (result) => {
-            item.resolve(result);
-          },
-          (error) => {
-            item.reject(error);
-          }
-        )
-        .finally(() => {
-          activeCountRef.current--;
-          updateCounts();
-          // Process queue immediately if there are more items and capacity
-          if (
-            activeCountRef.current < maxConcurrent &&
-            queueRef.current.length > 0
-          ) {
-            // Use microtask to avoid stack overflow but ensure immediate processing
-            Promise.resolve().then(() => processQueue());
-          }
-        });
+    // Process next item in queue if we have capacity
+    if (activeCountRef.current < maxConcurrent && queueRef.current.length > 0) {
+      const nextResolve = queueRef.current.shift();
+      if (nextResolve) {
+        queuedCountRef.current--;
+        updateCounts();
+        nextResolve();
+      }
     }
   }, [maxConcurrent, updateCounts]);
 
@@ -538,11 +506,13 @@ export function useBulkhead<T = any>(options: {
           });
         }
 
-        // Add to queue
-        return new Promise((resolve, reject) => {
-          queueRef.current.push({ fn, resolve, reject });
-          queuedCountRef.current++;
-          updateCounts();
+        // Add to queue and wait
+        queuedCountRef.current++;
+        updateCounts();
+
+        // Wait for capacity to become available
+        await new Promise<void>((resolve) => {
+          queueRef.current.push(resolve);
         });
       }
 
@@ -588,7 +558,7 @@ export function useBulkhead<T = any>(options: {
         processQueue();
       }
     },
-    [maxConcurrent, queueSize, onReject, timeout, processQueue, updateCounts]
+    [maxConcurrent, queueSize, onReject, timeout, updateCounts, processQueue]
   );
 
   return {

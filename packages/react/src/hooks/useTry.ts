@@ -118,6 +118,22 @@ export function useTry<T>(
   // Suspense promise for concurrent mode
   const suspensePromiseRef = useRef<Promise<T> | null>(null);
 
+  // Store current values in refs to avoid stale closures
+  const asyncFnRef = useRef(asyncFn);
+  const resetOnExecuteRef = useRef(resetOnExecute);
+  const abortMessageRef = useRef(abortMessage);
+  const cacheRef = useRef(cache);
+  const cacheKeyRef = useRef(cacheKey);
+  const suspenseRef = useRef(suspense);
+
+  // Update refs when values change
+  asyncFnRef.current = asyncFn;
+  resetOnExecuteRef.current = resetOnExecute;
+  abortMessageRef.current = abortMessage;
+  cacheRef.current = cache;
+  cacheKeyRef.current = cacheKey;
+  suspenseRef.current = suspense;
+
   // Cleanup on unmount
   useEffect(() => {
     return () => {
@@ -143,6 +159,12 @@ export function useTry<T>(
       clearTimeout(debounceTimeoutRef.current);
       debounceTimeoutRef.current = null;
     }
+
+    // Reset loading state when aborting
+    setState((prevState) => ({
+      ...prevState,
+      isLoading: false,
+    }));
   }, []);
 
   // Execute the async function
@@ -163,7 +185,7 @@ export function useTry<T>(
     }
 
     return executeInternal();
-  }, [asyncFn, resetOnExecute, abortMessage, cache, cacheKey, debounce]);
+  }, [debounce]);
 
   const executeInternal = useCallback(async () => {
     // Check if component is mounted before starting
@@ -173,8 +195,8 @@ export function useTry<T>(
     const currentExecutionId = ++executionIdRef.current;
 
     // Check cache first
-    if (cache && cacheKey) {
-      const cached = requestCache.get(cacheKey);
+    if (cacheRef.current && cacheKeyRef.current) {
+      const cached = requestCache.get(cacheKeyRef.current);
       if (cached && Date.now() - cached.timestamp < 5 * 60 * 1000) {
         // 5 min cache
         // Check if still the current execution
@@ -196,7 +218,7 @@ export function useTry<T>(
       }
 
       // Check if there's already a pending request for this key
-      const pending = pendingRequests.get(cacheKey);
+      const pending = pendingRequests.get(cacheKeyRef.current);
       if (pending) {
         try {
           const result = await pending;
@@ -244,7 +266,7 @@ export function useTry<T>(
 
     // Reset state if requested (batch state updates)
     setState((prevState) => {
-      if (resetOnExecute) {
+      if (resetOnExecuteRef.current) {
         return {
           data: null,
           error: null,
@@ -263,23 +285,25 @@ export function useTry<T>(
 
     try {
       // Create promise for the operation
-      const promise = tryAsync(() => asyncFn(abortController.signal));
+      const promise = tryAsync(() =>
+        asyncFnRef.current(abortController.signal)
+      );
 
       // Store in pending requests if caching
-      if (cache && cacheKey) {
-        pendingRequests.set(cacheKey, promise);
+      if (cacheRef.current && cacheKeyRef.current) {
+        pendingRequests.set(cacheKeyRef.current, promise);
       }
 
       // Handle Suspense
-      if (suspense) {
+      if (suspenseRef.current) {
         suspensePromiseRef.current = promise as Promise<T>;
       }
 
       const result = await promise;
 
       // Clean up pending request
-      if (cache && cacheKey) {
-        pendingRequests.delete(cacheKey);
+      if (cacheRef.current && cacheKeyRef.current) {
+        pendingRequests.delete(cacheKeyRef.current);
       }
 
       // Check if this is still the latest execution and component is mounted
@@ -303,7 +327,7 @@ export function useTry<T>(
             data: null,
             error: createError({
               type: "ABORTED",
-              message: abortMessage,
+              message: abortMessageRef.current,
               context: { reason: "manual_abort" },
               cause: result.cause,
             }),
@@ -322,8 +346,8 @@ export function useTry<T>(
         }
       } else {
         // Cache successful result
-        if (cache && cacheKey) {
-          requestCache.set(cacheKey, {
+        if (cacheRef.current && cacheKeyRef.current) {
+          requestCache.set(cacheKeyRef.current, {
             data: result,
             timestamp: Date.now(),
           });
@@ -339,8 +363,8 @@ export function useTry<T>(
       }
     } catch (error) {
       // Clean up pending request
-      if (cache && cacheKey) {
-        pendingRequests.delete(cacheKey);
+      if (cacheRef.current && cacheKeyRef.current) {
+        pendingRequests.delete(cacheKeyRef.current);
       }
 
       // Check if still the current execution
@@ -374,7 +398,7 @@ export function useTry<T>(
         });
       }
     }
-  }, [asyncFn, resetOnExecute, abortMessage, cache, cacheKey]);
+  }, []);
 
   // Reset state to initial values
   const reset = useCallback(() => {
@@ -391,38 +415,28 @@ export function useTry<T>(
   }, []);
 
   // Manually set data (useful for optimistic updates)
-  const mutate = useCallback(
-    (data: T) => {
-      // Update cache if enabled
-      if (cache && cacheKey) {
-        requestCache.set(cacheKey, {
-          data,
-          timestamp: Date.now(),
-        });
-      }
-
-      setState({
+  const mutate = useCallback((data: T) => {
+    // Update cache if enabled
+    if (cacheRef.current && cacheKeyRef.current) {
+      requestCache.set(cacheKeyRef.current, {
         data,
-        error: null,
-        isLoading: false,
-        isSuccess: true,
-        isError: false,
+        timestamp: Date.now(),
       });
-    },
-    [cache, cacheKey]
-  );
+    }
 
-  // Memoized execute function that includes deps
-  const memoizedExecute = useMemo(
-    () => execute,
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [execute, ...deps]
-  );
+    setState({
+      data,
+      error: null,
+      isLoading: false,
+      isSuccess: true,
+      isError: false,
+    });
+  }, []);
 
   // Execute immediately on mount or when deps change
   useEffect(() => {
     if (immediate) {
-      memoizedExecute();
+      execute();
     }
 
     // Cleanup function to abort request if deps change
@@ -431,7 +445,7 @@ export function useTry<T>(
         abortControllerRef.current?.abort();
       }
     };
-  }, [immediate, memoizedExecute]);
+  }, [immediate, ...deps]);
 
   // Support for Suspense
   if (suspense && state.isLoading && suspensePromiseRef.current) {
