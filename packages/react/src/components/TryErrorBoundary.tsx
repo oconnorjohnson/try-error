@@ -8,7 +8,7 @@ import React, {
   useEffect,
   useRef,
 } from "react";
-import { isTryError, TryError, createError } from "try-error";
+import { isTryError, TryError, createError, emitErrorCreated } from "try-error";
 import { ErrorProvider, ErrorContextValue } from "../context/ErrorContext";
 
 // Props for the TryErrorBoundary component
@@ -199,7 +199,7 @@ export class TryErrorBoundary extends Component<
       return;
     }
 
-    const tryError = this.convertToTryError(error, {
+    const { tryError, wasAlreadyTryError } = this.convertToTryError(error, {
       source,
       async: true,
       timestamp: Date.now(),
@@ -211,6 +211,9 @@ export class TryErrorBoundary extends Component<
       errorInfo: null,
       asyncError: tryError,
     });
+
+    // Always emit event to global event system for async boundary-specific error handling
+    emitErrorCreated(tryError);
 
     // Call the error handler if provided
     this.props.onError?.(tryError, null);
@@ -232,7 +235,7 @@ export class TryErrorBoundary extends Component<
       throw error; // Re-throw to let parent boundary handle it
     }
 
-    const tryError = this.convertToTryError(error, {
+    const { tryError, wasAlreadyTryError } = this.convertToTryError(error, {
       componentStack: errorInfo?.componentStack,
       errorBoundary: true,
     });
@@ -241,6 +244,10 @@ export class TryErrorBoundary extends Component<
       error: tryError,
       errorInfo,
     });
+
+    // Always emit event to global event system for boundary-specific error handling
+    // This provides observability into React error boundary activity
+    emitErrorCreated(tryError);
 
     // Call the error handler if provided
     this.props.onError?.(tryError, errorInfo);
@@ -259,22 +266,23 @@ export class TryErrorBoundary extends Component<
   private convertToTryError(
     error: Error,
     additionalContext?: Record<string, any>
-  ): TryError {
+  ): { tryError: TryError; wasAlreadyTryError: boolean } {
     if (isTryError(error)) {
       // Merge additional context if provided
-      if (additionalContext) {
-        return {
-          ...error,
-          context: {
-            ...error.context,
-            ...additionalContext,
-          },
-        };
-      }
-      return error;
+      const tryError = additionalContext
+        ? {
+            ...error,
+            context: {
+              ...error.context,
+              ...additionalContext,
+            },
+          }
+        : error;
+
+      return { tryError, wasAlreadyTryError: true };
     }
 
-    return createError({
+    const tryError = createError({
       type: "ReactError",
       message: error.message,
       cause: error,
@@ -284,6 +292,8 @@ export class TryErrorBoundary extends Component<
         ...additionalContext,
       },
     });
+
+    return { tryError, wasAlreadyTryError: false };
   }
 
   private logError(error: TryError | Error, errorInfo: ErrorInfo | null) {
