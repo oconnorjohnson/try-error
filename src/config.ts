@@ -1001,6 +1001,7 @@ export const Performance = {
       averageTime: (end - start) / iterations,
       iterations,
       errors: errors.length, // Ensure errors are not optimized away
+      createdErrors: errors, // FIXED: Expose created errors for context verification
     };
   },
 
