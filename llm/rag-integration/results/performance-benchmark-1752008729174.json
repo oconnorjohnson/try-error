@@ -1,0 +1,473 @@
+{
+  "system_info": {
+    "platform": "darwin",
+    "arch": "arm64",
+    "cpus": 14,
+    "memory_total": 38654705664,
+    "memory_free": 3677880320,
+    "load_avg": [
+      5.5244140625,
+      5.81689453125,
+      5.7587890625
+    ],
+    "node_version": "v23.11.0",
+    "uptime": 97918
+  },
+  "timestamp": "2025-07-08T20:31:07.273Z",
+  "benchmarks": {
+    "basic_retrieval": {
+      "vector_search": [
+        {
+          "query": "How do I use trySync?",
+          "times": [
+            4,
+            4,
+            4,
+            5,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4
+          ],
+          "avg": 4.1,
+          "min": 4,
+          "max": 5
+        },
+        {
+          "query": "What is error handling?",
+          "times": [
+            4,
+            5,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            2,
+            1
+          ],
+          "avg": 3.6,
+          "min": 1,
+          "max": 5
+        },
+        {
+          "query": "React error boundary",
+          "times": [
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0
+          ],
+          "avg": 0.5,
+          "min": 0,
+          "max": 1
+        },
+        {
+          "query": "Performance optimization",
+          "times": [
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            0,
+            1
+          ],
+          "avg": 0.5,
+          "min": 0,
+          "max": 1
+        },
+        {
+          "query": "TypeScript integration",
+          "times": [
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0
+          ],
+          "avg": 0.5,
+          "min": 0,
+          "max": 1
+        }
+      ],
+      "rag_retrieval": [
+        {
+          "query": "How do I use trySync?",
+          "times": [
+            0,
+            1,
+            0,
+            1,
+            0,
+            0,
+            1,
+            0,
+            1,
+            0
+          ],
+          "avg": 0.4,
+          "min": 0,
+          "max": 1
+        },
+        {
+          "query": "What is error handling?",
+          "times": [
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            1,
+            0,
+            1
+          ],
+          "avg": 0.6,
+          "min": 0,
+          "max": 1
+        },
+        {
+          "query": "React error boundary",
+          "times": [
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            1
+          ],
+          "avg": 0.6,
+          "min": 0,
+          "max": 1
+        },
+        {
+          "query": "Performance optimization",
+          "times": [
+            1,
+            0,
+            1,
+            1,
+            1,
+            0,
+            1,
+            0,
+            1,
+            1
+          ],
+          "avg": 0.7,
+          "min": 0,
+          "max": 1
+        },
+        {
+          "query": "TypeScript integration",
+          "times": [
+            1,
+            0,
+            1,
+            0,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1
+          ],
+          "avg": 0.5,
+          "min": 0,
+          "max": 1
+        }
+      ]
+    },
+    "throughput": [
+      {
+        "config": {
+          "name": "light-load",
+          "concurrent": 5,
+          "duration": 30,
+          "strategy": "light"
+        },
+        "total_queries": 12648,
+        "successful_queries": 12648,
+        "failed_queries": 0,
+        "success_rate": 1,
+        "throughput_qps": 421.4876033057851,
+        "response_times": {
+          "avg": 0.6554395951929158,
+          "min": 0,
+          "max": 18,
+          "p50": 1,
+          "p95": 1,
+          "p99": 3
+        },
+        "resource_usage": {
+          "memory": {
+            "rss": 69901086.37288135,
+            "heapTotal": 26818941.830508474,
+            "heapUsed": 12499666.576271186,
+            "external": 1605828.3220338982,
+            "arrayBuffers": 16659
+          },
+          "cpu": 27.4098813559322,
+          "samples": 59
+        },
+        "duration_actual": 30.008
+      },
+      {
+        "config": {
+          "name": "medium-load",
+          "concurrent": 15,
+          "duration": 30,
+          "strategy": "medium"
+        },
+        "total_queries": 4065,
+        "successful_queries": 4065,
+        "failed_queries": 0,
+        "success_rate": 1,
+        "throughput_qps": 13.399390846881056,
+        "response_times": {
+          "avg": 74.43517835178352,
+          "min": 0,
+          "max": 300112,
+          "p50": 1,
+          "p95": 1,
+          "p99": 2
+        },
+        "resource_usage": {
+          "memory": {
+            "rss": 71534884.57142857,
+            "heapTotal": 28285805.714285713,
+            "heapUsed": 13539402.285714285,
+            "external": 1605829,
+            "arrayBuffers": 16659
+          },
+          "cpu": 66.62014285714285,
+          "samples": 7
+        },
+        "duration_actual": 303.372
+      },
+      {
+        "config": {
+          "name": "heavy-load",
+          "concurrent": 30,
+          "duration": 30,
+          "strategy": "heavy"
+        },
+        "total_queries": 26302,
+        "successful_queries": 26302,
+        "failed_queries": 0,
+        "success_rate": 1,
+        "throughput_qps": 876.4411862712428,
+        "response_times": {
+          "avg": 1.1532963272754924,
+          "min": 0,
+          "max": 8553,
+          "p50": 0,
+          "p95": 1,
+          "p99": 1
+        },
+        "resource_usage": {
+          "memory": {
+            "rss": 77286717.79310344,
+            "heapTotal": 36776995.31034483,
+            "heapUsed": 16789043.310344826,
+            "external": 1605829,
+            "arrayBuffers": 16659
+          },
+          "cpu": 89.86461379310349,
+          "samples": 29
+        },
+        "duration_actual": 30.01
+      }
+    ],
+    "scalability": [
+      {
+        "config": {
+          "name": "concurrent-1",
+          "concurrent": 1,
+          "duration": 30,
+          "strategy": "scalability"
+        },
+        "total_queries": 2537,
+        "successful_queries": 2537,
+        "failed_queries": 0,
+        "success_rate": 1,
+        "throughput_qps": 84.55821084558211,
+        "response_times": {
+          "avg": 0.8178951517540402,
+          "min": 0,
+          "max": 7,
+          "p50": 1,
+          "p95": 1,
+          "p99": 2
+        },
+        "resource_usage": {
+          "memory": {
+            "rss": 87693554.98305085,
+            "heapTotal": 47350315.38983051,
+            "heapUsed": 19232388.20338983,
+            "external": 1605829,
+            "arrayBuffers": 16659
+          },
+          "cpu": 7.490705084745764,
+          "samples": 59
+        },
+        "duration_actual": 30.003
+      },
+      {
+        "config": {
+          "name": "concurrent-5",
+          "concurrent": 5,
+          "duration": 30,
+          "strategy": "scalability"
+        },
+        "total_queries": 4632,
+        "successful_queries": 4632,
+        "failed_queries": 0,
+        "success_rate": 1,
+        "throughput_qps": 29.911273553836416,
+        "response_times": {
+          "avg": 31.710060449050086,
+          "min": 0,
+          "max": 144063,
+          "p50": 1,
+          "p95": 1,
+          "p99": 2
+        },
+        "resource_usage": {
+          "memory": {
+            "rss": 88146664.72727273,
+            "heapTotal": 47448064,
+            "heapUsed": 20228144,
+            "external": 1605829,
+            "arrayBuffers": 16659
+          },
+          "cpu": 26.62236363636364,
+          "samples": 22
+        },
+        "duration_actual": 154.858
+      },
+      {
+        "config": {
+          "name": "concurrent-10",
+          "concurrent": 10,
+          "duration": 30,
+          "strategy": "scalability"
+        },
+        "total_queries": 26968,
+        "successful_queries": 26968,
+        "failed_queries": 0,
+        "success_rate": 1,
+        "throughput_qps": 898.6337887370876,
+        "response_times": {
+          "avg": 0.5944823494512014,
+          "min": 0,
+          "max": 9,
+          "p50": 1,
+          "p95": 1,
+          "p99": 1
+        },
+        "resource_usage": {
+          "memory": {
+            "rss": 68862229.69491525,
+            "heapTotal": 24331073.08474576,
+            "heapUsed": 12290600.54237288,
+            "external": 1605829,
+            "arrayBuffers": 16659
+          },
+          "cpu": 55.488654237288124,
+          "samples": 59
+        },
+        "duration_actual": 30.01
+      },
+      {
+        "config": {
+          "name": "concurrent-20",
+          "concurrent": 20,
+          "duration": 30,
+          "strategy": "scalability"
+        },
+        "total_queries": 3456,
+        "successful_queries": 3456,
+        "failed_queries": 0,
+        "success_rate": 1,
+        "throughput_qps": 3.4332922053537898,
+        "response_times": {
+          "avg": 291.23784722222223,
+          "min": 0,
+          "max": 1004349,
+          "p50": 1,
+          "p95": 1,
+          "p99": 1
+        },
+        "resource_usage": {
+          "memory": {
+            "rss": 76906496,
+            "heapTotal": 30746214.4,
+            "heapUsed": 17145236.8,
+            "external": 1605829,
+            "arrayBuffers": 16659
+          },
+          "cpu": 76.63656,
+          "samples": 5
+        },
+        "duration_actual": 1006.614
+      },
+      {
+        "config": {
+          "name": "concurrent-50",
+          "concurrent": 50,
+          "duration": 30,
+          "strategy": "scalability"
+        },
+        "total_queries": 8038,
+        "successful_queries": 8038,
+        "failed_queries": 0,
+        "success_rate": 1,
+        "throughput_qps": 17.218001143868204,
+        "response_times": {
+          "avg": 58.23264493655138,
+          "min": 0,
+          "max": 462648,
+          "p50": 0,
+          "p95": 1,
+          "p99": 1
+        },
+        "resource_usage": {
+          "memory": {
+            "rss": 77672448,
+            "heapTotal": 28016640,
+            "heapUsed": 14139618,
+            "external": 1605059,
+            "arrayBuffers": 16659
+          },
+          "cpu": 101.06332499999999,
+          "samples": 8
+        },
+        "duration_actual": 466.837
+      }
+    ]
+  }
+}
