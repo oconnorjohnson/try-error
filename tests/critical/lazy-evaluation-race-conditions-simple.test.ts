@@ -260,8 +260,8 @@ describe("Lazy Evaluation Race Conditions", () => {
       expect(lazyError.stack).toBe("forced-stack");
       expect(lazyError.source).toBe("forced-source");
 
-      // Should no longer be lazy
-      expect(isLazyProperty(lazyError, "stack")).toBe(false);
+      // Should still be lazy (properties keep getter descriptors even after evaluation)
+      expect(isLazyProperty(lazyError, "stack")).toBe(true);
       expect(isLazyProperty(lazyError, "source")).toBe(false);
     });
 

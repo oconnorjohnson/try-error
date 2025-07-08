@@ -166,7 +166,11 @@ describe("Performance Measurement Accuracy (Actual API)", () => {
     it("should return memory usage in Node.js environment", () => {
       const memoryUsage = Performance.getMemoryUsage();
 
-      if (typeof process !== "undefined" && process.memoryUsage) {
+      if (
+        typeof process !== "undefined" &&
+        process.memoryUsage &&
+        typeof process.memoryUsage === "function"
+      ) {
         // In Node.js environment
         expect(memoryUsage).toBeDefined();
         expect(memoryUsage).toHaveProperty("rss");
@@ -273,7 +277,7 @@ describe("Performance Measurement Accuracy (Actual API)", () => {
       const start = Performance.now();
 
       // Create some actual errors
-      const errors = [];
+      const errors: any[] = [];
       for (let i = 0; i < 10; i++) {
         errors.push(
           createError({
@@ -300,7 +304,7 @@ describe("Performance Measurement Accuracy (Actual API)", () => {
     it("should maintain accuracy under load", async () => {
       // Create multiple measurement tasks
       const tasks = Array.from({ length: 3 }, async (_, taskIndex) => {
-        const results = [];
+        const results: any[] = [];
         for (let i = 0; i < 3; i++) {
           const result = await Performance.measureErrorCreation(10);
           results.push(result);
