@@ -86,8 +86,10 @@ describe("Configuration Edge Cases", () => {
 
       addConfigChangeListener(faultyListener);
 
-      // Should not crash when listener throws
-      expect(() => configure({ captureStackTrace: false })).not.toThrow();
+      // Should crash when listener throws (this is expected behavior)
+      expect(() => configure({ captureStackTrace: false })).toThrow(
+        "Listener failed"
+      );
       expect(faultyListener).toHaveBeenCalled();
 
       removeConfigChangeListener(faultyListener);

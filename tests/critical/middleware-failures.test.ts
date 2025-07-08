@@ -423,7 +423,7 @@ describe("Middleware Error Handling", () => {
       for (let i = 0; i < 10; i++) {
         try {
           pipeline.execute(mockError);
-        } catch (error) {
+        } catch (error: any) {
           expect(error.message).toBe("Every third call fails");
         }
       }
