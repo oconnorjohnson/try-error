@@ -1,0 +1,714 @@
+{
+  "results": [
+    {
+      "query": "How do I use trySync for error handling?",
+      "expected_type": "function-reference",
+      "expected_concepts": [
+        "error-handling",
+        "trySync"
+      ],
+      "retrieval": {
+        "results": [
+          {
+            "chunk_id": "function_decrement",
+            "similarity": 0.4204001393749824,
+            "type": "function-reference"
+          },
+          {
+            "chunk_id": "configure_deep_dive_testing-configuration",
+            "similarity": 0.373931797268766,
+            "type": "deep-dive-section"
+          },
+          {
+            "chunk_id": "function_ErrorBoundaryDemo",
+            "similarity": 0.31886588607494026,
+            "type": "function-reference"
+          },
+          {
+            "chunk_id": "wrapError_deep_dive_edge-cases-and-gotchas",
+            "similarity": 0.31644472279847546,
+            "type": "deep-dive-section"
+          },
+          {
+            "chunk_id": "create_error_deep_dive_usage-examples",
+            "similarity": 0.3144922893963587,
+            "type": "deep-dive-section"
+          }
+        ],
+        "time": 6,
+        "relevance_score": 0.22380173786264349
+      },
+      "providers": {
+        "openai": {
+          "response": {
+            "content": "I understand you're asking about try-error functionality. trySync() is a synchronous error handling function that wraps operations and returns a Result type. It captures errors without throwing exceptions, making error handling explicit and functional.",
+            "usage": {
+              "prompt_tokens": 10,
+              "completion_tokens": 63,
+              "total_tokens": 73
+            },
+            "model": "gpt-4"
+          },
+          "responseTime": 244,
+          "success": true
+        },
+        "anthropic": {
+          "response": {
+            "content": "I can help you with try-error documentation. trySync() provides synchronous error handling with zero-overhead success paths. It uses discriminated unions to represent success/failure states without exceptions, making error handling both explicit and performant.",
+            "usage": {
+              "input_tokens": 835,
+              "output_tokens": 65
+            },
+            "model": "claude-3-sonnet-20240229"
+          },
+          "responseTime": 585,
+          "success": true
+        }
+      },
+      "quality": {
+        "openai": {
+          "overall": 0.7217777777777776,
+          "accuracy": 0.5,
+          "completeness": 0.8319999999999999,
+          "relevance": 0.8333333333333333
+        },
+        "anthropic": {
+          "overall": 0.7322777777777777,
+          "accuracy": 0.5,
+          "completeness": 0.8634999999999999,
+          "relevance": 0.8333333333333333
+        }
+      },
+      "performance": {
+        "total_time": 835,
+        "retrieval_time": 6
+      },
+      "success": true
+    },
+    {
+      "query": "What is the difference between trySync and tryAsync?",
+      "expected_type": "deep-dive-section",
+      "expected_concepts": [
+        "async-operations",
+        "comparison"
+      ],
+      "retrieval": {
+        "results": [
+          {
+            "chunk_id": "function_handleUserIdChange",
+            "similarity": 0.3760322926952433,
+            "type": "function-reference"
+          },
+          {
+            "chunk_id": "function_detectEnvironmentAndRuntime",
+            "similarity": 0.31132095049658465,
+            "type": "function-reference"
+          },
+          {
+            "chunk_id": "function_getSourceLocation",
+            "similarity": 0.2981383004758426,
+            "type": "function-reference"
+          },
+          {
+            "chunk_id": "create_error_deep_dive_edge-cases-and-gotchas",
+            "similarity": 0.29769141329508847,
+            "type": "deep-dive-section"
+          },
+          {
+            "chunk_id": "function_DefaultErrorFallback",
+            "similarity": 0.28743712302133667,
+            "type": "function-reference"
+          }
+        ],
+        "time": 5,
+        "relevance_score": 0.16003878120508172
+      },
+      "providers": {
+        "openai": {
+          "response": {
+            "content": "I understand you're asking about try-error functionality. trySync() is a synchronous error handling function that wraps operations and returns a Result type. It captures errors without throwing exceptions, making error handling explicit and functional.",
+            "usage": {
+              "prompt_tokens": 13,
+              "completion_tokens": 63,
+              "total_tokens": 76
+            },
+            "model": "gpt-4"
+          },
+          "responseTime": 478,
+          "success": true
+        },
+        "anthropic": {
+          "response": {
+            "content": "I can help you with try-error documentation. trySync() provides synchronous error handling with zero-overhead success paths. It uses discriminated unions to represent success/failure states without exceptions, making error handling both explicit and performant.",
+            "usage": {
+              "input_tokens": 844,
+              "output_tokens": 65
+            },
+            "model": "claude-3-sonnet-20240229"
+          },
+          "responseTime": 548,
+          "success": true
+        }
+      },
+      "quality": {
+        "openai": {
+          "overall": 0.47733333333333333,
+          "accuracy": 0,
+          "completeness": 0.8319999999999999,
+          "relevance": 0.6
+        },
+        "anthropic": {
+          "overall": 0.4878333333333333,
+          "accuracy": 0,
+          "completeness": 0.8634999999999999,
+          "relevance": 0.6
+        }
+      },
+      "performance": {
+        "total_time": 1031,
+        "retrieval_time": 5
+      },
+      "success": true
+    },
+    {
+      "query": "How to implement error boundaries in React?",
+      "expected_type": "deep-dive-section",
+      "expected_concepts": [
+        "react-integration",
+        "error-boundary"
+      ],
+      "retrieval": {
+        "results": [
+          {
+            "chunk_id": "trySync_deep_dive_common-patterns",
+            "similarity": 0.44748979330422867,
+            "type": "deep-dive-section"
+          },
+          {
+            "chunk_id": "function_diffErrors",
+            "similarity": 0.40128261875868304,
+            "type": "function-reference"
+          },
+          {
+            "chunk_id": "architecture_factory-functions",
+            "similarity": 0.39908976418474224,
+            "type": "conceptual"
+          },
+          {
+            "chunk_id": "function_hasAnyFlag",
+            "similarity": 0.39535453838364504,
+            "type": "function-reference"
+          },
+          {
+            "chunk_id": "function_unwrapOr",
+            "similarity": 0.39366550030001185,
+            "type": "function-reference"
+          }
+        ],
+        "time": 5,
+        "relevance_score": 0.23649553107730248
+      },
+      "providers": {
+        "openai": {
+          "response": {
+            "content": "I understand you're asking about try-error functionality. Based on the context provided, I can help you understand the specific try-error functionality you're asking about.",
+            "usage": {
+              "prompt_tokens": 10,
+              "completion_tokens": 43,
+              "total_tokens": 53
+            },
+            "model": "gpt-4"
+          },
+          "responseTime": 406,
+          "success": true
+        },
+        "anthropic": {
+          "response": {
+            "content": "I can help you with try-error documentation. trySync() provides synchronous error handling with zero-overhead success paths. It uses discriminated unions to represent success/failure states without exceptions, making error handling both explicit and performant.",
+            "usage": {
+              "input_tokens": 817,
+              "output_tokens": 65
+            },
+            "model": "claude-3-sonnet-20240229"
+          },
+          "responseTime": 628,
+          "success": true
+        }
+      },
+      "quality": {
+        "openai": {
+          "overall": 0.39233333333333337,
+          "accuracy": 0,
+          "completeness": 0.552,
+          "relevance": 0.625
+        },
+        "anthropic": {
+          "overall": 0.49616666666666664,
+          "accuracy": 0,
+          "completeness": 0.8634999999999999,
+          "relevance": 0.625
+        }
+      },
+      "performance": {
+        "total_time": 1040,
+        "retrieval_time": 5
+      },
+      "success": true
+    },
+    {
+      "query": "Configure try-error for production",
+      "expected_type": "function-reference",
+      "expected_concepts": [
+        "configuration",
+        "performance"
+      ],
+      "retrieval": {
+        "results": [
+          {
+            "chunk_id": "function_isRetryableTryState",
+            "similarity": 0.3901512965768262,
+            "type": "function-reference"
+          },
+          {
+            "chunk_id": "function_isAsyncComponentError",
+            "similarity": 0.3767563821163734,
+            "type": "function-reference"
+          },
+          {
+            "chunk_id": "function_createErrorReport",
+            "similarity": 0.3718815599650379,
+            "type": "function-reference"
+          },
+          {
+            "chunk_id": "wrapError_deep_dive_advanced-usage-patterns",
+            "similarity": 0.3296956896599096,
+            "type": "deep-dive-section"
+          },
+          {
+            "chunk_id": "function_getGlobalErrorPool",
+            "similarity": 0.32947127450622243,
+            "type": "function-reference"
+          }
+        ],
+        "time": 5,
+        "relevance_score": 0.24700006324037652
+      },
+      "providers": {
+        "openai": {
+          "response": {
+            "content": "I understand you're asking about try-error functionality. The configure() function sets up global try-error behavior including error reporting, performance optimization, and development vs production modes.",
+            "usage": {
+              "prompt_tokens": 8,
+              "completion_tokens": 51,
+              "total_tokens": 60
+            },
+            "model": "gpt-4"
+          },
+          "responseTime": 337,
+          "success": true
+        },
+        "anthropic": {
+          "response": {
+            "content": "I can help you with try-error documentation. The configure() function provides comprehensive setup options including performance presets (minimal, development, production), error reporting integration, and runtime behavior customization.",
+            "usage": {
+              "input_tokens": 838,
+              "output_tokens": 59
+            },
+            "model": "claude-3-sonnet-20240229"
+          },
+          "responseTime": 490,
+          "success": true
+        }
+      },
+      "quality": {
+        "openai": {
+          "overall": 0.7236666666666666,
+          "accuracy": 0.5,
+          "completeness": 0.6709999999999999,
+          "relevance": 1
+        },
+        "anthropic": {
+          "overall": 0.7598333333333334,
+          "accuracy": 0.5,
+          "completeness": 0.7795,
+          "relevance": 1
+        }
+      },
+      "performance": {
+        "total_time": 832,
+        "retrieval_time": 5
+      },
+      "success": true
+    },
+    {
+      "query": "What are the performance implications of using try-error?",
+      "expected_type": "deep-dive-section",
+      "expected_concepts": [
+        "performance-optimization"
+      ],
+      "retrieval": {
+        "results": [
+          {
+            "chunk_id": "isTryError_deep_dive_testing-strategies",
+            "similarity": 0.45095635897181297,
+            "type": "deep-dive-section"
+          },
+          {
+            "chunk_id": "function_withDefault",
+            "similarity": 0.4488381656083395,
+            "type": "function-reference"
+          },
+          {
+            "chunk_id": "fromThrown_deep_dive_implementation-details",
+            "similarity": 0.3873988725501004,
+            "type": "deep-dive-section"
+          },
+          {
+            "chunk_id": "function_createConsoleProvider",
+            "similarity": 0.35404836255050637,
+            "type": "function-reference"
+          },
+          {
+            "chunk_id": "function_resetErrorPool",
+            "similarity": 0.35011764175128224,
+            "type": "function-reference"
+          }
+        ],
+        "time": 5,
+        "relevance_score": 0.2506177353049645
+      },
+      "providers": {
+        "openai": {
+          "response": {
+            "content": "I understand you're asking about try-error functionality. Based on the context provided, I can help you understand the specific try-error functionality you're asking about.",
+            "usage": {
+              "prompt_tokens": 14,
+              "completion_tokens": 43,
+              "total_tokens": 57
+            },
+            "model": "gpt-4"
+          },
+          "responseTime": 355,
+          "success": true
+        },
+        "anthropic": {
+          "response": {
+            "content": "I can help you with try-error documentation. Let me provide information based on the try-error documentation context you've provided.",
+            "usage": {
+              "input_tokens": 840,
+              "output_tokens": 33
+            },
+            "model": "claude-3-sonnet-20240229"
+          },
+          "responseTime": 264,
+          "success": true
+        }
+      },
+      "quality": {
+        "openai": {
+          "overall": 0.3506666666666667,
+          "accuracy": 0,
+          "completeness": 0.552,
+          "relevance": 0.5
+        },
+        "anthropic": {
+          "overall": 0.30516666666666664,
+          "accuracy": 0,
+          "completeness": 0.4155,
+          "relevance": 0.5
+        }
+      },
+      "performance": {
+        "total_time": 624,
+        "retrieval_time": 5
+      },
+      "success": true
+    },
+    {
+      "query": "How to test functions that use tryAsync?",
+      "expected_type": "deep-dive-section",
+      "expected_concepts": [
+        "testing-patterns",
+        "async-operations"
+      ],
+      "retrieval": {
+        "results": [
+          {
+            "chunk_id": "function_isEffectError",
+            "similarity": 0.4191635601032157,
+            "type": "function-reference"
+          },
+          {
+            "chunk_id": "architecture_side-effects-analysis",
+            "similarity": 0.40806897521956736,
+            "type": "conceptual"
+          },
+          {
+            "chunk_id": "function_expectLoadingState",
+            "similarity": 0.3724641249008369,
+            "type": "function-reference"
+          },
+          {
+            "chunk_id": "function_createErrorReport",
+            "similarity": 0.36370046213548024,
+            "type": "function-reference"
+          },
+          {
+            "chunk_id": "function_setupReact",
+            "similarity": 0.34856780439986024,
+            "type": "function-reference"
+          }
+        ],
+        "time": 5,
+        "relevance_score": 0.1815982864854241
+      },
+      "providers": {
+        "openai": {
+          "response": {
+            "content": "I understand you're asking about try-error functionality. tryAsync() handles asynchronous operations with Promise-based error handling. It supports cancellation, timeouts, and converts Promise rejections into structured error objects.",
+            "usage": {
+              "prompt_tokens": 10,
+              "completion_tokens": 58,
+              "total_tokens": 68
+            },
+            "model": "gpt-4"
+          },
+          "responseTime": 316,
+          "success": true
+        },
+        "anthropic": {
+          "response": {
+            "content": "I can help you with try-error documentation. tryAsync() extends error handling to asynchronous operations with sophisticated features like AbortSignal integration, timeout management, and Promise rejection handling while maintaining the same Result-based API.",
+            "usage": {
+              "input_tokens": 740,
+              "output_tokens": 64
+            },
+            "model": "claude-3-sonnet-20240229"
+          },
+          "responseTime": 478,
+          "success": true
+        }
+      },
+      "quality": {
+        "openai": {
+          "overall": 0.423,
+          "accuracy": 0,
+          "completeness": 0.7689999999999999,
+          "relevance": 0.5
+        },
+        "anthropic": {
+          "overall": 0.45216666666666666,
+          "accuracy": 0,
+          "completeness": 0.8565,
+          "relevance": 0.5
+        }
+      },
+      "performance": {
+        "total_time": 799,
+        "retrieval_time": 5
+      },
+      "success": true
+    },
+    {
+      "query": "TypeScript types for TryError",
+      "expected_type": "function-reference",
+      "expected_concepts": [
+        "type-safety"
+      ],
+      "retrieval": {
+        "results": [
+          {
+            "chunk_id": "function_parseNumber",
+            "similarity": 0.4175714758443663,
+            "type": "function-reference"
+          },
+          {
+            "chunk_id": "configure_deep_dive_configuration-presets",
+            "similarity": 0.3759197188180454,
+            "type": "deep-dive-section"
+          },
+          {
+            "chunk_id": "trySync_deep_dive_edge-cases-and-gotchas",
+            "similarity": 0.35434322228161064,
+            "type": "deep-dive-section"
+          },
+          {
+            "chunk_id": "function_combineErrors",
+            "similarity": 0.3519818700572743,
+            "type": "function-reference"
+          },
+          {
+            "chunk_id": "function_wrapError",
+            "similarity": 0.32979562969612225,
+            "type": "function-reference"
+          }
+        ],
+        "time": 4,
+        "relevance_score": 0.23267267415661808
+      },
+      "providers": {
+        "openai": {
+          "response": {
+            "content": "I understand you're asking about try-error functionality. Based on the context provided, I can help you understand the specific try-error functionality you're asking about.",
+            "usage": {
+              "prompt_tokens": 7,
+              "completion_tokens": 43,
+              "total_tokens": 50
+            },
+            "model": "gpt-4"
+          },
+          "responseTime": 275,
+          "success": true
+        },
+        "anthropic": {
+          "response": {
+            "content": "I can help you with try-error documentation. trySync() provides synchronous error handling with zero-overhead success paths. It uses discriminated unions to represent success/failure states without exceptions, making error handling both explicit and performant.",
+            "usage": {
+              "input_tokens": 831,
+              "output_tokens": 65
+            },
+            "model": "claude-3-sonnet-20240229"
+          },
+          "responseTime": 622,
+          "success": true
+        }
+      },
+      "quality": {
+        "openai": {
+          "overall": 0.3506666666666667,
+          "accuracy": 0,
+          "completeness": 0.552,
+          "relevance": 0.5
+        },
+        "anthropic": {
+          "overall": 0.45449999999999996,
+          "accuracy": 0,
+          "completeness": 0.8634999999999999,
+          "relevance": 0.5
+        }
+      },
+      "performance": {
+        "total_time": 901,
+        "retrieval_time": 4
+      },
+      "success": true
+    },
+    {
+      "query": "Common pitfalls when using try-error",
+      "expected_type": "deep-dive-section",
+      "expected_concepts": [
+        "error-handling",
+        "best-practices"
+      ],
+      "retrieval": {
+        "results": [
+          {
+            "chunk_id": "function_Wrapper",
+            "similarity": 0.4542150109673383,
+            "type": "function-reference"
+          },
+          {
+            "chunk_id": "isTryError_deep_dive_performance-optimization",
+            "similarity": 0.38838218610663594,
+            "type": "deep-dive-section"
+          },
+          {
+            "chunk_id": "function_setFlag",
+            "similarity": 0.31827663988852894,
+            "type": "function-reference"
+          },
+          {
+            "chunk_id": "function_emitErrorRetry",
+            "similarity": 0.318218656867101,
+            "type": "function-reference"
+          },
+          {
+            "chunk_id": "function_forceLazyEvaluation",
+            "similarity": 0.31575288142497715,
+            "type": "function-reference"
+          }
+        ],
+        "time": 5,
+        "relevance_score": 0.19885982086905246
+      },
+      "providers": {
+        "openai": {
+          "response": {
+            "content": "I understand you're asking about try-error functionality. Based on the context provided, I can help you understand the specific try-error functionality you're asking about.",
+            "usage": {
+              "prompt_tokens": 9,
+              "completion_tokens": 43,
+              "total_tokens": 52
+            },
+            "model": "gpt-4"
+          },
+          "responseTime": 291,
+          "success": true
+        },
+        "anthropic": {
+          "response": {
+            "content": "I can help you with try-error documentation. Let me provide information based on the try-error documentation context you've provided.",
+            "usage": {
+              "input_tokens": 832,
+              "output_tokens": 33
+            },
+            "model": "claude-3-sonnet-20240229"
+          },
+          "responseTime": 308,
+          "success": true
+        }
+      },
+      "quality": {
+        "openai": {
+          "overall": 0.38400000000000006,
+          "accuracy": 0,
+          "completeness": 0.552,
+          "relevance": 0.6
+        },
+        "anthropic": {
+          "overall": 0.33849999999999997,
+          "accuracy": 0,
+          "completeness": 0.4155,
+          "relevance": 0.6
+        }
+      },
+      "performance": {
+        "total_time": 604,
+        "retrieval_time": 5
+      },
+      "success": true
+    }
+  ],
+  "summary": {
+    "total_tests": 8,
+    "successful_tests": 8,
+    "failed_tests": 0,
+    "average_retrieval_time": 5,
+    "average_total_time": 833.25,
+    "provider_performance": {
+      "openai": {
+        "success_rate": 1,
+        "average_response_time": 337.75
+      },
+      "anthropic": {
+        "success_rate": 1,
+        "average_response_time": 490.375
+      }
+    },
+    "quality_metrics": {
+      "openai": {
+        "average_overall": 0.4779305555555555,
+        "average_accuracy": 0.125,
+        "average_completeness": 0.6639999999999999,
+        "average_relevance": 0.6447916666666667
+      },
+      "anthropic": {
+        "average_overall": 0.5033055555555556,
+        "average_accuracy": 0.125,
+        "average_completeness": 0.7401249999999999,
+        "average_relevance": 0.6447916666666667
+      }
+    }
+  },
+  "timestamp": "2025-07-08T20:27:17.803Z"
+}
