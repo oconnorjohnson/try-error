@@ -519,7 +519,15 @@ export function createError<T extends string = string>(
       const runtime = detectRuntime();
       const handler = config.environmentHandlers[runtime];
       if (handler) {
-        transformedError = handler(transformedError) as TryError<T>;
+        try {
+          transformedError = handler(transformedError) as TryError<T>;
+        } catch (error) {
+          // Log warning but continue with untransformed error
+          if (typeof console !== "undefined") {
+            console.warn("Environment handler failed:", error);
+          }
+          // Continue with original error
+        }
       }
     }
 
@@ -582,7 +590,15 @@ export function createError<T extends string = string>(
       const runtime = detectRuntime();
       const handler = config.environmentHandlers[runtime];
       if (handler) {
-        transformedError = handler(transformedError) as TryError<T>;
+        try {
+          transformedError = handler(transformedError) as TryError<T>;
+        } catch (error) {
+          // Log warning but continue with untransformed error
+          if (typeof console !== "undefined") {
+            console.warn("Environment handler failed:", error);
+          }
+          // Continue with original error
+        }
       }
     }
 
@@ -677,7 +693,15 @@ export function createError<T extends string = string>(
     const runtime = detectRuntime();
     const handler = config.environmentHandlers[runtime];
     if (handler) {
-      transformedError = handler(transformedError) as TryError<T>;
+      try {
+        transformedError = handler(transformedError) as TryError<T>;
+      } catch (error) {
+        // Log warning but continue with untransformed error
+        if (typeof console !== "undefined") {
+          console.warn("Environment handler failed:", error);
+        }
+        // Continue with original error
+      }
     }
   }
 
