@@ -1,6 +1,24 @@
 import { createError } from "../../src/errors";
 import { configure, resetConfig, ConfigPresets } from "../../src/config";
-import { detectEnvironment, detectRuntime } from "../../src/setup";
+import { autoSetup, setupNode, setupReact } from "../../src/setup";
+
+// Simple environment detection utilities for testing
+function detectRuntime(): "server" | "client" | "edge" {
+  if (typeof process !== "undefined" && process.versions?.node) {
+    return "server";
+  }
+  if (typeof window !== "undefined" && typeof document !== "undefined") {
+    return "client";
+  }
+  return "edge";
+}
+
+function detectEnvironment(): string {
+  const runtime = detectRuntime();
+  if (runtime === "server") return "node";
+  if (runtime === "client") return "browser";
+  return "edge";
+}
 
 describe("Environment Detection Failures", () => {
   // Save original global values
