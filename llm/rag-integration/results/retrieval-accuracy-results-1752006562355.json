@@ -1,0 +1,2337 @@
+{
+  "results": {
+    "vector": {
+      "strategy": "vector",
+      "individual_results": [
+        {
+          "query": "How do I use trySync?",
+          "category": "api-usage",
+          "retrieved_chunks": [
+            {
+              "chunk_id": "function_setupNode",
+              "score": 0.39307129374828503,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_emitErrorSerialized",
+              "score": 0.3763791999993852,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_ComponentWithAsyncError",
+              "score": 0.3609140630615227,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_getGlobalErrorPool",
+              "score": 0.33681553303686856,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_PersistentErrorComponent",
+              "score": 0.3133567992829543,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_getErrorSummary",
+              "score": 0.29668819432267723,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_deserializeTryError",
+              "score": 0.2861980032527557,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_unwrapOr",
+              "score": 0.2855269951205457,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_ErrorThrowingComponent",
+              "score": 0.28192143623431004,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "create_error_deep_dive_runtime-context-injection",
+              "score": 0.28019644992748205,
+              "relevant": false,
+              "relevance": 0
+            }
+          ],
+          "metrics": {
+            "precision@1": 0,
+            "recall@1": 0,
+            "precision@3": 0,
+            "recall@3": 0,
+            "precision@5": 0,
+            "recall@5": 0,
+            "precision@10": 0,
+            "recall@10": 0,
+            "f1@5": 0,
+            "map": 0,
+            "ndcg@5": 0,
+            "ndcg@10": 0,
+            "mrr": 0
+          },
+          "retrieval_time": 8
+        },
+        {
+          "query": "trySync vs tryAsync differences",
+          "category": "comparison",
+          "retrieved_chunks": [
+            {
+              "chunk_id": "function_isFormSubmissionError",
+              "score": 0.37034054672043676,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_fromThrown",
+              "score": 0.3618321139700593,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "architecture_function-complexity-distribution",
+              "score": 0.35905542179321004,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_areTryErrorsEqual",
+              "score": 0.34667135566390256,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_isReactError",
+              "score": 0.3219019376367386,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_combineErrors",
+              "score": 0.31716800008678697,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "trySync_deep_dive_signature",
+              "score": 0.31673128610337603,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_useErrorContext",
+              "score": 0.30112207782385947,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "wrapError_deep_dive_common-patterns-and-best-practices",
+              "score": 0.2949934693567635,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_getErrorFingerprint",
+              "score": 0.2914822091954908,
+              "relevant": false,
+              "relevance": 0
+            }
+          ],
+          "metrics": {
+            "precision@1": 0,
+            "recall@1": 0,
+            "precision@3": 0,
+            "recall@3": 0,
+            "precision@5": 0,
+            "recall@5": 0,
+            "precision@10": 0,
+            "recall@10": 0,
+            "f1@5": 0,
+            "map": 0,
+            "ndcg@5": 0,
+            "ndcg@10": 0,
+            "mrr": 0
+          },
+          "retrieval_time": 5
+        },
+        {
+          "query": "React error boundary setup",
+          "category": "integration",
+          "retrieved_chunks": [
+            {
+              "chunk_id": "TryErrorBoundary_deep_dive_error-monitoring-integration",
+              "score": 0.33782553938901416,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_isRetryableTryState",
+              "score": 0.337149595697395,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_forceLazyEvaluation",
+              "score": 0.3282596924573247,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "isTryError_deep_dive_purpose",
+              "score": 0.3281454568104186,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_validateSetup",
+              "score": 0.3258120712912064,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_getConfigVersion",
+              "score": 0.3230611490254574,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "wrapError_deep_dive_performance-optimization",
+              "score": 0.3193731043060452,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_emitErrorRecovered",
+              "score": 0.3110750829387809,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "fromThrown_deep_dive_signature",
+              "score": 0.3074345123677182,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "create_error_deep_dive_runtime-context-injection",
+              "score": 0.3061603923826302,
+              "relevant": false,
+              "relevance": 0
+            }
+          ],
+          "metrics": {
+            "precision@1": 0,
+            "recall@1": 0,
+            "precision@3": 0,
+            "recall@3": 0,
+            "precision@5": 0,
+            "recall@5": 0,
+            "precision@10": 0,
+            "recall@10": 0,
+            "f1@5": 0,
+            "map": 0,
+            "ndcg@5": 0,
+            "ndcg@10": 0,
+            "mrr": 0
+          },
+          "retrieval_time": 5
+        },
+        {
+          "query": "configure try-error performance",
+          "category": "configuration",
+          "retrieved_chunks": [
+            {
+              "chunk_id": "function_fieldValidationError",
+              "score": 0.3964918115818024,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_getErrorFingerprint",
+              "score": 0.3900900668151362,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "create_error_deep_dive_signature",
+              "score": 0.3880815288966476,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_createDomainError",
+              "score": 0.34725357694330383,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_validateTerms",
+              "score": 0.3333083593937971,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_Component",
+              "score": 0.32810693261508733,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "wrapError_deep_dive_common-pitfalls",
+              "score": 0.3151015907889086,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "fromThrown_deep_dive_common-patterns-and-best-practices",
+              "score": 0.3149613316664509,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "configure_deep_dive_advanced-configuration-patterns",
+              "score": 0.31368356524205443,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_serializeTryError",
+              "score": 0.3069826459937906,
+              "relevant": false,
+              "relevance": 0
+            }
+          ],
+          "metrics": {
+            "precision@1": 0,
+            "recall@1": 0,
+            "precision@3": 0,
+            "recall@3": 0,
+            "precision@5": 0,
+            "recall@5": 0,
+            "precision@10": 0,
+            "recall@10": 0,
+            "f1@5": 0,
+            "map": 0,
+            "ndcg@5": 0,
+            "ndcg@10": 0,
+            "mrr": 0
+          },
+          "retrieval_time": 4
+        },
+        {
+          "query": "error type checking with isTryError",
+          "category": "type-checking",
+          "retrieved_chunks": [
+            {
+              "chunk_id": "function_amountError",
+              "score": 0.4222422901820905,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_tryExecute",
+              "score": 0.3985572486162063,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "wrapError_deep_dive_see-also",
+              "score": 0.37939274214999846,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_createFlags",
+              "score": 0.34414373045895763,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_fieldValidationError",
+              "score": 0.33164809357438463,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "fromThrown_deep_dive_advanced-usage-patterns",
+              "score": 0.32385265156428805,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_hasErrorContext",
+              "score": 0.3199289277084708,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_handleSubmit",
+              "score": 0.31717778409511327,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_isEventHandlerError",
+              "score": 0.2954127339059266,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_serializeDomainError",
+              "score": 0.2930665653547156,
+              "relevant": false,
+              "relevance": 0
+            }
+          ],
+          "metrics": {
+            "precision@1": 0,
+            "recall@1": 0,
+            "precision@3": 0,
+            "recall@3": 0,
+            "precision@5": 0,
+            "recall@5": 0,
+            "precision@10": 0,
+            "recall@10": 0,
+            "f1@5": 0,
+            "map": 0,
+            "ndcg@5": 0,
+            "ndcg@10": 0,
+            "mrr": 0
+          },
+          "retrieval_time": 4
+        },
+        {
+          "query": "async error handling patterns",
+          "category": "patterns",
+          "retrieved_chunks": [
+            {
+              "chunk_id": "function_emitErrorWrapped",
+              "score": 0.3502888791314436,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_unwrapOr",
+              "score": 0.34016569976379096,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "useTry_deep_dive_see-also",
+              "score": 0.33208852412305967,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_clearInternPool",
+              "score": 0.3303670131390501,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "useTry_deep_dive_signature",
+              "score": 0.30338534210077595,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_isProduction",
+              "score": 0.29712737242430864,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_validateConfig",
+              "score": 0.29696011438175085,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_getErrorPoolStats",
+              "score": 0.29366578719079567,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_getErrorContext",
+              "score": 0.2905364814613254,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_detectEnvironment",
+              "score": 0.2890802313814401,
+              "relevant": false,
+              "relevance": 0
+            }
+          ],
+          "metrics": {
+            "precision@1": 0,
+            "recall@1": 0,
+            "precision@3": 0,
+            "recall@3": 0,
+            "precision@5": 0,
+            "recall@5": 0,
+            "precision@10": 0,
+            "recall@10": 0,
+            "f1@5": 0,
+            "map": 0,
+            "ndcg@5": 0,
+            "ndcg@10": 0,
+            "mrr": 0
+          },
+          "retrieval_time": 4
+        },
+        {
+          "query": "wrapError usage examples",
+          "category": "api-usage",
+          "retrieved_chunks": [
+            {
+              "chunk_id": "function_loadPostData",
+              "score": 0.4034782026643549,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_diffErrors",
+              "score": 0.3897421979499536,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "isTryError_deep_dive_purpose",
+              "score": 0.38673805075006673,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "tryAsync_deep_dive_error-handling-patterns",
+              "score": 0.3829911948463074,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "TryErrorBoundary_deep_dive_see-also",
+              "score": 0.3811175367546338,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "configure_deep_dive_advanced-configuration-patterns",
+              "score": 0.36751862319069384,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_isTrySuccess",
+              "score": 0.34891445490544587,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_validateConfig",
+              "score": 0.32727828249504026,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_entityError",
+              "score": 0.3130327729605206,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "TryErrorBoundary_deep_dive_hook-integration",
+              "score": 0.31109989217643,
+              "relevant": false,
+              "relevance": 0
+            }
+          ],
+          "metrics": {
+            "precision@1": 0,
+            "recall@1": 0,
+            "precision@3": 0,
+            "recall@3": 0,
+            "precision@5": 0,
+            "recall@5": 0,
+            "precision@10": 0,
+            "recall@10": 0,
+            "f1@5": 0,
+            "map": 0,
+            "ndcg@5": 0,
+            "ndcg@10": 0,
+            "mrr": 0
+          },
+          "retrieval_time": 5
+        },
+        {
+          "query": "performance optimization tips",
+          "category": "optimization",
+          "retrieved_chunks": [
+            {
+              "chunk_id": "function_usePersistedState",
+              "score": 0.42381821436123185,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_areTryErrorsEqual",
+              "score": 0.37126850525602667,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_isTryState",
+              "score": 0.359925412211261,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_createScope",
+              "score": 0.3533820280995923,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "configure_deep_dive_implementation-details",
+              "score": 0.34002911363878036,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "trySync_deep_dive_purpose",
+              "score": 0.33936108070451715,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "trySync_deep_dive_usage-examples",
+              "score": 0.32673203143893415,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_forceLazyEvaluation",
+              "score": 0.3155660711781281,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "tryAsync_deep_dive_usage-examples",
+              "score": 0.31163034767070236,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "TryErrorBoundary_deep_dive_error-monitoring-integration",
+              "score": 0.30467145138829876,
+              "relevant": false,
+              "relevance": 0
+            }
+          ],
+          "metrics": {
+            "precision@1": 0,
+            "recall@1": 0,
+            "precision@3": 0,
+            "recall@3": 0,
+            "precision@5": 0,
+            "recall@5": 0,
+            "precision@10": 0,
+            "recall@10": 0,
+            "f1@5": 0,
+            "map": 0,
+            "ndcg@5": 0,
+            "ndcg@10": 0,
+            "mrr": 0
+          },
+          "retrieval_time": 4
+        },
+        {
+          "query": "testing with try-error",
+          "category": "testing",
+          "retrieved_chunks": [
+            {
+              "chunk_id": "TryErrorBoundary_deep_dive_migration-guide",
+              "score": 0.4679501288645451,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "configure_deep_dive_quick-reference",
+              "score": 0.4054750076156106,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_ParallelRequests",
+              "score": 0.4053388568377672,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "create_error_deep_dive_quick-reference",
+              "score": 0.3746960052844044,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_isReactError",
+              "score": 0.3530876844098154,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_isFormSubmissionError",
+              "score": 0.33865186028742617,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_diffErrors",
+              "score": 0.32270695509339853,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_validateSetup",
+              "score": 0.3222650704197178,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "tryAsync_deep_dive_edge-cases-and-gotchas",
+              "score": 0.3194206848373246,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_PersistentErrorComponent",
+              "score": 0.30439122763503185,
+              "relevant": false,
+              "relevance": 0
+            }
+          ],
+          "metrics": {
+            "precision@1": 0,
+            "recall@1": 0,
+            "precision@3": 0,
+            "recall@3": 0,
+            "precision@5": 0,
+            "recall@5": 0,
+            "precision@10": 0,
+            "recall@10": 0,
+            "f1@5": 0,
+            "map": 0,
+            "ndcg@5": 0,
+            "ndcg@10": 0,
+            "mrr": 0
+          },
+          "retrieval_time": 4
+        },
+        {
+          "query": "common mistakes and pitfalls",
+          "category": "troubleshooting",
+          "retrieved_chunks": [
+            {
+              "chunk_id": "function_listFactories",
+              "score": 0.4097668145002237,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_createExternalError",
+              "score": 0.37600094782766674,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "trySync_deep_dive_purpose",
+              "score": 0.3749486532101558,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "isTryError_deep_dive_see-also",
+              "score": 0.3709743998388974,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "configure_deep_dive_purpose",
+              "score": 0.36034708896196516,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "useTry_deep_dive_advanced-usage-patterns",
+              "score": 0.3494623225490746,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_forceLazyEvaluation",
+              "score": 0.34031575889308174,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_tryAnyAsync",
+              "score": 0.32386722087472497,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_checkCoreVersion",
+              "score": 0.32299899303812707,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "trySync_deep_dive_runtime-context-injection",
+              "score": 0.321123011844043,
+              "relevant": false,
+              "relevance": 0
+            }
+          ],
+          "metrics": {
+            "precision@1": 0,
+            "recall@1": 0,
+            "precision@3": 0,
+            "recall@3": 0,
+            "precision@5": 0,
+            "recall@5": 0,
+            "precision@10": 0,
+            "recall@10": 0,
+            "f1@5": 0,
+            "map": 0,
+            "ndcg@5": 0,
+            "ndcg@10": 0,
+            "mrr": 0
+          },
+          "retrieval_time": 4
+        }
+      ],
+      "aggregate_metrics": {
+        "precision@1": {
+          "mean": 0,
+          "min": 0,
+          "max": 0,
+          "std": 0
+        },
+        "recall@1": {
+          "mean": 0,
+          "min": 0,
+          "max": 0,
+          "std": 0
+        },
+        "precision@3": {
+          "mean": 0,
+          "min": 0,
+          "max": 0,
+          "std": 0
+        },
+        "recall@3": {
+          "mean": 0,
+          "min": 0,
+          "max": 0,
+          "std": 0
+        },
+        "precision@5": {
+          "mean": 0,
+          "min": 0,
+          "max": 0,
+          "std": 0
+        },
+        "recall@5": {
+          "mean": 0,
+          "min": 0,
+          "max": 0,
+          "std": 0
+        },
+        "precision@10": {
+          "mean": 0,
+          "min": 0,
+          "max": 0,
+          "std": 0
+        },
+        "recall@10": {
+          "mean": 0,
+          "min": 0,
+          "max": 0,
+          "std": 0
+        },
+        "f1@5": {
+          "mean": 0,
+          "min": 0,
+          "max": 0,
+          "std": 0
+        },
+        "map": {
+          "mean": 0,
+          "min": 0,
+          "max": 0,
+          "std": 0
+        },
+        "ndcg@5": {
+          "mean": 0,
+          "min": 0,
+          "max": 0,
+          "std": 0
+        },
+        "ndcg@10": {
+          "mean": 0,
+          "min": 0,
+          "max": 0,
+          "std": 0
+        },
+        "mrr": {
+          "mean": 0,
+          "min": 0,
+          "max": 0,
+          "std": 0
+        },
+        "average_retrieval_time": {
+          "mean": 4.7,
+          "min": 4,
+          "max": 8
+        },
+        "category_performance": {
+          "api-usage": {
+            "query_count": 2,
+            "avg_precision_at_5": 0,
+            "avg_ndcg_at_5": 0
+          },
+          "comparison": {
+            "query_count": 1,
+            "avg_precision_at_5": 0,
+            "avg_ndcg_at_5": 0
+          },
+          "integration": {
+            "query_count": 1,
+            "avg_precision_at_5": 0,
+            "avg_ndcg_at_5": 0
+          },
+          "configuration": {
+            "query_count": 1,
+            "avg_precision_at_5": 0,
+            "avg_ndcg_at_5": 0
+          },
+          "type-checking": {
+            "query_count": 1,
+            "avg_precision_at_5": 0,
+            "avg_ndcg_at_5": 0
+          },
+          "patterns": {
+            "query_count": 1,
+            "avg_precision_at_5": 0,
+            "avg_ndcg_at_5": 0
+          },
+          "optimization": {
+            "query_count": 1,
+            "avg_precision_at_5": 0,
+            "avg_ndcg_at_5": 0
+          },
+          "testing": {
+            "query_count": 1,
+            "avg_precision_at_5": 0,
+            "avg_ndcg_at_5": 0
+          },
+          "troubleshooting": {
+            "query_count": 1,
+            "avg_precision_at_5": 0,
+            "avg_ndcg_at_5": 0
+          }
+        }
+      },
+      "total_queries": 10
+    },
+    "pattern": {
+      "strategy": "pattern",
+      "individual_results": [
+        {
+          "query": "How do I use trySync?",
+          "category": "api-usage",
+          "retrieved_chunks": [],
+          "metrics": {
+            "precision@1": 0,
+            "recall@1": 0,
+            "precision@3": 0,
+            "recall@3": 0,
+            "precision@5": 0,
+            "recall@5": 0,
+            "precision@10": 0,
+            "recall@10": 0,
+            "f1@5": 0,
+            "map": 0,
+            "ndcg@5": 0,
+            "ndcg@10": 0,
+            "mrr": 0
+          },
+          "retrieval_time": 1
+        },
+        {
+          "query": "trySync vs tryAsync differences",
+          "category": "comparison",
+          "retrieved_chunks": [],
+          "metrics": {
+            "precision@1": 0,
+            "recall@1": 0,
+            "precision@3": 0,
+            "recall@3": 0,
+            "precision@5": 0,
+            "recall@5": 0,
+            "precision@10": 0,
+            "recall@10": 0,
+            "f1@5": 0,
+            "map": 0,
+            "ndcg@5": 0,
+            "ndcg@10": 0,
+            "mrr": 0
+          },
+          "retrieval_time": 1
+        },
+        {
+          "query": "React error boundary setup",
+          "category": "integration",
+          "retrieved_chunks": [],
+          "metrics": {
+            "precision@1": 0,
+            "recall@1": 0,
+            "precision@3": 0,
+            "recall@3": 0,
+            "precision@5": 0,
+            "recall@5": 0,
+            "precision@10": 0,
+            "recall@10": 0,
+            "f1@5": 0,
+            "map": 0,
+            "ndcg@5": 0,
+            "ndcg@10": 0,
+            "mrr": 0
+          },
+          "retrieval_time": 0
+        },
+        {
+          "query": "configure try-error performance",
+          "category": "configuration",
+          "retrieved_chunks": [
+            {
+              "chunk_id": "function_configure",
+              "score": 0.6,
+              "relevant": true,
+              "relevance": 4
+            }
+          ],
+          "metrics": {
+            "precision@1": 1,
+            "recall@1": 0.2,
+            "precision@3": 0.3333333333333333,
+            "recall@3": 0.2,
+            "precision@5": 0.2,
+            "recall@5": 0.2,
+            "precision@10": 0.1,
+            "recall@10": 0.2,
+            "f1@5": 0.20000000000000004,
+            "map": 0.2,
+            "ndcg@5": 0.398018907475069,
+            "ndcg@10": 0.398018907475069,
+            "mrr": 1
+          },
+          "retrieval_time": 1
+        },
+        {
+          "query": "error type checking with isTryError",
+          "category": "type-checking",
+          "retrieved_chunks": [
+            {
+              "chunk_id": "function_isTryError",
+              "score": 0.6,
+              "relevant": true,
+              "relevance": 4
+            }
+          ],
+          "metrics": {
+            "precision@1": 1,
+            "recall@1": 0.2,
+            "precision@3": 0.3333333333333333,
+            "recall@3": 0.2,
+            "precision@5": 0.2,
+            "recall@5": 0.2,
+            "precision@10": 0.1,
+            "recall@10": 0.2,
+            "f1@5": 0.20000000000000004,
+            "map": 0.2,
+            "ndcg@5": 0.398018907475069,
+            "ndcg@10": 0.398018907475069,
+            "mrr": 1
+          },
+          "retrieval_time": 1
+        },
+        {
+          "query": "async error handling patterns",
+          "category": "patterns",
+          "retrieved_chunks": [],
+          "metrics": {
+            "precision@1": 0,
+            "recall@1": 0,
+            "precision@3": 0,
+            "recall@3": 0,
+            "precision@5": 0,
+            "recall@5": 0,
+            "precision@10": 0,
+            "recall@10": 0,
+            "f1@5": 0,
+            "map": 0,
+            "ndcg@5": 0,
+            "ndcg@10": 0,
+            "mrr": 0
+          },
+          "retrieval_time": 1
+        },
+        {
+          "query": "wrapError usage examples",
+          "category": "api-usage",
+          "retrieved_chunks": [
+            {
+              "chunk_id": "function_wrapError",
+              "score": 0.6,
+              "relevant": true,
+              "relevance": 4
+            }
+          ],
+          "metrics": {
+            "precision@1": 1,
+            "recall@1": 0.2,
+            "precision@3": 0.3333333333333333,
+            "recall@3": 0.2,
+            "precision@5": 0.2,
+            "recall@5": 0.2,
+            "precision@10": 0.1,
+            "recall@10": 0.2,
+            "f1@5": 0.20000000000000004,
+            "map": 0.2,
+            "ndcg@5": 0.41506129453106205,
+            "ndcg@10": 0.41506129453106205,
+            "mrr": 1
+          },
+          "retrieval_time": 0
+        },
+        {
+          "query": "performance optimization tips",
+          "category": "optimization",
+          "retrieved_chunks": [],
+          "metrics": {
+            "precision@1": 0,
+            "recall@1": 0,
+            "precision@3": 0,
+            "recall@3": 0,
+            "precision@5": 0,
+            "recall@5": 0,
+            "precision@10": 0,
+            "recall@10": 0,
+            "f1@5": 0,
+            "map": 0,
+            "ndcg@5": 0,
+            "ndcg@10": 0,
+            "mrr": 0
+          },
+          "retrieval_time": 1
+        },
+        {
+          "query": "testing with try-error",
+          "category": "testing",
+          "retrieved_chunks": [],
+          "metrics": {
+            "precision@1": 0,
+            "recall@1": 0,
+            "precision@3": 0,
+            "recall@3": 0,
+            "precision@5": 0,
+            "recall@5": 0,
+            "precision@10": 0,
+            "recall@10": 0,
+            "f1@5": 0,
+            "map": 0,
+            "ndcg@5": 0,
+            "ndcg@10": 0,
+            "mrr": 0
+          },
+          "retrieval_time": 1
+        },
+        {
+          "query": "common mistakes and pitfalls",
+          "category": "troubleshooting",
+          "retrieved_chunks": [],
+          "metrics": {
+            "precision@1": 0,
+            "recall@1": 0,
+            "precision@3": 0,
+            "recall@3": 0,
+            "precision@5": 0,
+            "recall@5": 0,
+            "precision@10": 0,
+            "recall@10": 0,
+            "f1@5": 0,
+            "map": 0,
+            "ndcg@5": 0,
+            "ndcg@10": 0,
+            "mrr": 0
+          },
+          "retrieval_time": 0
+        }
+      ],
+      "aggregate_metrics": {
+        "precision@1": {
+          "mean": 0.3,
+          "min": 0,
+          "max": 1,
+          "std": 0.45825756949558405
+        },
+        "recall@1": {
+          "mean": 0.06000000000000001,
+          "min": 0,
+          "max": 0.2,
+          "std": 0.09165151389911681
+        },
+        "precision@3": {
+          "mean": 0.1,
+          "min": 0,
+          "max": 0.3333333333333333,
+          "std": 0.15275252316519466
+        },
+        "recall@3": {
+          "mean": 0.06000000000000001,
+          "min": 0,
+          "max": 0.2,
+          "std": 0.09165151389911681
+        },
+        "precision@5": {
+          "mean": 0.06000000000000001,
+          "min": 0,
+          "max": 0.2,
+          "std": 0.09165151389911681
+        },
+        "recall@5": {
+          "mean": 0.06000000000000001,
+          "min": 0,
+          "max": 0.2,
+          "std": 0.09165151389911681
+        },
+        "precision@10": {
+          "mean": 0.030000000000000006,
+          "min": 0,
+          "max": 0.1,
+          "std": 0.045825756949558406
+        },
+        "recall@10": {
+          "mean": 0.06000000000000001,
+          "min": 0,
+          "max": 0.2,
+          "std": 0.09165151389911681
+        },
+        "f1@5": {
+          "mean": 0.06000000000000001,
+          "min": 0,
+          "max": 0.20000000000000004,
+          "std": 0.09165151389911681
+        },
+        "map": {
+          "mean": 0.06000000000000001,
+          "min": 0,
+          "max": 0.2,
+          "std": 0.09165151389911681
+        },
+        "ndcg@5": {
+          "mean": 0.12110991094812,
+          "min": 0,
+          "max": 0.41506129453106205,
+          "std": 0.18505076988072233
+        },
+        "ndcg@10": {
+          "mean": 0.12110991094812,
+          "min": 0,
+          "max": 0.41506129453106205,
+          "std": 0.18505076988072233
+        },
+        "mrr": {
+          "mean": 0.3,
+          "min": 0,
+          "max": 1,
+          "std": 0.45825756949558405
+        },
+        "average_retrieval_time": {
+          "mean": 0.7,
+          "min": 0,
+          "max": 1
+        },
+        "category_performance": {
+          "api-usage": {
+            "query_count": 2,
+            "avg_precision_at_5": 0.1,
+            "avg_ndcg_at_5": 0.20753064726553103
+          },
+          "comparison": {
+            "query_count": 1,
+            "avg_precision_at_5": 0,
+            "avg_ndcg_at_5": 0
+          },
+          "integration": {
+            "query_count": 1,
+            "avg_precision_at_5": 0,
+            "avg_ndcg_at_5": 0
+          },
+          "configuration": {
+            "query_count": 1,
+            "avg_precision_at_5": 0.2,
+            "avg_ndcg_at_5": 0.398018907475069
+          },
+          "type-checking": {
+            "query_count": 1,
+            "avg_precision_at_5": 0.2,
+            "avg_ndcg_at_5": 0.398018907475069
+          },
+          "patterns": {
+            "query_count": 1,
+            "avg_precision_at_5": 0,
+            "avg_ndcg_at_5": 0
+          },
+          "optimization": {
+            "query_count": 1,
+            "avg_precision_at_5": 0,
+            "avg_ndcg_at_5": 0
+          },
+          "testing": {
+            "query_count": 1,
+            "avg_precision_at_5": 0,
+            "avg_ndcg_at_5": 0
+          },
+          "troubleshooting": {
+            "query_count": 1,
+            "avg_precision_at_5": 0,
+            "avg_ndcg_at_5": 0
+          }
+        }
+      },
+      "total_queries": 10
+    },
+    "hybrid": {
+      "strategy": "hybrid",
+      "individual_results": [
+        {
+          "query": "How do I use trySync?",
+          "category": "api-usage",
+          "retrieved_chunks": [
+            {
+              "chunk_id": "function_setupNode",
+              "score": 0.2751499056237995,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_emitErrorSerialized",
+              "score": 0.25029216799959114,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_ComponentWithAsyncError",
+              "score": 0.22737585972875926,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_getGlobalErrorPool",
+              "score": 0.20040524215693678,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_PersistentErrorComponent",
+              "score": 0.17547980759845438,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_getErrorSummary",
+              "score": 0.15576130201940555,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_deserializeTryError",
+              "score": 0.14023702159385026,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_unwrapOr",
+              "score": 0.1299147827798483,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_ErrorThrowingComponent",
+              "score": 0.11840700321841022,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "create_error_deep_dive_runtime-context-injection",
+              "score": 0.10787563322208059,
+              "relevant": false,
+              "relevance": 0
+            }
+          ],
+          "metrics": {
+            "precision@1": 0,
+            "recall@1": 0,
+            "precision@3": 0,
+            "recall@3": 0,
+            "precision@5": 0,
+            "recall@5": 0,
+            "precision@10": 0,
+            "recall@10": 0,
+            "f1@5": 0,
+            "map": 0,
+            "ndcg@5": 0,
+            "ndcg@10": 0,
+            "mrr": 0
+          },
+          "retrieval_time": 5
+        },
+        {
+          "query": "trySync vs tryAsync differences",
+          "category": "comparison",
+          "retrieved_chunks": [
+            {
+              "chunk_id": "function_isFormSubmissionError",
+              "score": 0.2592383827043057,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_fromThrown",
+              "score": 0.24061835579008942,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "architecture_function-complexity-distribution",
+              "score": 0.2262049157297223,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_areTryErrorsEqual",
+              "score": 0.206269456620022,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_isReactError",
+              "score": 0.1802650850765736,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_combineErrors",
+              "score": 0.16651320004556314,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "trySync_deep_dive_signature",
+              "score": 0.15519833019065424,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_useErrorContext",
+              "score": 0.13701054540985605,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "wrapError_deep_dive_common-patterns-and-best-practices",
+              "score": 0.12389725712984068,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_getErrorFingerprint",
+              "score": 0.11222065054026396,
+              "relevant": false,
+              "relevance": 0
+            }
+          ],
+          "metrics": {
+            "precision@1": 0,
+            "recall@1": 0,
+            "precision@3": 0,
+            "recall@3": 0,
+            "precision@5": 0,
+            "recall@5": 0,
+            "precision@10": 0,
+            "recall@10": 0,
+            "f1@5": 0,
+            "map": 0,
+            "ndcg@5": 0,
+            "ndcg@10": 0,
+            "mrr": 0
+          },
+          "retrieval_time": 5
+        },
+        {
+          "query": "React error boundary setup",
+          "category": "integration",
+          "retrieved_chunks": [
+            {
+              "chunk_id": "TryErrorBoundary_deep_dive_error-monitoring-integration",
+              "score": 0.2364778775723099,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_isRetryableTryState",
+              "score": 0.22420448113876765,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_forceLazyEvaluation",
+              "score": 0.20680360624811456,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "isTryError_deep_dive_purpose",
+              "score": 0.19524654680219905,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_validateSetup",
+              "score": 0.18245475992307558,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_getConfigVersion",
+              "score": 0.16960710323836511,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "wrapError_deep_dive_performance-optimization",
+              "score": 0.15649282110996213,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_emitErrorRecovered",
+              "score": 0.14153916273714529,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "fromThrown_deep_dive_signature",
+              "score": 0.12912249519444163,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "create_error_deep_dive_runtime-context-injection",
+              "score": 0.11787175106731264,
+              "relevant": false,
+              "relevance": 0
+            }
+          ],
+          "metrics": {
+            "precision@1": 0,
+            "recall@1": 0,
+            "precision@3": 0,
+            "recall@3": 0,
+            "precision@5": 0,
+            "recall@5": 0,
+            "precision@10": 0,
+            "recall@10": 0,
+            "f1@5": 0,
+            "map": 0,
+            "ndcg@5": 0,
+            "ndcg@10": 0,
+            "mrr": 0
+          },
+          "retrieval_time": 5
+        },
+        {
+          "query": "configure try-error performance",
+          "category": "configuration",
+          "retrieved_chunks": [
+            {
+              "chunk_id": "function_fieldValidationError",
+              "score": 0.2775442681072617,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_getErrorFingerprint",
+              "score": 0.2594098944320656,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "create_error_deep_dive_signature",
+              "score": 0.24449136320488796,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_createDomainError",
+              "score": 0.20661587828126576,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_validateTerms",
+              "score": 0.18665268126052637,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_configure",
+              "score": 0.18,
+              "relevant": true,
+              "relevance": 4
+            },
+            {
+              "chunk_id": "function_Component",
+              "score": 0.17225613962292083,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "wrapError_deep_dive_common-pitfalls",
+              "score": 0.1543997794865652,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "fromThrown_deep_dive_common-patterns-and-best-practices",
+              "score": 0.14330740590823515,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "configure_deep_dive_advanced-configuration-patterns",
+              "score": 0.13174709740166285,
+              "relevant": false,
+              "relevance": 0
+            }
+          ],
+          "metrics": {
+            "precision@1": 0,
+            "recall@1": 0,
+            "precision@3": 0,
+            "recall@3": 0,
+            "precision@5": 0,
+            "recall@5": 0,
+            "precision@10": 0.1,
+            "recall@10": 0.2,
+            "f1@5": 0,
+            "map": 0.03333333333333333,
+            "ndcg@5": 0,
+            "ndcg@10": 0.14177719544750247,
+            "mrr": 0.16666666666666666
+          },
+          "retrieval_time": 5
+        },
+        {
+          "query": "error type checking with isTryError",
+          "category": "type-checking",
+          "retrieved_chunks": [
+            {
+              "chunk_id": "function_amountError",
+              "score": 0.29556960312746333,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_tryExecute",
+              "score": 0.2650405703297772,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "wrapError_deep_dive_see-also",
+              "score": 0.239017427554499,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_createFlags",
+              "score": 0.2047655196230798,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_fieldValidationError",
+              "score": 0.18572293240165538,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_isTryError",
+              "score": 0.18,
+              "relevant": true,
+              "relevance": 4
+            },
+            {
+              "chunk_id": "fromThrown_deep_dive_advanced-usage-patterns",
+              "score": 0.17002264207125123,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_hasErrorContext",
+              "score": 0.15676517457715067,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_handleSubmit",
+              "score": 0.14431589176327653,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_isEventHandlerError",
+              "score": 0.12407334824048916,
+              "relevant": false,
+              "relevance": 0
+            }
+          ],
+          "metrics": {
+            "precision@1": 0,
+            "recall@1": 0,
+            "precision@3": 0,
+            "recall@3": 0,
+            "precision@5": 0,
+            "recall@5": 0,
+            "precision@10": 0.1,
+            "recall@10": 0.2,
+            "f1@5": 0,
+            "map": 0.03333333333333333,
+            "ndcg@5": 0,
+            "ndcg@10": 0.14177719544750247,
+            "mrr": 0.16666666666666666
+          },
+          "retrieval_time": 6
+        },
+        {
+          "query": "async error handling patterns",
+          "category": "patterns",
+          "retrieved_chunks": [
+            {
+              "chunk_id": "function_emitErrorWrapped",
+              "score": 0.24520221539201048,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_unwrapOr",
+              "score": 0.22621019034292095,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "useTry_deep_dive_see-also",
+              "score": 0.2092157701975276,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_clearInternPool",
+              "score": 0.1965683728177348,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "useTry_deep_dive_signature",
+              "score": 0.16989579157643453,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_isProduction",
+              "score": 0.15599187052276203,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_validateConfig",
+              "score": 0.1455104560470579,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_getErrorPoolStats",
+              "score": 0.13361793317181203,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_getErrorContext",
+              "score": 0.12202532221375666,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_detectEnvironment",
+              "score": 0.11129588908185445,
+              "relevant": false,
+              "relevance": 0
+            }
+          ],
+          "metrics": {
+            "precision@1": 0,
+            "recall@1": 0,
+            "precision@3": 0,
+            "recall@3": 0,
+            "precision@5": 0,
+            "recall@5": 0,
+            "precision@10": 0,
+            "recall@10": 0,
+            "f1@5": 0,
+            "map": 0,
+            "ndcg@5": 0,
+            "ndcg@10": 0,
+            "mrr": 0
+          },
+          "retrieval_time": 4
+        },
+        {
+          "query": "wrapError usage examples",
+          "category": "api-usage",
+          "retrieved_chunks": [
+            {
+              "chunk_id": "function_loadPostData",
+              "score": 0.2824347418650484,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_diffErrors",
+              "score": 0.2591785616367191,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "isTryError_deep_dive_purpose",
+              "score": 0.24364497197254203,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "tryAsync_deep_dive_error-handling-patterns",
+              "score": 0.22787976093355286,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "TryErrorBoundary_deep_dive_see-also",
+              "score": 0.21342582058259493,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "configure_deep_dive_advanced-configuration-patterns",
+              "score": 0.19294727717511426,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_wrapError",
+              "score": 0.18,
+              "relevant": true,
+              "relevance": 4
+            },
+            {
+              "chunk_id": "function_isTrySuccess",
+              "score": 0.17096808290366847,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_validateConfig",
+              "score": 0.14891161853524332,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_entityError",
+              "score": 0.13147376464341864,
+              "relevant": false,
+              "relevance": 0
+            }
+          ],
+          "metrics": {
+            "precision@1": 0,
+            "recall@1": 0,
+            "precision@3": 0,
+            "recall@3": 0,
+            "precision@5": 0,
+            "recall@5": 0,
+            "precision@10": 0.1,
+            "recall@10": 0.2,
+            "f1@5": 0,
+            "map": 0.02857142857142857,
+            "ndcg@5": 0,
+            "ndcg@10": 0.13835376484368736,
+            "mrr": 0.14285714285714285
+          },
+          "retrieval_time": 5
+        },
+        {
+          "query": "performance optimization tips",
+          "category": "optimization",
+          "retrieved_chunks": [
+            {
+              "chunk_id": "function_usePersistedState",
+              "score": 0.29667275005286226,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_areTryErrorsEqual",
+              "score": 0.2468935559952577,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_isTryState",
+              "score": 0.22675300969309442,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_createScope",
+              "score": 0.2102623067192574,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "configure_deep_dive_implementation-details",
+              "score": 0.190416303637717,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "trySync_deep_dive_purpose",
+              "score": 0.1781645673698715,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "trySync_deep_dive_usage-examples",
+              "score": 0.1600986954050777,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_forceLazyEvaluation",
+              "score": 0.1435825623860483,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "tryAsync_deep_dive_usage-examples",
+              "score": 0.13088474602169498,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "TryErrorBoundary_deep_dive_error-monitoring-integration",
+              "score": 0.11729850878449502,
+              "relevant": false,
+              "relevance": 0
+            }
+          ],
+          "metrics": {
+            "precision@1": 0,
+            "recall@1": 0,
+            "precision@3": 0,
+            "recall@3": 0,
+            "precision@5": 0,
+            "recall@5": 0,
+            "precision@10": 0,
+            "recall@10": 0,
+            "f1@5": 0,
+            "map": 0,
+            "ndcg@5": 0,
+            "ndcg@10": 0,
+            "mrr": 0
+          },
+          "retrieval_time": 4
+        },
+        {
+          "query": "testing with try-error",
+          "category": "testing",
+          "retrieved_chunks": [
+            {
+              "chunk_id": "TryErrorBoundary_deep_dive_migration-guide",
+              "score": 0.32756509020518154,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "configure_deep_dive_quick-reference",
+              "score": 0.269640880064381,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_ParallelRequests",
+              "score": 0.25536347980779334,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "create_error_deep_dive_quick-reference",
+              "score": 0.22294412314422057,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_isReactError",
+              "score": 0.19772910326949664,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_isFormSubmissionError",
+              "score": 0.17779222665089872,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_diffErrors",
+              "score": 0.15812640799576527,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_validateSetup",
+              "score": 0.1466306070409716,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "tryAsync_deep_dive_edge-cases-and-gotchas",
+              "score": 0.13415668763167632,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_PersistentErrorComponent",
+              "score": 0.11719062263948726,
+              "relevant": false,
+              "relevance": 0
+            }
+          ],
+          "metrics": {
+            "precision@1": 0,
+            "recall@1": 0,
+            "precision@3": 0,
+            "recall@3": 0,
+            "precision@5": 0,
+            "recall@5": 0,
+            "precision@10": 0,
+            "recall@10": 0,
+            "f1@5": 0,
+            "map": 0,
+            "ndcg@5": 0,
+            "ndcg@10": 0,
+            "mrr": 0
+          },
+          "retrieval_time": 6
+        },
+        {
+          "query": "common mistakes and pitfalls",
+          "category": "troubleshooting",
+          "retrieved_chunks": [
+            {
+              "chunk_id": "function_listFactories",
+              "score": 0.2868367701501566,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_createExternalError",
+              "score": 0.25004063030539836,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "trySync_deep_dive_purpose",
+              "score": 0.23621765152239813,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "isTryError_deep_dive_see-also",
+              "score": 0.22072976790414395,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "configure_deep_dive_purpose",
+              "score": 0.2017943698187005,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "useTry_deep_dive_advanced-usage-patterns",
+              "score": 0.18346771933826417,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_forceLazyEvaluation",
+              "score": 0.16675472185761003,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_tryAnyAsync",
+              "score": 0.14735958549799985,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "function_checkCoreVersion",
+              "score": 0.13565957707601337,
+              "relevant": false,
+              "relevance": 0
+            },
+            {
+              "chunk_id": "trySync_deep_dive_runtime-context-injection",
+              "score": 0.12363235955995656,
+              "relevant": false,
+              "relevance": 0
+            }
+          ],
+          "metrics": {
+            "precision@1": 0,
+            "recall@1": 0,
+            "precision@3": 0,
+            "recall@3": 0,
+            "precision@5": 0,
+            "recall@5": 0,
+            "precision@10": 0,
+            "recall@10": 0,
+            "f1@5": 0,
+            "map": 0,
+            "ndcg@5": 0,
+            "ndcg@10": 0,
+            "mrr": 0
+          },
+          "retrieval_time": 5
+        }
+      ],
+      "aggregate_metrics": {
+        "precision@1": {
+          "mean": 0,
+          "min": 0,
+          "max": 0,
+          "std": 0
+        },
+        "recall@1": {
+          "mean": 0,
+          "min": 0,
+          "max": 0,
+          "std": 0
+        },
+        "precision@3": {
+          "mean": 0,
+          "min": 0,
+          "max": 0,
+          "std": 0
+        },
+        "recall@3": {
+          "mean": 0,
+          "min": 0,
+          "max": 0,
+          "std": 0
+        },
+        "precision@5": {
+          "mean": 0,
+          "min": 0,
+          "max": 0,
+          "std": 0
+        },
+        "recall@5": {
+          "mean": 0,
+          "min": 0,
+          "max": 0,
+          "std": 0
+        },
+        "precision@10": {
+          "mean": 0.030000000000000006,
+          "min": 0,
+          "max": 0.1,
+          "std": 0.045825756949558406
+        },
+        "recall@10": {
+          "mean": 0.06000000000000001,
+          "min": 0,
+          "max": 0.2,
+          "std": 0.09165151389911681
+        },
+        "f1@5": {
+          "mean": 0,
+          "min": 0,
+          "max": 0,
+          "std": 0
+        },
+        "map": {
+          "mean": 0.009523809523809523,
+          "min": 0,
+          "max": 0.03333333333333333,
+          "std": 0.014599723539767516
+        },
+        "ndcg@5": {
+          "mean": 0,
+          "min": 0,
+          "max": 0,
+          "std": 0
+        },
+        "ndcg@10": {
+          "mean": 0.042190815573869236,
+          "min": 0,
+          "max": 0.14177719544750247,
+          "std": 0.06445359676267765
+        },
+        "mrr": {
+          "mean": 0.047619047619047616,
+          "min": 0,
+          "max": 0.16666666666666666,
+          "std": 0.07299861769883757
+        },
+        "average_retrieval_time": {
+          "mean": 5,
+          "min": 4,
+          "max": 6
+        },
+        "category_performance": {
+          "api-usage": {
+            "query_count": 2,
+            "avg_precision_at_5": 0,
+            "avg_ndcg_at_5": 0
+          },
+          "comparison": {
+            "query_count": 1,
+            "avg_precision_at_5": 0,
+            "avg_ndcg_at_5": 0
+          },
+          "integration": {
+            "query_count": 1,
+            "avg_precision_at_5": 0,
+            "avg_ndcg_at_5": 0
+          },
+          "configuration": {
+            "query_count": 1,
+            "avg_precision_at_5": 0,
+            "avg_ndcg_at_5": 0
+          },
+          "type-checking": {
+            "query_count": 1,
+            "avg_precision_at_5": 0,
+            "avg_ndcg_at_5": 0
+          },
+          "patterns": {
+            "query_count": 1,
+            "avg_precision_at_5": 0,
+            "avg_ndcg_at_5": 0
+          },
+          "optimization": {
+            "query_count": 1,
+            "avg_precision_at_5": 0,
+            "avg_ndcg_at_5": 0
+          },
+          "testing": {
+            "query_count": 1,
+            "avg_precision_at_5": 0,
+            "avg_ndcg_at_5": 0
+          },
+          "troubleshooting": {
+            "query_count": 1,
+            "avg_precision_at_5": 0,
+            "avg_ndcg_at_5": 0
+          }
+        }
+      },
+      "total_queries": 10
+    }
+  },
+  "comparison": {
+    "best_strategy": {
+      "precision@5": "pattern",
+      "recall@5": "pattern",
+      "ndcg@5": "pattern",
+      "map": "pattern",
+      "mrr": "pattern"
+    },
+    "metric_comparison": {
+      "precision@5": {
+        "vector": 0,
+        "pattern": 0.06000000000000001,
+        "hybrid": 0
+      },
+      "recall@5": {
+        "vector": 0,
+        "pattern": 0.06000000000000001,
+        "hybrid": 0
+      },
+      "ndcg@5": {
+        "vector": 0,
+        "pattern": 0.12110991094812,
+        "hybrid": 0
+      },
+      "map": {
+        "vector": 0,
+        "pattern": 0.06000000000000001,
+        "hybrid": 0.009523809523809523
+      },
+      "mrr": {
+        "vector": 0,
+        "pattern": 0.3,
+        "hybrid": 0.047619047619047616
+      }
+    },
+    "category_winners": {
+      "api-usage": "pattern",
+      "comparison": "vector",
+      "integration": "vector",
+      "configuration": "pattern",
+      "type-checking": "pattern",
+      "patterns": "vector",
+      "optimization": "vector",
+      "testing": "vector",
+      "troubleshooting": "vector"
+    }
+  },
+  "timestamp": "2025-07-08T20:29:22.353Z"
+}
