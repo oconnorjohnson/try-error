@@ -12,12 +12,25 @@ import { createError } from "../../src/errors";
 describe("Configuration Edge Cases", () => {
   // Save original env
   const originalEnv = process.env.NODE_ENV;
+  // Track listeners to clean up
+  const testListeners: Array<() => void> = [];
 
   beforeEach(() => {
     resetConfig();
+    // Clear any leftover listeners
+    testListeners.length = 0;
   });
 
   afterEach(() => {
+    // Remove all test listeners before reset to prevent errors
+    testListeners.forEach((listener) => {
+      try {
+        removeConfigChangeListener(listener);
+      } catch {
+        // Ignore errors during cleanup
+      }
+    });
+    testListeners.length = 0;
     resetConfig();
     process.env.NODE_ENV = originalEnv;
   });
@@ -84,13 +97,12 @@ describe("Configuration Edge Cases", () => {
         throw new Error("Listener failed");
       });
 
+      testListeners.push(faultyListener);
       addConfigChangeListener(faultyListener);
 
       // Should not crash when listener throws
       expect(() => configure({ captureStackTrace: false })).not.toThrow();
       expect(faultyListener).toHaveBeenCalled();
-
-      removeConfigChangeListener(faultyListener);
     });
 
     it("should handle multiple listeners with some failing", () => {
@@ -99,6 +111,7 @@ describe("Configuration Edge Cases", () => {
         throw new Error("Listener failed");
       });
 
+      testListeners.push(goodListener, faultyListener);
       addConfigChangeListener(goodListener);
       addConfigChangeListener(faultyListener);
 
@@ -106,9 +119,6 @@ describe("Configuration Edge Cases", () => {
 
       expect(goodListener).toHaveBeenCalled();
       expect(faultyListener).toHaveBeenCalled();
-
-      removeConfigChangeListener(goodListener);
-      removeConfigChangeListener(faultyListener);
     });
 
     it("should handle removing listener that was never added", () => {
@@ -118,6 +128,7 @@ describe("Configuration Edge Cases", () => {
 
     it("should handle adding same listener multiple times", () => {
       const listener = jest.fn();
+      testListeners.push(listener);
       addConfigChangeListener(listener);
       addConfigChangeListener(listener);
 
@@ -125,8 +136,6 @@ describe("Configuration Edge Cases", () => {
 
       // Should only be called once (set behavior)
       expect(listener).toHaveBeenCalledTimes(1);
-
-      removeConfigChangeListener(listener);
     });
   });
 
@@ -310,6 +319,7 @@ describe("Configuration Edge Cases", () => {
       const listener2 = jest.fn(() => listenerCalls.push(2));
       const listener3 = jest.fn(() => listenerCalls.push(3));
 
+      testListeners.push(listener1, listener2, listener3);
       addConfigChangeListener(listener1);
       addConfigChangeListener(listener2);
       addConfigChangeListener(listener3);
@@ -320,10 +330,6 @@ describe("Configuration Edge Cases", () => {
       expect(listener2).toHaveBeenCalled();
       expect(listener3).toHaveBeenCalled();
       expect(listenerCalls.length).toBe(3);
-
-      removeConfigChangeListener(listener1);
-      removeConfigChangeListener(listener2);
-      removeConfigChangeListener(listener3);
     });
   });
 

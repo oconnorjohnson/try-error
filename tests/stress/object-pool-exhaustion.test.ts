@@ -12,6 +12,8 @@ import { isTryError } from "../../src/types";
 describe("Object Pool Stress Tests", () => {
   beforeEach(() => {
     resetErrorPool();
+    // Enable object pooling for tests
+    configure(ConfigPresets.performance());
   });
 
   afterEach(() => {
@@ -24,7 +26,7 @@ describe("Object Pool Stress Tests", () => {
       const pool = getGlobalErrorPool();
 
       // Exhaust the pool
-      const errors: any[] = [];
+      const errors: ReturnType<ErrorPool["acquire"]>[] = [];
       for (let i = 0; i < 20; i++) {
         errors.push(pool.acquire());
       }
