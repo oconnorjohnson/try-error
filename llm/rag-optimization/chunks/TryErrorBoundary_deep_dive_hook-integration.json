@@ -1,0 +1,102 @@
+{
+  "chunk_id": "TryErrorBoundary_deep_dive_hook-integration",
+  "title": "Hook Integration",
+  "content": "## Hook Integration\n\n### useErrorBoundaryTrigger\n\n```tsx\n// Manual error triggering\nfunction ComponentWithManualErrors() {\n const throwError = useErrorBoundaryTrigger();\n\n const handleCriticalError = () => {\n // Manually trigger error boundary\n throwError(new Error(\"Critical operation failed\"));\n };\n\n const handleValidationError = () => {\n throwError(\n createError({\n type: \"ValidationError\",\n message: \"Form validation failed\",\n context: { fields: [\"email\", \"password\"] },\n })\n );\n };\n\n return (\n <div>\n <button onClick={handleCriticalError}>Trigger Critical Error</button>\n <button onClick={handleValidationError}>Trigger Validation Error</button>\n </div>\n );\n}\n```\n\n### useAsyncError and useAsyncErrorHandler\n\n```tsx\n// Async error handling hooks\nfunction AsyncDataComponent() {\n const [data, setData] = useState(null);\n const [loading, setLoading] = useState(false);\n const throwAsyncError = useAsyncError();\n const handleAsyncError = useAsyncErrorHandler();\n\n const loadData = async () => {\n setLoading(true);\n try {\n const result = await handleAsyncError(async () => {\n const response = await fetch(\"/api/data\");\n if (!response.ok) {\n throw new Error(`HTTP ${response.status}: ${response.statusText}`);\n }\n return response.json();\n });\n setData(result);\n } catch (error) {\n // This will be caught by the error boundary\n throwAsyncError(error);\n } finally {\n setLoading(false);\n }\n };\n\n const handleUnhandledAsync = () => {\n // This will be caught by boundary with catchAsyncErrors={true}\n Promise.reject(new Error(\"Unhandled async error\"));\n };\n\n return (\n <div>\n <button onClick={loadData} disabled={loading}>\n {loading ? \"Loading...\" : \"Load Data\"}\n </button>\n <button onClick={handleUnhandledAsync}>\n Trigger Unhandled Async Error\n </button>\n {data && <div>Data: {JSON.stringify(data)}</div>}\n </div>\n );\n}\n```",
+  "metadata": {
+    "chunk_id": "TryErrorBoundary_deep_dive_hook-integration",
+    "source_document": "rag-docs/TryErrorBoundary-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.277Z",
+    "topics": [
+      "hook integration",
+      "useerrorboundarytrigger",
+      "useasyncerror and useasyncerrorhandler",
+      "tsx",
+      "error",
+      "async",
+      "sync",
+      "promise",
+      "function",
+      "hook",
+      "component",
+      "validation"
+    ],
+    "complexity": "intermediate",
+    "includes_code": true,
+    "line_count": 80,
+    "token_count": 268,
+    "module": "react",
+    "category": "react-integration",
+    "search_keywords": [
+      "ComponentWithManualErrors",
+      "useErrorBoundaryTrigger",
+      "throwError",
+      "Error",
+      "createError",
+      "AsyncDataComponent",
+      "useState",
+      "useAsyncError",
+      "useAsyncErrorHandler",
+      "setLoading",
+      "handleAsyncError",
+      "fetch",
+      "json",
+      "setData",
+      "throwAsyncError",
+      "reject",
+      "stringify"
+    ],
+    "common_questions": [
+      "How does hook integration work?",
+      "Hook Integration best practices",
+      "Hook Integration patterns"
+    ],
+    "id": "TryErrorBoundary-deep-dive",
+    "title": "TryErrorBoundary - Complete Implementation Guide",
+    "tags": [
+      "react",
+      "error-boundary",
+      "component",
+      "retry",
+      "async-errors",
+      "event-handlers"
+    ],
+    "related": [
+      "useTry",
+      "useErrorRecovery",
+      "createError",
+      "fromThrown",
+      "React"
+    ],
+    "performance_impact": "low",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization",
+      "TryErrorBoundary_deep_dive_common-pitfalls"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "error-handling",
+      "async-operations",
+      "react-integration"
+    ],
+    "cross_references": [
+      "function_Component",
+      "function_createError",
+      "function_throwError",
+      "function_useAsyncError",
+      "function_useAsyncErrorHandler",
+      "function_useErrorBoundaryTrigger",
+      "function_validationError"
+    ]
+  },
+  "hash": "e0a647eb6c3bbabdf5c26b4b1b6ec204"
+}

@@ -1,0 +1,90 @@
+{
+  "chunk_id": "TryErrorBoundary_deep_dive_performance-optimization",
+  "title": "Performance Optimization",
+  "content": "## Performance Optimization\n\n### Lazy Loading Error Boundaries\n\n```tsx\n// Lazy-loaded error boundaries\nconst LazyErrorBoundary = React.lazy(() => import(\"./ErrorBoundary\"));\n\nfunction OptimizedApp() {\n return (\n <React.Suspense fallback={<div>Loading...</div>}>\n <LazyErrorBoundary>\n <MainApp />\n </LazyErrorBoundary>\n </React.Suspense>\n );\n}\n```\n\n### Memoized Error Components\n\n```tsx\n// Memoized error fallback\nconst MemoizedErrorFallback = React.memo(\n ({\n error,\n errorInfo,\n retry,\n }: {\n error: Error | TryError;\n errorInfo: ErrorInfo | null;\n retry: () => void;\n }) => (\n <div className=\"error-fallback\">\n <h2>Error: {error.message}</h2>\n <button onClick={retry}>Retry</button>\n </div>\n )\n);\n\nfunction OptimizedErrorBoundary({ children }: { children: ReactNode }) {\n return (\n <TryErrorBoundary fallback={MemoizedErrorFallback}>\n {children}\n </TryErrorBoundary>\n );\n}\n```",
+  "metadata": {
+    "chunk_id": "TryErrorBoundary_deep_dive_performance-optimization",
+    "source_document": "rag-docs/TryErrorBoundary-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.278Z",
+    "topics": [
+      "performance optimization",
+      "lazy loading error boundaries",
+      "memoized error components",
+      "tsx",
+      "error",
+      "function",
+      "react",
+      "component",
+      "performance",
+      "optimization"
+    ],
+    "complexity": "intermediate",
+    "includes_code": true,
+    "line_count": 48,
+    "token_count": 124,
+    "module": "react",
+    "category": "performance",
+    "search_keywords": [
+      "lazy",
+      "import",
+      "OptimizedApp",
+      "memo",
+      "OptimizedErrorBoundary",
+      "Error",
+      "ErrorInfo",
+      "ReactNode"
+    ],
+    "common_questions": [
+      "How does performance optimization work?",
+      "Performance Optimization best practices",
+      "Performance Optimization patterns"
+    ],
+    "id": "TryErrorBoundary-deep-dive",
+    "title": "TryErrorBoundary - Complete Implementation Guide",
+    "tags": [
+      "react",
+      "error-boundary",
+      "component",
+      "retry",
+      "async-errors",
+      "event-handlers"
+    ],
+    "related": [
+      "useTry",
+      "useErrorRecovery",
+      "createError",
+      "fromThrown",
+      "React"
+    ],
+    "performance_impact": "low",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_common-pitfalls"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "react-integration",
+      "performance-optimization"
+    ],
+    "cross_references": [
+      "create_error_deep_dive_performance-optimization",
+      "fromThrown_deep_dive_performance-optimization",
+      "function_Component",
+      "isTryError_deep_dive_performance-optimization",
+      "tryAsync_deep_dive_performance-optimization",
+      "trySync_deep_dive_performance-optimization",
+      "wrapError_deep_dive_performance-optimization"
+    ]
+  },
+  "hash": "e6b86802d67d5241ae4be4aa51f053c8"
+}

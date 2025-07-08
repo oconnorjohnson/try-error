@@ -1,0 +1,91 @@
+{
+  "chunk_id": "trySync_deep_dive_advanced-patterns",
+  "title": "Advanced Patterns",
+  "content": "## Advanced Patterns\n\n### Retry with trySync\n\n```typescript\nfunction withRetry<T>(\n fn: () => T,\n maxAttempts: number = 3,\n delayMs: number = 1000\n): TryResult<T, TryError> {\n for (let attempt = 1; attempt <= maxAttempts; attempt++) {\n const result = trySync(fn, {\n context: { attempt, maxAttempts },\n });\n\n if (!isTryError(result)) {\n return result;\n }\n\n // Don't wait on final attempt\n if (attempt < maxAttempts) {\n // Synchronous delay (not recommended for production)\n Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, delayMs);\n }\n }\n\n return createError({\n type: \"MaxRetriesExceeded\",\n message: `Operation failed after ${maxAttempts} attempts`,\n context: { maxAttempts },\n });\n}\n```\n\n### Pipeline Processing\n\n```typescript\nfunction processData(rawData: unknown) {\n // Stage 1: Parse\n const parseResult = trySync(() => JSON.parse(rawData as string), {\n context: { stage: \"parse\", dataType: typeof rawData },\n });\n\n if (isTryError(parseResult)) {\n return parseResult;\n }\n\n // Stage 2: Validate\n const validateResult = trySync(() => validateSchema(parseResult), {\n context: { stage: \"validate\", recordCount: parseResult.length },\n });\n\n if (isTryError(validateResult)) {\n return validateResult;\n }\n\n // Stage 3: Transform\n const transformResult = trySync(() => transformData(validateResult), {\n context: { stage: \"transform\", inputSize: validateResult.length },\n });\n\n return transformResult;\n}\n```\n\n### Conditional Error Handling\n\n```typescript\nfunction processWithFallback<T>(\n primary: () => T,\n fallback: () => T,\n shouldFallback: (error: TryError) => boolean\n): TryResult<T, TryError> {\n const primaryResult = trySync(primary, {\n context: { strategy: \"primary\" },\n });\n\n if (isTryError(primaryResult)) {\n if (shouldFallback(primaryResult)) {\n return trySync(fallback, {\n context: {\n strategy: \"fallback\",\n primaryError: primaryResult.type,\n reason: \"primary_failed\",\n },\n });\n }\n return primaryResult;\n }\n\n return primaryResult;\n}\n\n// Usage\nconst result = processWithFallback(\n () => loadFromCache(),\n () => loadFromDatabase(),\n (error) => error.type === \"CacheError\"\n);\n```",
+  "metadata": {
+    "chunk_id": "trySync_deep_dive_advanced-patterns",
+    "source_document": "rag-docs/trySync-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.342Z",
+    "topics": [
+      "advanced patterns",
+      "retry with trysync",
+      "pipeline processing",
+      "conditional error handling",
+      "typescript",
+      "error",
+      "sync",
+      "function"
+    ],
+    "complexity": "intermediate",
+    "includes_code": true,
+    "line_count": 100,
+    "token_count": 338,
+    "module": "sync",
+    "category": "utilities",
+    "search_keywords": [
+      "trySync",
+      "isTryError",
+      "wait",
+      "Int32Array",
+      "SharedArrayBuffer",
+      "createError",
+      "processData",
+      "parse",
+      "validateSchema",
+      "transformData",
+      "shouldFallback",
+      "processWithFallback",
+      "loadFromCache",
+      "loadFromDatabase",
+      "TryResult<T",
+      "Parse",
+      "Validate",
+      "Transform",
+      "TryError"
+    ],
+    "common_questions": [
+      "How does advanced patterns work?",
+      "Advanced Patterns best practices",
+      "Advanced Patterns patterns"
+    ],
+    "id": "trySync-deep-dive",
+    "title": "trySync() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "sync",
+      "error-handling",
+      "performance"
+    ],
+    "related": [
+      "tryAsync",
+      "isTryError",
+      "wrapError",
+      "fromThrown",
+      "createError"
+    ],
+    "performance_impact": "low",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [],
+    "cross_references": [
+      "function_createError",
+      "function_isTryError",
+      "tryAsync_deep_dive_advanced-patterns"
+    ]
+  },
+  "hash": "80a7b4d686d02aa906d35c1996760bd0"
+}

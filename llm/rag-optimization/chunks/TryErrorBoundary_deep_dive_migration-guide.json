@@ -1,0 +1,82 @@
+{
+  "chunk_id": "TryErrorBoundary_deep_dive_migration-guide",
+  "title": "Migration Guide",
+  "content": "## Migration Guide\n\n### From React ErrorBoundary\n\n```tsx\n// Before: Basic React ErrorBoundary\nclass OldErrorBoundary extends React.Component {\n constructor(props) {\n super(props);\n this.state = { hasError: false };\n }\n\n static getDerivedStateFromError(error) {\n return { hasError: true };\n }\n\n componentDidCatch(error, errorInfo) {\n console.error(\"Error caught:\", error, errorInfo);\n }\n\n render() {\n if (this.state.hasError) {\n return <h1>Something went wrong.</h1>;\n }\n return this.props.children;\n }\n}\n\n// After: TryErrorBoundary\nfunction NewErrorBoundary({ children }) {\n return (\n <TryErrorBoundary\n onError={(error, errorInfo) => {\n console.error(\"Error caught:\", error, errorInfo);\n }}\n fallback={(error, errorInfo, retry) => (\n <div>\n <h1>Something went wrong.</h1>\n <button onClick={retry}>Try Again</button>\n </div>\n )}\n >\n {children}\n </TryErrorBoundary>\n );\n}\n```",
+  "metadata": {
+    "chunk_id": "TryErrorBoundary_deep_dive_migration-guide",
+    "source_document": "rag-docs/TryErrorBoundary-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.279Z",
+    "topics": [
+      "migration guide",
+      "from react errorboundary",
+      "tsx",
+      "error",
+      "function",
+      "react",
+      "component"
+    ],
+    "complexity": "intermediate",
+    "includes_code": true,
+    "line_count": 47,
+    "token_count": 129,
+    "module": "react",
+    "category": "utilities",
+    "search_keywords": [
+      "constructor",
+      "super",
+      "getDerivedStateFromError",
+      "componentDidCatch",
+      "error",
+      "render",
+      "NewErrorBoundary",
+      "Basic",
+      "TryErrorBoundary"
+    ],
+    "common_questions": [
+      "How does migration guide work?",
+      "Migration Guide best practices",
+      "Migration Guide patterns"
+    ],
+    "id": "TryErrorBoundary-deep-dive",
+    "title": "TryErrorBoundary - Complete Implementation Guide",
+    "tags": [
+      "react",
+      "error-boundary",
+      "component",
+      "retry",
+      "async-errors",
+      "event-handlers"
+    ],
+    "related": [
+      "useTry",
+      "useErrorRecovery",
+      "createError",
+      "fromThrown",
+      "React"
+    ],
+    "performance_impact": "low",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "react-integration"
+    ],
+    "cross_references": [
+      "fromThrown_deep_dive_migration-guide",
+      "function_Component"
+    ]
+  },
+  "hash": "914f9253bc4f9e9f11220af90277443f"
+}

@@ -1,0 +1,47 @@
+{
+  "chunk_id": "index_module-breakdown",
+  "title": "Module Breakdown",
+  "content": "## Module Breakdown\n- **async**: 2 files, 6 functions\n- **core**: 10 files, 53 functions\n- **config**: 1 files, 7 functions\n- **errors**: 1 files, 12 functions\n- **middleware**: 1 files, 5 functions\n- **sync**: 2 files, 6 functions\n- **types**: 1 files, 7 functions\n- **utils**: 1 files, 16 functions\n- **react**: 30 files, 94 functions",
+  "metadata": {
+    "chunk_id": "index_module-breakdown",
+    "source_document": "rag-docs/index.md",
+    "chunk_type": "general",
+    "last_updated": "2025-07-08T20:17:18.336Z",
+    "topics": [
+      "module breakdown",
+      "error",
+      "async",
+      "sync",
+      "function",
+      "react",
+      "middleware"
+    ],
+    "complexity": "intermediate",
+    "includes_code": false,
+    "line_count": 10,
+    "token_count": 75,
+    "module": "core",
+    "category": "utilities",
+    "search_keywords": [],
+    "common_questions": [],
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "async-operations",
+      "react-integration"
+    ],
+    "cross_references": []
+  },
+  "hash": "b9f9ba61e917104a140cb6d50600353a"
+}

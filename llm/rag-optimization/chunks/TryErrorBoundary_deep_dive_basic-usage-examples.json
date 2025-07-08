@@ -1,0 +1,111 @@
+{
+  "chunk_id": "TryErrorBoundary_deep_dive_basic-usage-examples",
+  "title": "Basic Usage Examples",
+  "content": "## Basic Usage Examples\n\n### Simple Error Boundary\n\n```tsx\n// Basic error boundary setup\nfunction App() {\n return (\n <TryErrorBoundary>\n <Header />\n <MainContent />\n <Footer />\n </TryErrorBoundary>\n );\n}\n\n// Component that may throw errors\nfunction MainContent() {\n const [data, setData] = useState(null);\n\n useEffect(() => {\n // This error will be caught by the boundary\n if (someCondition) {\n throw new Error(\"Failed to load data\");\n }\n }, []);\n\n return <div>{data}</div>;\n}\n```\n\n### Error Boundary with Retry\n\n```tsx\nfunction DataFetchingComponent() {\n return (\n <TryErrorBoundary\n showRetry={true}\n retryStrategy={{\n maxRetries: 3,\n delay: 1000,\n backoff: \"exponential\",\n }}\n onError={(error, errorInfo) => {\n console.error(\"Error caught:\", error);\n reportErrorToService(error, errorInfo);\n }}\n >\n <UserProfile userId=\"123\" />\n </TryErrorBoundary>\n );\n}\n\n// Component that may fail on initial load\nfunction UserProfile({ userId }: { userId: string }) {\n const [user, setUser] = useState(null);\n const [loading, setLoading] = useState(true);\n\n useEffect(() => {\n fetchUser(userId)\n .then(setUser)\n .catch((error) => {\n // This will be caught by the boundary\n throw new Error(`Failed to load user ${userId}: ${error.message}`);\n })\n .finally(() => setLoading(false));\n }, [userId]);\n\n if (loading) return <Spinner />;\n return <div>User: {user.name}</div>;\n}\n```\n\n### Async Error Handling\n\n```tsx\n// Catch unhandled promise rejections\nfunction AsyncErrorDemo() {\n return (\n <TryErrorBoundary\n catchAsyncErrors={true}\n catchEventHandlerErrors={true}\n onError={(error, errorInfo) => {\n console.log(\"Async error caught:\", error);\n }}\n >\n <AsyncComponent />\n </TryErrorBoundary>\n );\n}\n\nfunction AsyncComponent() {\n const handleClick = () => {\n // This promise rejection will be caught\n fetch(\"/api/data\")\n .then((response) => response.json())\n .then((data) => {\n // Don't handle errors - let boundary catch them\n if (data.error) {\n throw new Error(data.error);\n }\n });\n // No .catch() - unhandled rejection will be caught by boundary\n };\n\n return <button onClick={handleClick}>Load Data</button>;\n}\n```\n\n### Custom Fallback UI\n\n```tsx\nfunction CustomFallbackExample() {\n return (\n <TryErrorBoundary\n fallback={(error, errorInfo, retry) => (\n <div className=\"custom-error-ui\">\n <h2>🚨 Oops! Something went wrong</h2>\n <p>Error: {error.message}</p>\n\n {isTryError(error) && (\n <div className=\"try-error-details\">\n <p>\n Type: <code>{error.type}</code>\n </p>\n <p>\n Source: <code>{error.source}</code>\n </p>\n {error.context && (\n <details>\n <summary>Context</summary>\n <pre>{JSON.stringify(error.context, null, 2)}</pre>\n </details>\n )}\n </div>\n )}\n\n <div className=\"error-actions\">\n <button onClick={retry} className=\"retry-btn\">\n 🔄 Try Again\n </button>\n <button\n onClick={() => window.location.reload()}\n className=\"refresh-btn\"\n >\n 🔄 Refresh Page\n </button>\n </div>\n\n {process.env.NODE_ENV === \"development\" && (\n <details className=\"error-debug\">\n <summary>Debug Information</summary>\n <pre>{error.stack}</pre>\n {errorInfo && <pre>{errorInfo.componentStack}</pre>}\n </details>\n )}\n </div>\n )}\n >\n <ComplexComponent />\n </TryErrorBoundary>\n );\n}\n```",
+  "metadata": {
+    "chunk_id": "TryErrorBoundary_deep_dive_basic-usage-examples",
+    "source_document": "rag-docs/TryErrorBoundary-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.276Z",
+    "topics": [
+      "basic usage examples",
+      "simple error boundary",
+      "error boundary with retry",
+      "async error handling",
+      "custom fallback ui",
+      "tsx",
+      "error",
+      "async",
+      "sync",
+      "promise",
+      "function",
+      "component"
+    ],
+    "complexity": "intermediate",
+    "includes_code": true,
+    "line_count": 164,
+    "token_count": 470,
+    "module": "react",
+    "category": "utilities",
+    "search_keywords": [
+      "App",
+      "MainContent",
+      "useState",
+      "useEffect",
+      "Error",
+      "DataFetchingComponent",
+      "error",
+      "reportErrorToService",
+      "UserProfile",
+      "fetchUser",
+      "then",
+      "catch",
+      "finally",
+      "setLoading",
+      "AsyncErrorDemo",
+      "log",
+      "AsyncComponent",
+      "fetch",
+      "json",
+      "CustomFallbackExample",
+      "isTryError",
+      "stringify",
+      "reload"
+    ],
+    "common_questions": [
+      "How does basic usage examples work?",
+      "Basic Usage Examples best practices",
+      "Basic Usage Examples patterns"
+    ],
+    "id": "TryErrorBoundary-deep-dive",
+    "title": "TryErrorBoundary - Complete Implementation Guide",
+    "tags": [
+      "react",
+      "error-boundary",
+      "component",
+      "retry",
+      "async-errors",
+      "event-handlers"
+    ],
+    "related": [
+      "useTry",
+      "useErrorRecovery",
+      "createError",
+      "fromThrown",
+      "React"
+    ],
+    "performance_impact": "low",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization",
+      "TryErrorBoundary_deep_dive_common-pitfalls"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "async-operations"
+    ],
+    "cross_references": [
+      "create_error_deep_dive_usage-examples",
+      "fromThrown_deep_dive_basic-usage-examples",
+      "function_AsyncComponent",
+      "function_Component",
+      "function_UserProfile",
+      "function_fetchUser",
+      "function_handleClick",
+      "function_isTryError",
+      "tryAsync_deep_dive_usage-examples",
+      "trySync_deep_dive_usage-examples",
+      "useTry_deep_dive_basic-usage-examples",
+      "wrapError_deep_dive_basic-usage-examples"
+    ]
+  },
+  "hash": "658d92d70994df69d8036a38f2fcdda3"
+}

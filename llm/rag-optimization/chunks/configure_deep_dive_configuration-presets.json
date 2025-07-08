@@ -1,0 +1,91 @@
+{
+  "chunk_id": "configure_deep_dive_configuration-presets",
+  "title": "Configuration Presets",
+  "content": "## Configuration Presets\n\n### Development Preset\n\n```typescript\n// Full debugging features\nconfigure(\"development\");\n\n// Equivalent to:\nconfigure({\n captureStackTrace: true,\n stackTraceLimit: 50,\n includeSource: true,\n developmentMode: true,\n onError: (error) => {\n console.group(`🚨 TryError: ${error.type}`);\n console.error(\"Message:\", error.message);\n console.error(\"Source:\", error.source);\n console.error(\"Context:\", error.context);\n if (error.stack) console.error(\"Stack:\", error.stack);\n console.groupEnd();\n return error;\n },\n});\n```\n\n### Production Preset\n\n```typescript\n// Performance-optimized for production\nconfigure(\"production\");\n\n// Equivalent to:\nconfigure({\n captureStackTrace: false,\n stackTraceLimit: 0,\n includeSource: true, // Keep for log debugging\n developmentMode: false,\n serializer: (error) => ({\n type: error.type,\n message: error.message,\n timestamp: error.timestamp,\n source: error.source,\n // Omit sensitive context\n }),\n onError: (error) => {\n // No console logging in production\n // Integrate with your error service here\n return error;\n },\n});\n```\n\n### Performance Preset\n\n```typescript\n// Maximum performance optimization\nconfigure(\"performance\");\n\n// Equivalent to:\nconfigure({\n captureStackTrace: false,\n stackTraceLimit: 0,\n includeSource: false,\n developmentMode: false,\n performance: {\n errorCreation: {\n cacheConstructors: true,\n lazyStackTrace: true,\n objectPooling: true,\n poolSize: 100,\n },\n contextCapture: {\n maxContextSize: 5120, // 5KB limit\n deepClone: false,\n timeout: 50,\n },\n memory: {\n maxErrorHistory: 50,\n useWeakRefs: true,\n gcHints: true,\n },\n },\n});\n```\n\n### Minimal Preset\n\n```typescript\n// Ultra-minimal for <50% overhead target\nconfigure(\"minimal\");\n\n// Equivalent to:\nconfigure({\n captureStackTrace: false,\n stackTraceLimit: 0,\n includeSource: false,\n developmentMode: false,\n minimalErrors: true,\n skipTimestamp: true,\n skipContext: true,\n});\n```\n\n### Next.js Preset\n\n```typescript\n// Optimized for Next.js applications\nconfigure(\"nextjs\");\n\n// Equivalent to:\nconfigure({\n runtimeDetection: true,\n captureStackTrace: process.env.NODE_ENV !== \"production\",\n stackTraceLimit: process.env.NODE_ENV === \"production\" ? 5 : 20,\n includeSource: true,\n developmentMode: process.env.NODE_ENV === \"development\",\n\n environmentHandlers: {\n server: (error) => {\n if (process.env.NODE_ENV === \"production\") {\n console.error(`[Server Error] ${error.type}: ${error.message}`);\n } else {\n console.group(`🚨 [Server] TryError: ${error.type}`);\n console.error(\"Message:\", error.message);\n console.error(\"Source:\", error.source);\n console.error(\"Context:\", error.context);\n console.groupEnd();\n }\n return error;\n },\n\n client: (error) => {\n if (process.env.NODE_ENV === \"production\") {\n // Send to error tracking service\n // No console output in production\n } else {\n console.group(`🚨 [Client] TryError: ${error.type}`);\n console.error(\"Message:\", error.message);\n console.error(\"Context:\", error.context);\n console.groupEnd();\n }\n return error;\n },\n\n edge: (error) => {\n console.log(\n JSON.stringify({\n type: error.type,\n message: error.message,\n timestamp: error.timestamp,\n runtime: \"edge\",\n })\n );\n return error;\n },\n },\n});\n```",
+  "metadata": {
+    "chunk_id": "configure_deep_dive_configuration-presets",
+    "source_document": "rag-docs/configure-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.282Z",
+    "topics": [
+      "configuration presets",
+      "development preset",
+      "production preset",
+      "performance preset",
+      "minimal preset",
+      "next.js preset",
+      "typescript",
+      "error",
+      "performance",
+      "optimization",
+      "configuration"
+    ],
+    "complexity": "advanced",
+    "includes_code": true,
+    "line_count": 159,
+    "token_count": 426,
+    "module": "config",
+    "category": "configuration",
+    "search_keywords": [
+      "configure",
+      "group",
+      "error",
+      "groupEnd",
+      "log",
+      "stringify"
+    ],
+    "common_questions": [
+      "How does configuration presets work?",
+      "Configuration Presets best practices",
+      "Configuration Presets patterns"
+    ],
+    "id": "configure-deep-dive",
+    "title": "configure() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "configuration",
+      "performance",
+      "optimization",
+      "presets"
+    ],
+    "related": [
+      "getConfig",
+      "resetConfig",
+      "ConfigPresets",
+      "performance",
+      "monitoring"
+    ],
+    "performance_impact": "medium",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "performance-optimization"
+    ],
+    "cross_references": [
+      "TryErrorBoundary_deep_dive_performance-optimization",
+      "create_error_deep_dive_performance-optimization",
+      "fromThrown_deep_dive_performance-optimization",
+      "function_configure",
+      "function_next",
+      "function_reset",
+      "isTryError_deep_dive_performance-optimization",
+      "tryAsync_deep_dive_performance-optimization",
+      "trySync_deep_dive_performance-optimization",
+      "wrapError_deep_dive_performance-optimization"
+    ]
+  },
+  "hash": "288dcfe82a3e07f46ebab07df1cd8007"
+}

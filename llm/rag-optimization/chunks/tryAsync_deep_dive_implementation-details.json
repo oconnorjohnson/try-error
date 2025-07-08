@@ -1,0 +1,110 @@
+{
+  "chunk_id": "tryAsync_deep_dive_implementation-details",
+  "title": "Implementation Details",
+  "content": "## Implementation Details\n\n### Algorithm Flow\n\n```\n1. Options validation → 1-2ns\n2. Promise creation/wrapping → 5-10ns\n3. Cancellation setup (if signal provided) → 10-20ns\n4. Timeout setup (if timeout provided) → 15-25ns\n5. Promise.race setup (if timeout/signal) → 20-30ns\n6. Function execution → Variable (user function time)\n7. Success path → Return value directly (0ns overhead)\n8. Error path → Error transformation (20-100ns)\n a. Abort/timeout detection\n b. Custom error type check\n c. Context merging\n d. TryError creation via fromThrown()\n9. Promise resolution → 0ns\n```\n\n### Performance Characteristics\n\n- **Time Complexity**: O(1) + O(user function) + O(Promise resolution)\n- **Space Complexity**: O(1) on success, O(context size) on error\n- **Success Path Overhead**: **0ns** (direct return)\n- **Error Path Overhead**: 20-100ns depending on configuration\n- **Cancellation Overhead**: 10-20ns when AbortSignal provided\n- **Timeout Overhead**: 15-25ns when timeout provided\n\n### Memory Usage\n\n```typescript\n// Success case: No additional memory allocation\nconst result = await tryAsync(() => Promise.resolve(42));\n// result === 42, no wrapper object\n\n// Error case: TryError object allocation\nconst result = await tryAsync(() => Promise.reject(new Error(\"fail\")));\n// result = { type: \"Error\", message: \"fail\", source: \"...\", ... }\n// Memory: ~450 bytes (standard) or ~120 bytes (minimal mode)\n\n// Cancellation case: AbortController event listener\nconst controller = new AbortController();\nconst result = await tryAsync(() => longRunningOperation(), {\n signal: controller.signal,\n});\n// Additional memory: ~100 bytes for event listener\n```\n\n### Internal Dependencies\n\n```typescript\n// Direct dependencies\n-fromThrown(error, context) - // Automatic error type detection\n createError() - // TryError creation (via fromThrown)\n Promise.race() - // Timeout/cancellation implementation\n AbortSignal.addEventListener() - // Cancellation support\n setTimeout / clearTimeout - // Timeout management\n // Indirect dependencies (via fromThrown)\n getCachedConfig() - // Configuration access\n getSourceLocation() - // Stack trace parsing\n ErrorPool.acquire(); // Object pooling (if enabled)\n```",
+  "metadata": {
+    "chunk_id": "tryAsync_deep_dive_implementation-details",
+    "source_document": "rag-docs/tryAsync-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.339Z",
+    "topics": [
+      "implementation details",
+      "algorithm flow",
+      "performance characteristics",
+      "memory usage",
+      "internal dependencies",
+      "typescript",
+      "error",
+      "async",
+      "sync",
+      "promise",
+      "function",
+      "validation",
+      "performance",
+      "configuration"
+    ],
+    "complexity": "intermediate",
+    "includes_code": true,
+    "line_count": 63,
+    "token_count": 380,
+    "module": "async",
+    "category": "utilities",
+    "search_keywords": [
+      "fromThrown",
+      "O",
+      "tryAsync",
+      "resolve",
+      "reject",
+      "Error",
+      "AbortController",
+      "longRunningOperation",
+      "createError",
+      "race",
+      "addEventListener",
+      "getCachedConfig",
+      "getSourceLocation",
+      "acquire",
+      "No",
+      "TryError"
+    ],
+    "common_questions": [
+      "How does implementation details work?",
+      "Implementation Details best practices",
+      "Implementation Details patterns"
+    ],
+    "id": "tryAsync-deep-dive",
+    "title": "tryAsync() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "async",
+      "error-handling",
+      "promises",
+      "cancellation"
+    ],
+    "related": [
+      "trySync",
+      "isTryError",
+      "AbortSignal",
+      "timeout",
+      "Promise"
+    ],
+    "performance_impact": "low",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "async-operations",
+      "performance-optimization"
+    ],
+    "cross_references": [
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "configure_deep_dive_implementation-details",
+      "create_error_deep_dive_implementation-details",
+      "fromThrown_deep_dive_implementation-details",
+      "function_Wrapper",
+      "function_clear",
+      "function_createError",
+      "function_fromThrown",
+      "function_getCachedConfig",
+      "function_getSourceLocation",
+      "function_intern",
+      "isTryError_deep_dive_implementation-details",
+      "trySync_deep_dive_implementation-details",
+      "useTry_deep_dive_implementation-details",
+      "wrapError_deep_dive_implementation-details"
+    ]
+  },
+  "hash": "dc1ab042d2b7c2ae19385a9d1d355ac3"
+}

@@ -1,0 +1,105 @@
+{
+  "chunk_id": "wrapError_deep_dive_testing-strategies",
+  "title": "Testing Strategies",
+  "content": "## Testing Strategies\n\n### Unit Testing\n\n```typescript\ndescribe(\"wrapError\", () => {\n it(\"should wrap Error instances correctly\", () => {\n const originalError = new Error(\"Original message\");\n const wrapped = wrapError(\"TestError\", originalError);\n\n expect(wrapped.type).toBe(\"TestError\");\n expect(wrapped.message).toBe(\"Original message\");\n expect(wrapped.cause).toBe(originalError);\n expect(isTryError(wrapped)).toBe(true);\n });\n\n it(\"should handle string errors\", () => {\n const stringError = \"String error message\";\n const wrapped = wrapError(\"StringError\", stringError);\n\n expect(wrapped.type).toBe(\"StringError\");\n expect(wrapped.message).toBe(\"String error message\");\n expect(wrapped.cause).toBe(stringError);\n });\n\n it(\"should use custom message when provided\", () => {\n const originalError = new Error(\"Original\");\n const wrapped = wrapError(\"CustomError\", originalError, \"Custom message\");\n\n expect(wrapped.message).toBe(\"Custom message\");\n expect(wrapped.cause).toBe(originalError);\n });\n\n it(\"should include context\", () => {\n const context = { key: \"value\" };\n const wrapped = wrapError(\n \"ContextError\",\n new Error(\"test\"),\n ,\n context\n );\n\n expect(wrapped.context).toEqual(context);\n });\n\n it(\"should handle unknown error types\", () => {\n const unknownError = { weird: \"object\" };\n const wrapped = wrapError(\"UnknownError\", unknownError);\n\n expect(wrapped.type).toBe(\"UnknownError\");\n expect(wrapped.message).toBe(\"Unknown error occurred\");\n expect(wrapped.cause).toBe(unknownError);\n });\n});\n```\n\n### Integration Testing\n\n```typescript\ndescribe(\"wrapError integration\", () => {\n it(\"should work with real API errors\", async () => {\n // Mock failed API call\n nock(\"https://api.example.com\")\n .get(\"/users/123\")\n .replyWithError(\"Network error\");\n\n try {\n await fetch(\"https://api.example.com/users/123\");\n } catch (error) {\n const wrapped = wrapError(\"ApiError\", error, \"Failed to fetch user\");\n\n expect(wrapped.type).toBe(\"ApiError\");\n expect(wrapped.message).toBe(\"Failed to fetch user\");\n expect(wrapped.cause).toBe(error);\n }\n });\n\n it(\"should preserve stack traces\", () => {\n function throwingFunction() {\n throw new Error(\"Deep error\");\n }\n\n function wrapperFunction() {\n try {\n throwingFunction();\n } catch (error) {\n return wrapError(\"WrapperError\", error);\n }\n }\n\n const result = wrapperFunction();\n\n expect(isTryError(result)).toBe(true);\n expect(result.cause instanceof Error).toBe(true);\n expect(result.cause.stack).toContain(\"throwingFunction\");\n });\n});\n```\n\n### Property-Based Testing\n\n```typescript\nimport { fc } from \"fast-check\";\n\ndescribe(\"wrapError property tests\", () => {\n it(\"should always preserve the cause\", () => {\n fc.assert(\n fc.property(\n fc.string(),\n fc.anything(),\n fc.option(fc.string()),\n fc.option(fc.record(fc.string(), fc.anything())),\n (type, cause, message, context) => {\n const wrapped = wrapError(type, cause, message, context);\n\n expect(wrapped.cause).toBe(cause);\n expect(wrapped.type).toBe(type);\n expect(isTryError(wrapped)).toBe(true);\n }\n )\n );\n });\n\n it(\"should extract messages correctly\", () => {\n fc.assert(\n fc.property(fc.string(), fc.string(), (type, errorMessage) => {\n const error = new Error(errorMessage);\n const wrapped = wrapError(type, error);\n\n expect(wrapped.message).toBe(errorMessage);\n expect(wrapped.cause).toBe(error);\n })\n );\n });\n});\n```",
+  "metadata": {
+    "chunk_id": "wrapError_deep_dive_testing-strategies",
+    "source_document": "rag-docs/wrapError-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.348Z",
+    "topics": [
+      "testing strategies",
+      "unit testing",
+      "integration testing",
+      "property-based testing",
+      "typescript",
+      "error",
+      "async",
+      "sync",
+      "function",
+      "testing"
+    ],
+    "complexity": "intermediate",
+    "includes_code": true,
+    "line_count": 136,
+    "token_count": 410,
+    "module": "errors",
+    "category": "testing",
+    "search_keywords": [
+      "describe",
+      "it",
+      "Error",
+      "wrapError",
+      "expect",
+      "toBe",
+      "isTryError",
+      "toEqual",
+      "nock",
+      "get",
+      "replyWithError",
+      "fetch",
+      "throwingFunction",
+      "wrapperFunction",
+      "toContain",
+      "assert",
+      "property",
+      "string",
+      "anything",
+      "option",
+      "record"
+    ],
+    "common_questions": [
+      "How does testing strategies work?",
+      "Testing Strategies best practices",
+      "Testing Strategies patterns"
+    ],
+    "id": "wrapError-deep-dive",
+    "title": "wrapError() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "error-wrapping",
+      "cause-preservation",
+      "error-chaining"
+    ],
+    "related": [
+      "fromThrown",
+      "createError",
+      "trySync",
+      "tryAsync",
+      "Error"
+    ],
+    "performance_impact": "low",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "error-handling",
+      "async-operations",
+      "testing"
+    ],
+    "cross_references": [
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "fromThrown_deep_dive_testing-strategies",
+      "function_Wrapper",
+      "function_isTryError",
+      "function_wrapError",
+      "isTryError_deep_dive_testing-strategies",
+      "tryAsync_deep_dive_testing-strategies",
+      "trySync_deep_dive_testing-strategies",
+      "useTry_deep_dive_testing-strategies"
+    ]
+  },
+  "hash": "7d4b14f584cb14beb36f8e73e8ce5bcd"
+}

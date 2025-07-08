@@ -1,0 +1,94 @@
+{
+  "chunk_id": "wrapError_deep_dive_common-patterns-and-best-practices",
+  "title": "Common Patterns and Best Practices",
+  "content": "## Common Patterns and Best Practices\n\n### Error Transformation Pipeline\n\n```typescript\n// Create reusable error transformation pipeline\nclass ErrorTransformer {\n private transformers: Array<(error: unknown) => TryError | null> = [];\n\n addTransformer(transformer: (error: unknown) => TryError | null) {\n this.transformers.push(transformer);\n return this;\n }\n\n transform(error: unknown): TryError {\n for (const transformer of this.transformers) {\n const result = transformer(error);\n if (result) return result;\n }\n\n // Fallback\n return wrapError(\"UnhandledError\", error, \"No transformer matched\");\n }\n}\n\n// Usage\nconst errorTransformer = new ErrorTransformer()\n .addTransformer((error) => {\n if (error instanceof ValidationError) {\n return wrapError(\"FormError\", error, \"Form validation failed\");\n }\n return null;\n })\n .addTransformer((error) => {\n if (error.name === \"NetworkError\") {\n return wrapError(\n \"ConnectivityError\",\n error,\n \"Network connectivity issue\"\n );\n }\n return null;\n })\n .addTransformer((error) => {\n if (error.code === \"ENOENT\") {\n return wrapError(\"FileNotFoundError\", error, \"Required file missing\");\n }\n return null;\n });\n\n// Transform any error\nconst transformedError = errorTransformer.transform(someError);\n```\n\n### Error Recovery Strategies\n\n```typescript\n// Use wrapError in error recovery\nasync function resilientOperation(data: any, maxRetries: number = 3) {\n let lastError: TryError | null = null;\n\n for (let attempt = 1; attempt <= maxRetries; attempt++) {\n try {\n return await performOperation(data);\n } catch (error) {\n lastError = wrapError(\n \"OperationAttemptError\",\n error,\n `Operation failed on attempt ${attempt}`,\n {\n attempt,\n maxRetries,\n data: sanitizeDataForLogging(data),\n timestamp: Date.now(),\n }\n );\n\n // Don't retry on certain error types\n if (isNonRetryableError(error)) {\n break;\n }\n\n // Wait before retry\n if (attempt < maxRetries) {\n await wait(Math.pow(2, attempt) * 1000);\n }\n }\n }\n\n // Final error with complete context\n return wrapError(\n \"OperationFailedError\",\n lastError,\n \"Operation failed after all retry attempts\",\n {\n totalAttempts: maxRetries,\n finalError: lastError,\n }\n );\n}\n```",
+  "metadata": {
+    "chunk_id": "wrapError_deep_dive_common-patterns-and-best-practices",
+    "source_document": "rag-docs/wrapError-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.348Z",
+    "topics": [
+      "common patterns and best practices",
+      "error transformation pipeline",
+      "error recovery strategies",
+      "typescript",
+      "error",
+      "async",
+      "sync",
+      "function",
+      "validation"
+    ],
+    "complexity": "intermediate",
+    "includes_code": true,
+    "line_count": 101,
+    "token_count": 341,
+    "module": "errors",
+    "category": "utilities",
+    "search_keywords": [
+      "addTransformer",
+      "push",
+      "transform",
+      "transformer",
+      "wrapError",
+      "ErrorTransformer",
+      "resilientOperation",
+      "performOperation",
+      "sanitizeDataForLogging",
+      "now",
+      "isNonRetryableError",
+      "wait",
+      "pow",
+      "Array<",
+      "TryError",
+      "Date"
+    ],
+    "common_questions": [
+      "How does common patterns and best practices work?",
+      "Common Patterns and Best Practices best practices",
+      "Common Patterns and Best Practices patterns"
+    ],
+    "id": "wrapError-deep-dive",
+    "title": "wrapError() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "error-wrapping",
+      "cause-preservation",
+      "error-chaining"
+    ],
+    "related": [
+      "fromThrown",
+      "createError",
+      "trySync",
+      "tryAsync",
+      "Error"
+    ],
+    "performance_impact": "low",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "error-handling",
+      "async-operations"
+    ],
+    "cross_references": [
+      "create_error_deep_dive_common-patterns",
+      "fromThrown_deep_dive_common-patterns-and-best-practices",
+      "function_validationError",
+      "function_wrapError",
+      "trySync_deep_dive_common-patterns"
+    ]
+  },
+  "hash": "e97e9bbe89cf8d1784535abb37fbd605"
+}

@@ -1,0 +1,94 @@
+{
+  "chunk_id": "isTryError_deep_dive_runtime-validation-examples",
+  "title": "Runtime Validation Examples",
+  "content": "## Runtime Validation Examples\n\n### Basic Validation\n\n```typescript\n// Simple validation\nconst maybeError = JSON.parse(serializedError);\n\nif (isTryError(maybeError)) {\n console.log(\"Valid TryError:\", maybeError.message);\n} else {\n console.log(\"Not a TryError:\", maybeError);\n}\n```\n\n### API Response Validation\n\n```typescript\n// Validating API responses\nasync function handleApiResponse(response: Response) {\n const data = await response.json();\n\n if (isTryError(data)) {\n // Server returned an error in TryError format\n console.error(\"Server error:\", data.message);\n console.error(\"Error type:\", data.type);\n console.error(\"Context:\", data.context);\n return data;\n }\n\n // Server returned success data\n return data;\n}\n```\n\n### Deserialization Validation\n\n```typescript\n// Validating deserialized errors\nfunction deserializeError(serialized: string): TryError | null {\n try {\n const parsed = JSON.parse(serialized);\n\n if (isTryError(parsed)) {\n return parsed;\n }\n\n console.warn(\"Invalid TryError format:\", parsed);\n return null;\n } catch (e) {\n console.error(\"Failed to parse error:\", e);\n return null;\n }\n}\n```\n\n### Configuration Validation\n\n```typescript\n// Validating configuration that might contain errors\ninterface Config {\n database: DatabaseConfig | TryError;\n api: ApiConfig | TryError;\n cache: CacheConfig | TryError;\n}\n\nfunction validateConfig(config: Config): string[] {\n const errors: string[] = [];\n\n if (isTryError(config.database)) {\n errors.push(`Database config error: ${config.database.message}`);\n }\n\n if (isTryError(config.api)) {\n errors.push(`API config error: ${config.api.message}`);\n }\n\n if (isTryError(config.cache)) {\n errors.push(`Cache config error: ${config.cache.message}`);\n }\n\n return errors;\n}\n```",
+  "metadata": {
+    "chunk_id": "isTryError_deep_dive_runtime-validation-examples",
+    "source_document": "rag-docs/isTryError-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.337Z",
+    "topics": [
+      "runtime validation examples",
+      "basic validation",
+      "api response validation",
+      "deserialization validation",
+      "configuration validation",
+      "typescript",
+      "error",
+      "async",
+      "sync",
+      "function",
+      "validation",
+      "configuration"
+    ],
+    "complexity": "intermediate",
+    "includes_code": true,
+    "line_count": 84,
+    "token_count": 250,
+    "module": "types",
+    "category": "utilities",
+    "search_keywords": [
+      "parse",
+      "isTryError",
+      "log",
+      "handleApiResponse",
+      "json",
+      "error",
+      "deserializeError",
+      "warn",
+      "validateConfig",
+      "push",
+      "Response",
+      "TryError",
+      "DatabaseConfig",
+      "ApiConfig",
+      "CacheConfig",
+      "Config"
+    ],
+    "common_questions": [
+      "How does runtime validation examples work?",
+      "Runtime Validation Examples best practices",
+      "Runtime Validation Examples patterns"
+    ],
+    "id": "isTryError-deep-dive",
+    "title": "isTryError() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "type-guard",
+      "type-safety",
+      "discriminated-union"
+    ],
+    "related": [
+      "trySync",
+      "tryAsync",
+      "TryResult",
+      "TryError",
+      "TypeScript"
+    ],
+    "performance_impact": "negligible",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "error-handling",
+      "async-operations"
+    ],
+    "cross_references": [
+      "function_isTryError",
+      "function_validateConfig"
+    ]
+  },
+  "hash": "056e5e31c87cb998b269d27430ec8509"
+}

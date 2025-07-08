@@ -1,0 +1,43 @@
+{
+  "chunk_id": "architecture_function-complexity-distribution",
+  "title": "Function Complexity Distribution",
+  "content": "## Function Complexity Distribution\n- **Low Complexity**: 142 functions\n- **Medium Complexity**: 57 functions \n- **High Complexity**: 7 functions",
+  "metadata": {
+    "chunk_id": "architecture_function-complexity-distribution",
+    "source_document": "rag-docs/performance.md",
+    "chunk_type": "conceptual",
+    "last_updated": "2025-07-08T20:17:18.338Z",
+    "topics": [
+      "function complexity distribution",
+      "function"
+    ],
+    "complexity": "basic",
+    "includes_code": false,
+    "line_count": 4,
+    "token_count": 25,
+    "module": "core",
+    "category": "type-checking",
+    "search_keywords": [],
+    "common_questions": [
+      "What is function complexity distribution?",
+      "Function Complexity Distribution architecture",
+      "Function Complexity Distribution explanation"
+    ],
+    "related_chunks": [
+      "architecture_module-organization",
+      "architecture_factory-functions",
+      "architecture_error-handling-functions",
+      "architecture_utility-functions",
+      "architecture_middleware-functions",
+      "architecture_hook-functions-react",
+      "architecture_async-vs-sync",
+      "architecture_side-effects-analysis",
+      "architecture_optimization-techniques-used",
+      "TryErrorBoundary_deep_dive_quick-reference"
+    ],
+    "related_functions": [],
+    "usage_patterns": [],
+    "cross_references": []
+  },
+  "hash": "ed3c034f26046c770e120dd9f7ca4e12"
+}

@@ -1,0 +1,90 @@
+{
+  "chunk_id": "tryAsync_deep_dive_error-handling-patterns",
+  "title": "Error Handling Patterns",
+  "content": "## Error Handling Patterns\n\n### Async Error Aggregation\n\n```typescript\nasync function aggregateAsyncErrors<T>(\n operations: Array<() => Promise<T>>\n): Promise<TryResult<T[], TryError>> {\n const results: T[] = [];\n const errors: TryError[] = [];\n\n for (const [index, operation] of operations.entries()) {\n const result = await tryAsync(operation, {\n context: { operationIndex: index },\n });\n\n if (isTryError(result)) {\n errors.push(result);\n } else {\n results.push(result);\n }\n }\n\n if (errors.length > 0) {\n return createError({\n type: \"MultipleAsyncErrors\",\n message: `${errors.length} async operations failed`,\n context: {\n errors: errors.map((e) => ({\n type: e.type,\n message: e.message,\n context: e.context,\n })),\n successCount: results.length,\n totalCount: operations.length,\n },\n });\n }\n\n return results;\n}\n```\n\n### Async Chain with Early Return\n\n```typescript\nasync function processChain(input: any) {\n return await tryAsync(\n async () => {\n const step1 = await tryAsync(() => processStep1(input));\n if (isTryError(step1)) throw step1;\n\n const step2 = await tryAsync(() => processStep2(step1));\n if (isTryError(step2)) throw step2;\n\n const step3 = await tryAsync(() => processStep3(step2));\n if (isTryError(step3)) throw step3;\n\n return step3;\n },\n {\n context: {\n chainType: \"sequential\",\n inputType: typeof input,\n totalSteps: 3,\n },\n }\n );\n}\n```",
+  "metadata": {
+    "chunk_id": "tryAsync_deep_dive_error-handling-patterns",
+    "source_document": "rag-docs/tryAsync-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.341Z",
+    "topics": [
+      "error handling patterns",
+      "async error aggregation",
+      "async chain with early return",
+      "typescript",
+      "error",
+      "async",
+      "sync",
+      "promise",
+      "function"
+    ],
+    "complexity": "intermediate",
+    "includes_code": true,
+    "line_count": 70,
+    "token_count": 218,
+    "module": "async",
+    "category": "error-creation",
+    "search_keywords": [
+      "entries",
+      "tryAsync",
+      "isTryError",
+      "push",
+      "createError",
+      "map",
+      "processChain",
+      "processStep1",
+      "processStep2",
+      "processStep3",
+      "Array<",
+      "Promise<TryResult<T[]",
+      "T[]",
+      "TryError[]"
+    ],
+    "common_questions": [
+      "How does error handling patterns work?",
+      "Error Handling Patterns best practices",
+      "Error Handling Patterns patterns"
+    ],
+    "id": "tryAsync-deep-dive",
+    "title": "tryAsync() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "async",
+      "error-handling",
+      "promises",
+      "cancellation"
+    ],
+    "related": [
+      "trySync",
+      "isTryError",
+      "AbortSignal",
+      "timeout",
+      "Promise"
+    ],
+    "performance_impact": "low",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "async-operations"
+    ],
+    "cross_references": [
+      "function_createError",
+      "function_isTryError",
+      "useTry_deep_dive_error-handling-patterns"
+    ]
+  },
+  "hash": "29dd1bd05ab37eaaf7c40bcef2fe94e8"
+}

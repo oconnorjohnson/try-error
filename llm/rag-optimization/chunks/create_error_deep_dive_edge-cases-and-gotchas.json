@@ -1,0 +1,75 @@
+{
+  "chunk_id": "create_error_deep_dive_edge-cases-and-gotchas",
+  "title": "Edge Cases and Gotchas",
+  "content": "## Edge Cases and Gotchas\n\n### Circular References\n\n```typescript\n// This will cause issues\nconst obj = { name: \"test\" };\nobj.self = obj; // Circular reference\n\n// DON'T do this\ncreateError({\n type: \"Error\",\n message: \"Bad context\",\n context: { obj }, // Will fail during serialization\n});\n\n// DO this instead\ncreateError({\n type: \"Error\",\n message: \"Good context\",\n context: {\n objName: obj.name,\n objType: typeof obj,\n },\n});\n```\n\n### Context Mutation\n\n```typescript\nconst sharedContext = { count: 0 };\n\n// Context is not cloned - mutations will affect all references\nconst error1 = createError({\n type: \"Error\",\n message: \"First\",\n context: sharedContext,\n});\n\nsharedContext.count++; // This affects error1.context!\n\n// Best practice: pass new objects\nconst error2 = createError({\n type: \"Error\",\n message: \"Second\",\n context: { ...sharedContext }, // Shallow clone\n});\n```\n\n### Performance Cliffs\n\n```typescript\n// Avoid creating errors in hot loops\nfor (let i = 0; i < 1000000; i++) {\n // This creates 1M error objects!\n const error = createError({\n type: \"LoopError\",\n message: `Iteration ${i}`,\n });\n}\n\n// Better: Create once, reuse or pool\nconst baseError = createError({\n type: \"LoopError\",\n message: \"Loop failed\",\n});\n\nfor (let i = 0; i < 1000000; i++) {\n if (shouldFail(i)) {\n return wrapWithContext(baseError, { iteration: i });\n }\n}\n```",
+  "metadata": {
+    "chunk_id": "create_error_deep_dive_edge-cases-and-gotchas",
+    "source_document": "rag-docs/create-error-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.284Z",
+    "topics": [
+      "edge cases and gotchas",
+      "circular references",
+      "context mutation",
+      "performance cliffs",
+      "typescript",
+      "error",
+      "performance"
+    ],
+    "complexity": "intermediate",
+    "includes_code": true,
+    "line_count": 73,
+    "token_count": 267,
+    "module": "core",
+    "category": "utilities",
+    "search_keywords": [
+      "createError",
+      "shouldFail",
+      "wrapWithContext",
+      "Create"
+    ],
+    "common_questions": [
+      "How does edge cases and gotchas work?",
+      "Edge Cases and Gotchas best practices",
+      "Edge Cases and Gotchas patterns"
+    ],
+    "id": "create-error-deep-dive",
+    "title": "createError() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "error-creation",
+      "performance",
+      "context-injection"
+    ],
+    "related": null,
+    "performance_impact": "low",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "testing",
+      "performance-optimization"
+    ],
+    "cross_references": [
+      "function_createError",
+      "function_wrapWithContext",
+      "isTryError_deep_dive_edge-cases-and-gotchas",
+      "tryAsync_deep_dive_edge-cases-and-gotchas",
+      "trySync_deep_dive_edge-cases-and-gotchas",
+      "wrapError_deep_dive_edge-cases-and-gotchas"
+    ]
+  },
+  "hash": "8506a49f36bebf298c027d5102f1783c"
+}

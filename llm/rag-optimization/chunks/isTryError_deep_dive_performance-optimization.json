@@ -1,0 +1,88 @@
+{
+  "chunk_id": "isTryError_deep_dive_performance-optimization",
+  "title": "Performance Optimization",
+  "content": "## Performance Optimization\n\n### Hot Path Usage\n\n```typescript\n// Optimized for high-frequency calls\nfunction processHighFrequency<T>(results: Array<TryResult<T, TryError>>): {\n successes: T[];\n errorCount: number;\n} {\n const successes: T[] = [];\n let errorCount = 0;\n\n // Direct loop - faster than filter operations\n for (const result of results) {\n if (isTryError(result)) {\n errorCount++;\n } else {\n successes.push(result);\n }\n }\n\n return { successes, errorCount };\n}\n```\n\n### Batch Processing\n\n```typescript\n// Process large batches efficiently\nfunction processBatch<T>(batch: Array<TryResult<T, TryError>>): BatchResult<T> {\n let successCount = 0;\n let errorCount = 0;\n const errors: TryError[] = [];\n const successes: T[] = [];\n\n for (const item of batch) {\n if (isTryError(item)) {\n errorCount++;\n errors.push(item);\n } else {\n successCount++;\n successes.push(item);\n }\n }\n\n return { successes, errors, successCount, errorCount };\n}\n```\n\n### Memoization\n\n```typescript\n// Memoize expensive error checks\nconst errorCheckCache = new WeakMap<object, boolean>();\n\nfunction isTryErrorMemoized(value: unknown): value is TryError {\n if (typeof value === \"object\" && value !== null) {\n const cached = errorCheckCache.get(value);\n if (cached !== ) {\n return cached;\n }\n }\n\n const result = isTryError(value);\n\n if (typeof value === \"object\" && value !== null) {\n errorCheckCache.set(value, result);\n }\n\n return result;\n}\n```",
+  "metadata": {
+    "chunk_id": "isTryError_deep_dive_performance-optimization",
+    "source_document": "rag-docs/isTryError-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.337Z",
+    "topics": [
+      "performance optimization",
+      "hot path usage",
+      "batch processing",
+      "memoization",
+      "typescript",
+      "error",
+      "function",
+      "performance",
+      "optimization"
+    ],
+    "complexity": "intermediate",
+    "includes_code": true,
+    "line_count": 73,
+    "token_count": 246,
+    "module": "types",
+    "category": "performance",
+    "search_keywords": [
+      "isTryError",
+      "push",
+      "isTryErrorMemoized",
+      "get",
+      "set",
+      "Array<TryResult<T",
+      "T[]",
+      "BatchResult<T>",
+      "TryError[]"
+    ],
+    "common_questions": [
+      "How does performance optimization work?",
+      "Performance Optimization best practices",
+      "Performance Optimization patterns"
+    ],
+    "id": "isTryError-deep-dive",
+    "title": "isTryError() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "type-guard",
+      "type-safety",
+      "discriminated-union"
+    ],
+    "related": [
+      "trySync",
+      "tryAsync",
+      "TryResult",
+      "TryError",
+      "TypeScript"
+    ],
+    "performance_impact": "negligible",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "performance-optimization"
+    ],
+    "cross_references": [
+      "TryErrorBoundary_deep_dive_performance-optimization",
+      "create_error_deep_dive_performance-optimization",
+      "fromThrown_deep_dive_performance-optimization",
+      "function_isTryError",
+      "tryAsync_deep_dive_performance-optimization",
+      "trySync_deep_dive_performance-optimization",
+      "wrapError_deep_dive_performance-optimization"
+    ]
+  },
+  "hash": "a7cd4f045b2681d9c1688b381169c980"
+}

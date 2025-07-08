@@ -1,0 +1,50 @@
+{
+  "chunk_id": "architecture_middleware-functions",
+  "title": "Middleware Functions",
+  "content": "## Middleware Functions\n- filterMiddleware()\n- rateLimitMiddleware()",
+  "metadata": {
+    "chunk_id": "architecture_middleware-functions",
+    "source_document": "rag-docs/patterns.md",
+    "chunk_type": "conceptual",
+    "last_updated": "2025-07-08T20:17:18.338Z",
+    "topics": [
+      "middleware functions",
+      "function",
+      "middleware"
+    ],
+    "complexity": "basic",
+    "includes_code": false,
+    "line_count": 3,
+    "token_count": 10,
+    "module": "core",
+    "category": "utilities",
+    "search_keywords": [
+      "filterMiddleware",
+      "rateLimitMiddleware"
+    ],
+    "common_questions": [
+      "What is middleware functions?",
+      "Middleware Functions architecture",
+      "Middleware Functions explanation"
+    ],
+    "related_chunks": [
+      "architecture_module-organization",
+      "architecture_dependency-graph",
+      "architecture_factory-functions",
+      "architecture_error-handling-functions",
+      "architecture_utility-functions",
+      "architecture_hook-functions-react",
+      "architecture_function-complexity-distribution",
+      "architecture_async-vs-sync",
+      "architecture_side-effects-analysis",
+      "architecture_optimization-techniques-used"
+    ],
+    "related_functions": [],
+    "usage_patterns": [],
+    "cross_references": [
+      "function_filterMiddleware",
+      "function_rateLimitMiddleware"
+    ]
+  },
+  "hash": "37b318fe757e02cdf46cead048619e18"
+}

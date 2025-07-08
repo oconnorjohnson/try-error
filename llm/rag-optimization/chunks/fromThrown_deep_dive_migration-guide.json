@@ -1,0 +1,81 @@
+{
+  "chunk_id": "fromThrown_deep_dive_migration-guide",
+  "title": "Migration Guide",
+  "content": "## Migration Guide\n\n### From Traditional Error Handling\n\n```typescript\n// Before: Traditional try-catch\nfunction oldWay() {\n try {\n return riskyOperation();\n } catch (error) {\n console.error(\"Error:\", error);\n throw error; // Re-throw\n }\n}\n\n// After: Using fromThrown\nfunction newWay() {\n try {\n return riskyOperation();\n } catch (error) {\n const wrappedError = fromThrown(error, {\n operation: \"riskyOperation\",\n });\n\n // Handle error locally\n console.error(\"Error:\", wrappedError.message);\n\n // Return structured error instead of throwing\n return wrappedError;\n }\n}\n```\n\n### From Manual Error Wrapping\n\n```typescript\n// Before: Manual error detection\nfunction oldDetection(error: unknown) {\n if (error instanceof TypeError) {\n return { type: \"TypeError\", message: error.message };\n }\n if (error instanceof SyntaxError) {\n return { type: \"SyntaxError\", message: error.message };\n }\n return { type: \"UnknownError\", message: \"Unknown error\" };\n}\n\n// After: Using fromThrown\nfunction newDetection(error: unknown) {\n return fromThrown(error); // Handles all cases automatically\n}\n```",
+  "metadata": {
+    "chunk_id": "fromThrown_deep_dive_migration-guide",
+    "source_document": "rag-docs/fromThrown-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.288Z",
+    "topics": [
+      "migration guide",
+      "from traditional error handling",
+      "from manual error wrapping",
+      "typescript",
+      "error",
+      "function"
+    ],
+    "complexity": "beginner",
+    "includes_code": true,
+    "line_count": 52,
+    "token_count": 182,
+    "module": "errors",
+    "category": "utilities",
+    "search_keywords": [
+      "oldWay",
+      "riskyOperation",
+      "error",
+      "newWay",
+      "fromThrown",
+      "oldDetection",
+      "newDetection",
+      "Traditional",
+      "Using",
+      "Manual"
+    ],
+    "common_questions": [
+      "How does migration guide work?",
+      "Migration Guide best practices",
+      "Migration Guide patterns"
+    ],
+    "id": "fromThrown-deep-dive",
+    "title": "fromThrown() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "auto-detection",
+      "type-classification",
+      "catch-blocks"
+    ],
+    "related": [
+      "wrapError",
+      "createError",
+      "trySync",
+      "tryAsync",
+      "Error"
+    ],
+    "performance_impact": "low",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "error-handling"
+    ],
+    "cross_references": [
+      "TryErrorBoundary_deep_dive_migration-guide",
+      "function_fromThrown"
+    ]
+  },
+  "hash": "da6032d61bd716b76fb388399c5367c1"
+}

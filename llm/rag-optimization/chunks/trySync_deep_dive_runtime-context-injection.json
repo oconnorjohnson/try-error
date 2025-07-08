@@ -1,0 +1,96 @@
+{
+  "chunk_id": "trySync_deep_dive_runtime-context-injection",
+  "title": "Runtime Context Injection",
+  "content": "## Runtime Context Injection\n\n### Basic Context Usage\n\n```typescript\n// Static context at call site\nconst result = trySync(() => JSON.parse(userInput), {\n context: {\n operation: \"user-input-parsing\",\n inputLength: userInput.length,\n timestamp: Date.now(),\n },\n});\n\n// Dynamic context with runtime values\nfunction processUserData(userId: string, data: unknown) {\n return trySync(() => validateUserData(data), {\n context: {\n userId,\n dataType: typeof data,\n validation: \"strict\",\n sessionId: getCurrentSessionId(),\n },\n });\n}\n```\n\n### Context Inheritance Pattern\n\n```typescript\nclass DataProcessor {\n private baseContext: Record<string, unknown>;\n\n constructor(processorId: string) {\n this.baseContext = {\n processorId,\n version: \"1.0.0\",\n startTime: Date.now(),\n };\n }\n\n process(data: unknown, operation: string) {\n return trySync(() => this.performOperation(data, operation), {\n context: {\n ...this.baseContext,\n operation,\n dataSize: JSON.stringify(data).length,\n timestamp: Date.now(),\n },\n });\n }\n}\n```\n\n### Request-Scoped Context\n\n```typescript\n// Express middleware pattern\nfunction errorContextMiddleware(\n req: Request,\n res: Response,\n next: NextFunction\n) {\n // Monkey-patch trySync for this request\n const originalTrySync = trySync;\n\n (req as any).trySync = function <T>(fn: () => T, options?: TrySyncOptions) {\n return originalTrySync(fn, {\n ...options,\n context: {\n ...options?.context,\n requestId: req.id,\n userId: req.user?.id,\n path: req.path,\n method: req.method,\n userAgent: req.get(\"user-agent\"),\n },\n });\n };\n\n next();\n}\n```",
+  "metadata": {
+    "chunk_id": "trySync_deep_dive_runtime-context-injection",
+    "source_document": "rag-docs/trySync-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.342Z",
+    "topics": [
+      "runtime context injection",
+      "basic context usage",
+      "context inheritance pattern",
+      "request-scoped context",
+      "typescript",
+      "error",
+      "sync",
+      "function",
+      "method",
+      "validation",
+      "middleware"
+    ],
+    "complexity": "intermediate",
+    "includes_code": true,
+    "line_count": 83,
+    "token_count": 228,
+    "module": "sync",
+    "category": "utilities",
+    "search_keywords": [
+      "trySync",
+      "parse",
+      "now",
+      "processUserData",
+      "validateUserData",
+      "getCurrentSessionId",
+      "constructor",
+      "process",
+      "performOperation",
+      "stringify",
+      "errorContextMiddleware",
+      "originalTrySync",
+      "get",
+      "next",
+      "Date",
+      "Record<string",
+      "JSON",
+      "Request",
+      "Response",
+      "NextFunction",
+      "TrySyncOptions"
+    ],
+    "common_questions": [
+      "How does runtime context injection work?",
+      "Runtime Context Injection best practices",
+      "Runtime Context Injection patterns"
+    ],
+    "id": "trySync-deep-dive",
+    "title": "trySync() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "sync",
+      "error-handling",
+      "performance"
+    ],
+    "related": [
+      "tryAsync",
+      "isTryError",
+      "wrapError",
+      "fromThrown",
+      "createError"
+    ],
+    "performance_impact": "low",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [],
+    "cross_references": [
+      "create_error_deep_dive_runtime-context-injection",
+      "function_next",
+      "tryAsync_deep_dive_runtime-context-injection"
+    ]
+  },
+  "hash": "eb71d067259d7dd2f9c142bc58e467bd"
+}

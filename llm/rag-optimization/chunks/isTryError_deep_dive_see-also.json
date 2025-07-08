@@ -1,0 +1,81 @@
+{
+  "chunk_id": "isTryError_deep_dive_see-also",
+  "title": "See Also",
+  "content": "## See Also\n\n- [TryResult Type](./try-result-type.md)\n- [TryError Interface](./try-error-interface.md)\n- [trySync() Function](./trySync-deep-dive.md)\n- [tryAsync() Function](./tryAsync-deep-dive.md)\n- [TypeScript Integration](./typescript-integration.md)\n- [Type Guards Best Practices](./type-guards-best-practices.md)\n- [Discriminated Unions](./discriminated-unions.md)\n- [Error Handling Patterns](./error-handling-patterns.md)",
+  "metadata": {
+    "chunk_id": "isTryError_deep_dive_see-also",
+    "source_document": "rag-docs/isTryError-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.338Z",
+    "topics": [
+      "see also",
+      "error",
+      "async",
+      "sync",
+      "function",
+      "typescript"
+    ],
+    "complexity": "intermediate",
+    "includes_code": false,
+    "line_count": 10,
+    "token_count": 39,
+    "module": "types",
+    "category": "utilities",
+    "search_keywords": [
+      "trySync",
+      "tryAsync"
+    ],
+    "common_questions": [
+      "How does see also work?",
+      "See Also best practices",
+      "See Also patterns"
+    ],
+    "id": "isTryError-deep-dive",
+    "title": "isTryError() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "type-guard",
+      "type-safety",
+      "discriminated-union"
+    ],
+    "related": [
+      "trySync",
+      "tryAsync",
+      "TryResult",
+      "TryError",
+      "TypeScript"
+    ],
+    "performance_impact": "negligible",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "async-operations"
+    ],
+    "cross_references": [
+      "TryErrorBoundary_deep_dive_see-also",
+      "configure_deep_dive_see-also",
+      "create_error_deep_dive_see-also",
+      "fromThrown_deep_dive_see-also",
+      "tryAsync_deep_dive_error-handling-patterns",
+      "tryAsync_deep_dive_see-also",
+      "trySync_deep_dive_see-also",
+      "useTry_deep_dive_error-handling-patterns",
+      "useTry_deep_dive_see-also",
+      "wrapError_deep_dive_see-also"
+    ]
+  },
+  "hash": "84d2c558dc110ed58eb99329b0d9f96f"
+}

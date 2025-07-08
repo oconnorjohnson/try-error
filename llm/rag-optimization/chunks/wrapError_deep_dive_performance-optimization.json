@@ -1,0 +1,95 @@
+{
+  "chunk_id": "wrapError_deep_dive_performance-optimization",
+  "title": "Performance Optimization",
+  "content": "## Performance Optimization\n\n### Minimal Wrapping\n\n```typescript\n// Use minimal error mode for performance-critical paths\nconfigure({ minimalErrors: true });\n\nfunction performantErrorWrapping(cause: unknown) {\n // This will create minimal TryError objects\n return wrapError(\"FastError\", cause, \"Performance-critical error\");\n}\n\n// Conditional context for hot paths\nfunction conditionalContextWrapping(\n cause: unknown,\n includeContext: boolean = false\n) {\n if (includeContext) {\n return wrapError(\"DetailedError\", cause, \"Error with full context\", {\n timestamp: Date.now(),\n stack: new Error().stack,\n memory: process.memoryUsage(),\n });\n }\n\n // Minimal wrapping for performance\n return wrapError(\"SimpleError\", cause, \"Simple error\");\n}\n```\n\n### Lazy Context Evaluation\n\n```typescript\n// Expensive context computation only when needed\nfunction wrapWithLazyContext(\n cause: unknown,\n computeExpensiveContext: () => Record<string, unknown>\n) {\n // Check if we're in debug mode or error will be logged\n const shouldIncludeContext =\n process.env.NODE_ENV === \"development\" || process.env.DEBUG === \"true\";\n\n return wrapError(\n \"ContextualError\",\n cause,\n \"Error with conditional context\",\n shouldIncludeContext ? computeExpensiveContext() : { minimal: true }\n );\n}\n\n// Usage\nfunction expensiveOperation() {\n try {\n return performComplexCalculation();\n } catch (error) {\n return wrapWithLazyContext(error, () => ({\n systemMetrics: gatherSystemMetrics(),\n performanceData: gatherPerformanceData(),\n debugTrace: gatherDebugTrace(),\n }));\n }\n}\n```",
+  "metadata": {
+    "chunk_id": "wrapError_deep_dive_performance-optimization",
+    "source_document": "rag-docs/wrapError-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.348Z",
+    "topics": [
+      "performance optimization",
+      "minimal wrapping",
+      "lazy context evaluation",
+      "typescript",
+      "error",
+      "function",
+      "performance",
+      "optimization"
+    ],
+    "complexity": "intermediate",
+    "includes_code": true,
+    "line_count": 64,
+    "token_count": 228,
+    "module": "errors",
+    "category": "performance",
+    "search_keywords": [
+      "configure",
+      "performantErrorWrapping",
+      "wrapError",
+      "conditionalContextWrapping",
+      "now",
+      "Error",
+      "memoryUsage",
+      "wrapWithLazyContext",
+      "computeExpensiveContext",
+      "expensiveOperation",
+      "performComplexCalculation",
+      "gatherSystemMetrics",
+      "gatherPerformanceData",
+      "gatherDebugTrace",
+      "Date"
+    ],
+    "common_questions": [
+      "How does performance optimization work?",
+      "Performance Optimization best practices",
+      "Performance Optimization patterns"
+    ],
+    "id": "wrapError-deep-dive",
+    "title": "wrapError() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "error-wrapping",
+      "cause-preservation",
+      "error-chaining"
+    ],
+    "related": [
+      "fromThrown",
+      "createError",
+      "trySync",
+      "tryAsync",
+      "Error"
+    ],
+    "performance_impact": "low",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "error-handling",
+      "performance-optimization"
+    ],
+    "cross_references": [
+      "TryErrorBoundary_deep_dive_performance-optimization",
+      "create_error_deep_dive_performance-optimization",
+      "fromThrown_deep_dive_performance-optimization",
+      "function_configure",
+      "function_wrapError",
+      "isTryError_deep_dive_performance-optimization",
+      "tryAsync_deep_dive_performance-optimization",
+      "trySync_deep_dive_performance-optimization"
+    ]
+  },
+  "hash": "35bf87dbaffe1656481857423c986533"
+}

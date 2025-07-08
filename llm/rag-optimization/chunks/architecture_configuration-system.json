@@ -1,0 +1,52 @@
+{
+  "chunk_id": "architecture_configuration-system",
+  "title": "Configuration System",
+  "content": "## Configuration System\n\nGlobal configuration system with:\n\n- **Performance Options**: Object pooling, lazy evaluation\n- **Feature Flags**: Stack trace capture, source location\n- **Environment Detection**: Automatic dev/prod optimization\n- **Runtime Reconfiguration**: Update config on the fly",
+  "metadata": {
+    "chunk_id": "architecture_configuration-system",
+    "source_document": "rag-docs/architecture.md",
+    "chunk_type": "conceptual",
+    "last_updated": "2025-07-08T20:17:18.280Z",
+    "topics": [
+      "configuration system",
+      "performance",
+      "optimization",
+      "configuration"
+    ],
+    "complexity": "basic",
+    "includes_code": false,
+    "line_count": 8,
+    "token_count": 47,
+    "module": "core",
+    "category": "configuration",
+    "search_keywords": [
+      "Object",
+      "Stack",
+      "Automatic",
+      "Update"
+    ],
+    "common_questions": [
+      "What is configuration system?",
+      "Configuration System architecture",
+      "Configuration System explanation"
+    ],
+    "related_chunks": [
+      "architecture_module-organization",
+      "architecture_event-system",
+      "architecture_optimization-techniques-used",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_performance-optimization",
+      "configure_deep_dive_quick-reference",
+      "configure_deep_dive_signature",
+      "configure_deep_dive_purpose",
+      "configure_deep_dive_implementation-details",
+      "configure_deep_dive_configuration-options-deep-dive"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "performance-optimization"
+    ],
+    "cross_references": []
+  },
+  "hash": "0223a3141c771ebc35e521fb2d8b9098"
+}

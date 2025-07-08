@@ -1,0 +1,94 @@
+{
+  "chunk_id": "fromThrown_deep_dive_common-patterns-and-best-practices",
+  "title": "Common Patterns and Best Practices",
+  "content": "## Common Patterns and Best Practices\n\n### Generic Error Handler\n\n```typescript\n// Create a reusable error handler\nfunction createErrorHandler<T>(\n operationName: string,\n defaultContext?: Record<string, unknown>\n) {\n return (error: unknown): TryError => {\n return fromThrown(error, {\n operation: operationName,\n ...defaultContext,\n timestamp: Date.now(),\n });\n };\n}\n\n// Usage\nconst dbErrorHandler = createErrorHandler(\"database\", {\n component: \"UserService\",\n});\nconst apiErrorHandler = createErrorHandler(\"api\", { component: \"HttpClient\" });\n\nfunction getUserFromDb(id: string) {\n try {\n return database.findUser(id);\n } catch (error) {\n return dbErrorHandler(error);\n }\n}\n\nfunction fetchUserFromApi(id: string) {\n try {\n return httpClient.get(`/users/${id}`);\n } catch (error) {\n return apiErrorHandler(error);\n }\n}\n```\n\n### Error Monitoring Integration\n\n```typescript\n// Integration with error monitoring services\nfunction fromThrownWithMonitoring(\n cause: unknown,\n context?: Record<string, unknown>\n): TryError {\n const error = fromThrown(cause, context);\n\n // Send to monitoring service\n if (shouldReportError(error)) {\n reportToMonitoringService(error);\n }\n\n return error;\n}\n\nfunction shouldReportError(error: TryError): boolean {\n // Don't report certain error types\n if (error.type === \"StringError\") return false;\n if (error.type === \"UnknownError\" && !error.cause) return false;\n\n return true;\n}\n\nfunction reportToMonitoringService(error: TryError) {\n // Sentry integration\n Sentry.captureException(error.cause, {\n tags: {\n errorType: error.type,\n source: error.source,\n },\n extra: {\n message: error.message,\n context: error.context,\n timestamp: error.timestamp,\n },\n });\n}\n```",
+  "metadata": {
+    "chunk_id": "fromThrown_deep_dive_common-patterns-and-best-practices",
+    "source_document": "rag-docs/fromThrown-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.287Z",
+    "topics": [
+      "common patterns and best practices",
+      "generic error handler",
+      "error monitoring integration",
+      "typescript",
+      "error",
+      "function",
+      "component"
+    ],
+    "complexity": "beginner",
+    "includes_code": true,
+    "line_count": 83,
+    "token_count": 246,
+    "module": "errors",
+    "category": "utilities",
+    "search_keywords": [
+      "fromThrown",
+      "now",
+      "createErrorHandler",
+      "getUserFromDb",
+      "findUser",
+      "dbErrorHandler",
+      "fetchUserFromApi",
+      "get",
+      "apiErrorHandler",
+      "fromThrownWithMonitoring",
+      "shouldReportError",
+      "reportToMonitoringService",
+      "captureException",
+      "Record<string",
+      "TryError",
+      "Date"
+    ],
+    "common_questions": [
+      "How does common patterns and best practices work?",
+      "Common Patterns and Best Practices best practices",
+      "Common Patterns and Best Practices patterns"
+    ],
+    "id": "fromThrown-deep-dive",
+    "title": "fromThrown() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "auto-detection",
+      "type-classification",
+      "catch-blocks"
+    ],
+    "related": [
+      "wrapError",
+      "createError",
+      "trySync",
+      "tryAsync",
+      "Error"
+    ],
+    "performance_impact": "low",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "error-handling"
+    ],
+    "cross_references": [
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "create_error_deep_dive_common-patterns",
+      "function_Component",
+      "function_createError",
+      "function_fetchUser",
+      "function_fromThrown",
+      "trySync_deep_dive_common-patterns",
+      "wrapError_deep_dive_common-patterns-and-best-practices"
+    ]
+  },
+  "hash": "8738e6423de5db98aa93ec39e4897e6e"
+}

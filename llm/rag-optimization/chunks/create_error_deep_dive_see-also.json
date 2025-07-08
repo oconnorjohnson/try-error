@@ -1,0 +1,76 @@
+{
+  "chunk_id": "create_error_deep_dive_see-also",
+  "title": "See Also",
+  "content": "## See Also\n\n- [Context Management System](./context-management.md)\n- [Performance Optimization Guide](./performance-guide.md)\n- [Error Factory Patterns](./error-factories.md)\n- [Middleware System](./middleware-system.md)\n- [Type System Architecture](./type-system.md)",
+  "metadata": {
+    "chunk_id": "create_error_deep_dive_see-also",
+    "source_document": "rag-docs/create-error-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.285Z",
+    "topics": [
+      "see also",
+      "error",
+      "performance",
+      "optimization",
+      "middleware"
+    ],
+    "complexity": "intermediate",
+    "includes_code": false,
+    "line_count": 7,
+    "token_count": 29,
+    "module": "core",
+    "category": "utilities",
+    "search_keywords": [],
+    "common_questions": [
+      "How does see also work?",
+      "See Also best practices",
+      "See Also patterns"
+    ],
+    "id": "create-error-deep-dive",
+    "title": "createError() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "error-creation",
+      "performance",
+      "context-injection"
+    ],
+    "related": null,
+    "performance_impact": "low",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "performance-optimization"
+    ],
+    "cross_references": [
+      "TryErrorBoundary_deep_dive_performance-optimization",
+      "TryErrorBoundary_deep_dive_see-also",
+      "configure_deep_dive_see-also",
+      "create_error_deep_dive_performance-optimization",
+      "fromThrown_deep_dive_performance-optimization",
+      "fromThrown_deep_dive_see-also",
+      "isTryError_deep_dive_performance-optimization",
+      "isTryError_deep_dive_see-also",
+      "tryAsync_deep_dive_performance-optimization",
+      "tryAsync_deep_dive_see-also",
+      "trySync_deep_dive_performance-optimization",
+      "trySync_deep_dive_see-also",
+      "useTry_deep_dive_see-also",
+      "wrapError_deep_dive_performance-optimization",
+      "wrapError_deep_dive_see-also"
+    ]
+  },
+  "hash": "5ce10a8837735519aa4cd88481ba5070"
+}

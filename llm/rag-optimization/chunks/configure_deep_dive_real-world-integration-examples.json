@@ -1,0 +1,82 @@
+{
+  "chunk_id": "configure_deep_dive_real-world-integration-examples",
+  "title": "Real-World Integration Examples",
+  "content": "## Real-World Integration Examples\n\n### Sentry Integration\n\n```typescript\nimport * as Sentry from \"@sentry/node\";\n\nconfigure({\n captureStackTrace: false, // Sentry handles stack traces\n includeSource: true,\n\n onError: (error) => {\n Sentry.captureException(error, {\n tags: {\n errorType: error.type,\n source: error.source,\n },\n contexts: {\n tryError: {\n type: error.type,\n message: error.message,\n timestamp: error.timestamp,\n context: error.context,\n },\n },\n });\n\n return error;\n },\n\n serializer: (error) => ({\n type: error.type,\n message: error.message,\n timestamp: error.timestamp,\n // Don't include sensitive context in serialization\n }),\n});\n```\n\n### DataDog Integration\n\n```typescript\nimport { datadogLogs } from \"@datadog/browser-logs\";\n\nconfigure({\n captureStackTrace: false,\n includeSource: true,\n\n onError: (error) => {\n datadogLogs.logger.error(\"Application error\", {\n error_type: error.type,\n error_message: error.message,\n error_source: error.source,\n error_timestamp: error.timestamp,\n error_context: error.context,\n });\n\n return error;\n },\n});\n```\n\n### Winston Logger Integration\n\n```typescript\nimport winston from \"winston\";\n\nconst logger = winston.createLogger({\n level: \"info\",\n format: winston.format.json(),\n transports: [\n new winston.transports.File({ filename: \"error.log\", level: \"error\" }),\n new winston.transports.Console(),\n ],\n});\n\nconfigure({\n captureStackTrace: process.env.NODE_ENV !== \"production\",\n includeSource: true,\n\n onError: (error) => {\n logger.error(\"Application error\", {\n type: error.type,\n message: error.message,\n source: error.source,\n timestamp: error.timestamp,\n context: error.context,\n stack: error.stack,\n });\n\n return error;\n },\n});\n```\n\n### Custom Analytics Integration\n\n```typescript\nimport { analytics } from \"./analytics\";\n\nconfigure({\n captureStackTrace: false,\n includeSource: true,\n\n onError: (error) => {\n // Track error metrics\n analytics.track(\"error_occurred\", {\n error_type: error.type,\n error_source: error.source,\n timestamp: error.timestamp,\n user_id: getCurrentUserId(),\n session_id: getSessionId(),\n });\n\n // Track error patterns\n analytics.increment(\"errors.total\");\n analytics.increment(`errors.by_type.${error.type}`);\n\n return error;\n },\n});\n```",
+  "metadata": {
+    "chunk_id": "configure_deep_dive_real-world-integration-examples",
+    "source_document": "rag-docs/configure-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.282Z",
+    "topics": [
+      "real-world integration examples",
+      "sentry integration",
+      "datadog integration",
+      "winston logger integration",
+      "custom analytics integration",
+      "typescript",
+      "error"
+    ],
+    "complexity": "advanced",
+    "includes_code": true,
+    "line_count": 122,
+    "token_count": 290,
+    "module": "config",
+    "category": "utilities",
+    "search_keywords": [
+      "configure",
+      "captureException",
+      "error",
+      "createLogger",
+      "json",
+      "File",
+      "Console",
+      "track",
+      "getCurrentUserId",
+      "getSessionId",
+      "increment"
+    ],
+    "common_questions": [
+      "How does real-world integration examples work?",
+      "Real-World Integration Examples best practices",
+      "Real-World Integration Examples patterns"
+    ],
+    "id": "configure-deep-dive",
+    "title": "configure() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "configuration",
+      "performance",
+      "optimization",
+      "presets"
+    ],
+    "related": [
+      "getConfig",
+      "resetConfig",
+      "ConfigPresets",
+      "performance",
+      "monitoring"
+    ],
+    "performance_impact": "medium",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [],
+    "cross_references": [
+      "function_configure",
+      "function_increment"
+    ]
+  },
+  "hash": "c4627bd5ebf1de09bca15ca4b2bc7e08"
+}

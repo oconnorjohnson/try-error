@@ -1,0 +1,118 @@
+{
+  "chunk_id": "function_setupReact",
+  "title": "setupReact",
+  "content": "---\nid: setupReact\ntitle: setupReact() - Deep Dive\ntags: [function, core, sync, internal]\ncomplexity: low\nsideEffects: no\n---\n\n# setupReact()\n\n## Overview\nQuick setup for React applications (client-side)\n\n**Location**: `src/setup.ts` \n**Module**: core \n**Exported**: No \n\n## Signature\n```typescript\nfunction setupReact(options?: TryErrorConfig = {}): void\n```\n\n## Parameters\n- **options** (`TryErrorConfig = {}`) - Optional\n\n## Characteristics\n\n### Behavior\n- **Async**: No\n- **Throws Errors**: No\n- **Uses Generics**: No\n- **Recursive**: Yes\n\n### Integration\n- **Uses Config**: Yes\n- **Emits Events**: No\n- **Uses Object Pool**: No\n- **Context Support**: No\n\n### Side Effects\nNone detected\n\n### Dependencies\n- setupReact()\n- configure()\n\n### Complexity\n- **Estimated**: low\n- **Loops**: Few/None\n- **Conditions**: Simple\n\n## Examples\n\n### Example 1\n```typescript\n* ```typescript\n * // In your main.tsx or index.tsx\n * import { setupReact } from 'try-error/setup';\n *\n * setupReact(); // Basic setup\n *\n * // With error reporting\n * setupReact({\n * onError: (error) => {\n * // Send to analytics\n * gtag('event', 'exception', {\n * description: `${error.type}: ${error.message}`,\n * fatal: false\n * });\n * }\n * });\n * ```\n```\n\n## Implementation Notes\nNo special implementation notes.\n\n## Performance Considerations\n- Recursive implementation - watch for stack overflow with large inputs\n\n## Common Patterns\nNo specific patterns identified.",
+  "metadata": {
+    "chunk_id": "function_setupReact",
+    "source_document": "rag-docs/functions/setupReact.md",
+    "chunk_type": "function-reference",
+    "last_updated": "2025-07-08T20:17:18.328Z",
+    "topics": [
+      "setupreact()",
+      "overview",
+      "signature",
+      "parameters",
+      "characteristics",
+      "behavior",
+      "integration",
+      "side effects",
+      "dependencies",
+      "complexity",
+      "examples",
+      "example 1",
+      "implementation notes",
+      "performance considerations",
+      "common patterns",
+      "typescript",
+      "error",
+      "async",
+      "sync",
+      "function",
+      "react",
+      "performance"
+    ],
+    "complexity": "low",
+    "includes_code": true,
+    "line_count": 82,
+    "token_count": 268,
+    "module": "core",
+    "category": "react-integration",
+    "search_keywords": [
+      "setupReact",
+      "configure",
+      "gtag",
+      "No",
+      "TryErrorConfig",
+      "Yes",
+      "Few",
+      "Simple"
+    ],
+    "common_questions": [
+      "How do I use setupReact?",
+      "What does setupReact do?",
+      "setupReact example"
+    ],
+    "id": "setupReact",
+    "title": "setupReact() - Deep Dive",
+    "tags": [
+      "function",
+      "core",
+      "sync",
+      "internal"
+    ],
+    "sideEffects": "no",
+    "function_name": "setupReact",
+    "parameters": [
+      "id",
+      "title",
+      "tags",
+      "complexity",
+      "sideEffects",
+      "fatal"
+    ],
+    "return_type": "unknown",
+    "related_chunks": [
+      "function_AsyncComponent",
+      "function_Component",
+      "function_ComponentWithAsyncHandler",
+      "function_MyComponent",
+      "function_TestComponent",
+      "function_WrappedComponent",
+      "function_getComponentName",
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose"
+    ],
+    "related_functions": [
+      "AsyncComponent",
+      "Component",
+      "ComponentWithAsyncHandler",
+      "MyComponent",
+      "TestComponent",
+      "WrappedComponent",
+      "getComponentName"
+    ],
+    "usage_patterns": [
+      "async-operations",
+      "react-integration",
+      "performance-optimization"
+    ],
+    "cross_references": [
+      "TryErrorBoundary_deep_dive_signature",
+      "configure_deep_dive_signature",
+      "create_error_deep_dive_signature",
+      "create_error_deep_dive_common-patterns",
+      "fromThrown_deep_dive_signature",
+      "function_configure",
+      "function_intern",
+      "index_overview",
+      "isTryError_deep_dive_signature",
+      "tryAsync_deep_dive_signature",
+      "trySync_deep_dive_signature",
+      "trySync_deep_dive_common-patterns",
+      "useTry_deep_dive_signature",
+      "wrapError_deep_dive_signature"
+    ]
+  },
+  "hash": "ef9e945183d9faa2bfd05f0c7ef08b17"
+}

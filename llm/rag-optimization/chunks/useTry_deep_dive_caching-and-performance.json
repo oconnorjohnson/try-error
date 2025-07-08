@@ -1,0 +1,94 @@
+{
+  "chunk_id": "useTry_deep_dive_caching-and-performance",
+  "title": "Caching and Performance",
+  "content": "## Caching and Performance\n\n### Cache Configuration\n\n```typescript\n// Global cache settings\nconst CACHE_CONFIG = {\n DEFAULT_CACHE_TIME: 5 * 60 * 1000, // 5 minutes\n DEFAULT_STALE_TIME: 1 * 60 * 1000, // 1 minute\n MAX_CACHE_SIZE: 100, // Maximum cached items\n};\n\nfunction CachedDataComponent() {\n const { data, error, isLoading } = useTry(\n async (signal) => {\n const response = await fetch(\"/api/expensive-operation\", { signal });\n return response.json();\n },\n {\n cacheKey: \"expensive-operation\",\n cacheTime: 10 * 60 * 1000, // Cache for 10 minutes\n staleTime: 5 * 60 * 1000, // Fresh for 5 minutes\n\n // Only execute if data is truly stale\n enabled: true,\n }\n );\n\n return (\n <div>\n {isLoading && <div>Loading...</div>}\n {error && <div>Error: {error.message}</div>}\n {data && <div>Data: {JSON.stringify(data)}</div>}\n </div>\n );\n}\n```\n\n### Request Deduplication\n\n```typescript\nfunction DeduplicatedRequests() {\n // Multiple components using the same cache key\n // will share the same request\n const sharedCacheKey = \"shared-user-data\";\n\n return (\n <div>\n <UserSummary cacheKey={sharedCacheKey} />\n <UserProfile cacheKey={sharedCacheKey} />\n <UserPreferences cacheKey={sharedCacheKey} />\n </div>\n );\n}\n\nfunction UserSummary({ cacheKey }: { cacheKey: string }) {\n const { data, error, isLoading } = useTry(\n async (signal) => {\n // This request will be deduplicated\n const response = await fetch(\"/api/user\", { signal });\n return response.json();\n },\n { cacheKey }\n );\n\n if (isLoading) return <div>Loading summary...</div>;\n if (error) return <div>Error: {error.message}</div>;\n\n return <div>User: {data?.name}</div>;\n}\n```\n\n### Performance Monitoring\n\n```typescript\nfunction PerformanceMonitoredComponent() {\n const [metrics, setMetrics] = useState<{\n requestCount: number;\n cacheHits: number;\n averageResponseTime: number;\n }>({\n requestCount: 0,\n cacheHits: 0,\n averageResponseTime: 0,\n });\n\n const { data, error, isLoading } = useTry(\n async (signal) => {\n const startTime = performance.now();\n\n const response = await fetch(\"/api/data\", { signal });\n\n const endTime = performance.now();\n const responseTime = endTime - startTime;\n\n // Update metrics\n setMetrics((prev) => ({\n requestCount: prev.requestCount + 1,\n cacheHits: prev.cacheHits, // Would be updated by cache logic\n averageResponseTime: (prev.averageResponseTime + responseTime) / 2,\n }));\n\n return response.json();\n },\n {\n cacheKey: \"monitored-data\",\n cacheTime: 5 * 60 * 1000,\n\n onSuccess: (data) => {\n console.log(\n \"Request successful, data size:\",\n JSON.stringify(data).length\n );\n },\n\n onError: (error) => {\n console.error(\"Request failed:\", error);\n },\n }\n );\n\n return (\n <div>\n <div>\n <h2>Performance Metrics</h2>\n <p>Requests: {metrics.requestCount}</p>\n <p>Cache Hits: {metrics.cacheHits}</p>\n <p>Avg Response Time: {metrics.averageResponseTime.toFixed(2)}ms</p>\n </div>\n\n {isLoading && <div>Loading...</div>}\n {error && <div>Error: {error.message}</div>}\n {data && <div>Data loaded successfully</div>}\n </div>\n );\n}\n```",
+  "metadata": {
+    "chunk_id": "useTry_deep_dive_caching-and-performance",
+    "source_document": "rag-docs/useTry-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.345Z",
+    "topics": [
+      "caching and performance",
+      "cache configuration",
+      "request deduplication",
+      "performance monitoring",
+      "typescript",
+      "error",
+      "async",
+      "sync",
+      "function",
+      "component",
+      "performance",
+      "configuration"
+    ],
+    "complexity": "advanced",
+    "includes_code": true,
+    "line_count": 137,
+    "token_count": 483,
+    "module": "react",
+    "category": "performance",
+    "search_keywords": [
+      "CachedDataComponent",
+      "useTry",
+      "fetch",
+      "json",
+      "stringify",
+      "DeduplicatedRequests",
+      "UserSummary",
+      "PerformanceMonitoredComponent",
+      "now",
+      "setMetrics",
+      "log",
+      "error",
+      "toFixed"
+    ],
+    "common_questions": [
+      "How does caching and performance work?",
+      "Caching and Performance best practices",
+      "Caching and Performance patterns"
+    ],
+    "id": "useTry-deep-dive",
+    "title": "useTry() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "react",
+      "hooks",
+      "async",
+      "state-management",
+      "cancellation",
+      "caching"
+    ],
+    "related": [
+      "tryAsync",
+      "isTryError",
+      "AbortSignal",
+      "React",
+      "useState",
+      "useEffect"
+    ],
+    "performance_impact": "medium",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "async-operations",
+      "performance-optimization"
+    ],
+    "cross_references": [
+      "function_Component",
+      "function_UserProfile"
+    ]
+  },
+  "hash": "e394070e90f4adc4ec9c95e563264c95"
+}

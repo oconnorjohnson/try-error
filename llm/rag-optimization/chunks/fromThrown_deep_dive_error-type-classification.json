@@ -1,0 +1,81 @@
+{
+  "chunk_id": "fromThrown_deep_dive_error-type-classification",
+  "title": "Error Type Classification",
+  "content": "## Error Type Classification\n\n### JavaScript Built-in Error Types\n\n```typescript\n// Complete error type mapping\nconst errorTypeMap = {\n TypeError: \"TypeError\",\n ReferenceError: \"ReferenceError\",\n SyntaxError: \"SyntaxError\",\n RangeError: \"RangeError\", // Not directly handled\n URIError: \"URIError\", // Not directly handled\n EvalError: \"EvalError\", // Not directly handled\n Error: \"Error\", // Generic fallback\n} as const;\n\n// Extended error handling for more types\nfunction fromThrownExtended(\n cause: unknown,\n context?: Record<string, unknown>\n): TryError {\n // Standard fromThrown() handles the most common cases\n if (cause instanceof TypeError)\n return wrapError(\"TypeError\", cause, , context);\n if (cause instanceof ReferenceError)\n return wrapError(\"ReferenceError\", cause, undefined, context);\n if (cause instanceof SyntaxError)\n return wrapError(\"SyntaxError\", cause, undefined, context);\n\n // Additional error types\n if (cause instanceof RangeError)\n return wrapError(\"RangeError\", cause, undefined, context);\n if (cause instanceof URIError)\n return wrapError(\"URIError\", cause, undefined, context);\n if (cause instanceof EvalError)\n return wrapError(\"EvalError\", cause, undefined, context);\n\n // Generic Error and fallbacks\n if (cause instanceof Error)\n return wrapError(\"Error\", cause, undefined, context);\n if (typeof cause === \"string\")\n return wrapError(\"StringError\", cause, cause, context);\n\n return wrapError(\"UnknownError\", cause, \"An unknown error occurred\", context);\n}\n```\n\n### Custom Error Types\n\n```typescript\n// Handle custom error classes\nclass ValidationError extends Error {\n constructor(message: string, public field: string) {\n super(message);\n this.name = \"ValidationError\";\n }\n}\n\nclass NetworkError extends Error {\n constructor(message: string, public statusCode: number) {\n super(message);\n this.name = \"NetworkError\";\n }\n}\n\n// Custom detection logic\nfunction fromThrownWithCustomTypes(\n cause: unknown,\n context?: Record<string, unknown>\n): TryError {\n // Custom error types\n if (cause instanceof ValidationError) {\n return wrapError(\"ValidationError\", cause, undefined, {\n ...context,\n field: cause.field,\n });\n }\n\n if (cause instanceof NetworkError) {\n return wrapError(\"NetworkError\", cause, undefined, {\n ...context,\n statusCode: cause.statusCode,\n });\n }\n\n // Fall back to standard detection\n return fromThrown(cause, context);\n}\n```",
+  "metadata": {
+    "chunk_id": "fromThrown_deep_dive_error-type-classification",
+    "source_document": "rag-docs/fromThrown-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.287Z",
+    "topics": [
+      "error type classification",
+      "javascript built-in error types",
+      "custom error types",
+      "typescript",
+      "error",
+      "function",
+      "javascript",
+      "validation"
+    ],
+    "complexity": "beginner",
+    "includes_code": true,
+    "line_count": 89,
+    "token_count": 353,
+    "module": "errors",
+    "category": "error-creation",
+    "search_keywords": [
+      "fromThrownExtended",
+      "fromThrown",
+      "wrapError",
+      "constructor",
+      "super",
+      "fromThrownWithCustomTypes",
+      "Record<string",
+      "TryError"
+    ],
+    "common_questions": [
+      "How does error type classification work?",
+      "Error Type Classification best practices",
+      "Error Type Classification patterns"
+    ],
+    "id": "fromThrown-deep-dive",
+    "title": "fromThrown() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "auto-detection",
+      "type-classification",
+      "catch-blocks"
+    ],
+    "related": [
+      "wrapError",
+      "createError",
+      "trySync",
+      "tryAsync",
+      "Error"
+    ],
+    "performance_impact": "low",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [],
+    "cross_references": [
+      "function_fromThrown",
+      "function_next",
+      "function_validationError",
+      "function_wrapError"
+    ]
+  },
+  "hash": "d203df3fec0385efe92ec325a05bc4fc"
+}

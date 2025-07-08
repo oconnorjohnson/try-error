@@ -1,0 +1,89 @@
+{
+  "chunk_id": "trySync_deep_dive_common-patterns",
+  "title": "Common Patterns",
+  "content": "## Common Patterns\n\n### Result Chaining\n\n```typescript\nfunction chainOperations(input: string) {\n return trySync(() => {\n const parsed = trySync(() => JSON.parse(input));\n if (isTryError(parsed)) throw parsed;\n\n const validated = trySync(() => validateData(parsed));\n if (isTryError(validated)) throw validated;\n\n const transformed = trySync(() => transformData(validated));\n if (isTryError(transformed)) throw transformed;\n\n return transformed;\n });\n}\n```\n\n### Multiple Operations\n\n```typescript\nfunction processMultiple(items: unknown[]) {\n const results: Array<TryResult<ProcessedItem, TryError>> = [];\n\n for (const [index, item] of items.entries()) {\n const result = trySync(() => processItem(item), {\n context: { index, totalItems: items.length },\n });\n\n results.push(result);\n }\n\n return results;\n}\n```\n\n### Error Aggregation\n\n```typescript\nfunction aggregateErrors<T>(\n operations: Array<() => T>\n): TryResult<T[], TryError> {\n const results: T[] = [];\n const errors: TryError[] = [];\n\n for (const [index, operation] of operations.entries()) {\n const result = trySync(operation, {\n context: { operationIndex: index },\n });\n\n if (isTryError(result)) {\n errors.push(result);\n } else {\n results.push(result);\n }\n }\n\n if (errors.length > 0) {\n return createError({\n type: \"MultipleErrors\",\n message: `${errors.length} operations failed`,\n context: {\n errors: errors.map((e) => ({ type: e.type, message: e.message })),\n successCount: results.length,\n totalCount: operations.length,\n },\n });\n }\n\n return results;\n}\n```",
+  "metadata": {
+    "chunk_id": "trySync_deep_dive_common-patterns",
+    "source_document": "rag-docs/trySync-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.343Z",
+    "topics": [
+      "common patterns",
+      "result chaining",
+      "multiple operations",
+      "error aggregation",
+      "typescript",
+      "error",
+      "sync",
+      "function"
+    ],
+    "complexity": "intermediate",
+    "includes_code": true,
+    "line_count": 75,
+    "token_count": 232,
+    "module": "sync",
+    "category": "utilities",
+    "search_keywords": [
+      "chainOperations",
+      "trySync",
+      "parse",
+      "isTryError",
+      "validateData",
+      "transformData",
+      "processMultiple",
+      "entries",
+      "processItem",
+      "push",
+      "createError",
+      "map",
+      "Array<TryResult<ProcessedItem",
+      "Array<",
+      "TryResult<T[]",
+      "T[]",
+      "TryError[]"
+    ],
+    "common_questions": [
+      "How does common patterns work?",
+      "Common Patterns best practices",
+      "Common Patterns patterns"
+    ],
+    "id": "trySync-deep-dive",
+    "title": "trySync() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "sync",
+      "error-handling",
+      "performance"
+    ],
+    "related": [
+      "tryAsync",
+      "isTryError",
+      "wrapError",
+      "fromThrown",
+      "createError"
+    ],
+    "performance_impact": "low",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [],
+    "cross_references": [
+      "create_error_deep_dive_common-patterns",
+      "function_createError",
+      "function_isTryError"
+    ]
+  },
+  "hash": "524cf7a7e73fad0c0f115e543288fb02"
+}

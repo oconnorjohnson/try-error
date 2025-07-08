@@ -1,0 +1,91 @@
+{
+  "chunk_id": "configure_deep_dive_implementation-details",
+  "title": "Implementation Details",
+  "content": "## Implementation Details\n\n### Algorithm Flow\n\n```\n1. Configuration validation → 5-15ns\n2. Preset resolution (if string) → 10-20ns\n3. Deep merge with existing config → 20-100ns\n4. Global state update → 1-2ns\n5. Version increment → 5-10ns\n6. Cache invalidation → 10-30ns\n7. Change listener notification → 5-15ns per listener\n```\n\n### Performance Characteristics\n\n- **Time Complexity**: O(depth) for deep merge operations\n- **Space Complexity**: O(config size) for configuration storage\n- **Configuration Overhead**: 40-180ns per configure() call\n- **Memory Usage**: ~500 bytes for typical configuration\n- **Cache Impact**: Invalidates error creation caches (forces recalculation)\n\n### Configuration Storage\n\n```typescript\n// Global configuration state\nlet globalConfig: TryErrorConfig | null = null;\n\n// Version tracking for cache invalidation\nclass ConfigVersionTracker {\n private version = 0;\n private listeners = new Set<() => void>();\n\n increment(): void {\n this.version++;\n this.listeners.forEach((listener) => listener());\n }\n}\n\n// LRU cache for preset configurations\nclass LRUCache<K, V> {\n private cache = new Map<K, V>();\n private readonly maxSize = 20;\n\n // Cached preset configurations for fast access\n}\n```",
+  "metadata": {
+    "chunk_id": "configure_deep_dive_implementation-details",
+    "source_document": "rag-docs/configure-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.281Z",
+    "topics": [
+      "implementation details",
+      "algorithm flow",
+      "performance characteristics",
+      "configuration storage",
+      "typescript",
+      "error",
+      "validation",
+      "performance",
+      "configuration"
+    ],
+    "complexity": "advanced",
+    "includes_code": true,
+    "line_count": 47,
+    "token_count": 220,
+    "module": "config",
+    "category": "utilities",
+    "search_keywords": [
+      "O",
+      "configure",
+      "increment",
+      "forEach",
+      "listener",
+      "Invalidates",
+      "TryErrorConfig"
+    ],
+    "common_questions": [
+      "How does implementation details work?",
+      "Implementation Details best practices",
+      "Implementation Details patterns"
+    ],
+    "id": "configure-deep-dive",
+    "title": "configure() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "configuration",
+      "performance",
+      "optimization",
+      "presets"
+    ],
+    "related": [
+      "getConfig",
+      "resetConfig",
+      "ConfigPresets",
+      "performance",
+      "monitoring"
+    ],
+    "performance_impact": "medium",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "performance-optimization"
+    ],
+    "cross_references": [
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "create_error_deep_dive_implementation-details",
+      "fromThrown_deep_dive_implementation-details",
+      "function_configure",
+      "function_increment",
+      "function_reset",
+      "isTryError_deep_dive_implementation-details",
+      "tryAsync_deep_dive_implementation-details",
+      "trySync_deep_dive_implementation-details",
+      "useTry_deep_dive_implementation-details",
+      "wrapError_deep_dive_implementation-details"
+    ]
+  },
+  "hash": "acb92645c64f8d65477e98f850231d01"
+}

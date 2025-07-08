@@ -1,0 +1,96 @@
+{
+  "chunk_id": "create_error_deep_dive_usage-examples",
+  "title": "Usage Examples",
+  "content": "## Usage Examples\n\n### Basic Error Creation\n\n```typescript\n// Simple error\nconst error = createError({\n type: \"NotFoundError\",\n message: \"User not found\",\n});\n\n// With context\nconst error = createError({\n type: \"ValidationError\",\n message: \"Email format invalid\",\n context: {\n field: \"email\",\n value: \"not-an-email\",\n pattern: \"^[^@]+@[^@]+$\",\n },\n});\n\n// With cause (error chaining)\ntry {\n JSON.parse(invalidJson);\n} catch (e) {\n const error = createError({\n type: \"ParseError\",\n message: \"Failed to parse configuration\",\n cause: e,\n context: {\n configFile: \"./config.json\",\n line: getCurrentLine(),\n },\n });\n}\n```\n\n### Advanced Patterns\n\n#### Request Context Pattern\n\n```typescript\n// Middleware that adds request context to all errors\nfunction errorContextMiddleware(req: Request, res: Response, next: Next) {\n const originalCreate = createError;\n\n // Override createError in request scope\n (global as any).createError = (options) => {\n return originalCreate({\n ...options,\n context: {\n ...options.context,\n requestId: req.id,\n userId: req.user?.id,\n path: req.path,\n method: req.method,\n },\n });\n };\n\n next();\n}\n```\n\n#### Lazy Context Pattern\n\n```typescript\n// For expensive context computation\nconst error = createLazyError({\n type: \"ProcessingError\",\n message: \"Failed to process data\",\n context: {\n // Immediate values\n dataId: data.id,\n\n // Lazy computed - only evaluated if accessed\n get memorySnapshot() {\n return process.memoryUsage();\n },\n get stackAnalysis() {\n return analyzeCallStack();\n },\n },\n});\n```\n\n#### Context Inheritance Pattern\n\n```typescript\nclass ServiceClient {\n private baseContext: Record<string, unknown>;\n\n constructor(config: Config) {\n this.baseContext = {\n service: config.serviceName,\n version: config.version,\n environment: config.env,\n };\n }\n\n createError(\n type: string,\n message: string,\n context?: Record<string, unknown>\n ) {\n return createError({\n type,\n message,\n context: {\n ...this.baseContext, // Inherited context\n ...context, // Specific context\n timestamp: Date.now(), // Always fresh\n },\n });\n }\n}\n```",
+  "metadata": {
+    "chunk_id": "create_error_deep_dive_usage-examples",
+    "source_document": "rag-docs/create-error-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.284Z",
+    "topics": [
+      "usage examples",
+      "basic error creation",
+      "advanced patterns",
+      "request context pattern",
+      "lazy context pattern",
+      "context inheritance pattern",
+      "typescript",
+      "error",
+      "function",
+      "method",
+      "validation",
+      "configuration",
+      "middleware"
+    ],
+    "complexity": "intermediate",
+    "includes_code": true,
+    "line_count": 118,
+    "token_count": 329,
+    "module": "core",
+    "category": "utilities",
+    "search_keywords": [
+      "createError",
+      "parse",
+      "getCurrentLine",
+      "errorContextMiddleware",
+      "originalCreate",
+      "next",
+      "createLazyError",
+      "memorySnapshot",
+      "memoryUsage",
+      "stackAnalysis",
+      "analyzeCallStack",
+      "constructor",
+      "now",
+      "Request",
+      "Response",
+      "Next",
+      "Record<string",
+      "Config",
+      "Date"
+    ],
+    "common_questions": [
+      "How does usage examples work?",
+      "Usage Examples best practices",
+      "Usage Examples patterns"
+    ],
+    "id": "create-error-deep-dive",
+    "title": "createError() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "error-creation",
+      "performance",
+      "context-injection"
+    ],
+    "related": null,
+    "performance_impact": "low",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "error-handling"
+    ],
+    "cross_references": [
+      "function_createError",
+      "function_next",
+      "function_validationError",
+      "tryAsync_deep_dive_usage-examples",
+      "tryAsync_deep_dive_advanced-patterns",
+      "trySync_deep_dive_usage-examples",
+      "trySync_deep_dive_advanced-patterns"
+    ]
+  },
+  "hash": "40b3553dc36508d0a05a02d6352f2ee1"
+}

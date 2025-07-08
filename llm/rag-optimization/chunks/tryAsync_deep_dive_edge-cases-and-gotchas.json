@@ -1,0 +1,101 @@
+{
+  "chunk_id": "tryAsync_deep_dive_edge-cases-and-gotchas",
+  "title": "Edge Cases and Gotchas",
+  "content": "## Edge Cases and Gotchas\n\n### Promise That Resolves to TryError\n\n```typescript\n// Function that returns a TryError as a valid result\nasync function getLastAsyncError(): Promise<TryError> {\n return createError({\n type: \"PreviousAsyncError\",\n message: \"This is a valid return value\",\n });\n}\n\n// This will work correctly - the returned TryError is the success value\nconst result = await tryAsync(() => getLastAsyncError());\n// result is the TryError object as the success value\n// Use isTryError(result) to check if it's actually an error from tryAsync\n```\n\n### Async Function That Rejects with TryError\n\n```typescript\nasync function problematicAsyncFunction() {\n throw createError({\n type: \"CustomAsyncError\",\n message: \"I'm rejecting with a TryError\",\n });\n}\n\nconst result = await tryAsync(() => problematicAsyncFunction());\n// result will be the thrown TryError, properly handled\n// The error won't be double-wrapped\n```\n\n### Timeout Race Condition\n\n```typescript\n// Potential race condition with cleanup\nasync function timeoutRaceCondition() {\n const controller = new AbortController();\n\n // Set timeout\n const timeoutId = setTimeout(() => {\n controller.abort();\n }, 5000);\n\n const result = await tryAsync(() => longRunningOperation(controller.signal), {\n signal: controller.signal,\n timeout: 5000, // This creates a second timeout!\n });\n\n clearTimeout(timeoutId); // May not be called if timeout occurred\n\n return result;\n}\n\n// Better approach - use only one timeout mechanism\nasync function betterTimeoutHandling() {\n const controller = new AbortController();\n\n const result = await tryAsync(() => longRunningOperation(controller.signal), {\n timeout: 5000, // Use built-in timeout\n signal: controller.signal,\n });\n\n return result;\n}\n```\n\n### Memory Leaks with Event Listeners\n\n```typescript\n// Potential memory leak\nasync function potentialMemoryLeak() {\n const controller = new AbortController();\n\n // Multiple event listeners without cleanup\n controller.signal.addEventListener(\"abort\", () => console.log(\"Aborted 1\"));\n controller.signal.addEventListener(\"abort\", () => console.log(\"Aborted 2\"));\n\n const result = await tryAsync(() => longRunningOperation(controller.signal), {\n signal: controller.signal,\n });\n\n // Event listeners remain in memory\n return result;\n}\n\n// Better approach with cleanup\nasync function betterEventHandling() {\n const controller = new AbortController();\n\n const handler = () => console.log(\"Operation aborted\");\n controller.signal.addEventListener(\"abort\", handler);\n\n try {\n const result = await tryAsync(\n () => longRunningOperation(controller.signal),\n { signal: controller.signal }\n );\n\n return result;\n } finally {\n controller.signal.removeEventListener(\"abort\", handler);\n }\n}\n```",
+  "metadata": {
+    "chunk_id": "tryAsync_deep_dive_edge-cases-and-gotchas",
+    "source_document": "rag-docs/tryAsync-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.341Z",
+    "topics": [
+      "edge cases and gotchas",
+      "promise that resolves to tryerror",
+      "async function that rejects with tryerror",
+      "timeout race condition",
+      "memory leaks with event listeners",
+      "typescript",
+      "error",
+      "async",
+      "sync",
+      "promise",
+      "function"
+    ],
+    "complexity": "intermediate",
+    "includes_code": true,
+    "line_count": 107,
+    "token_count": 437,
+    "module": "async",
+    "category": "utilities",
+    "search_keywords": [
+      "getLastAsyncError",
+      "createError",
+      "tryAsync",
+      "isTryError",
+      "problematicAsyncFunction",
+      "timeoutRaceCondition",
+      "AbortController",
+      "setTimeout",
+      "abort",
+      "longRunningOperation",
+      "clearTimeout",
+      "betterTimeoutHandling",
+      "potentialMemoryLeak",
+      "addEventListener",
+      "log",
+      "betterEventHandling",
+      "removeEventListener",
+      "Promise<TryError>"
+    ],
+    "common_questions": [
+      "How does edge cases and gotchas work?",
+      "Edge Cases and Gotchas best practices",
+      "Edge Cases and Gotchas patterns"
+    ],
+    "id": "tryAsync-deep-dive",
+    "title": "tryAsync() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "async",
+      "error-handling",
+      "promises",
+      "cancellation"
+    ],
+    "related": [
+      "trySync",
+      "isTryError",
+      "AbortSignal",
+      "timeout",
+      "Promise"
+    ],
+    "performance_impact": "low",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "error-handling",
+      "async-operations"
+    ],
+    "cross_references": [
+      "create_error_deep_dive_edge-cases-and-gotchas",
+      "function_clear",
+      "function_createError",
+      "function_isTryError",
+      "isTryError_deep_dive_edge-cases-and-gotchas",
+      "trySync_deep_dive_edge-cases-and-gotchas",
+      "wrapError_deep_dive_edge-cases-and-gotchas"
+    ]
+  },
+  "hash": "e824eef2e8ae42d00c8ce73b0f977b62"
+}

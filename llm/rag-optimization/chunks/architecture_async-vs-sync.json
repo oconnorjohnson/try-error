@@ -1,0 +1,47 @@
+{
+  "chunk_id": "architecture_async-vs-sync",
+  "title": "Async vs Sync",
+  "content": "## Async vs Sync\n- **Async Functions**: 33\n- **Sync Functions**: 173",
+  "metadata": {
+    "chunk_id": "architecture_async-vs-sync",
+    "source_document": "rag-docs/performance.md",
+    "chunk_type": "conceptual",
+    "last_updated": "2025-07-08T20:17:18.338Z",
+    "topics": [
+      "async vs sync",
+      "async",
+      "sync",
+      "function"
+    ],
+    "complexity": "intermediate",
+    "includes_code": false,
+    "line_count": 3,
+    "token_count": 16,
+    "module": "core",
+    "category": "utilities",
+    "search_keywords": [],
+    "common_questions": [
+      "What is async vs sync?",
+      "Async vs Sync architecture",
+      "Async vs Sync explanation"
+    ],
+    "related_chunks": [
+      "architecture_module-organization",
+      "architecture_dependency-graph",
+      "architecture_factory-functions",
+      "architecture_error-handling-functions",
+      "architecture_utility-functions",
+      "architecture_middleware-functions",
+      "architecture_hook-functions-react",
+      "architecture_function-complexity-distribution",
+      "architecture_side-effects-analysis",
+      "architecture_optimization-techniques-used"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "async-operations"
+    ],
+    "cross_references": []
+  },
+  "hash": "2f305fd88b3d8fba54ad853288402a3b"
+}

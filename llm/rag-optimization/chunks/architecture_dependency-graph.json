@@ -1,0 +1,50 @@
+{
+  "chunk_id": "architecture_dependency-graph",
+  "title": "Dependency Graph",
+  "content": "## Dependency Graph\n\n```\ncore\n ├── errors\n ├── types \n └── utils\nmiddleware\n └── core\nasync\n └── core\nreact\n ├── core\n └── types\n```",
+  "metadata": {
+    "chunk_id": "architecture_dependency-graph",
+    "source_document": "rag-docs/architecture.md",
+    "chunk_type": "conceptual",
+    "last_updated": "2025-07-08T20:17:18.280Z",
+    "topics": [
+      "dependency graph",
+      "error",
+      "async",
+      "sync",
+      "react",
+      "middleware"
+    ],
+    "complexity": "intermediate",
+    "includes_code": true,
+    "line_count": 15,
+    "token_count": 30,
+    "module": "core",
+    "category": "utilities",
+    "search_keywords": [],
+    "common_questions": [
+      "What is dependency graph?",
+      "Dependency Graph architecture",
+      "Dependency Graph explanation"
+    ],
+    "related_chunks": [
+      "architecture_module-organization",
+      "architecture_event-system",
+      "architecture_factory-functions",
+      "architecture_error-handling-functions",
+      "architecture_utility-functions",
+      "architecture_middleware-functions",
+      "architecture_hook-functions-react",
+      "architecture_async-vs-sync",
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "async-operations",
+      "react-integration"
+    ],
+    "cross_references": []
+  },
+  "hash": "01eba6b7d6e224b3b165ef578bfc0a2a"
+}

@@ -1,0 +1,88 @@
+{
+  "chunk_id": "configure_deep_dive_signature",
+  "title": "Signature",
+  "content": "## Signature\n\n```typescript\nfunction configure(config: TryErrorConfig | keyof typeof ConfigPresets): void;\n\n// Configuration interface\ninterface TryErrorConfig {\n captureStackTrace?: boolean;\n stackTraceLimit?: number;\n includeSource?: boolean;\n minimalErrors?: boolean;\n skipTimestamp?: boolean;\n skipContext?: boolean;\n sourceLocation?: SourceLocationConfig;\n defaultErrorType?: string;\n developmentMode?: boolean;\n serializer?: (error: TryError) => Record<string, unknown>;\n onError?: (error: TryError) => TryError;\n runtimeDetection?: boolean;\n environmentHandlers?: EnvironmentHandlers;\n performance?: PerformanceConfig;\n}\n\n// Available presets\ntype ConfigPresets =\n | \"development\"\n | \"production\"\n | \"test\"\n | \"performance\"\n | \"minimal\"\n | \"serverProduction\"\n | \"clientProduction\"\n | \"edge\"\n | \"nextjs\";\n```",
+  "metadata": {
+    "chunk_id": "configure_deep_dive_signature",
+    "source_document": "rag-docs/configure-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.281Z",
+    "topics": [
+      "signature",
+      "typescript",
+      "error",
+      "function",
+      "performance",
+      "configuration"
+    ],
+    "complexity": "advanced",
+    "includes_code": true,
+    "line_count": 35,
+    "token_count": 102,
+    "module": "config",
+    "category": "utilities",
+    "search_keywords": [
+      "configure",
+      "TryErrorConfig",
+      "SourceLocationConfig",
+      "TryError",
+      "EnvironmentHandlers",
+      "PerformanceConfig"
+    ],
+    "common_questions": [
+      "How does signature work?",
+      "Signature best practices",
+      "Signature patterns"
+    ],
+    "id": "configure-deep-dive",
+    "title": "configure() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "configuration",
+      "performance",
+      "optimization",
+      "presets"
+    ],
+    "related": [
+      "getConfig",
+      "resetConfig",
+      "ConfigPresets",
+      "performance",
+      "monitoring"
+    ],
+    "performance_impact": "medium",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "testing",
+      "performance-optimization"
+    ],
+    "cross_references": [
+      "TryErrorBoundary_deep_dive_signature",
+      "create_error_deep_dive_signature",
+      "fromThrown_deep_dive_signature",
+      "function_configure",
+      "function_next",
+      "function_reset",
+      "isTryError_deep_dive_signature",
+      "tryAsync_deep_dive_signature",
+      "trySync_deep_dive_signature",
+      "useTry_deep_dive_signature",
+      "wrapError_deep_dive_signature"
+    ]
+  },
+  "hash": "5a2e344bdcb36f51d082dfa8fb69c1a8"
+}

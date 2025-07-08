@@ -1,0 +1,118 @@
+{
+  "chunk_id": "function_invalidateEnvironmentCache",
+  "title": "invalidateEnvironmentCache",
+  "content": "---\nid: invalidateEnvironmentCache\ntitle: invalidateEnvironmentCache() - Deep Dive\ntags: [function, errors, sync, internal]\ncomplexity: low\nsideEffects: yes\n---\n\n# invalidateEnvironmentCache()\n\n## Overview\nInvalidate environment caches (useful for SSR)\n\n**Location**: `src/errors.ts` \n**Module**: errors \n**Exported**: No \n\n## Signature\n```typescript\nfunction invalidateEnvironmentCache(): void\n```\n\n## Parameters\nNo parameters\n\n## Characteristics\n\n### Behavior\n- **Async**: No\n- **Throws Errors**: No\n- **Uses Generics**: No\n- **Recursive**: Yes\n\n### Integration\n- **Uses Config**: Yes\n- **Emits Events**: No\n- **Uses Object Pool**: No\n- **Context Support**: Yes\n\n### Side Effects\n- performsIO\n\n### Dependencies\n- getCachedConfig()\n- getConfigVersion()\n- get()\n- getConfig()\n- set()\n\n### Complexity\n- **Estimated**: low\n- **Loops**: Few/None\n- **Conditions**: Simple\n\n## Implementation Notes\nNo special implementation notes.\n\n## Performance Considerations\n- Recursive implementation - watch for stack overflow with large inputs\n- Performs I/O operations - may be slow, consider caching\n\n## Common Patterns\n- Context pattern - accepts runtime values via context parameter",
+  "metadata": {
+    "chunk_id": "function_invalidateEnvironmentCache",
+    "source_document": "rag-docs/functions/invalidateEnvironmentCache.md",
+    "chunk_type": "function-reference",
+    "last_updated": "2025-07-08T20:17:18.317Z",
+    "topics": [
+      "invalidateenvironmentcache()",
+      "overview",
+      "signature",
+      "parameters",
+      "characteristics",
+      "behavior",
+      "integration",
+      "side effects",
+      "dependencies",
+      "complexity",
+      "implementation notes",
+      "performance considerations",
+      "common patterns",
+      "typescript",
+      "error",
+      "async",
+      "sync",
+      "function",
+      "performance"
+    ],
+    "complexity": "low",
+    "includes_code": true,
+    "line_count": 63,
+    "token_count": 201,
+    "module": "core",
+    "category": "validation",
+    "search_keywords": [
+      "invalidateEnvironmentCache",
+      "getCachedConfig",
+      "getConfigVersion",
+      "get",
+      "getConfig",
+      "set",
+      "No",
+      "Yes",
+      "Few",
+      "Simple"
+    ],
+    "common_questions": [
+      "How do I use invalidateEnvironmentCache?",
+      "What does invalidateEnvironmentCache do?",
+      "invalidateEnvironmentCache example"
+    ],
+    "id": "invalidateEnvironmentCache",
+    "title": "invalidateEnvironmentCache() - Deep Dive",
+    "tags": [
+      "function",
+      "errors",
+      "sync",
+      "internal"
+    ],
+    "sideEffects": "yes",
+    "function_name": "invalidateEnvironmentCache",
+    "parameters": [
+      "id",
+      "title",
+      "tags",
+      "complexity",
+      "sideEffects"
+    ],
+    "return_type": "unknown",
+    "related_chunks": [
+      "function_validateAge",
+      "function_validateConfig",
+      "function_validateConfirmPassword",
+      "function_validateEmail",
+      "function_validateField",
+      "function_validatePassword",
+      "function_validateSetup",
+      "function_validateTerms",
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature"
+    ],
+    "related_functions": [
+      "validateAge",
+      "validateConfig",
+      "validateConfirmPassword",
+      "validateEmail",
+      "validateField",
+      "validatePassword",
+      "validateSetup",
+      "validateTerms"
+    ],
+    "usage_patterns": [
+      "async-operations",
+      "performance-optimization"
+    ],
+    "cross_references": [
+      "TryErrorBoundary_deep_dive_signature",
+      "configure_deep_dive_signature",
+      "create_error_deep_dive_signature",
+      "create_error_deep_dive_common-patterns",
+      "fromThrown_deep_dive_signature",
+      "function_getCachedConfig",
+      "function_getConfig",
+      "function_getConfigVersion",
+      "function_intern",
+      "index_overview",
+      "isTryError_deep_dive_signature",
+      "tryAsync_deep_dive_signature",
+      "trySync_deep_dive_signature",
+      "trySync_deep_dive_common-patterns",
+      "useTry_deep_dive_signature",
+      "wrapError_deep_dive_signature"
+    ]
+  },
+  "hash": "cccccecd39d3b910d6aa1ae1be63bf30"
+}

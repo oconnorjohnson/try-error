@@ -1,0 +1,49 @@
+{
+  "chunk_id": "architecture_event-system",
+  "title": "Event System",
+  "content": "## Event System\n\nThe library uses an event-driven architecture for lifecycle hooks:\n\n- **Error Creation**: Emitted when new errors are created\n- **Error Pooling**: Emitted when errors are pooled/released \n- **Error Transformation**: Emitted when errors are transformed\n- **Configuration Changes**: Emitted when configuration updates",
+  "metadata": {
+    "chunk_id": "architecture_event-system",
+    "source_document": "rag-docs/architecture.md",
+    "chunk_type": "conceptual",
+    "last_updated": "2025-07-08T20:17:18.280Z",
+    "topics": [
+      "event system",
+      "error",
+      "hook",
+      "configuration"
+    ],
+    "complexity": "basic",
+    "includes_code": false,
+    "line_count": 8,
+    "token_count": 58,
+    "module": "core",
+    "category": "utilities",
+    "search_keywords": [
+      "Emitted"
+    ],
+    "common_questions": [
+      "What is event system?",
+      "Event System architecture",
+      "Event System explanation"
+    ],
+    "related_chunks": [
+      "architecture_module-organization",
+      "architecture_dependency-graph",
+      "architecture_configuration-system",
+      "architecture_factory-functions",
+      "architecture_error-handling-functions",
+      "architecture_utility-functions",
+      "architecture_hook-functions-react",
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "react-integration"
+    ],
+    "cross_references": []
+  },
+  "hash": "976c7b284523e19e060ad876c046e578"
+}

@@ -1,0 +1,78 @@
+{
+  "chunk_id": "create_error_deep_dive_quick-reference",
+  "title": "Quick Reference",
+  "content": "## Quick Reference\n\nCreates a TryError with automatic source location detection, configurable performance optimizations, and full support for runtime context injection.",
+  "metadata": {
+    "chunk_id": "create_error_deep_dive_quick-reference",
+    "source_document": "rag-docs/create-error-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.284Z",
+    "topics": [
+      "quick reference",
+      "error",
+      "performance",
+      "optimization"
+    ],
+    "complexity": "intermediate",
+    "includes_code": false,
+    "line_count": 3,
+    "token_count": 28,
+    "module": "core",
+    "category": "utilities",
+    "search_keywords": [],
+    "common_questions": [
+      "How does quick reference work?",
+      "Quick Reference best practices",
+      "Quick Reference patterns"
+    ],
+    "id": "create-error-deep-dive",
+    "title": "createError() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "error-creation",
+      "performance",
+      "context-injection"
+    ],
+    "related": null,
+    "performance_impact": "low",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "performance-optimization"
+    ],
+    "cross_references": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_performance-optimization",
+      "configure_deep_dive_quick-reference",
+      "create_error_deep_dive_runtime-context-injection",
+      "create_error_deep_dive_performance-optimization",
+      "fromThrown_deep_dive_quick-reference",
+      "fromThrown_deep_dive_performance-optimization",
+      "isTryError_deep_dive_quick-reference",
+      "isTryError_deep_dive_performance-optimization",
+      "tryAsync_deep_dive_quick-reference",
+      "tryAsync_deep_dive_runtime-context-injection",
+      "tryAsync_deep_dive_performance-optimization",
+      "trySync_deep_dive_quick-reference",
+      "trySync_deep_dive_runtime-context-injection",
+      "trySync_deep_dive_performance-optimization",
+      "useTry_deep_dive_quick-reference",
+      "wrapError_deep_dive_quick-reference",
+      "wrapError_deep_dive_performance-optimization"
+    ]
+  },
+  "hash": "af384b51761a7124cc6c5e1bb3cad4e1"
+}

@@ -1,0 +1,93 @@
+{
+  "chunk_id": "trySync_deep_dive_performance-optimization",
+  "title": "Performance Optimization",
+  "content": "## Performance Optimization\n\n### Success Path - Zero Overhead\n\n```typescript\n// This has ZERO overhead when successful\nconst result = trySync(() => 42);\n// result === 42 (not wrapped in object)\n\n// No performance difference between:\nconst direct = computeValue();\nconst wrapped = trySync(() => computeValue());\n// Both execute computeValue() with identical performance\n```\n\n### Error Path - Minimal Overhead\n\n```typescript\n// Configure for minimal error overhead\nconfigure({\n minimalErrors: true, // Skip stack traces, source location\n skipContext: true, // Skip context merging\n skipTimestamp: true, // Skip timestamp generation\n});\n\n// This will have ~20ns overhead on errors instead of ~100ns\nconst result = trySync(() => {\n throw new Error(\"fail\");\n});\n```\n\n### Hot Path Optimization\n\n```typescript\n// For hot paths, avoid context allocation\nfunction hotPathOperation(data: unknown) {\n // Don't do this in hot paths:\n // return trySync(() => process(data), {\n // context: {\n // timestamp: Date.now(),\n // dataSize: JSON.stringify(data).length\n // }\n // });\n\n // Do this instead:\n return trySync(() => process(data));\n}\n\n// Add context only when error occurs\nfunction hotPathWithLazyContext(data: unknown) {\n const result = trySync(() => process(data));\n\n if (isTryError(result)) {\n // Add context after error for debugging\n return {\n ...result,\n context: {\n ...result.context,\n timestamp: Date.now(),\n dataSize: JSON.stringify(data).length,\n },\n };\n }\n\n return result;\n}\n```",
+  "metadata": {
+    "chunk_id": "trySync_deep_dive_performance-optimization",
+    "source_document": "rag-docs/trySync-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.343Z",
+    "topics": [
+      "performance optimization",
+      "success path - zero overhead",
+      "error path - minimal overhead",
+      "hot path optimization",
+      "typescript",
+      "error",
+      "sync",
+      "function",
+      "performance",
+      "optimization"
+    ],
+    "complexity": "intermediate",
+    "includes_code": true,
+    "line_count": 67,
+    "token_count": 268,
+    "module": "sync",
+    "category": "performance",
+    "search_keywords": [
+      "trySync",
+      "computeValue",
+      "configure",
+      "Error",
+      "hotPathOperation",
+      "process",
+      "now",
+      "stringify",
+      "hotPathWithLazyContext",
+      "isTryError",
+      "Date",
+      "JSON"
+    ],
+    "common_questions": [
+      "How does performance optimization work?",
+      "Performance Optimization best practices",
+      "Performance Optimization patterns"
+    ],
+    "id": "trySync-deep-dive",
+    "title": "trySync() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "sync",
+      "error-handling",
+      "performance"
+    ],
+    "related": [
+      "tryAsync",
+      "isTryError",
+      "wrapError",
+      "fromThrown",
+      "createError"
+    ],
+    "performance_impact": "low",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "performance-optimization"
+    ],
+    "cross_references": [
+      "TryErrorBoundary_deep_dive_performance-optimization",
+      "create_error_deep_dive_performance-optimization",
+      "fromThrown_deep_dive_performance-optimization",
+      "function_configure",
+      "function_isTryError",
+      "isTryError_deep_dive_performance-optimization",
+      "tryAsync_deep_dive_performance-optimization",
+      "wrapError_deep_dive_performance-optimization"
+    ]
+  },
+  "hash": "e10b84e77dd629fab6b41ff324d4eff8"
+}

@@ -1,0 +1,97 @@
+{
+  "chunk_id": "wrapError_deep_dive_basic-usage-examples",
+  "title": "Basic Usage Examples",
+  "content": "## Basic Usage Examples\n\n### Wrapping Standard Errors\n\n```typescript\n// Basic Error wrapping\ntry {\n JSON.parse(invalidJson);\n} catch (error) {\n return wrapError(\"ParseError\", error, \"Failed to parse configuration\");\n}\n\n// Network error wrapping\ntry {\n const response = await fetch(\"/api/data\");\n if (!response.ok) {\n throw new Error(`HTTP ${response.status}: ${response.statusText}`);\n }\n} catch (error) {\n return wrapError(\"NetworkError\", error, \"Failed to fetch user data\");\n}\n\n// File system error wrapping\ntry {\n const content = fs.readFileSync(\"config.json\", \"utf8\");\n return JSON.parse(content);\n} catch (error) {\n return wrapError(\"ConfigError\", error, \"Failed to load configuration file\");\n}\n```\n\n### Preserving Error Messages\n\n```typescript\n// Use original error message\nconst originalError = new Error(\"Connection timeout after 5000ms\");\nconst wrapped = wrapError(\"NetworkError\", originalError);\nconsole.log(wrapped.message); // \"Connection timeout after 5000ms\"\n\n// Override with custom message\nconst wrappedCustom = wrapError(\n \"NetworkError\",\n originalError,\n \"Network request failed during user authentication\"\n);\nconsole.log(wrappedCustom.message); // \"Network request failed during user authentication\"\n\n// Access original message via cause\nconsole.log(wrappedCustom.cause.message); // \"Connection timeout after 5000ms\"\n```\n\n### Adding Context\n\n```typescript\n// Wrap with debugging context\nfunction processUserData(userId: string, data: unknown) {\n try {\n return validateUserSchema(data);\n } catch (error) {\n return wrapError(\"ValidationError\", error, \"User data validation failed\", {\n userId,\n dataKeys: Object.keys(data as object),\n validationSchema: \"userSchemaV2\",\n timestamp: Date.now(),\n });\n }\n}\n\n// Wrap with operational context\nasync function saveToDatabase(record: any) {\n try {\n return await db.insert(\"users\", record);\n } catch (error) {\n return wrapError(\"DatabaseError\", error, \"Failed to insert user record\", {\n table: \"users\",\n recordId: record.id,\n operation: \"insert\",\n connectionId: db.connectionId,\n retryCount: 0,\n });\n }\n}\n```",
+  "metadata": {
+    "chunk_id": "wrapError_deep_dive_basic-usage-examples",
+    "source_document": "rag-docs/wrapError-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.347Z",
+    "topics": [
+      "basic usage examples",
+      "wrapping standard errors",
+      "preserving error messages",
+      "adding context",
+      "typescript",
+      "error",
+      "async",
+      "sync",
+      "function",
+      "validation",
+      "configuration"
+    ],
+    "complexity": "intermediate",
+    "includes_code": true,
+    "line_count": 83,
+    "token_count": 316,
+    "module": "errors",
+    "category": "utilities",
+    "search_keywords": [
+      "parse",
+      "wrapError",
+      "fetch",
+      "Error",
+      "readFileSync",
+      "log",
+      "processUserData",
+      "validateUserSchema",
+      "keys",
+      "now",
+      "saveToDatabase",
+      "insert",
+      "Object",
+      "Date"
+    ],
+    "common_questions": [
+      "How does basic usage examples work?",
+      "Basic Usage Examples best practices",
+      "Basic Usage Examples patterns"
+    ],
+    "id": "wrapError-deep-dive",
+    "title": "wrapError() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "error-wrapping",
+      "cause-preservation",
+      "error-chaining"
+    ],
+    "related": [
+      "fromThrown",
+      "createError",
+      "trySync",
+      "tryAsync",
+      "Error"
+    ],
+    "performance_impact": "low",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "error-handling",
+      "async-operations"
+    ],
+    "cross_references": [
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "create_error_deep_dive_usage-examples",
+      "fromThrown_deep_dive_basic-usage-examples",
+      "function_validationError",
+      "function_wrapError",
+      "tryAsync_deep_dive_usage-examples",
+      "trySync_deep_dive_usage-examples",
+      "useTry_deep_dive_basic-usage-examples"
+    ]
+  },
+  "hash": "bbf8b78dd6011c52e2cc6c6103982407"
+}

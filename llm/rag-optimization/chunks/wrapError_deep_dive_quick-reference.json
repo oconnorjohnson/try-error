@@ -1,0 +1,71 @@
+{
+  "chunk_id": "wrapError_deep_dive_quick-reference",
+  "title": "Quick Reference",
+  "content": "## Quick Reference\n\nWraps existing errors or thrown values into a structured TryError while preserving the original error as the `cause`. This is essential for error chaining, maintaining stack traces, and converting exception-based code to functional error handling.",
+  "metadata": {
+    "chunk_id": "wrapError_deep_dive_quick-reference",
+    "source_document": "rag-docs/wrapError-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.347Z",
+    "topics": [
+      "quick reference",
+      "error",
+      "function"
+    ],
+    "complexity": "intermediate",
+    "includes_code": true,
+    "line_count": 3,
+    "token_count": 50,
+    "module": "errors",
+    "category": "utilities",
+    "search_keywords": [],
+    "common_questions": [
+      "How does quick reference work?",
+      "Quick Reference best practices",
+      "Quick Reference patterns"
+    ],
+    "id": "wrapError-deep-dive",
+    "title": "wrapError() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "error-wrapping",
+      "cause-preservation",
+      "error-chaining"
+    ],
+    "related": [
+      "fromThrown",
+      "createError",
+      "trySync",
+      "tryAsync",
+      "Error"
+    ],
+    "performance_impact": "low",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [],
+    "cross_references": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "configure_deep_dive_quick-reference",
+      "create_error_deep_dive_quick-reference",
+      "fromThrown_deep_dive_quick-reference",
+      "isTryError_deep_dive_quick-reference",
+      "tryAsync_deep_dive_quick-reference",
+      "trySync_deep_dive_quick-reference",
+      "useTry_deep_dive_quick-reference"
+    ]
+  },
+  "hash": "4e2c1f0b277e0a3d916763166c218f31"
+}

@@ -1,0 +1,43 @@
+{
+  "chunk_id": "architecture_side-effects-analysis",
+  "title": "Side Effects Analysis",
+  "content": "## Side Effects Analysis\n- **State Mutations**: 3 functions\n- **I/O Operations**: 19 functions\n- **Event Emitters**: 11 functions",
+  "metadata": {
+    "chunk_id": "architecture_side-effects-analysis",
+    "source_document": "rag-docs/performance.md",
+    "chunk_type": "conceptual",
+    "last_updated": "2025-07-08T20:17:18.338Z",
+    "topics": [
+      "side effects analysis",
+      "function"
+    ],
+    "complexity": "basic",
+    "includes_code": false,
+    "line_count": 4,
+    "token_count": 25,
+    "module": "core",
+    "category": "type-checking",
+    "search_keywords": [],
+    "common_questions": [
+      "What is side effects analysis?",
+      "Side Effects Analysis architecture",
+      "Side Effects Analysis explanation"
+    ],
+    "related_chunks": [
+      "architecture_module-organization",
+      "architecture_factory-functions",
+      "architecture_error-handling-functions",
+      "architecture_utility-functions",
+      "architecture_middleware-functions",
+      "architecture_hook-functions-react",
+      "architecture_function-complexity-distribution",
+      "architecture_async-vs-sync",
+      "architecture_optimization-techniques-used",
+      "TryErrorBoundary_deep_dive_quick-reference"
+    ],
+    "related_functions": [],
+    "usage_patterns": [],
+    "cross_references": []
+  },
+  "hash": "1ef04d675c9ff4965e35f18a298b2d46"
+}

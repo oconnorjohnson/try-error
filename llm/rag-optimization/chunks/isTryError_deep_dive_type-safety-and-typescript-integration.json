@@ -1,0 +1,88 @@
+{
+  "chunk_id": "isTryError_deep_dive_type-safety-and-typescript-integration",
+  "title": "Type Safety and TypeScript Integration",
+  "content": "## Type Safety and TypeScript Integration\n\n### Discriminated Union Usage\n\n```typescript\n// Basic type narrowing\nconst result = trySync(() => JSON.parse(input));\n\nif (isTryError(result)) {\n // TypeScript knows result is TryError\n console.error(result.message);\n console.error(result.type);\n console.error(result.source);\n} else {\n // TypeScript knows result is parsed JSON\n console.log(result.data);\n}\n```\n\n### Generic Type Narrowing\n\n```typescript\n// With specific error types\ntype ValidationError = TryError<\"ValidationError\">;\ntype NetworkError = TryError<\"NetworkError\">;\n\nconst result: TryResult<User, ValidationError | NetworkError> = await tryAsync(\n () => fetchUser(id)\n);\n\nif (isTryError(result)) {\n // TypeScript knows result is ValidationError | NetworkError\n if (result.type === \"ValidationError\") {\n // TypeScript narrows to ValidationError\n console.error(\"Validation failed:\", result.message);\n } else if (result.type === \"NetworkError\") {\n // TypeScript narrows to NetworkError\n console.error(\"Network error:\", result.message);\n }\n} else {\n // TypeScript knows result is User\n console.log(`Welcome ${result.name}`);\n}\n```\n\n### Type Guard Composition\n\n```typescript\n// Combining type guards\nfunction isValidationError(value: unknown): value is ValidationError {\n return isTryError(value) && value.type === \"ValidationError\";\n}\n\nfunction isNetworkError(value: unknown): value is NetworkError {\n return isTryError(value) && value.type === \"NetworkError\";\n}\n\n// Usage\nconst result = trySync(() => processData(input));\n\nif (isValidationError(result)) {\n // TypeScript knows this is ValidationError\n console.error(\"Validation failed:\", result.context?.field);\n} else if (isNetworkError(result)) {\n // TypeScript knows this is NetworkError\n console.error(\"Network error:\", result.context?.statusCode);\n} else if (isTryError(result)) {\n // TypeScript knows this is some other TryError\n console.error(\"Other error:\", result.message);\n} else {\n // TypeScript knows this is the success value\n console.log(\"Success:\", result);\n}\n```",
+  "metadata": {
+    "chunk_id": "isTryError_deep_dive_type-safety-and-typescript-integration",
+    "source_document": "rag-docs/isTryError-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.336Z",
+    "topics": [
+      "type safety and typescript integration",
+      "discriminated union usage",
+      "generic type narrowing",
+      "type guard composition",
+      "typescript",
+      "error",
+      "async",
+      "sync",
+      "function",
+      "validation"
+    ],
+    "complexity": "intermediate",
+    "includes_code": true,
+    "line_count": 74,
+    "token_count": 302,
+    "module": "types",
+    "category": "utilities",
+    "search_keywords": [
+      "trySync",
+      "parse",
+      "isTryError",
+      "error",
+      "log",
+      "tryAsync",
+      "fetchUser",
+      "isValidationError",
+      "isNetworkError",
+      "processData",
+      "TryResult<User"
+    ],
+    "common_questions": [
+      "How does type safety and typescript integration work?",
+      "Type Safety and TypeScript Integration best practices",
+      "Type Safety and TypeScript Integration patterns"
+    ],
+    "id": "isTryError-deep-dive",
+    "title": "isTryError() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "type-guard",
+      "type-safety",
+      "discriminated-union"
+    ],
+    "related": [
+      "trySync",
+      "tryAsync",
+      "TryResult",
+      "TryError",
+      "TypeScript"
+    ],
+    "performance_impact": "negligible",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "async-operations"
+    ],
+    "cross_references": [
+      "function_fetchUser",
+      "function_isTryError",
+      "function_isValidationError",
+      "function_validationError"
+    ]
+  },
+  "hash": "472d9455678e8c19542b973ae3047439"
+}

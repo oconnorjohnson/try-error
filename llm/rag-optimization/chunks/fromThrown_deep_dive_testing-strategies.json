@@ -1,0 +1,103 @@
+{
+  "chunk_id": "fromThrown_deep_dive_testing-strategies",
+  "title": "Testing Strategies",
+  "content": "## Testing Strategies\n\n### Unit Testing\n\n```typescript\ndescribe(\"fromThrown\", () => {\n it(\"should detect TypeError\", () => {\n const typeError = new TypeError(\"Cannot read property\");\n const result = fromThrown(typeError);\n\n expect(result.type).toBe(\"TypeError\");\n expect(result.message).toBe(\"Cannot read property\");\n expect(result.cause).toBe(typeError);\n });\n\n it(\"should detect ReferenceError\", () => {\n const refError = new ReferenceError(\"Variable not defined\");\n const result = fromThrown(refError);\n\n expect(result.type).toBe(\"ReferenceError\");\n expect(result.message).toBe(\"Variable not defined\");\n expect(result.cause).toBe(refError);\n });\n\n it(\"should detect SyntaxError\", () => {\n const syntaxError = new SyntaxError(\"Unexpected token\");\n const result = fromThrown(syntaxError);\n\n expect(result.type).toBe(\"SyntaxError\");\n expect(result.message).toBe(\"Unexpected token\");\n expect(result.cause).toBe(syntaxError);\n });\n\n it(\"should handle generic Error\", () => {\n const genericError = new Error(\"Generic error\");\n const result = fromThrown(genericError);\n\n expect(result.type).toBe(\"Error\");\n expect(result.message).toBe(\"Generic error\");\n expect(result.cause).toBe(genericError);\n });\n\n it(\"should handle string errors\", () => {\n const stringError = \"String error message\";\n const result = fromThrown(stringError);\n\n expect(result.type).toBe(\"StringError\");\n expect(result.message).toBe(\"String error message\");\n expect(result.cause).toBe(stringError);\n });\n\n it(\"should handle unknown types\", () => {\n const unknownError = { weird: \"object\" };\n const result = fromThrown(unknownError);\n\n expect(result.type).toBe(\"UnknownError\");\n expect(result.message).toBe(\"An unknown error occurred\");\n expect(result.cause).toBe(unknownError);\n });\n\n it(\"should include context when provided\", () => {\n const context = { operation: \"test\", attempt: 1 };\n const error = new Error(\"Test error\");\n const result = fromThrown(error, context);\n\n expect(result.context).toEqual(context);\n });\n});\n```\n\n### Integration Testing\n\n```typescript\ndescribe(\"fromThrown integration\", () => {\n it(\"should work with real runtime errors\", () => {\n const operations = [\n () => JSON.parse(\"invalid json\"),\n () => {\n const obj: any = null;\n return obj.prop;\n },\n () => {\n return Var;\n },\n () => {\n throw \"string error\";\n },\n () => {\n throw { code: 500 };\n },\n ];\n\n const results = operations.map((op) => {\n try {\n return op();\n } catch (error) {\n return fromThrown(error);\n }\n });\n\n expect(results[0].type).toBe(\"SyntaxError\");\n expect(results[1].type).toBe(\"TypeError\");\n expect(results[2].type).toBe(\"ReferenceError\");\n expect(results[3].type).toBe(\"StringError\");\n expect(results[4].type).toBe(\"UnknownError\");\n });\n\n it(\"should work with async operations\", async () => {\n const asyncOp = async () => {\n throw new Error(\"Async error\");\n };\n\n try {\n await asyncOp();\n } catch (error) {\n const result = fromThrown(error);\n expect(result.type).toBe(\"Error\");\n expect(result.message).toBe(\"Async error\");\n }\n });\n});\n```\n\n### Property-Based Testing\n\n```typescript\nimport { fc } from \"fast-check\";\n\ndescribe(\"fromThrown property tests\", () => {\n it(\"should always return a TryError\", () => {\n fc.assert(\n fc.property(\n fc.anything(),\n fc.option(fc.record(fc.string(), fc.anything())),\n (cause, context) => {\n const result = fromThrown(cause, context);\n\n expect(isTryError(result)).toBe(true);\n expect(result.cause).toBe(cause);\n expect(typeof result.type).toBe(\"string\");\n expect(typeof result.message).toBe(\"string\");\n\n if (context) {\n expect(result.context).toEqual(context);\n }\n }\n )\n );\n });\n\n it(\"should handle Error instances correctly\", () => {\n fc.assert(\n fc.property(fc.string(), (message) => {\n const error = new Error(message);\n const result = fromThrown(error);\n\n expect(result.type).toBe(\"Error\");\n expect(result.message).toBe(message);\n expect(result.cause).toBe(error);\n })\n );\n });\n});\n```",
+  "metadata": {
+    "chunk_id": "fromThrown_deep_dive_testing-strategies",
+    "source_document": "rag-docs/fromThrown-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.287Z",
+    "topics": [
+      "testing strategies",
+      "unit testing",
+      "integration testing",
+      "property-based testing",
+      "typescript",
+      "error",
+      "async",
+      "sync",
+      "testing"
+    ],
+    "complexity": "beginner",
+    "includes_code": true,
+    "line_count": 164,
+    "token_count": 504,
+    "module": "errors",
+    "category": "testing",
+    "search_keywords": [
+      "describe",
+      "it",
+      "TypeError",
+      "fromThrown",
+      "expect",
+      "toBe",
+      "ReferenceError",
+      "SyntaxError",
+      "Error",
+      "toEqual",
+      "parse",
+      "map",
+      "op",
+      "asyncOp",
+      "assert",
+      "property",
+      "anything",
+      "option",
+      "record",
+      "string",
+      "isTryError"
+    ],
+    "common_questions": [
+      "How does testing strategies work?",
+      "Testing Strategies best practices",
+      "Testing Strategies patterns"
+    ],
+    "id": "fromThrown-deep-dive",
+    "title": "fromThrown() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "auto-detection",
+      "type-classification",
+      "catch-blocks"
+    ],
+    "related": [
+      "wrapError",
+      "createError",
+      "trySync",
+      "tryAsync",
+      "Error"
+    ],
+    "performance_impact": "low",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "error-handling",
+      "async-operations",
+      "testing"
+    ],
+    "cross_references": [
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "function_fromThrown",
+      "function_isTryError",
+      "isTryError_deep_dive_testing-strategies",
+      "tryAsync_deep_dive_testing-strategies",
+      "trySync_deep_dive_testing-strategies",
+      "useTry_deep_dive_testing-strategies",
+      "wrapError_deep_dive_testing-strategies"
+    ]
+  },
+  "hash": "9391cf4b7e6c1952366b908c191903db"
+}

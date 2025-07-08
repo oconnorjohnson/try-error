@@ -1,0 +1,80 @@
+{
+  "chunk_id": "wrapError_deep_dive_error-type-handling",
+  "title": "Error Type Handling",
+  "content": "## Error Type Handling\n\n### Specific Error Types\n\n```typescript\n// Handle different error types specifically\nfunction processFile(filePath: string) {\n try {\n const content = fs.readFileSync(filePath, \"utf8\");\n return JSON.parse(content);\n } catch (error) {\n // File system errors\n if (error.code === \"ENOENT\") {\n return wrapError(\n \"FileNotFoundError\",\n error,\n `File not found: ${filePath}`,\n {\n filePath,\n operation: \"read\",\n errorCode: error.code,\n }\n );\n }\n\n if (error.code === \"EACCES\") {\n return wrapError(\n \"FilePermissionError\",\n error,\n `Permission denied: ${filePath}`,\n {\n filePath,\n operation: \"read\",\n errorCode: error.code,\n }\n );\n }\n\n // JSON parsing errors\n if (error instanceof SyntaxError) {\n return wrapError(\n \"JsonParseError\",\n error,\n `Invalid JSON in file: ${filePath}`,\n {\n filePath,\n operation: \"parse\",\n syntaxError: error.message,\n }\n );\n }\n\n // Generic file processing error\n return wrapError(\n \"FileProcessingError\",\n error,\n `Failed to process file: ${filePath}`,\n { filePath }\n );\n }\n}\n```\n\n### Custom Error Classes\n\n```typescript\n// Working with custom error classes\nclass ValidationError extends Error {\n constructor(message: string, public field: string, public value: unknown) {\n super(message);\n this.name = \"ValidationError\";\n }\n}\n\nclass NetworkError extends Error {\n constructor(\n message: string,\n public statusCode: number,\n public endpoint: string\n ) {\n super(message);\n this.name = \"NetworkError\";\n }\n}\n\nfunction handleCustomErrors(error: unknown) {\n if (error instanceof ValidationError) {\n return wrapError(\"FormValidationError\", error, \"Form validation failed\", {\n field: error.field,\n value: error.value,\n validationType: \"client-side\",\n });\n }\n\n if (error instanceof NetworkError) {\n return wrapError(\"ApiConnectionError\", error, \"API connection failed\", {\n endpoint: error.endpoint,\n statusCode: error.statusCode,\n retryable: error.statusCode >= 500,\n });\n }\n\n return wrapError(\"UnhandledError\", error, \"Unhandled error type\");\n}\n```",
+  "metadata": {
+    "chunk_id": "wrapError_deep_dive_error-type-handling",
+    "source_document": "rag-docs/wrapError-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.348Z",
+    "topics": [
+      "error type handling",
+      "specific error types",
+      "custom error classes",
+      "typescript",
+      "error",
+      "sync",
+      "function",
+      "validation"
+    ],
+    "complexity": "intermediate",
+    "includes_code": true,
+    "line_count": 105,
+    "token_count": 305,
+    "module": "errors",
+    "category": "error-creation",
+    "search_keywords": [
+      "processFile",
+      "readFileSync",
+      "parse",
+      "wrapError",
+      "constructor",
+      "super",
+      "handleCustomErrors"
+    ],
+    "common_questions": [
+      "How does error type handling work?",
+      "Error Type Handling best practices",
+      "Error Type Handling patterns"
+    ],
+    "id": "wrapError-deep-dive",
+    "title": "wrapError() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "error-wrapping",
+      "cause-preservation",
+      "error-chaining"
+    ],
+    "related": [
+      "fromThrown",
+      "createError",
+      "trySync",
+      "tryAsync",
+      "Error"
+    ],
+    "performance_impact": "low",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "error-handling"
+    ],
+    "cross_references": [
+      "function_validationError",
+      "function_wrapError"
+    ]
+  },
+  "hash": "7df0efd7a738d3f3118dccb029ec3721"
+}

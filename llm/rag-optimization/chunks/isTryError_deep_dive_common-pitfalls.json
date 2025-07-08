@@ -1,0 +1,95 @@
+{
+  "chunk_id": "isTryError_deep_dive_common-pitfalls",
+  "title": "Common Pitfalls",
+  "content": "## Common Pitfalls\n\n### 1. Not Checking Results\n\n```typescript\n// BAD: Accessing properties without checking\nconst result = trySync(() => JSON.parse(input));\nconsole.log(result.data); // Error if result is TryError\n\n// GOOD: Always check with isTryError\nconst result = trySync(() => JSON.parse(input));\nif (isTryError(result)) {\n console.error(result.message);\n} else {\n console.log(result); // Safe to use\n}\n```\n\n### 2. Incorrect Type Assertions\n\n```typescript\n// BAD: Using type assertions instead of type guards\nconst result = trySync(() => operation());\nconst error = result as TryError; // Unsafe!\n\n// GOOD: Use type guard\nconst result = trySync(() => operation());\nif (isTryError(result)) {\n const error = result; // TypeScript knows it's TryError\n}\n```\n\n### 3. Missing Generic Types\n\n```typescript\n// BAD: Generic type not specified\nfunction processError(error: unknown) {\n if (isTryError(error)) {\n // error is TryError<string> (default)\n console.log(error.type); // Limited type information\n }\n}\n\n// GOOD: Specify generic type\nfunction processError(error: unknown) {\n if (isTryError<ValidationError>(error)) {\n // error is ValidationError\n console.log(error.type); // Better type information\n }\n}\n```\n\n### 4. Negation Logic\n\n```typescript\n// BAD: Confusing negation\nconst result = trySync(() => operation());\nif (!isTryError(result)) {\n // This is success case\n} else {\n // This is error case\n}\n\n// GOOD: Positive logic first\nconst result = trySync(() => operation());\nif (isTryError(result)) {\n // Handle error case\n} else {\n // Handle success case\n}\n```",
+  "metadata": {
+    "chunk_id": "isTryError_deep_dive_common-pitfalls",
+    "source_document": "rag-docs/isTryError-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.338Z",
+    "topics": [
+      "common pitfalls",
+      "1. not checking results",
+      "2. incorrect type assertions",
+      "3. missing generic types",
+      "4. negation logic",
+      "typescript",
+      "error",
+      "sync",
+      "function",
+      "validation"
+    ],
+    "complexity": "intermediate",
+    "includes_code": true,
+    "line_count": 71,
+    "token_count": 289,
+    "module": "types",
+    "category": "utilities",
+    "search_keywords": [
+      "trySync",
+      "parse",
+      "log",
+      "isTryError",
+      "error",
+      "operation",
+      "processError",
+      "Accessing",
+      "Always",
+      "Using",
+      "Use",
+      "Generic",
+      "Specify",
+      "Confusing",
+      "Positive"
+    ],
+    "common_questions": [
+      "How does common pitfalls work?",
+      "Common Pitfalls best practices",
+      "Common Pitfalls patterns"
+    ],
+    "id": "isTryError-deep-dive",
+    "title": "isTryError() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "type-guard",
+      "type-safety",
+      "discriminated-union"
+    ],
+    "related": [
+      "trySync",
+      "tryAsync",
+      "TryResult",
+      "TryError",
+      "TypeScript"
+    ],
+    "performance_impact": "negligible",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [],
+    "cross_references": [
+      "TryErrorBoundary_deep_dive_common-pitfalls",
+      "configure_deep_dive_common-pitfalls",
+      "fromThrown_deep_dive_common-pitfalls",
+      "function_isTryError",
+      "function_validationError",
+      "tryAsync_deep_dive_common-pitfalls",
+      "trySync_deep_dive_common-pitfalls",
+      "useTry_deep_dive_common-pitfalls",
+      "wrapError_deep_dive_common-pitfalls"
+    ]
+  },
+  "hash": "5b38c02b4cfe5fca3a180bae02e6e235"
+}

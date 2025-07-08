@@ -1,0 +1,85 @@
+{
+  "chunk_id": "wrapError_deep_dive_edge-cases-and-gotchas",
+  "title": "Edge Cases and Gotchas",
+  "content": "## Edge Cases and Gotchas\n\n### Circular References\n\n```typescript\n// Handle potential circular references in causes\nfunction safeWrapError(type: string, cause: unknown, message?: string) {\n let safeContext: Record<string, unknown> | ;\n\n try {\n // Test if cause can be serialized (no circular refs)\n JSON.stringify(cause);\n safeContext = { originalCause: cause };\n } catch (circularError) {\n // Handle circular reference\n safeContext = {\n causeType: typeof cause,\n causeName: cause?.constructor?.name || \"unknown\",\n circularReference: true,\n };\n }\n\n return wrapError(type, cause, message, safeContext);\n}\n```\n\n### Error Mutation\n\n```typescript\n// Be careful with mutable error objects\nfunction wrapMutableError(cause: unknown) {\n // If cause is mutable, consider freezing it\n if (typeof cause === \"object\" && cause !== null) {\n try {\n Object.freeze(cause);\n } catch {\n // Ignore if already frozen or non-configurable\n }\n }\n\n return wrapError(\"FrozenError\", cause, \"Error with frozen cause\");\n}\n```\n\n### Large Error Objects\n\n```typescript\n// Handle large error objects efficiently\nfunction wrapLargeError(cause: unknown) {\n const causeSize = JSON.stringify(cause).length;\n\n if (causeSize > 10000) {\n // 10KB threshold\n // Store reference and minimal info\n const errorId = generateErrorId();\n largeErrorStorage.set(errorId, cause);\n\n return wrapError(\n \"LargeError\",\n { errorId, size: causeSize },\n \"Large error object stored separately\",\n { errorId, originalSize: causeSize }\n );\n }\n\n return wrapError(\"StandardError\", cause);\n}\n```",
+  "metadata": {
+    "chunk_id": "wrapError_deep_dive_edge-cases-and-gotchas",
+    "source_document": "rag-docs/wrapError-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.349Z",
+    "topics": [
+      "edge cases and gotchas",
+      "circular references",
+      "error mutation",
+      "large error objects",
+      "typescript",
+      "error",
+      "function"
+    ],
+    "complexity": "intermediate",
+    "includes_code": true,
+    "line_count": 68,
+    "token_count": 259,
+    "module": "errors",
+    "category": "utilities",
+    "search_keywords": [
+      "safeWrapError",
+      "stringify",
+      "wrapError",
+      "wrapMutableError",
+      "freeze",
+      "wrapLargeError",
+      "generateErrorId",
+      "set",
+      "Record<string"
+    ],
+    "common_questions": [
+      "How does edge cases and gotchas work?",
+      "Edge Cases and Gotchas best practices",
+      "Edge Cases and Gotchas patterns"
+    ],
+    "id": "wrapError-deep-dive",
+    "title": "wrapError() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "error-wrapping",
+      "cause-preservation",
+      "error-chaining"
+    ],
+    "related": [
+      "fromThrown",
+      "createError",
+      "trySync",
+      "tryAsync",
+      "Error"
+    ],
+    "performance_impact": "low",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "error-handling",
+      "testing"
+    ],
+    "cross_references": [
+      "create_error_deep_dive_edge-cases-and-gotchas",
+      "function_wrapError",
+      "isTryError_deep_dive_edge-cases-and-gotchas",
+      "tryAsync_deep_dive_edge-cases-and-gotchas",
+      "trySync_deep_dive_edge-cases-and-gotchas"
+    ]
+  },
+  "hash": "33cd3cc20b3959acfc01d754215f0d59"
+}

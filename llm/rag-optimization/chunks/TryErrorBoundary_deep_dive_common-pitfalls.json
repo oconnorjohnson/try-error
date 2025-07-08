@@ -1,0 +1,111 @@
+{
+  "chunk_id": "TryErrorBoundary_deep_dive_common-pitfalls",
+  "title": "Common Pitfalls",
+  "content": "## Common Pitfalls\n\n### 1. Event Handler Errors\n\n```tsx\n// BAD: Error boundaries don't catch event handler errors by default\nfunction BadExample() {\n const handleClick = () => {\n throw new Error(\"This won't be caught!\");\n };\n\n return (\n <TryErrorBoundary>\n <button onClick={handleClick}>Click me</button>\n </TryErrorBoundary>\n );\n}\n\n// GOOD: Use catchEventHandlerErrors or manual error handling\nfunction GoodExample() {\n const throwError = useErrorBoundaryTrigger();\n\n const handleClick = () => {\n try {\n riskyOperation();\n } catch (error) {\n throwError(error);\n }\n };\n\n return (\n <TryErrorBoundary catchEventHandlerErrors={true}>\n <button onClick={handleClick}>Click me</button>\n </TryErrorBoundary>\n );\n}\n```\n\n### 2. Async Error Handling\n\n```tsx\n// BAD: Async errors aren't caught without special handling\nfunction BadAsyncExample() {\n useEffect(() => {\n fetch(\"/api/data\")\n .then((response) => response.json())\n .then((data) => {\n if (data.error) {\n throw new Error(data.error); // Won't be caught!\n }\n });\n }, []);\n\n return <div>Component</div>;\n}\n\n// GOOD: Use catchAsyncErrors or proper error handling\nfunction GoodAsyncExample() {\n const throwAsyncError = useAsyncError();\n\n useEffect(() => {\n fetch(\"/api/data\")\n .then((response) => response.json())\n .then((data) => {\n if (data.error) {\n throwAsyncError(new Error(data.error));\n }\n })\n .catch((error) => {\n throwAsyncError(error);\n });\n }, []);\n\n return <div>Component</div>;\n}\n```\n\n### 3. Retry Logic Issues\n\n```tsx\n// BAD: Retry without fixing underlying issue\nfunction BadRetryExample() {\n const [failCount, setFailCount] = useState(0);\n\n useEffect(() => {\n // This will always fail\n throw new Error(\"Always fails\");\n }, [failCount]);\n\n return (\n <TryErrorBoundary\n fallback={(error, errorInfo, retry) => (\n <button onClick={retry}>Retry</button>\n )}\n >\n <div>Content</div>\n </TryErrorBoundary>\n );\n}\n\n// GOOD: Implement proper retry logic\nfunction GoodRetryExample() {\n const [retryKey, setRetryKey] = useState(0);\n\n return (\n <TryErrorBoundary\n key={retryKey} // Force remount on retry\n fallback={(error, errorInfo, retry) => (\n <button\n onClick={() => {\n setRetryKey((prev) => prev + 1);\n retry();\n }}\n >\n Retry\n </button>\n )}\n >\n <div>Content</div>\n </TryErrorBoundary>\n );\n}\n```",
+  "metadata": {
+    "chunk_id": "TryErrorBoundary_deep_dive_common-pitfalls",
+    "source_document": "rag-docs/TryErrorBoundary-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.279Z",
+    "topics": [
+      "common pitfalls",
+      "1. event handler errors",
+      "2. async error handling",
+      "3. retry logic issues",
+      "tsx",
+      "error",
+      "async",
+      "sync",
+      "function",
+      "component"
+    ],
+    "complexity": "intermediate",
+    "includes_code": true,
+    "line_count": 123,
+    "token_count": 358,
+    "module": "react",
+    "category": "utilities",
+    "search_keywords": [
+      "BadExample",
+      "Error",
+      "GoodExample",
+      "useErrorBoundaryTrigger",
+      "riskyOperation",
+      "throwError",
+      "BadAsyncExample",
+      "useEffect",
+      "fetch",
+      "then",
+      "json",
+      "GoodAsyncExample",
+      "useAsyncError",
+      "throwAsyncError",
+      "catch",
+      "BadRetryExample",
+      "useState",
+      "GoodRetryExample",
+      "setRetryKey",
+      "retry",
+      "Use",
+      "Async",
+      "Retry",
+      "Implement"
+    ],
+    "common_questions": [
+      "How does common pitfalls work?",
+      "Common Pitfalls best practices",
+      "Common Pitfalls patterns"
+    ],
+    "id": "TryErrorBoundary-deep-dive",
+    "title": "TryErrorBoundary - Complete Implementation Guide",
+    "tags": [
+      "react",
+      "error-boundary",
+      "component",
+      "retry",
+      "async-errors",
+      "event-handlers"
+    ],
+    "related": [
+      "useTry",
+      "useErrorRecovery",
+      "createError",
+      "fromThrown",
+      "React"
+    ],
+    "performance_impact": "low",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "error-handling",
+      "async-operations"
+    ],
+    "cross_references": [
+      "configure_deep_dive_common-pitfalls",
+      "fromThrown_deep_dive_common-pitfalls",
+      "function_Component",
+      "function_handleClick",
+      "function_throwError",
+      "function_useAsyncError",
+      "function_useErrorBoundaryTrigger",
+      "isTryError_deep_dive_common-pitfalls",
+      "tryAsync_deep_dive_common-pitfalls",
+      "trySync_deep_dive_common-pitfalls",
+      "useTry_deep_dive_common-pitfalls",
+      "wrapError_deep_dive_common-pitfalls"
+    ]
+  },
+  "hash": "89c12b8a9b3a4119b17d26c16f49aa12"
+}

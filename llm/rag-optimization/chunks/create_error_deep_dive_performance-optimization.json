@@ -1,0 +1,83 @@
+{
+  "chunk_id": "create_error_deep_dive_performance-optimization",
+  "title": "Performance Optimization",
+  "content": "## Performance Optimization\n\n### Configuration Impact\n\n```typescript\n// Fastest: Minimal mode (~25ns)\nconfigure({ minimalErrors: true });\nconst error = createError({\n type: \"Error\",\n message: \"Fast error\",\n}); // No source, no stack, minimal overhead\n\n// Balanced: Standard mode (~150ns)\nconfigure({\n captureStackTrace: false,\n captureSource: true,\n});\n\n// Full features (~400ns)\nconfigure({\n captureStackTrace: true,\n captureSource: true,\n skipTimestamp: false,\n});\n```\n\n### Object Pooling\n\nWhen enabled, reduces GC pressure:\n\n```typescript\nconfigure({\n performance: {\n errorCreation: {\n objectPooling: true,\n poolSize: 1000,\n },\n },\n});\n\n// Errors are recycled from pool\n// ~60% memory reduction in high-throughput scenarios\n```\n\n### Context Size Impact\n\n```typescript\n// Fast: Small context (~10ns overhead)\ncontext: { userId: 123, operation: \"read\" }\n\n// Slower: Large context (~50ns overhead)\ncontext: {\n ...largeObject,\n nested: { deep: { properties: [...] } }\n}\n\n// Use lazy evaluation for large contexts\ncontext: {\n userId: 123,\n get fullData() { return expensiveComputation(); }\n}\n```",
+  "metadata": {
+    "chunk_id": "create_error_deep_dive_performance-optimization",
+    "source_document": "rag-docs/create-error-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.284Z",
+    "topics": [
+      "performance optimization",
+      "configuration impact",
+      "object pooling",
+      "context size impact",
+      "typescript",
+      "error",
+      "performance",
+      "optimization",
+      "configuration"
+    ],
+    "complexity": "intermediate",
+    "includes_code": true,
+    "line_count": 62,
+    "token_count": 192,
+    "module": "core",
+    "category": "performance",
+    "search_keywords": [
+      "configure",
+      "createError",
+      "fullData",
+      "expensiveComputation",
+      "Minimal",
+      "Standard",
+      "Small",
+      "Large"
+    ],
+    "common_questions": [
+      "How does performance optimization work?",
+      "Performance Optimization best practices",
+      "Performance Optimization patterns"
+    ],
+    "id": "create-error-deep-dive",
+    "title": "createError() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "error-creation",
+      "performance",
+      "context-injection"
+    ],
+    "related": null,
+    "performance_impact": "low",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "testing",
+      "performance-optimization"
+    ],
+    "cross_references": [
+      "TryErrorBoundary_deep_dive_performance-optimization",
+      "fromThrown_deep_dive_performance-optimization",
+      "function_configure",
+      "function_createError",
+      "isTryError_deep_dive_performance-optimization",
+      "tryAsync_deep_dive_performance-optimization",
+      "trySync_deep_dive_performance-optimization",
+      "wrapError_deep_dive_performance-optimization"
+    ]
+  },
+  "hash": "11d023ed5c24d44e9856a5c89da24de7"
+}

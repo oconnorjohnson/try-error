@@ -1,0 +1,119 @@
+{
+  "chunk_id": "function_isFormTryState",
+  "title": "isFormTryState",
+  "content": "---\nid: isFormTryState\ntitle: isFormTryState() - Deep Dive\ntags: [function, react, sync, internal]\ncomplexity: medium\nsideEffects: no\n---\n\n# isFormTryState()\n\n## Overview\nCheck if error happened in a specific component\n\n**Location**: `packages/react/src/types/index.ts` \n**Module**: react \n**Exported**: No \n\n## Signature\n```typescript\nfunction isFormTryState(value: unknown): value is FormTryState<T>\n```\n\n## Parameters\n- **value** (`unknown`)\n\n## Characteristics\n\n### Behavior\n- **Async**: No\n- **Throws Errors**: No\n- **Uses Generics**: Yes\n- **Recursive**: No\n\n### Integration\n- **Uses Config**: No\n- **Emits Events**: No\n- **Uses Object Pool**: No\n- **Context Support**: No\n\n### Side Effects\nNone detected\n\n### Dependencies\nNo internal dependencies\n\n### Complexity\n- **Estimated**: medium\n- **Loops**: Some\n- **Conditions**: Moderate\n\n## Implementation Notes\nNo special implementation notes.\n\n## Performance Considerations\nNo specific performance considerations.\n\n## Common Patterns\nNo specific patterns identified.",
+  "metadata": {
+    "chunk_id": "function_isFormTryState",
+    "source_document": "rag-docs/functions/isFormTryState.md",
+    "chunk_type": "function-reference",
+    "last_updated": "2025-07-08T20:17:18.320Z",
+    "topics": [
+      "isformtrystate()",
+      "overview",
+      "signature",
+      "parameters",
+      "characteristics",
+      "behavior",
+      "integration",
+      "side effects",
+      "dependencies",
+      "complexity",
+      "implementation notes",
+      "performance considerations",
+      "common patterns",
+      "typescript",
+      "error",
+      "async",
+      "sync",
+      "function",
+      "react",
+      "component",
+      "performance"
+    ],
+    "complexity": "medium",
+    "includes_code": true,
+    "line_count": 58,
+    "token_count": 169,
+    "module": "core",
+    "category": "type-checking",
+    "search_keywords": [
+      "isFormTryState",
+      "No",
+      "Yes",
+      "Some",
+      "Moderate"
+    ],
+    "common_questions": [
+      "How do I use isFormTryState?",
+      "What does isFormTryState do?",
+      "isFormTryState example"
+    ],
+    "id": "isFormTryState",
+    "title": "isFormTryState() - Deep Dive",
+    "tags": [
+      "function",
+      "react",
+      "sync",
+      "internal"
+    ],
+    "sideEffects": "no",
+    "function_name": "isFormTryState",
+    "parameters": [
+      "id",
+      "title",
+      "tags",
+      "complexity",
+      "sideEffects",
+      "value"
+    ],
+    "return_type": "unknown",
+    "related_chunks": [
+      "function_checkCoreVersion",
+      "function_dispatch",
+      "function_isErr",
+      "function_isLazyProperty",
+      "function_isOk",
+      "function_isProduction",
+      "function_isRetryableTryState",
+      "function_isTryState",
+      "function_isTrySuccess",
+      "function_isTrySyncOptions"
+    ],
+    "related_functions": [
+      "checkCoreVersion",
+      "dispatch",
+      "isErr",
+      "isLazyProperty",
+      "isOk",
+      "isProduction",
+      "isRetryableTryState",
+      "isTryState",
+      "isTrySuccess",
+      "isTrySyncOptions",
+      "listFactories",
+      "usePersistedState"
+    ],
+    "usage_patterns": [
+      "async-operations",
+      "react-integration",
+      "performance-optimization"
+    ],
+    "cross_references": [
+      "TryErrorBoundary_deep_dive_signature",
+      "configure_deep_dive_signature",
+      "create_error_deep_dive_signature",
+      "create_error_deep_dive_common-patterns",
+      "fromThrown_deep_dive_signature",
+      "function_Component",
+      "function_intern",
+      "index_overview",
+      "isTryError_deep_dive_signature",
+      "tryAsync_deep_dive_signature",
+      "trySync_deep_dive_signature",
+      "trySync_deep_dive_common-patterns",
+      "useTry_deep_dive_signature",
+      "wrapError_deep_dive_signature"
+    ]
+  },
+  "hash": "1e715a35786fbe161bb2a698796ac2a2"
+}

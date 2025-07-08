@@ -1,0 +1,108 @@
+{
+  "chunk_id": "isTryError_deep_dive_testing-strategies",
+  "title": "Testing Strategies",
+  "content": "## Testing Strategies\n\n### Unit Tests\n\n```typescript\ndescribe(\"isTryError\", () => {\n it(\"should return true for valid TryError\", () => {\n const error = createError({\n type: \"TestError\",\n message: \"Test error\",\n });\n\n expect(isTryError(error)).toBe(true);\n });\n\n it(\"should return false for non-objects\", () => {\n expect(isTryError(null)).toBe(false);\n expect(isTryError()).toBe(false);\n expect(isTryError(42)).toBe(false);\n expect(isTryError(\"error\")).toBe(false);\n expect(isTryError(true)).toBe(false);\n });\n\n it(\"should return false for objects missing brand\", () => {\n const fake = {\n type: \"FakeError\",\n message: \"Fake error\",\n source: \"fake.ts:1:1\",\n timestamp: Date.now(),\n };\n\n expect(isTryError(fake)).toBe(false);\n });\n\n it(\"should return false for objects with wrong field types\", () => {\n const invalid = {\n [TRY_ERROR_BRAND]: true,\n type: 123, // Should be string\n message: \"Error\",\n source: \"test.ts:1:1\",\n timestamp: Date.now(),\n };\n\n expect(isTryError(invalid)).toBe(false);\n });\n\n it(\"should handle optional fields correctly\", () => {\n const minimal = {\n [TRY_ERROR_BRAND]: true,\n type: \"MinimalError\",\n message: \"Minimal error\",\n source: \"test.ts:1:1\",\n timestamp: Date.now(),\n };\n\n expect(isTryError(minimal)).toBe(true);\n\n const withContext = {\n ...minimal,\n context: { key: \"value\" },\n };\n\n expect(isTryError(withContext)).toBe(true);\n });\n});\n```\n\n### Property-Based Tests\n\n```typescript\nimport { fc } from \"fast-check\";\n\ndescribe(\"isTryError property tests\", () => {\n it(\"should never return true for primitives\", () => {\n fc.assert(\n fc.property(\n fc.oneof(\n fc.string(),\n fc.integer(),\n fc.boolean(),\n fc.constant(null),\n fc.constant(undefined)\n ),\n (value) => {\n expect(isTryError(value)).toBe(false);\n }\n )\n );\n });\n\n it(\"should return true for all created TryErrors\", () => {\n fc.assert(\n fc.property(fc.string(), fc.string(), (type, message) => {\n const error = createError({ type, message });\n expect(isTryError(error)).toBe(true);\n })\n );\n });\n});\n```\n\n### Integration Tests\n\n```typescript\ndescribe(\"isTryError integration\", () => {\n it(\"should work with trySync results\", () => {\n const successResult = trySync(() => \"success\");\n const errorResult = trySync(() => {\n throw new Error(\"fail\");\n });\n\n expect(isTryError(successResult)).toBe(false);\n expect(isTryError(errorResult)).toBe(true);\n });\n\n it(\"should work with tryAsync results\", async () => {\n const successResult = await tryAsync(() => Promise.resolve(\"success\"));\n const errorResult = await tryAsync(() => Promise.reject(new Error(\"fail\")));\n\n expect(isTryError(successResult)).toBe(false);\n expect(isTryError(errorResult)).toBe(true);\n });\n\n it(\"should work with serialized errors\", () => {\n const error = createError({\n type: \"SerializationError\",\n message: \"Test serialization\",\n });\n\n const serialized = JSON.stringify(serializeTryError(error));\n const deserialized = deserializeTryError(JSON.parse(serialized));\n\n expect(isTryError(deserialized)).toBe(true);\n });\n});\n```",
+  "metadata": {
+    "chunk_id": "isTryError_deep_dive_testing-strategies",
+    "source_document": "rag-docs/isTryError-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.337Z",
+    "topics": [
+      "testing strategies",
+      "unit tests",
+      "property-based tests",
+      "integration tests",
+      "typescript",
+      "error",
+      "async",
+      "sync",
+      "promise",
+      "testing"
+    ],
+    "complexity": "intermediate",
+    "includes_code": true,
+    "line_count": 136,
+    "token_count": 403,
+    "module": "types",
+    "category": "testing",
+    "search_keywords": [
+      "describe",
+      "it",
+      "createError",
+      "expect",
+      "isTryError",
+      "toBe",
+      "now",
+      "assert",
+      "property",
+      "oneof",
+      "string",
+      "integer",
+      "boolean",
+      "constant",
+      "trySync",
+      "Error",
+      "tryAsync",
+      "resolve",
+      "reject",
+      "stringify",
+      "serializeTryError",
+      "deserializeTryError",
+      "parse",
+      "Date"
+    ],
+    "common_questions": [
+      "How does testing strategies work?",
+      "Testing Strategies best practices",
+      "Testing Strategies patterns"
+    ],
+    "id": "isTryError-deep-dive",
+    "title": "isTryError() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "type-guard",
+      "type-safety",
+      "discriminated-union"
+    ],
+    "related": [
+      "trySync",
+      "tryAsync",
+      "TryResult",
+      "TryError",
+      "TypeScript"
+    ],
+    "performance_impact": "negligible",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "async-operations",
+      "testing"
+    ],
+    "cross_references": [
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "fromThrown_deep_dive_testing-strategies",
+      "function_createError",
+      "function_deserializeTryError",
+      "function_isTryError",
+      "function_serializeTryError",
+      "tryAsync_deep_dive_testing-strategies",
+      "trySync_deep_dive_testing-strategies",
+      "useTry_deep_dive_testing-strategies",
+      "wrapError_deep_dive_testing-strategies"
+    ]
+  },
+  "hash": "2736ee3de38f6bc5b09166533f598fc8"
+}

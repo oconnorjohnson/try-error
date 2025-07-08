@@ -1,0 +1,92 @@
+{
+  "chunk_id": "wrapError_deep_dive_implementation-details",
+  "title": "Implementation Details",
+  "content": "## Implementation Details\n\n### Algorithm Flow\n\n```\n1. Message extraction → 5-15ns\n a. Use provided message if given\n b. Extract from Error.message if Error instance\n c. Use string value if cause is string\n d. Default fallback message\n2. createError() delegation → 20-100ns\n a. Pass through type, extracted message\n b. Include original cause\n c. Add optional context\n3. TryError creation → Variable (depends on config)\n4. Return structured error → 0ns\n```\n\n### Performance Characteristics\n\n- **Time Complexity**: O(1) + O(message extraction)\n- **Space Complexity**: O(1) + O(context size)\n- **Execution Time**: 25-115ns total\n- **Memory Usage**: ~450 bytes (standard) or ~120 bytes (minimal mode)\n- **Overhead**: Same as createError() since it delegates\n\n### Message Extraction Logic\n\n```typescript\nfunction extractMessage(cause: unknown, customMessage?: string): string {\n // 1. Use custom message if provided\n if (customMessage) {\n return customMessage;\n }\n\n // 2. Extract from Error instance\n if (cause instanceof Error) {\n return cause.message;\n }\n\n // 3. Use string directly\n if (typeof cause === \"string\") {\n return cause;\n }\n\n // 4. Fallback for unknown types\n return \"Unknown error occurred\";\n}\n```\n\n### Internal Dependencies\n\n```typescript\n// Direct dependencies\n- createError() // Core error creation\n- typeof cause checks // Type detection\n- Error.message extraction // Message extraction\n\n// Indirect dependencies (via createError)\n- getCachedConfig() // Configuration access\n- getSourceLocation() // Stack trace parsing\n- ErrorPool.acquire() // Object pooling (if enabled)\n- TRY_ERROR_BRAND // Symbol branding\n```",
+  "metadata": {
+    "chunk_id": "wrapError_deep_dive_implementation-details",
+    "source_document": "rag-docs/wrapError-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.347Z",
+    "topics": [
+      "implementation details",
+      "algorithm flow",
+      "performance characteristics",
+      "message extraction logic",
+      "internal dependencies",
+      "typescript",
+      "error",
+      "function",
+      "performance",
+      "configuration"
+    ],
+    "complexity": "intermediate",
+    "includes_code": true,
+    "line_count": 64,
+    "token_count": 302,
+    "module": "errors",
+    "category": "utilities",
+    "search_keywords": [
+      "createError",
+      "O",
+      "extractMessage",
+      "getCachedConfig",
+      "getSourceLocation",
+      "acquire",
+      "Same"
+    ],
+    "common_questions": [
+      "How does implementation details work?",
+      "Implementation Details best practices",
+      "Implementation Details patterns"
+    ],
+    "id": "wrapError-deep-dive",
+    "title": "wrapError() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "error-wrapping",
+      "cause-preservation",
+      "error-chaining"
+    ],
+    "related": [
+      "fromThrown",
+      "createError",
+      "trySync",
+      "tryAsync",
+      "Error"
+    ],
+    "performance_impact": "low",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "performance-optimization"
+    ],
+    "cross_references": [
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "configure_deep_dive_implementation-details",
+      "create_error_deep_dive_implementation-details",
+      "fromThrown_deep_dive_implementation-details",
+      "function_createError",
+      "function_getCachedConfig",
+      "function_getSourceLocation",
+      "function_intern",
+      "isTryError_deep_dive_implementation-details",
+      "tryAsync_deep_dive_implementation-details",
+      "trySync_deep_dive_implementation-details",
+      "useTry_deep_dive_implementation-details"
+    ]
+  },
+  "hash": "1130d990b2d8b9614d6a89c322f54eb8"
+}

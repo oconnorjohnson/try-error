@@ -1,0 +1,54 @@
+{
+  "chunk_id": "index_contents",
+  "title": "Contents",
+  "content": "## Contents\n\n### 📁 Functions\n- Total: 206 functions documented\n- [Browse all functions](./functions/)\n\n### 🏗️ Architecture\n- [Architecture Overview](./architecture.md)\n- Module organization\n- Dependency graphs\n- Event system\n- Configuration system\n\n### ⚡ Performance\n- [Performance Analysis](./performance.md)\n- Complexity distribution\n- Optimization techniques\n- Benchmarks\n\n### 🎯 Patterns\n- [Pattern Catalog](./patterns.md)\n- Common usage patterns\n- Best practices\n- Anti-patterns",
+  "metadata": {
+    "chunk_id": "index_contents",
+    "source_document": "rag-docs/index.md",
+    "chunk_type": "general",
+    "last_updated": "2025-07-08T20:17:18.336Z",
+    "topics": [
+      "contents",
+      "📁 functions",
+      "🏗️ architecture",
+      "⚡ performance",
+      "🎯 patterns",
+      "function",
+      "performance",
+      "optimization",
+      "configuration"
+    ],
+    "complexity": "basic",
+    "includes_code": false,
+    "line_count": 24,
+    "token_count": 80,
+    "module": "core",
+    "category": "utilities",
+    "search_keywords": [],
+    "common_questions": [],
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization",
+      "TryErrorBoundary_deep_dive_common-pitfalls"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "performance-optimization"
+    ],
+    "cross_references": [
+      "architecture_module-organization",
+      "architecture_dependency-graph",
+      "architecture_event-system",
+      "architecture_configuration-system",
+      "index_overview"
+    ]
+  },
+  "hash": "9f47a73c88c220c17f6c734503196d31"
+}

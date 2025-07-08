@@ -1,0 +1,85 @@
+{
+  "chunk_id": "tryAsync_deep_dive_platform-specific-behavior",
+  "title": "Platform-Specific Behavior",
+  "content": "## Platform-Specific Behavior\n\n### Node.js\n\n```typescript\n// Node.js specific timeout behavior\nconst result = await tryAsync(() => fetch(\"https://api.example.com/data\"), {\n timeout: 5000,\n});\n\n// Node.js provides more detailed timeout information\nif (isTryError(result) && result.message.includes(\"timeout\")) {\n console.log(\"Request timed out\");\n // result.stack includes Node.js-specific stack trace\n}\n```\n\n### Browser\n\n```typescript\n// Browser-specific AbortController support\nconst controller = new AbortController();\n\n// Some browsers have different AbortSignal.timeout implementations\nconst result = await tryAsync(\n () => fetch(\"/api/data\", { signal: controller.signal }),\n {\n signal: controller.signal,\n timeout: 5000,\n context: { userAgent: navigator.userAgent },\n }\n);\n```\n\n### Service Workers\n\n```typescript\n// Service Worker context\nself.addEventListener(\"fetch\", (event) => {\n event.respondWith(\n (async () => {\n const result = await tryAsync(() => fetch(event.request), {\n context: {\n url: event.request.url,\n method: event.request.method,\n serviceWorker: true,\n },\n });\n\n if (isTryError(result)) {\n // Return fallback response\n return new Response(\"Service temporarily unavailable\", {\n status: 503,\n });\n }\n\n return result;\n })()\n );\n});\n```",
+  "metadata": {
+    "chunk_id": "tryAsync_deep_dive_platform-specific-behavior",
+    "source_document": "rag-docs/tryAsync-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.341Z",
+    "topics": [
+      "platform-specific behavior",
+      "node.js",
+      "browser",
+      "service workers",
+      "typescript",
+      "error",
+      "async",
+      "sync",
+      "method"
+    ],
+    "complexity": "intermediate",
+    "includes_code": true,
+    "line_count": 61,
+    "token_count": 192,
+    "module": "async",
+    "category": "utilities",
+    "search_keywords": [
+      "tryAsync",
+      "fetch",
+      "isTryError",
+      "includes",
+      "log",
+      "AbortController",
+      "addEventListener",
+      "respondWith",
+      "Response"
+    ],
+    "common_questions": [
+      "How does platform-specific behavior work?",
+      "Platform-Specific Behavior best practices",
+      "Platform-Specific Behavior patterns"
+    ],
+    "id": "tryAsync-deep-dive",
+    "title": "tryAsync() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "async",
+      "error-handling",
+      "promises",
+      "cancellation"
+    ],
+    "related": [
+      "trySync",
+      "isTryError",
+      "AbortSignal",
+      "timeout",
+      "Promise"
+    ],
+    "performance_impact": "low",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "async-operations"
+    ],
+    "cross_references": [
+      "create_error_deep_dive_platform-specific-behavior",
+      "function_isTryError",
+      "trySync_deep_dive_platform-specific-behavior"
+    ]
+  },
+  "hash": "da4969b767fd6cbfbdb3da42d744c668"
+}

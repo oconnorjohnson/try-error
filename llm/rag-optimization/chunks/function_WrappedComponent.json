@@ -1,0 +1,115 @@
+{
+  "chunk_id": "function_WrappedComponent",
+  "title": "WrappedComponent",
+  "content": "---\nid: WrappedComponent\ntitle: WrappedComponent() - Deep Dive\ntags: [function, react, sync, internal]\ncomplexity: low\nsideEffects: no\n---\n\n# WrappedComponent()\n\n## Overview\nNo description available.\n\n**Location**: `packages/react/src/telemetry/index.ts` \n**Module**: react \n**Exported**: No \n\n## Signature\n```typescript\nfunction WrappedComponent(props: P): unknown\n```\n\n## Parameters\n- **props** (`P`)\n\n## Characteristics\n\n### Behavior\n- **Async**: No\n- **Throws Errors**: No\n- **Uses Generics**: Yes\n- **Recursive**: No\n\n### Integration\n- **Uses Config**: No\n- **Emits Events**: No\n- **Uses Object Pool**: No\n- **Context Support**: No\n\n### Side Effects\nNone detected\n\n### Dependencies\n- createElement()\n\n### Complexity\n- **Estimated**: low\n- **Loops**: Few/None\n- **Conditions**: Simple\n\n## Implementation Notes\nNo special implementation notes.\n\n## Performance Considerations\nNo specific performance considerations.\n\n## Common Patterns\nNo specific patterns identified.",
+  "metadata": {
+    "chunk_id": "function_WrappedComponent",
+    "source_document": "rag-docs/functions/WrappedComponent.md",
+    "chunk_type": "function-reference",
+    "last_updated": "2025-07-08T20:17:18.295Z",
+    "topics": [
+      "wrappedcomponent()",
+      "overview",
+      "signature",
+      "parameters",
+      "characteristics",
+      "behavior",
+      "integration",
+      "side effects",
+      "dependencies",
+      "complexity",
+      "implementation notes",
+      "performance considerations",
+      "common patterns",
+      "typescript",
+      "error",
+      "async",
+      "sync",
+      "function",
+      "react",
+      "component",
+      "performance"
+    ],
+    "complexity": "low",
+    "includes_code": true,
+    "line_count": 58,
+    "token_count": 159,
+    "module": "core",
+    "category": "react-integration",
+    "search_keywords": [
+      "WrappedComponent",
+      "createElement",
+      "No",
+      "Yes",
+      "Few",
+      "Simple"
+    ],
+    "common_questions": [
+      "How do I use WrappedComponent?",
+      "What does WrappedComponent do?",
+      "WrappedComponent example"
+    ],
+    "id": "WrappedComponent",
+    "title": "WrappedComponent() - Deep Dive",
+    "tags": [
+      "function",
+      "react",
+      "sync",
+      "internal"
+    ],
+    "sideEffects": "no",
+    "function_name": "WrappedComponent",
+    "parameters": [
+      "id",
+      "title",
+      "tags",
+      "complexity",
+      "sideEffects",
+      "props"
+    ],
+    "return_type": "unknown",
+    "related_chunks": [
+      "function_AsyncComponent",
+      "function_Component",
+      "function_ComponentWithAsyncHandler",
+      "function_MyComponent",
+      "function_TestComponent",
+      "function_getComponentName",
+      "function_setupReact",
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose"
+    ],
+    "related_functions": [
+      "AsyncComponent",
+      "Component",
+      "ComponentWithAsyncHandler",
+      "MyComponent",
+      "TestComponent",
+      "getComponentName",
+      "setupReact"
+    ],
+    "usage_patterns": [
+      "async-operations",
+      "react-integration",
+      "performance-optimization"
+    ],
+    "cross_references": [
+      "TryErrorBoundary_deep_dive_signature",
+      "configure_deep_dive_signature",
+      "create_error_deep_dive_signature",
+      "create_error_deep_dive_common-patterns",
+      "fromThrown_deep_dive_signature",
+      "function_Component",
+      "function_intern",
+      "index_overview",
+      "isTryError_deep_dive_signature",
+      "tryAsync_deep_dive_signature",
+      "trySync_deep_dive_signature",
+      "trySync_deep_dive_common-patterns",
+      "useTry_deep_dive_signature",
+      "wrapError_deep_dive_signature"
+    ]
+  },
+  "hash": "7b3c5849beac6b6376a171a2f7332924"
+}

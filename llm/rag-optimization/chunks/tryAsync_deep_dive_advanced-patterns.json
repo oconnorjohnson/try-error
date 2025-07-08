@@ -1,0 +1,107 @@
+{
+  "chunk_id": "tryAsync_deep_dive_advanced-patterns",
+  "title": "Advanced Patterns",
+  "content": "## Advanced Patterns\n\n### Parallel Operations\n\n```typescript\nasync function fetchUserProfile(userId: string) {\n // Execute multiple operations in parallel\n const [userResult, postsResult, friendsResult] = await Promise.all([\n tryAsync(() => fetch(`/api/users/${userId}`), {\n context: { operation: \"fetch-user\", userId },\n }),\n tryAsync(() => fetch(`/api/users/${userId}/posts`), {\n context: { operation: \"fetch-posts\", userId },\n }),\n tryAsync(() => fetch(`/api/users/${userId}/friends`), {\n context: { operation: \"fetch-friends\", userId },\n }),\n ]);\n\n // Handle partial failures\n const profile: any = {};\n\n if (isTryError(userResult)) {\n return userResult; // User data is critical\n }\n profile.user = userResult;\n\n if (isTryError(postsResult)) {\n console.warn(`Failed to load posts: ${postsResult.message}`);\n profile.posts = [];\n } else {\n profile.posts = postsResult;\n }\n\n if (isTryError(friendsResult)) {\n console.warn(`Failed to load friends: ${friendsResult.message}`);\n profile.friends = [];\n } else {\n profile.friends = friendsResult;\n }\n\n return profile;\n}\n```\n\n### Sequential Operations with Context Chaining\n\n```typescript\nasync function processWorkflow(inputData: any) {\n let workflowContext = {\n workflowId: generateId(),\n startTime: Date.now(),\n steps: [] as Array<{ step: string; duration: number; success: boolean }>,\n };\n\n // Step 1: Validate\n const stepStart = Date.now();\n const validateResult = await tryAsync(() => validateInput(inputData), {\n context: {\n ...workflowContext,\n currentStep: \"validate\",\n stepNumber: 1,\n },\n });\n\n workflowContext.steps.push({\n step: \"validate\",\n duration: Date.now() - stepStart,\n success: !isTryError(validateResult),\n });\n\n if (isTryError(validateResult)) {\n return validateResult;\n }\n\n // Step 2: Process\n const processStart = Date.now();\n const processResult = await tryAsync(() => processData(validateResult), {\n context: {\n ...workflowContext,\n currentStep: \"process\",\n stepNumber: 2,\n inputSize: JSON.stringify(validateResult).length,\n },\n });\n\n workflowContext.steps.push({\n step: \"process\",\n duration: Date.now() - processStart,\n success: !isTryError(processResult),\n });\n\n if (isTryError(processResult)) {\n return processResult;\n }\n\n // Step 3: Store\n const storeStart = Date.now();\n const storeResult = await tryAsync(() => storeResult(processResult), {\n context: {\n ...workflowContext,\n currentStep: \"store\",\n stepNumber: 3,\n outputSize: JSON.stringify(processResult).length,\n },\n });\n\n workflowContext.steps.push({\n step: \"store\",\n duration: Date.now() - storeStart,\n success: !isTryError(storeResult),\n });\n\n return storeResult;\n}\n```\n\n### Rate-Limited Operations\n\n```typescript\nclass RateLimitedClient {\n private lastRequestTime: number = 0;\n private minInterval: number = 1000; // 1 second between requests\n\n async makeRequest<T>(\n operation: () => Promise<T>,\n operationName: string\n ): Promise<TryResult<T, TryError>> {\n const now = Date.now();\n const timeSinceLastRequest = now - this.lastRequestTime;\n\n if (timeSinceLastRequest < this.minInterval) {\n const waitTime = this.minInterval - timeSinceLastRequest;\n await new Promise((resolve) => setTimeout(resolve, waitTime));\n }\n\n this.lastRequestTime = Date.now();\n\n return await tryAsync(operation, {\n context: {\n operationName,\n requestTime: this.lastRequestTime,\n waitTime: Math.max(0, this.minInterval - timeSinceLastRequest),\n rateLimited: true,\n },\n });\n }\n}\n```\n\n### Circuit Breaker Pattern\n\n```typescript\nclass CircuitBreaker {\n private failures: number = 0;\n private lastFailureTime: number = 0;\n private state: \"CLOSED\" | \"OPEN\" | \"HALF_OPEN\" = \"CLOSED\";\n\n constructor(\n private failureThreshold: number = 5,\n private timeout: number = 60000\n ) {}\n\n async execute<T>(\n operation: () => Promise<T>,\n operationName: string\n ): Promise<TryResult<T, TryError>> {\n const now = Date.now();\n\n // Check if circuit should be half-open\n if (this.state === \"OPEN\" && now - this.lastFailureTime > this.timeout) {\n this.state = \"HALF_OPEN\";\n }\n\n // Fail fast if circuit is open\n if (this.state === \"OPEN\") {\n return createError({\n type: \"CircuitBreakerOpen\",\n message: \"Circuit breaker is open\",\n context: {\n operationName,\n failures: this.failures,\n lastFailureTime: this.lastFailureTime,\n },\n });\n }\n\n const result = await tryAsync(operation, {\n context: {\n operationName,\n circuitState: this.state,\n failureCount: this.failures,\n },\n });\n\n if (isTryError(result)) {\n this.failures++;\n this.lastFailureTime = now;\n\n if (this.failures >= this.failureThreshold) {\n this.state = \"OPEN\";\n }\n } else {\n // Success - reset circuit\n this.failures = 0;\n this.state = \"CLOSED\";\n }\n\n return result;\n }\n}\n```",
+  "metadata": {
+    "chunk_id": "tryAsync_deep_dive_advanced-patterns",
+    "source_document": "rag-docs/tryAsync-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.340Z",
+    "topics": [
+      "advanced patterns",
+      "parallel operations",
+      "sequential operations with context chaining",
+      "rate-limited operations",
+      "circuit breaker pattern",
+      "typescript",
+      "error",
+      "async",
+      "sync",
+      "promise",
+      "function"
+    ],
+    "complexity": "intermediate",
+    "includes_code": true,
+    "line_count": 212,
+    "token_count": 683,
+    "module": "async",
+    "category": "utilities",
+    "search_keywords": [
+      "fetchUserProfile",
+      "all",
+      "tryAsync",
+      "fetch",
+      "isTryError",
+      "warn",
+      "processWorkflow",
+      "generateId",
+      "now",
+      "validateInput",
+      "push",
+      "processData",
+      "stringify",
+      "storeResult",
+      "Promise",
+      "setTimeout",
+      "max",
+      "constructor",
+      "createError",
+      "Date",
+      "Validate",
+      "Process",
+      "JSON",
+      "Store",
+      "Promise<TryResult<T",
+      "Math"
+    ],
+    "common_questions": [
+      "How does advanced patterns work?",
+      "Advanced Patterns best practices",
+      "Advanced Patterns patterns"
+    ],
+    "id": "tryAsync-deep-dive",
+    "title": "tryAsync() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "async",
+      "error-handling",
+      "promises",
+      "cancellation"
+    ],
+    "related": [
+      "trySync",
+      "isTryError",
+      "AbortSignal",
+      "timeout",
+      "Promise"
+    ],
+    "performance_impact": "low",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "async-operations"
+    ],
+    "cross_references": [
+      "function_UserProfile",
+      "function_createError",
+      "function_fetchUser",
+      "function_isTryError",
+      "function_reset",
+      "trySync_deep_dive_advanced-patterns"
+    ]
+  },
+  "hash": "df3d045e05ee28169152bb1fa7214ecd"
+}

@@ -1,0 +1,89 @@
+{
+  "chunk_id": "configure_deep_dive_testing-configuration",
+  "title": "Testing Configuration",
+  "content": "## Testing Configuration\n\n### Unit Testing\n\n```typescript\ndescribe(\"configuration\", () => {\n beforeEach(() => {\n resetConfig();\n });\n\n it(\"should apply preset configurations\", () => {\n configure(\"production\");\n\n const config = getConfig();\n expect(config.captureStackTrace).toBe(false);\n expect(config.includeSource).toBe(true);\n });\n\n it(\"should merge custom configurations\", () => {\n configure(\"production\");\n configure({\n captureStackTrace: true,\n customField: \"value\",\n });\n\n const config = getConfig();\n expect(config.captureStackTrace).toBe(true);\n expect(config.includeSource).toBe(true);\n });\n\n it(\"should validate configuration\", () => {\n expect(() => {\n configure({\n captureStackTrace: \"invalid\" as any,\n });\n }).toThrow(\"Invalid configuration object\");\n });\n});\n```\n\n### Integration Testing\n\n```typescript\ndescribe(\"configuration integration\", () => {\n it(\"should affect error creation behavior\", () => {\n configure({\n captureStackTrace: false,\n includeSource: false,\n });\n\n const error = createError({\n type: \"TestError\",\n message: \"Test message\",\n });\n\n expect(error.stack).toBeUndefined();\n expect(error.source).toBe(\"disabled\");\n });\n\n it(\"should call onError handlers\", () => {\n const onErrorSpy = jest.fn();\n\n configure({\n onError: onErrorSpy,\n });\n\n const error = createError({\n type: \"TestError\",\n message: \"Test message\",\n });\n\n expect(onErrorSpy).toHaveBeenCalledWith(error);\n });\n});\n```",
+  "metadata": {
+    "chunk_id": "configure_deep_dive_testing-configuration",
+    "source_document": "rag-docs/configure-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.283Z",
+    "topics": [
+      "testing configuration",
+      "unit testing",
+      "integration testing",
+      "typescript",
+      "error",
+      "testing",
+      "configuration"
+    ],
+    "complexity": "advanced",
+    "includes_code": true,
+    "line_count": 75,
+    "token_count": 180,
+    "module": "config",
+    "category": "testing",
+    "search_keywords": [
+      "describe",
+      "beforeEach",
+      "resetConfig",
+      "it",
+      "configure",
+      "getConfig",
+      "expect",
+      "toBe",
+      "toThrow",
+      "createError",
+      "toBeUndefined",
+      "fn",
+      "toHaveBeenCalledWith"
+    ],
+    "common_questions": [
+      "How does testing configuration work?",
+      "Testing Configuration best practices",
+      "Testing Configuration patterns"
+    ],
+    "id": "configure-deep-dive",
+    "title": "configure() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "configuration",
+      "performance",
+      "optimization",
+      "presets"
+    ],
+    "related": [
+      "getConfig",
+      "resetConfig",
+      "ConfigPresets",
+      "performance",
+      "monitoring"
+    ],
+    "performance_impact": "medium",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "testing"
+    ],
+    "cross_references": [
+      "function_configure",
+      "function_createError",
+      "function_getConfig",
+      "function_reset",
+      "function_resetConfig"
+    ]
+  },
+  "hash": "471f0c865b65b41ac1aa07ec9256b360"
+}

@@ -1,0 +1,79 @@
+{
+  "chunk_id": "TryErrorBoundary_deep_dive_quick-reference",
+  "title": "Quick Reference",
+  "content": "## Quick Reference\n\nEnhanced React Error Boundary with try-error integration, retry functionality, async error handling, and comprehensive error reporting. Catches both React render errors and unhandled promise rejections/event handler errors.",
+  "metadata": {
+    "chunk_id": "TryErrorBoundary_deep_dive_quick-reference",
+    "source_document": "rag-docs/TryErrorBoundary-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.273Z",
+    "topics": [
+      "quick reference",
+      "error",
+      "async",
+      "sync",
+      "promise",
+      "function",
+      "react"
+    ],
+    "complexity": "intermediate",
+    "includes_code": false,
+    "line_count": 3,
+    "token_count": 39,
+    "module": "react",
+    "category": "utilities",
+    "search_keywords": [],
+    "common_questions": [
+      "How does quick reference work?",
+      "Quick Reference best practices",
+      "Quick Reference patterns"
+    ],
+    "id": "TryErrorBoundary-deep-dive",
+    "title": "TryErrorBoundary - Complete Implementation Guide",
+    "tags": [
+      "react",
+      "error-boundary",
+      "component",
+      "retry",
+      "async-errors",
+      "event-handlers"
+    ],
+    "related": [
+      "useTry",
+      "useErrorRecovery",
+      "createError",
+      "fromThrown",
+      "React"
+    ],
+    "performance_impact": "low",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization",
+      "TryErrorBoundary_deep_dive_common-pitfalls"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "async-operations",
+      "react-integration"
+    ],
+    "cross_references": [
+      "configure_deep_dive_quick-reference",
+      "create_error_deep_dive_quick-reference",
+      "fromThrown_deep_dive_quick-reference",
+      "isTryError_deep_dive_quick-reference",
+      "tryAsync_deep_dive_quick-reference",
+      "trySync_deep_dive_quick-reference",
+      "useTry_deep_dive_quick-reference",
+      "wrapError_deep_dive_quick-reference"
+    ]
+  },
+  "hash": "01669ab88d8626886bac6b0d559c7339"
+}

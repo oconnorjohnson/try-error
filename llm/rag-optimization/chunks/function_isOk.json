@@ -1,0 +1,121 @@
+{
+  "chunk_id": "function_isOk",
+  "title": "isOk",
+  "content": "---\nid: isOk\ntitle: isOk() - Deep Dive\ntags: [function, sync, sync, internal]\ncomplexity: low\nsideEffects: no\n---\n\n# isOk()\n\n## Overview\nCheck if a TryResult is successful (not an error)\n\n**Location**: `src/sync.ts` \n**Module**: sync \n**Exported**: No \n\n## Signature\n```typescript\nfunction isOk(result: TryResult<T, E>: any): result is T\n```\n\n## Parameters\n- **result** (`TryResult<T`)\n- **E>** (`any`)\n\n## Characteristics\n\n### Behavior\n- **Async**: No\n- **Throws Errors**: No\n- **Uses Generics**: No\n- **Recursive**: No\n\n### Integration\n- **Uses Config**: No\n- **Emits Events**: No\n- **Uses Object Pool**: No\n- **Context Support**: No\n\n### Side Effects\nNone detected\n\n### Dependencies\n- trySync()\n- tryAll()\n\n### Complexity\n- **Estimated**: low\n- **Loops**: Few/None\n- **Conditions**: Simple\n\n## Examples\n\n### Example 1\n```typescript\n* ```typescript\n * const result = trySync(() => JSON.parse(jsonString));\n * if (isOk(result)) {\n * // result is narrowed to success type\n * console.log(result.name);\n * }\n * ```\n```\n\n## Implementation Notes\nNo special implementation notes.\n\n## Performance Considerations\nNo specific performance considerations.\n\n## Common Patterns\nNo specific patterns identified.",
+  "metadata": {
+    "chunk_id": "function_isOk",
+    "source_document": "rag-docs/functions/isOk.md",
+    "chunk_type": "function-reference",
+    "last_updated": "2025-07-08T20:17:18.320Z",
+    "topics": [
+      "isok()",
+      "overview",
+      "signature",
+      "parameters",
+      "characteristics",
+      "behavior",
+      "integration",
+      "side effects",
+      "dependencies",
+      "complexity",
+      "examples",
+      "example 1",
+      "implementation notes",
+      "performance considerations",
+      "common patterns",
+      "typescript",
+      "error",
+      "async",
+      "sync",
+      "function",
+      "performance"
+    ],
+    "complexity": "low",
+    "includes_code": true,
+    "line_count": 73,
+    "token_count": 223,
+    "module": "core",
+    "category": "type-checking",
+    "search_keywords": [
+      "isOk",
+      "trySync",
+      "tryAll",
+      "parse",
+      "log",
+      "No",
+      "TryResult<T",
+      "Few",
+      "Simple"
+    ],
+    "common_questions": [
+      "How do I use isOk?",
+      "What does isOk do?",
+      "isOk example"
+    ],
+    "id": "isOk",
+    "title": "isOk() - Deep Dive",
+    "tags": [
+      "function",
+      "sync",
+      "sync",
+      "internal"
+    ],
+    "sideEffects": "no",
+    "function_name": "isOk",
+    "parameters": [
+      "id",
+      "title",
+      "tags",
+      "complexity",
+      "sideEffects",
+      "result"
+    ],
+    "return_type": "unknown",
+    "related_chunks": [
+      "function_checkCoreVersion",
+      "function_dispatch",
+      "function_isErr",
+      "function_isFormTryState",
+      "function_isLazyProperty",
+      "function_isProduction",
+      "function_isRetryableTryState",
+      "function_isTryState",
+      "function_isTrySuccess",
+      "function_isTrySyncOptions"
+    ],
+    "related_functions": [
+      "checkCoreVersion",
+      "dispatch",
+      "isErr",
+      "isFormTryState",
+      "isLazyProperty",
+      "isProduction",
+      "isRetryableTryState",
+      "isTryState",
+      "isTrySuccess",
+      "isTrySyncOptions",
+      "listFactories",
+      "usePersistedState"
+    ],
+    "usage_patterns": [
+      "async-operations",
+      "performance-optimization"
+    ],
+    "cross_references": [
+      "TryErrorBoundary_deep_dive_signature",
+      "configure_deep_dive_signature",
+      "create_error_deep_dive_signature",
+      "create_error_deep_dive_common-patterns",
+      "fromThrown_deep_dive_signature",
+      "function_intern",
+      "index_overview",
+      "isTryError_deep_dive_signature",
+      "tryAsync_deep_dive_signature",
+      "trySync_deep_dive_signature",
+      "trySync_deep_dive_common-patterns",
+      "useTry_deep_dive_signature",
+      "wrapError_deep_dive_signature"
+    ]
+  },
+  "hash": "5b35df00d8e478c7c1ad4ba55c383c20"
+}

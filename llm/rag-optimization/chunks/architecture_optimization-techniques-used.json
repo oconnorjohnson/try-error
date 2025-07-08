@@ -1,0 +1,46 @@
+{
+  "chunk_id": "architecture_optimization-techniques-used",
+  "title": "Optimization Techniques Used",
+  "content": "## Optimization Techniques Used\n- Object Pooling: 19 functions\n- Lazy Evaluation: 2 functions\n- Caching: 3 functions",
+  "metadata": {
+    "chunk_id": "architecture_optimization-techniques-used",
+    "source_document": "rag-docs/performance.md",
+    "chunk_type": "conceptual",
+    "last_updated": "2025-07-08T20:17:18.338Z",
+    "topics": [
+      "optimization techniques used",
+      "function",
+      "optimization"
+    ],
+    "complexity": "basic",
+    "includes_code": false,
+    "line_count": 4,
+    "token_count": 24,
+    "module": "core",
+    "category": "utilities",
+    "search_keywords": [],
+    "common_questions": [
+      "What is optimization techniques used?",
+      "Optimization Techniques Used architecture",
+      "Optimization Techniques Used explanation"
+    ],
+    "related_chunks": [
+      "architecture_module-organization",
+      "architecture_configuration-system",
+      "architecture_factory-functions",
+      "architecture_error-handling-functions",
+      "architecture_utility-functions",
+      "architecture_middleware-functions",
+      "architecture_hook-functions-react",
+      "architecture_function-complexity-distribution",
+      "architecture_async-vs-sync",
+      "architecture_side-effects-analysis"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "performance-optimization"
+    ],
+    "cross_references": []
+  },
+  "hash": "75fc37f15bcf7eb04b006de4ea6f11e1"
+}

@@ -1,0 +1,71 @@
+{
+  "chunk_id": "architecture_hook-functions-react",
+  "title": "Hook Functions (React)",
+  "content": "## Hook Functions (React)\n- useErrorBoundaryTrigger()\n- useAsyncError()\n- useAsyncErrorHandler()\n- useErrorContext()\n- useIsInErrorBoundary()\n- useErrorRecovery()\n- useStateWithError()\n- usePersistedState()\n- useTelemetry()",
+  "metadata": {
+    "chunk_id": "architecture_hook-functions-react",
+    "source_document": "rag-docs/patterns.md",
+    "chunk_type": "conceptual",
+    "last_updated": "2025-07-08T20:17:18.338Z",
+    "topics": [
+      "hook functions (react)",
+      "error",
+      "async",
+      "sync",
+      "function",
+      "react",
+      "hook"
+    ],
+    "complexity": "intermediate",
+    "includes_code": false,
+    "line_count": 10,
+    "token_count": 29,
+    "module": "core",
+    "category": "react-integration",
+    "search_keywords": [
+      "useErrorBoundaryTrigger",
+      "useAsyncError",
+      "useAsyncErrorHandler",
+      "useErrorContext",
+      "useIsInErrorBoundary",
+      "useErrorRecovery",
+      "useStateWithError",
+      "usePersistedState",
+      "useTelemetry"
+    ],
+    "common_questions": [
+      "What is hook functions (react)?",
+      "Hook Functions (React) architecture",
+      "Hook Functions (React) explanation"
+    ],
+    "related_chunks": [
+      "architecture_module-organization",
+      "architecture_dependency-graph",
+      "architecture_event-system",
+      "architecture_factory-functions",
+      "architecture_error-handling-functions",
+      "architecture_utility-functions",
+      "architecture_middleware-functions",
+      "architecture_function-complexity-distribution",
+      "architecture_async-vs-sync",
+      "architecture_side-effects-analysis"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "async-operations",
+      "react-integration"
+    ],
+    "cross_references": [
+      "function_useAsyncError",
+      "function_useAsyncErrorHandler",
+      "function_useErrorBoundaryTrigger",
+      "function_useErrorContext",
+      "function_useErrorRecovery",
+      "function_useIsInErrorBoundary",
+      "function_usePersistedState",
+      "function_useStateWithError",
+      "function_useTelemetry"
+    ]
+  },
+  "hash": "b1b0456b3c51e22991216253476b1f66"
+}

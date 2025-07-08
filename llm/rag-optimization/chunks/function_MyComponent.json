@@ -1,0 +1,115 @@
+{
+  "chunk_id": "function_MyComponent",
+  "title": "MyComponent",
+  "content": "---\nid: MyComponent\ntitle: MyComponent() - Deep Dive\ntags: [function, react, async, internal]\ncomplexity: low\nsideEffects: yes\n---\n\n# MyComponent()\n\n## Overview\nNo description available.\n\n**Location**: `packages/react/src/components/TryErrorBoundary.tsx` \n**Module**: react \n**Exported**: No \n\n## Signature\n```typescript\nasync function MyComponent(): unknown\n```\n\n## Parameters\nNo parameters\n\n## Characteristics\n\n### Behavior\n- **Async**: Yes\n- **Throws Errors**: No\n- **Uses Generics**: No\n- **Recursive**: Yes\n\n### Integration\n- **Uses Config**: No\n- **Emits Events**: No\n- **Uses Object Pool**: No\n- **Context Support**: No\n\n### Side Effects\n- performsIO\n\n### Dependencies\n- wrapAsync()\n\n### Complexity\n- **Estimated**: low\n- **Loops**: Few/None\n- **Conditions**: Simple\n\n## Implementation Notes\n- This is an async function - remember to use await or handle the returned Promise\n\n## Performance Considerations\n- Recursive implementation - watch for stack overflow with large inputs\n- Performs I/O operations - may be slow, consider caching\n\n## Common Patterns\nNo specific patterns identified.",
+  "metadata": {
+    "chunk_id": "function_MyComponent",
+    "source_document": "rag-docs/functions/MyComponent.md",
+    "chunk_type": "function-reference",
+    "last_updated": "2025-07-08T20:17:18.293Z",
+    "topics": [
+      "mycomponent()",
+      "overview",
+      "signature",
+      "parameters",
+      "characteristics",
+      "behavior",
+      "integration",
+      "side effects",
+      "dependencies",
+      "complexity",
+      "implementation notes",
+      "performance considerations",
+      "common patterns",
+      "typescript",
+      "error",
+      "async",
+      "sync",
+      "promise",
+      "function",
+      "react",
+      "component",
+      "performance"
+    ],
+    "complexity": "low",
+    "includes_code": true,
+    "line_count": 59,
+    "token_count": 195,
+    "module": "core",
+    "category": "react-integration",
+    "search_keywords": [
+      "MyComponent",
+      "wrapAsync",
+      "No",
+      "Yes",
+      "Few",
+      "Simple"
+    ],
+    "common_questions": [
+      "How do I use MyComponent?",
+      "What does MyComponent do?",
+      "MyComponent example"
+    ],
+    "id": "MyComponent",
+    "title": "MyComponent() - Deep Dive",
+    "tags": [
+      "function",
+      "react",
+      "async",
+      "internal"
+    ],
+    "sideEffects": "yes",
+    "function_name": "MyComponent",
+    "parameters": [
+      "id",
+      "title",
+      "tags",
+      "complexity",
+      "sideEffects"
+    ],
+    "return_type": "ed",
+    "related_chunks": [
+      "function_AsyncComponent",
+      "function_Component",
+      "function_ComponentWithAsyncHandler",
+      "function_TestComponent",
+      "function_WrappedComponent",
+      "function_getComponentName",
+      "function_setupReact",
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose"
+    ],
+    "related_functions": [
+      "AsyncComponent",
+      "Component",
+      "ComponentWithAsyncHandler",
+      "TestComponent",
+      "WrappedComponent",
+      "getComponentName",
+      "setupReact"
+    ],
+    "usage_patterns": [
+      "async-operations",
+      "react-integration",
+      "performance-optimization"
+    ],
+    "cross_references": [
+      "TryErrorBoundary_deep_dive_signature",
+      "configure_deep_dive_signature",
+      "create_error_deep_dive_signature",
+      "create_error_deep_dive_common-patterns",
+      "fromThrown_deep_dive_signature",
+      "function_Component",
+      "function_intern",
+      "index_overview",
+      "isTryError_deep_dive_signature",
+      "tryAsync_deep_dive_signature",
+      "trySync_deep_dive_signature",
+      "trySync_deep_dive_common-patterns",
+      "useTry_deep_dive_signature",
+      "wrapError_deep_dive_signature"
+    ]
+  },
+  "hash": "87f4e349cb5a92161e4494137aea02d2"
+}

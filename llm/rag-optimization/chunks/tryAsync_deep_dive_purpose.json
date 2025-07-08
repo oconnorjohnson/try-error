@@ -1,0 +1,86 @@
+{
+  "chunk_id": "tryAsync_deep_dive_purpose",
+  "title": "Purpose",
+  "content": "## Purpose\n\n- **Promise rejection to Result conversion**: Transforms rejecting Promises into resolved Promises with results\n- **Cancellation support**: Built-in AbortSignal integration for operation cancellation\n- **Timeout handling**: Automatic timeout management with configurable delays\n- **Type safety**: Provides compile-time guarantees about async error handling\n- **Context injection**: Allows runtime context to be attached to async errors\n- **Performance**: Minimal overhead, preserves Promise chain optimizations",
+  "metadata": {
+    "chunk_id": "tryAsync_deep_dive_purpose",
+    "source_document": "rag-docs/tryAsync-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.339Z",
+    "topics": [
+      "purpose",
+      "error",
+      "async",
+      "sync",
+      "promise",
+      "performance",
+      "optimization"
+    ],
+    "complexity": "intermediate",
+    "includes_code": false,
+    "line_count": 8,
+    "token_count": 84,
+    "module": "async",
+    "category": "utilities",
+    "search_keywords": [
+      "Transforms",
+      "Built",
+      "Automatic",
+      "Provides",
+      "Allows",
+      "Minimal"
+    ],
+    "common_questions": [
+      "How does purpose work?",
+      "Purpose best practices",
+      "Purpose patterns"
+    ],
+    "id": "tryAsync-deep-dive",
+    "title": "tryAsync() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "async",
+      "error-handling",
+      "promises",
+      "cancellation"
+    ],
+    "related": [
+      "trySync",
+      "isTryError",
+      "AbortSignal",
+      "timeout",
+      "Promise"
+    ],
+    "performance_impact": "low",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "async-operations",
+      "performance-optimization"
+    ],
+    "cross_references": [
+      "TryErrorBoundary_deep_dive_purpose",
+      "configure_deep_dive_purpose",
+      "create_error_deep_dive_purpose",
+      "fromThrown_deep_dive_purpose",
+      "isTryError_deep_dive_purpose",
+      "trySync_deep_dive_purpose",
+      "useTry_deep_dive_purpose",
+      "wrapError_deep_dive_purpose"
+    ]
+  },
+  "hash": "7048abe72702cdd009e07d54da139468"
+}

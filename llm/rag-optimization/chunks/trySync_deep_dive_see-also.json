@@ -1,0 +1,98 @@
+{
+  "chunk_id": "trySync_deep_dive_see-also",
+  "title": "See Also",
+  "content": "## See Also\n\n- [tryAsync() - Async Error Handling](./tryAsync-deep-dive.md)\n- [isTryError() - Type Guards](./isTryError-deep-dive.md)\n- [createError() - Error Creation](./create-error-deep-dive.md)\n- [wrapError() - Error Wrapping](./wrapError-deep-dive.md)\n- [fromThrown() - Error Conversion](./fromThrown-deep-dive.md)\n- [Configuration Guide](./configure-deep-dive.md)\n- [Performance Optimization](./performance-optimization.md)\n- [Error Handling Patterns](./error-patterns.md)",
+  "metadata": {
+    "chunk_id": "trySync_deep_dive_see-also",
+    "source_document": "rag-docs/trySync-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.343Z",
+    "topics": [
+      "see also",
+      "error",
+      "async",
+      "sync",
+      "performance",
+      "optimization",
+      "configuration"
+    ],
+    "complexity": "intermediate",
+    "includes_code": false,
+    "line_count": 10,
+    "token_count": 51,
+    "module": "sync",
+    "category": "utilities",
+    "search_keywords": [
+      "tryAsync",
+      "isTryError",
+      "createError",
+      "wrapError",
+      "fromThrown"
+    ],
+    "common_questions": [
+      "How does see also work?",
+      "See Also best practices",
+      "See Also patterns"
+    ],
+    "id": "trySync-deep-dive",
+    "title": "trySync() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "sync",
+      "error-handling",
+      "performance"
+    ],
+    "related": [
+      "tryAsync",
+      "isTryError",
+      "wrapError",
+      "fromThrown",
+      "createError"
+    ],
+    "performance_impact": "low",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "async-operations",
+      "performance-optimization"
+    ],
+    "cross_references": [
+      "TryErrorBoundary_deep_dive_performance-optimization",
+      "TryErrorBoundary_deep_dive_see-also",
+      "configure_deep_dive_see-also",
+      "create_error_deep_dive_performance-optimization",
+      "create_error_deep_dive_see-also",
+      "fromThrown_deep_dive_performance-optimization",
+      "fromThrown_deep_dive_see-also",
+      "function_configure",
+      "function_createError",
+      "function_fromThrown",
+      "function_isTryError",
+      "function_wrapError",
+      "isTryError_deep_dive_performance-optimization",
+      "isTryError_deep_dive_see-also",
+      "tryAsync_deep_dive_performance-optimization",
+      "tryAsync_deep_dive_error-handling-patterns",
+      "tryAsync_deep_dive_see-also",
+      "trySync_deep_dive_performance-optimization",
+      "useTry_deep_dive_error-handling-patterns",
+      "useTry_deep_dive_see-also",
+      "wrapError_deep_dive_performance-optimization",
+      "wrapError_deep_dive_see-also"
+    ]
+  },
+  "hash": "595bed9883083f3604b02757ab75ca07"
+}

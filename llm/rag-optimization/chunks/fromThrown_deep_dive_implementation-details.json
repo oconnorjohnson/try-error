@@ -1,0 +1,95 @@
+{
+  "chunk_id": "fromThrown_deep_dive_implementation-details",
+  "title": "Implementation Details",
+  "content": "## Implementation Details\n\n### Algorithm Flow\n\n```\n1. Type detection → 5-25ns\n a. Check instanceof TypeError\n b. Check instanceof ReferenceError\n c. Check instanceof SyntaxError\n d. Check instanceof Error (generic)\n e. Check typeof === \"string\"\n f. Default to unknown\n2. wrapError() delegation → 25-115ns\n a. Pass detected type\n b. Include original cause\n c. Extract or generate message\n d. Add optional context\n3. TryError creation → Variable (via wrapError)\n4. Return structured error → 0ns\n```\n\n### Performance Characteristics\n\n- **Time Complexity**: O(1) - constant time type checks\n- **Space Complexity**: O(1) + O(context size)\n- **Execution Time**: 30-140ns total\n- **Memory Usage**: Same as wrapError() (standard mode)\n- **Overhead**: Minimal - just type detection overhead\n\n### Type Detection Logic\n\n```typescript\nfunction classifyError(cause: unknown): string {\n // 1. Specific Error types (most common first)\n if (cause instanceof TypeError) return \"TypeError\";\n if (cause instanceof ReferenceError) return \"ReferenceError\";\n if (cause instanceof SyntaxError) return \"SyntaxError\";\n\n // 2. Generic Error (catch-all for Error instances)\n if (cause instanceof Error) return \"Error\";\n\n // 3. String errors (common in legacy code)\n if (typeof cause === \"string\") return \"StringError\";\n\n // 4. Unknown types (objects, numbers, etc.)\n return \"UnknownError\";\n}\n```\n\n### Internal Dependencies\n\n```typescript\n// Direct dependencies\n- wrapError() // Error wrapping logic\n- instanceof checks // Type detection\n- typeof checks // Primitive type detection\n\n// Indirect dependencies (via wrapError)\n- createError() // Core error creation\n- getCachedConfig() // Configuration access\n- getSourceLocation() // Stack trace parsing\n- ErrorPool.acquire() // Object pooling (if enabled)\n```",
+  "metadata": {
+    "chunk_id": "fromThrown_deep_dive_implementation-details",
+    "source_document": "rag-docs/fromThrown-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.285Z",
+    "topics": [
+      "implementation details",
+      "algorithm flow",
+      "performance characteristics",
+      "type detection logic",
+      "internal dependencies",
+      "typescript",
+      "error",
+      "function",
+      "performance",
+      "configuration"
+    ],
+    "complexity": "beginner",
+    "includes_code": true,
+    "line_count": 63,
+    "token_count": 320,
+    "module": "errors",
+    "category": "utilities",
+    "search_keywords": [
+      "wrapError",
+      "O",
+      "classifyError",
+      "createError",
+      "getCachedConfig",
+      "getSourceLocation",
+      "acquire",
+      "Same",
+      "Minimal"
+    ],
+    "common_questions": [
+      "How does implementation details work?",
+      "Implementation Details best practices",
+      "Implementation Details patterns"
+    ],
+    "id": "fromThrown-deep-dive",
+    "title": "fromThrown() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "auto-detection",
+      "type-classification",
+      "catch-blocks"
+    ],
+    "related": [
+      "wrapError",
+      "createError",
+      "trySync",
+      "tryAsync",
+      "Error"
+    ],
+    "performance_impact": "low",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "performance-optimization"
+    ],
+    "cross_references": [
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "configure_deep_dive_implementation-details",
+      "create_error_deep_dive_implementation-details",
+      "function_createError",
+      "function_getCachedConfig",
+      "function_getSourceLocation",
+      "function_intern",
+      "function_wrapError",
+      "isTryError_deep_dive_implementation-details",
+      "tryAsync_deep_dive_implementation-details",
+      "trySync_deep_dive_implementation-details",
+      "useTry_deep_dive_implementation-details",
+      "wrapError_deep_dive_implementation-details"
+    ]
+  },
+  "hash": "343eacea2ea9502eace066ee1fec741a"
+}

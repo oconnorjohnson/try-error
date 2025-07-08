@@ -1,0 +1,87 @@
+{
+  "chunk_id": "trySync_deep_dive_testing-strategies",
+  "title": "Testing Strategies",
+  "content": "## Testing Strategies\n\n### Unit Testing\n\n```typescript\ndescribe(\"trySync\", () => {\n it(\"should return success value directly\", () => {\n const result = trySync(() => 42);\n expect(result).toBe(42);\n expect(isTryError(result)).toBe(false);\n });\n\n it(\"should handle thrown errors\", () => {\n const result = trySync(() => {\n throw new Error(\"test\");\n });\n expect(isTryError(result)).toBe(true);\n expect(result.message).toBe(\"test\");\n });\n\n it(\"should include context in errors\", () => {\n const context = { userId: 123, operation: \"test\" };\n const result = trySync(\n () => {\n throw new Error(\"fail\");\n },\n { context }\n );\n\n expect(isTryError(result)).toBe(true);\n expect(result.context).toEqual(context);\n });\n});\n```\n\n### Integration Testing\n\n```typescript\ndescribe(\"trySync integration\", () => {\n it(\"should work with real file operations\", () => {\n const result = trySync(() => fs.readFileSync(\"test-file.txt\", \"utf8\"));\n\n if (isTryError(result)) {\n expect(result.type).toBe(\"Error\");\n expect(result.message).toContain(\"ENOENT\");\n } else {\n expect(typeof result).toBe(\"string\");\n }\n });\n});\n```",
+  "metadata": {
+    "chunk_id": "trySync_deep_dive_testing-strategies",
+    "source_document": "rag-docs/trySync-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.343Z",
+    "topics": [
+      "testing strategies",
+      "unit testing",
+      "integration testing",
+      "typescript",
+      "error",
+      "sync",
+      "testing"
+    ],
+    "complexity": "intermediate",
+    "includes_code": true,
+    "line_count": 51,
+    "token_count": 162,
+    "module": "sync",
+    "category": "testing",
+    "search_keywords": [
+      "describe",
+      "it",
+      "trySync",
+      "expect",
+      "toBe",
+      "isTryError",
+      "Error",
+      "toEqual",
+      "readFileSync",
+      "toContain"
+    ],
+    "common_questions": [
+      "How does testing strategies work?",
+      "Testing Strategies best practices",
+      "Testing Strategies patterns"
+    ],
+    "id": "trySync-deep-dive",
+    "title": "trySync() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "sync",
+      "error-handling",
+      "performance"
+    ],
+    "related": [
+      "tryAsync",
+      "isTryError",
+      "wrapError",
+      "fromThrown",
+      "createError"
+    ],
+    "performance_impact": "low",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "testing"
+    ],
+    "cross_references": [
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "fromThrown_deep_dive_testing-strategies",
+      "function_isTryError",
+      "isTryError_deep_dive_testing-strategies",
+      "tryAsync_deep_dive_testing-strategies",
+      "useTry_deep_dive_testing-strategies",
+      "wrapError_deep_dive_testing-strategies"
+    ]
+  },
+  "hash": "1911e7fe832421e289b72eb6022d31d6"
+}

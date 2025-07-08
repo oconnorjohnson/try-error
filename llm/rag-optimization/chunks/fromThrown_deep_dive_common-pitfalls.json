@@ -1,0 +1,96 @@
+{
+  "chunk_id": "fromThrown_deep_dive_common-pitfalls",
+  "title": "Common Pitfalls",
+  "content": "## Common Pitfalls\n\n### 1. Forgetting to Check Return Type\n\n```typescript\n// BAD: Not checking if result is an error\nfunction riskyOperation() {\n try {\n return performOperation();\n } catch (error) {\n return fromThrown(error);\n }\n}\n\nconst result = riskyOperation();\n// Using result directly without checking!\nconsole.log(result.data); // May be !\n\n// GOOD: Always check error state\nconst result = riskyOperation();\nif (isTryError(result)) {\n console.log(\"Error occurred:\", result.message);\n return;\n}\nconsole.log(\"Success:\", result.data);\n```\n\n### 2. Losing Type Information\n\n```typescript\n// BAD: Converting specific error types to generic\nfunction badErrorHandling() {\n try {\n return JSON.parse(invalidJson);\n } catch (error) {\n throw new Error(\"Parsing failed\"); // Lost SyntaxError type!\n }\n}\n\n// GOOD: Preserve original error type\nfunction goodErrorHandling() {\n try {\n return JSON.parse(invalidJson);\n } catch (error) {\n return fromThrown(error); // Preserves SyntaxError type\n }\n}\n```\n\n### 3. Not Adding Sufficient Context\n\n```typescript\n// BAD: No context about the operation\nfunction parseUserData(data: string) {\n try {\n return JSON.parse(data);\n } catch (error) {\n return fromThrown(error); // No context about what failed\n }\n}\n\n// GOOD: Include operation context\nfunction parseUserData(data: string, userId?: string) {\n try {\n return JSON.parse(data);\n } catch (error) {\n return fromThrown(error, {\n operation: \"parseUserData\",\n userId,\n dataLength: data.length,\n dataPreview: data.slice(0, 100),\n });\n }\n}\n```",
+  "metadata": {
+    "chunk_id": "fromThrown_deep_dive_common-pitfalls",
+    "source_document": "rag-docs/fromThrown-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.288Z",
+    "topics": [
+      "common pitfalls",
+      "1. forgetting to check return type",
+      "2. losing type information",
+      "3. not adding sufficient context",
+      "typescript",
+      "error",
+      "function"
+    ],
+    "complexity": "beginner",
+    "includes_code": true,
+    "line_count": 75,
+    "token_count": 263,
+    "module": "errors",
+    "category": "utilities",
+    "search_keywords": [
+      "riskyOperation",
+      "performOperation",
+      "fromThrown",
+      "log",
+      "isTryError",
+      "badErrorHandling",
+      "parse",
+      "Error",
+      "goodErrorHandling",
+      "parseUserData",
+      "slice",
+      "Not",
+      "Always",
+      "Converting",
+      "Preserve",
+      "No",
+      "Include"
+    ],
+    "common_questions": [
+      "How does common pitfalls work?",
+      "Common Pitfalls best practices",
+      "Common Pitfalls patterns"
+    ],
+    "id": "fromThrown-deep-dive",
+    "title": "fromThrown() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "auto-detection",
+      "type-classification",
+      "catch-blocks"
+    ],
+    "related": [
+      "wrapError",
+      "createError",
+      "trySync",
+      "tryAsync",
+      "Error"
+    ],
+    "performance_impact": "low",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "error-handling"
+    ],
+    "cross_references": [
+      "TryErrorBoundary_deep_dive_common-pitfalls",
+      "configure_deep_dive_common-pitfalls",
+      "function_fromThrown",
+      "function_isTryError",
+      "isTryError_deep_dive_common-pitfalls",
+      "tryAsync_deep_dive_common-pitfalls",
+      "trySync_deep_dive_common-pitfalls",
+      "useTry_deep_dive_common-pitfalls",
+      "wrapError_deep_dive_common-pitfalls"
+    ]
+  },
+  "hash": "07bc1978576b126798d1fa0593121fea"
+}

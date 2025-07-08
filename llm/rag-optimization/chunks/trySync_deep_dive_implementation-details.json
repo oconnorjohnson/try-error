@@ -1,0 +1,103 @@
+{
+  "chunk_id": "trySync_deep_dive_implementation-details",
+  "title": "Implementation Details",
+  "content": "## Implementation Details\n\n### Algorithm Flow\n\n```\n1. Options validation → 1-2ns\n2. Function execution → Variable (user function time)\n3. Success path → Return value directly (0ns overhead)\n4. Error path → Error transformation (20-100ns)\n a. Custom error type check\n b. Context merging\n c. Stack trace preservation\n d. TryError creation via createTryError()\n5. Return TryResult → 0ns\n```\n\n### Performance Characteristics\n\n- **Time Complexity**: O(1) + O(user function)\n- **Space Complexity**: O(1) on success, O(context size) on error\n- **Success Path Overhead**: **0ns** (direct return)\n- **Error Path Overhead**: 20-100ns depending on configuration\n\n### Memory Usage\n\n```typescript\n// Success case: No additional memory allocation\nconst result = trySync(() => 42); // result === 42, no wrapper object\n\n// Error case: TryError object allocation\nconst result = trySync(() => {\n throw new Error(\"fail\");\n});\n// result = { type: \"Error\", message: \"fail\", source: \"...\", ... }\n// Memory: ~450 bytes (standard) or ~120 bytes (minimal mode)\n```\n\n### Internal Dependencies\n\n```typescript\n// Direct dependencies\n-createTryError(error, options) - // Error creation with context\n fromThrown(error, context) - // Automatic error type detection\n wrapError(type, error, msg, ctx) - // Custom error type wrapping\n // Indirect dependencies (via createTryError)\n createError() - // Core error creation\n getCachedConfig() - // Configuration access\n getSourceLocation() - // Stack trace parsing\n ErrorPool.acquire(); // Object pooling (if enabled)\n```",
+  "metadata": {
+    "chunk_id": "trySync_deep_dive_implementation-details",
+    "source_document": "rag-docs/trySync-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.342Z",
+    "topics": [
+      "implementation details",
+      "algorithm flow",
+      "performance characteristics",
+      "memory usage",
+      "internal dependencies",
+      "typescript",
+      "error",
+      "sync",
+      "function",
+      "validation",
+      "performance",
+      "configuration"
+    ],
+    "complexity": "intermediate",
+    "includes_code": true,
+    "line_count": 50,
+    "token_count": 285,
+    "module": "sync",
+    "category": "utilities",
+    "search_keywords": [
+      "createTryError",
+      "O",
+      "trySync",
+      "Error",
+      "fromThrown",
+      "wrapError",
+      "createError",
+      "getCachedConfig",
+      "getSourceLocation",
+      "acquire",
+      "No",
+      "TryError"
+    ],
+    "common_questions": [
+      "How does implementation details work?",
+      "Implementation Details best practices",
+      "Implementation Details patterns"
+    ],
+    "id": "trySync-deep-dive",
+    "title": "trySync() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "sync",
+      "error-handling",
+      "performance"
+    ],
+    "related": [
+      "tryAsync",
+      "isTryError",
+      "wrapError",
+      "fromThrown",
+      "createError"
+    ],
+    "performance_impact": "low",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "performance-optimization"
+    ],
+    "cross_references": [
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "configure_deep_dive_implementation-details",
+      "create_error_deep_dive_implementation-details",
+      "fromThrown_deep_dive_implementation-details",
+      "function_Wrapper",
+      "function_createError",
+      "function_createTryError",
+      "function_fromThrown",
+      "function_getCachedConfig",
+      "function_getSourceLocation",
+      "function_intern",
+      "function_wrapError",
+      "isTryError_deep_dive_implementation-details",
+      "tryAsync_deep_dive_implementation-details",
+      "useTry_deep_dive_implementation-details",
+      "wrapError_deep_dive_implementation-details"
+    ]
+  },
+  "hash": "5406612c3087c9c7845886f7b54570bd"
+}

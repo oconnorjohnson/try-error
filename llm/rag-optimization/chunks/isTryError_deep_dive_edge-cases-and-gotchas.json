@@ -1,0 +1,82 @@
+{
+  "chunk_id": "isTryError_deep_dive_edge-cases-and-gotchas",
+  "title": "Edge Cases and Gotchas",
+  "content": "## Edge Cases and Gotchas\n\n### Spoofing Prevention\n\n```typescript\n// Attempt to create fake TryError (will fail validation)\nconst fakeError = {\n type: \"FakeError\",\n message: \"I'm fake\",\n source: \"fake.ts:1:1\",\n timestamp: Date.now(),\n // Missing TRY_ERROR_BRAND symbol\n};\n\nconsole.log(isTryError(fakeError)); // false - spoofing prevented\n```\n\n### Nested Error Objects\n\n```typescript\n// TryError containing another TryError\nconst innerError = createError({\n type: \"InnerError\",\n message: \"Inner error occurred\",\n});\n\nconst outerError = createError({\n type: \"OuterError\",\n message: \"Outer error occurred\",\n context: {\n innerError, // TryError inside context\n },\n});\n\nconsole.log(isTryError(outerError)); // true\nconsole.log(isTryError(outerError.context?.innerError)); // true\n```\n\n### Circular References\n\n```typescript\n// TryError with circular reference in context\nconst error = createError({\n type: \"CircularError\",\n message: \"Error with circular reference\",\n context: { data: {} },\n});\n\n// Create circular reference\nerror.context!.data = error;\n\nconsole.log(isTryError(error)); // true - still valid\n// But JSON.stringify(error) would fail\n```\n\n### Inherited Objects\n\n```typescript\n// Objects inheriting from TryError\nclass CustomError extends Error {\n [TRY_ERROR_BRAND] = true as const;\n type = \"CustomError\";\n source = \"custom.ts:1:1\";\n timestamp = Date.now();\n}\n\nconst customError = new CustomError(\"Custom error\");\nconsole.log(isTryError(customError)); // true - validates correctly\n```",
+  "metadata": {
+    "chunk_id": "isTryError_deep_dive_edge-cases-and-gotchas",
+    "source_document": "rag-docs/isTryError-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.337Z",
+    "topics": [
+      "edge cases and gotchas",
+      "spoofing prevention",
+      "nested error objects",
+      "circular references",
+      "inherited objects",
+      "typescript",
+      "error",
+      "validation"
+    ],
+    "complexity": "intermediate",
+    "includes_code": true,
+    "line_count": 69,
+    "token_count": 233,
+    "module": "types",
+    "category": "utilities",
+    "search_keywords": [
+      "now",
+      "log",
+      "isTryError",
+      "createError",
+      "stringify",
+      "CustomError",
+      "Date"
+    ],
+    "common_questions": [
+      "How does edge cases and gotchas work?",
+      "Edge Cases and Gotchas best practices",
+      "Edge Cases and Gotchas patterns"
+    ],
+    "id": "isTryError-deep-dive",
+    "title": "isTryError() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "type-guard",
+      "type-safety",
+      "discriminated-union"
+    ],
+    "related": [
+      "trySync",
+      "tryAsync",
+      "TryResult",
+      "TryError",
+      "TypeScript"
+    ],
+    "performance_impact": "negligible",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [],
+    "cross_references": [
+      "create_error_deep_dive_edge-cases-and-gotchas",
+      "function_createError",
+      "function_isTryError",
+      "tryAsync_deep_dive_edge-cases-and-gotchas",
+      "trySync_deep_dive_edge-cases-and-gotchas",
+      "wrapError_deep_dive_edge-cases-and-gotchas"
+    ]
+  },
+  "hash": "29e9465a1733c18a0336e09442632e51"
+}

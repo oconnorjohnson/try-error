@@ -1,0 +1,105 @@
+{
+  "chunk_id": "useTry_deep_dive_basic-usage-examples",
+  "title": "Basic Usage Examples",
+  "content": "## Basic Usage Examples\n\n### Simple Data Fetching\n\n```typescript\nfunction UserProfile({ userId }: { userId: string }) {\n const {\n data: user,\n error,\n isLoading,\n } = useTry(\n async (signal) => {\n const response = await fetch(`/api/users/${userId}`, { signal });\n if (!response.ok) throw new Error(\"Failed to fetch user\");\n return response.json();\n },\n {\n deps: [userId],\n cacheKey: `user-${userId}`,\n cacheTime: 5 * 60 * 1000, // 5 minutes\n }\n );\n\n if (isLoading) return <div>Loading user...</div>;\n if (error) return <div>Error: {error.message}</div>;\n if (!user) return <div>No user found</div>;\n\n return (\n <div>\n <h1>{user.name}</h1>\n <p>{user.email}</p>\n </div>\n );\n}\n```\n\n### Manual Execution\n\n```typescript\nfunction SearchComponent() {\n const [query, setQuery] = useState(\"\");\n\n const {\n data: results,\n error,\n isLoading,\n execute,\n } = useTry(\n async (signal) => {\n if (!query.trim()) return [];\n\n const response = await fetch(\n `/api/search?q=${encodeURIComponent(query)}`,\n {\n signal,\n }\n );\n\n if (!response.ok) throw new Error(\"Search failed\");\n return response.json();\n },\n {\n enabled: false, // Don't auto-execute\n deps: [query],\n debounceMs: 300,\n cacheKey: `search-${query}`,\n }\n );\n\n const handleSubmit = (e: React.FormEvent) => {\n e.preventDefault();\n execute();\n };\n\n return (\n <form onSubmit={handleSubmit}>\n <input\n value={query}\n onChange={(e) => setQuery(e.target.value)}\n placeholder=\"Search...\"\n />\n <button type=\"submit\" disabled={isLoading}>\n {isLoading ? \"Searching...\" : \"Search\"}\n </button>\n\n {error && <div>Error: {error.message}</div>}\n\n {results && (\n <ul>\n {results.map((result) => (\n <li key={result.id}>{result.title}</li>\n ))}\n </ul>\n )}\n </form>\n );\n}\n```\n\n### With Callbacks\n\n```typescript\nfunction DataManager() {\n const [notifications, setNotifications] = useState<string[]>([]);\n\n const { data, error, isLoading, execute, abort } = useTry(\n async (signal) => {\n const response = await fetch(\"/api/data\", { signal });\n if (!response.ok) throw new Error(\"Failed to fetch data\");\n return response.json();\n },\n {\n onSuccess: (data) => {\n setNotifications((prev) => [\n ...prev,\n `Data loaded: ${data.length} items`,\n ]);\n },\n\n onError: (error) => {\n setNotifications((prev) => [...prev, `Error: ${error.message}`]);\n },\n\n onSettled: (data, error) => {\n console.log(\"Request completed\", { data, error });\n },\n\n cacheKey: \"data-manager\",\n cacheTime: 2 * 60 * 1000, // 2 minutes\n }\n );\n\n return (\n <div>\n <div>\n <button onClick={execute} disabled={isLoading}>\n {isLoading ? \"Loading...\" : \"Load Data\"}\n </button>\n\n {isLoading && <button onClick={abort}>Cancel</button>}\n </div>\n\n {error && <div>Error: {error.message}</div>}\n\n {data && (\n <div>\n <h2>Data ({data.length} items)</h2>\n {/* Render data */}\n </div>\n )}\n\n <div>\n <h3>Notifications</h3>\n {notifications.map((notification, index) => (\n <div key={index}>{notification}</div>\n ))}\n </div>\n </div>\n );\n}\n```",
+  "metadata": {
+    "chunk_id": "useTry_deep_dive_basic-usage-examples",
+    "source_document": "rag-docs/useTry-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.344Z",
+    "topics": [
+      "basic usage examples",
+      "simple data fetching",
+      "manual execution",
+      "with callbacks",
+      "typescript",
+      "error",
+      "async",
+      "sync",
+      "callback",
+      "function",
+      "react",
+      "component"
+    ],
+    "complexity": "advanced",
+    "includes_code": true,
+    "line_count": 161,
+    "token_count": 454,
+    "module": "react",
+    "category": "utilities",
+    "search_keywords": [
+      "UserProfile",
+      "useTry",
+      "fetch",
+      "Error",
+      "json",
+      "SearchComponent",
+      "useState",
+      "trim",
+      "encodeURIComponent",
+      "preventDefault",
+      "execute",
+      "setQuery",
+      "map",
+      "DataManager",
+      "setNotifications",
+      "log",
+      "React"
+    ],
+    "common_questions": [
+      "How does basic usage examples work?",
+      "Basic Usage Examples best practices",
+      "Basic Usage Examples patterns"
+    ],
+    "id": "useTry-deep-dive",
+    "title": "useTry() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "react",
+      "hooks",
+      "async",
+      "state-management",
+      "cancellation",
+      "caching"
+    ],
+    "related": [
+      "tryAsync",
+      "isTryError",
+      "AbortSignal",
+      "React",
+      "useState",
+      "useEffect"
+    ],
+    "performance_impact": "medium",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "async-operations",
+      "react-integration"
+    ],
+    "cross_references": [
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "create_error_deep_dive_usage-examples",
+      "fromThrown_deep_dive_basic-usage-examples",
+      "function_Component",
+      "function_UserProfile",
+      "function_handleSubmit",
+      "tryAsync_deep_dive_usage-examples",
+      "trySync_deep_dive_usage-examples",
+      "wrapError_deep_dive_basic-usage-examples"
+    ]
+  },
+  "hash": "6b6473584e15f0614bb4774349cad287"
+}

@@ -1,0 +1,78 @@
+{
+  "chunk_id": "isTryError_deep_dive_purpose",
+  "title": "Purpose",
+  "content": "## Purpose\n\n- **Type narrowing**: Enables TypeScript to narrow types in conditional blocks\n- **Runtime validation**: Verifies that an object is a valid TryError at runtime\n- **Type safety**: Prevents accessing error properties on success values\n- **Discriminated unions**: Core mechanism for Result pattern implementation\n- **Spoofing prevention**: Uses Symbol branding to prevent fake error objects",
+  "metadata": {
+    "chunk_id": "isTryError_deep_dive_purpose",
+    "source_document": "rag-docs/isTryError-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.336Z",
+    "topics": [
+      "purpose",
+      "error",
+      "typescript",
+      "validation"
+    ],
+    "complexity": "intermediate",
+    "includes_code": false,
+    "line_count": 7,
+    "token_count": 73,
+    "module": "types",
+    "category": "utilities",
+    "search_keywords": [
+      "Enables",
+      "Verifies",
+      "Prevents",
+      "Core",
+      "Uses"
+    ],
+    "common_questions": [
+      "How does purpose work?",
+      "Purpose best practices",
+      "Purpose patterns"
+    ],
+    "id": "isTryError-deep-dive",
+    "title": "isTryError() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "type-guard",
+      "type-safety",
+      "discriminated-union"
+    ],
+    "related": [
+      "trySync",
+      "tryAsync",
+      "TryResult",
+      "TryError",
+      "TypeScript"
+    ],
+    "performance_impact": "negligible",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [],
+    "cross_references": [
+      "TryErrorBoundary_deep_dive_purpose",
+      "configure_deep_dive_purpose",
+      "create_error_deep_dive_purpose",
+      "fromThrown_deep_dive_purpose",
+      "tryAsync_deep_dive_purpose",
+      "trySync_deep_dive_purpose",
+      "useTry_deep_dive_purpose",
+      "wrapError_deep_dive_purpose"
+    ]
+  },
+  "hash": "923265262bbcdb9d69337b2afc6fc05d"
+}

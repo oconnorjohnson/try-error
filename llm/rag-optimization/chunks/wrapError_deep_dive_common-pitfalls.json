@@ -1,0 +1,100 @@
+{
+  "chunk_id": "wrapError_deep_dive_common-pitfalls",
+  "title": "Common Pitfalls",
+  "content": "## Common Pitfalls\n\n### 1. Losing Original Stack Traces\n\n```typescript\n// BAD: Stack trace is lost\ntry {\n complexOperation();\n} catch (error) {\n throw wrapError(\"ProcessingError\", error.message); // Lost original error!\n}\n\n// GOOD: Preserve original error\ntry {\n complexOperation();\n} catch (error) {\n return wrapError(\"ProcessingError\", error); // Original error preserved\n}\n```\n\n### 2. Double Wrapping\n\n```typescript\n// BAD: Wrapping already wrapped errors\nfunction doubleWrap(error: unknown) {\n const wrapped = wrapError(\"FirstWrap\", error);\n return wrapError(\"SecondWrap\", wrapped); // Creates confusing chain\n}\n\n// GOOD: Check if already wrapped\nfunction smartWrap(error: unknown) {\n if (isTryError(error)) {\n return error; // Already wrapped\n }\n return wrapError(\"SmartWrap\", error);\n}\n```\n\n### 3. Context Information Loss\n\n```typescript\n// BAD: Losing important context\nfunction processWithoutContext(data: any) {\n try {\n return validateData(data);\n } catch (error) {\n return wrapError(\"ValidationError\", error); // Lost data context\n }\n}\n\n// GOOD: Preserve context\nfunction processWithContext(data: any) {\n try {\n return validateData(data);\n } catch (error) {\n return wrapError(\"ValidationError\", error, \"Data validation failed\", {\n dataKeys: Object.keys(data),\n dataSize: JSON.stringify(data).length,\n timestamp: Date.now(),\n });\n }\n}\n```",
+  "metadata": {
+    "chunk_id": "wrapError_deep_dive_common-pitfalls",
+    "source_document": "rag-docs/wrapError-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.349Z",
+    "topics": [
+      "common pitfalls",
+      "1. losing original stack traces",
+      "2. double wrapping",
+      "3. context information loss",
+      "typescript",
+      "error",
+      "function",
+      "validation"
+    ],
+    "complexity": "intermediate",
+    "includes_code": true,
+    "line_count": 63,
+    "token_count": 220,
+    "module": "errors",
+    "category": "utilities",
+    "search_keywords": [
+      "complexOperation",
+      "wrapError",
+      "doubleWrap",
+      "smartWrap",
+      "isTryError",
+      "processWithoutContext",
+      "validateData",
+      "processWithContext",
+      "keys",
+      "stringify",
+      "now",
+      "Stack",
+      "Preserve",
+      "Wrapping",
+      "Check",
+      "Losing",
+      "Object",
+      "JSON",
+      "Date"
+    ],
+    "common_questions": [
+      "How does common pitfalls work?",
+      "Common Pitfalls best practices",
+      "Common Pitfalls patterns"
+    ],
+    "id": "wrapError-deep-dive",
+    "title": "wrapError() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "error-wrapping",
+      "cause-preservation",
+      "error-chaining"
+    ],
+    "related": [
+      "fromThrown",
+      "createError",
+      "trySync",
+      "tryAsync",
+      "Error"
+    ],
+    "performance_impact": "low",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "error-handling"
+    ],
+    "cross_references": [
+      "TryErrorBoundary_deep_dive_common-pitfalls",
+      "configure_deep_dive_common-pitfalls",
+      "fromThrown_deep_dive_common-pitfalls",
+      "function_isTryError",
+      "function_validationError",
+      "function_wrapError",
+      "isTryError_deep_dive_common-pitfalls",
+      "tryAsync_deep_dive_common-pitfalls",
+      "trySync_deep_dive_common-pitfalls",
+      "useTry_deep_dive_common-pitfalls"
+    ]
+  },
+  "hash": "de2b2b873fc0b5ead4a6faa255a3e79b"
+}

@@ -1,0 +1,81 @@
+{
+  "chunk_id": "create_error_deep_dive_common-patterns",
+  "title": "Common Patterns",
+  "content": "## Common Patterns\n\n### With trySync/tryAsync\n\n```typescript\nconst result = trySync(() => dangerousOperation(), {\n errorType: \"OperationError\",\n context: {\n operation: \"user-update\",\n userId: user.id,\n },\n});\n```\n\n### With Middleware Pipeline\n\n```typescript\nconst pipeline = new MiddlewarePipeline()\n .use(\n enrichContextMiddleware(() => ({\n timestamp: Date.now(),\n requestId: getRequestId(),\n }))\n )\n .use(loggingMiddleware());\n\nconst wrappedCreate = pipeline.wrap(createError);\n```\n\n### With Error Factories\n\n```typescript\nconst createApiError = createErrorFactory({\n service: \"user-api\",\n version: \"1.0.0\",\n});\n\nconst error = createApiError(\n \"ApiError\",\n \"Failed to fetch user\",\n { endpoint: \"/users/123\" },\n { context: { method: \"GET\" } }\n);\n```",
+  "metadata": {
+    "chunk_id": "create_error_deep_dive_common-patterns",
+    "source_document": "rag-docs/create-error-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.284Z",
+    "topics": [
+      "common patterns",
+      "with trysync/tryasync",
+      "with middleware pipeline",
+      "with error factories",
+      "typescript",
+      "error",
+      "async",
+      "sync",
+      "method",
+      "middleware"
+    ],
+    "complexity": "intermediate",
+    "includes_code": true,
+    "line_count": 44,
+    "token_count": 114,
+    "module": "core",
+    "category": "utilities",
+    "search_keywords": [
+      "trySync",
+      "dangerousOperation",
+      "MiddlewarePipeline",
+      "use",
+      "enrichContextMiddleware",
+      "now",
+      "getRequestId",
+      "loggingMiddleware",
+      "wrap",
+      "createErrorFactory",
+      "createApiError",
+      "Date"
+    ],
+    "common_questions": [
+      "How does common patterns work?",
+      "Common Patterns best practices",
+      "Common Patterns patterns"
+    ],
+    "id": "create-error-deep-dive",
+    "title": "createError() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "error-creation",
+      "performance",
+      "context-injection"
+    ],
+    "related": null,
+    "performance_impact": "low",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "async-operations"
+    ],
+    "cross_references": [
+      "function_createError",
+      "trySync_deep_dive_common-patterns"
+    ]
+  },
+  "hash": "38aca980960578e19abb9ef8e10df56f"
+}

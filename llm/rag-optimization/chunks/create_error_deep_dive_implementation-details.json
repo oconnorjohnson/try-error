@@ -1,0 +1,93 @@
+{
+  "chunk_id": "create_error_deep_dive_implementation-details",
+  "title": "Implementation Details",
+  "content": "## Implementation Details\n\n### Algorithm Flow\n\n```\n1. Configuration retrieval (cached) → 2-5ns\n2. Minimal mode check → 1ns\n3. Cache key generation → 5-10ns\n4. Cache lookup (LRU) → 5-15ns\n5. Error construction → 20-100ns\n a. Object allocation/pooling\n b. Field assignment\n c. Context merging\n d. Source detection (optional)\n e. Stack capture (optional)\n6. Cache storage → 5-10ns\n7. Event emission → 10-20ns\n```\n\n### Performance Characteristics\n\n- **Time Complexity**: O(1) for all operations\n- **Space Complexity**: O(n) where n is context object size\n- **Memory Allocation**:\n - Minimal mode: ~120 bytes\n - Standard mode: ~450 bytes\n - Full mode with stack: ~1.2KB\n\n### Internal Dependencies\n\n```typescript\n// Direct dependencies\n-getCachedConfig() - // Configuration retrieval\n getErrorCacheKey() - // Cache key generation\n errorCache.get / set() - // LRU cache operations\n createMinimalError() - // Fast path for minimal mode\n getSourceLocation() - // Stack parsing\n ErrorPool.acquire() - // Object pooling\n emitErrorCreated() - // Event system\n // Indirect dependencies\n isProduction() - // Environment detection\n internString() - // String interning for memory optimization\n createLazyProperty(); // Lazy evaluation setup\n```",
+  "metadata": {
+    "chunk_id": "create_error_deep_dive_implementation-details",
+    "source_document": "rag-docs/create-error-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.284Z",
+    "topics": [
+      "implementation details",
+      "algorithm flow",
+      "performance characteristics",
+      "internal dependencies",
+      "typescript",
+      "error",
+      "performance",
+      "optimization",
+      "configuration"
+    ],
+    "complexity": "intermediate",
+    "includes_code": true,
+    "line_count": 44,
+    "token_count": 227,
+    "module": "core",
+    "category": "utilities",
+    "search_keywords": [
+      "O",
+      "getCachedConfig",
+      "getErrorCacheKey",
+      "set",
+      "createMinimalError",
+      "getSourceLocation",
+      "acquire",
+      "emitErrorCreated",
+      "isProduction",
+      "internString",
+      "createLazyProperty"
+    ],
+    "common_questions": [
+      "How does implementation details work?",
+      "Implementation Details best practices",
+      "Implementation Details patterns"
+    ],
+    "id": "create-error-deep-dive",
+    "title": "createError() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "error-creation",
+      "performance",
+      "context-injection"
+    ],
+    "related": null,
+    "performance_impact": "low",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "performance-optimization"
+    ],
+    "cross_references": [
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "architecture_event-system",
+      "configure_deep_dive_implementation-details",
+      "fromThrown_deep_dive_implementation-details",
+      "function_createMinimalError",
+      "function_emitErrorCreated",
+      "function_getCachedConfig",
+      "function_getErrorCacheKey",
+      "function_getSourceLocation",
+      "function_intern",
+      "function_isProduction",
+      "isTryError_deep_dive_implementation-details",
+      "tryAsync_deep_dive_implementation-details",
+      "trySync_deep_dive_implementation-details",
+      "useTry_deep_dive_implementation-details",
+      "wrapError_deep_dive_implementation-details"
+    ]
+  },
+  "hash": "511e58826305be04d5a42e815311969d"
+}

@@ -1,0 +1,114 @@
+{
+  "chunk_id": "function_resetConfig",
+  "title": "resetConfig",
+  "content": "---\nid: resetConfig\ntitle: resetConfig() - Deep Dive\ntags: [function, config, sync, internal]\ncomplexity: low\nsideEffects: no\n---\n\n# resetConfig()\n\n## Overview\nGet the current global configuration\n\n**Location**: `src/config.ts` \n**Module**: config \n**Exported**: No \n\n## Signature\n```typescript\nfunction resetConfig(): void\n```\n\n## Parameters\nNo parameters\n\n## Characteristics\n\n### Behavior\n- **Async**: No\n- **Throws Errors**: No\n- **Uses Generics**: No\n- **Recursive**: Yes\n\n### Integration\n- **Uses Config**: Yes\n- **Emits Events**: No\n- **Uses Object Pool**: No\n- **Context Support**: No\n\n### Side Effects\nNone detected\n\n### Dependencies\n- createScope()\n- createError()\n- getConfig()\n\n### Complexity\n- **Estimated**: low\n- **Loops**: Few/None\n- **Conditions**: Simple\n\n## Implementation Notes\nNo special implementation notes.\n\n## Performance Considerations\n- Recursive implementation - watch for stack overflow with large inputs\n\n## Common Patterns\nNo specific patterns identified.",
+  "metadata": {
+    "chunk_id": "function_resetConfig",
+    "source_document": "rag-docs/functions/resetConfig.md",
+    "chunk_type": "function-reference",
+    "last_updated": "2025-07-08T20:17:18.325Z",
+    "topics": [
+      "resetconfig()",
+      "overview",
+      "signature",
+      "parameters",
+      "characteristics",
+      "behavior",
+      "integration",
+      "side effects",
+      "dependencies",
+      "complexity",
+      "implementation notes",
+      "performance considerations",
+      "common patterns",
+      "typescript",
+      "error",
+      "async",
+      "sync",
+      "function",
+      "performance",
+      "configuration"
+    ],
+    "complexity": "low",
+    "includes_code": true,
+    "line_count": 60,
+    "token_count": 173,
+    "module": "core",
+    "category": "configuration",
+    "search_keywords": [
+      "resetConfig",
+      "createScope",
+      "createError",
+      "getConfig",
+      "No",
+      "Yes",
+      "Few",
+      "Simple"
+    ],
+    "common_questions": [
+      "How do I use resetConfig?",
+      "What does resetConfig do?",
+      "resetConfig example"
+    ],
+    "id": "resetConfig",
+    "title": "resetConfig() - Deep Dive",
+    "tags": [
+      "function",
+      "config",
+      "sync",
+      "internal"
+    ],
+    "sideEffects": "no",
+    "function_name": "resetConfig",
+    "parameters": [
+      "id",
+      "title",
+      "tags",
+      "complexity",
+      "sideEffects"
+    ],
+    "return_type": "unknown",
+    "related_chunks": [
+      "function_configure",
+      "function_getCachedConfig",
+      "function_getConfig",
+      "function_getConfigVersion",
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns"
+    ],
+    "related_functions": [
+      "configure",
+      "getCachedConfig",
+      "getConfig",
+      "getConfigVersion"
+    ],
+    "usage_patterns": [
+      "async-operations",
+      "performance-optimization"
+    ],
+    "cross_references": [
+      "TryErrorBoundary_deep_dive_signature",
+      "configure_deep_dive_signature",
+      "create_error_deep_dive_signature",
+      "create_error_deep_dive_common-patterns",
+      "fromThrown_deep_dive_signature",
+      "function_createError",
+      "function_createScope",
+      "function_getConfig",
+      "function_intern",
+      "function_reset",
+      "index_overview",
+      "isTryError_deep_dive_signature",
+      "tryAsync_deep_dive_signature",
+      "trySync_deep_dive_signature",
+      "trySync_deep_dive_common-patterns",
+      "useTry_deep_dive_signature",
+      "wrapError_deep_dive_signature"
+    ]
+  },
+  "hash": "fb608242cd71f0a0e0efcc34ec8ae6ab"
+}

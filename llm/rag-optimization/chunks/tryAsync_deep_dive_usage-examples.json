@@ -1,0 +1,98 @@
+{
+  "chunk_id": "tryAsync_deep_dive_usage-examples",
+  "title": "Usage Examples",
+  "content": "## Usage Examples\n\n### Basic Async Error Handling\n\n```typescript\n// Simple API call that might fail\nconst result = await tryAsync(() => fetch(\"/api/data\"));\n\nif (isTryError(result)) {\n console.error(`Request failed: ${result.message}`);\n console.error(`Error type: ${result.type}`);\n console.error(`Source: ${result.source}`);\n} else {\n console.log(`Response received:`, result);\n}\n```\n\n### With Timeout\n\n```typescript\n// API call with 5-second timeout\nconst result = await tryAsync(() => fetch(\"/api/slow-endpoint\"), {\n timeout: 5000,\n context: {\n endpoint: \"/api/slow-endpoint\",\n maxWaitTime: 5000,\n },\n});\n\nif (isTryError(result)) {\n if (result.message.includes(\"timed out\")) {\n console.error(\"Request timed out after 5 seconds\");\n } else {\n console.error(`Request failed: ${result.message}`);\n }\n}\n```\n\n### With Cancellation\n\n```typescript\n// Long-running operation with cancellation\nconst controller = new AbortController();\n\n// Start the operation\nconst operationPromise = tryAsync(\n () => longRunningDataProcessing(controller.signal),\n {\n signal: controller.signal,\n context: {\n operation: \"data-processing\",\n startTime: Date.now(),\n },\n }\n);\n\n// Cancel after 10 seconds\nsetTimeout(() => {\n controller.abort();\n}, 10000);\n\nconst result = await operationPromise;\n\nif (isTryError(result)) {\n if (result.type === \"ABORTED\") {\n console.log(\"Operation was cancelled\");\n } else {\n console.error(`Operation failed: ${result.message}`);\n }\n}\n```\n\n### Database Operations with Context\n\n```typescript\nasync function createUser(userData: UserData) {\n const result = await tryAsync(() => db.users.create(userData), {\n errorType: \"DatabaseError\",\n context: {\n operation: \"user-creation\",\n userId: userData.id,\n email: userData.email,\n createdAt: new Date().toISOString(),\n dbConnection: db.connectionId,\n },\n });\n\n if (isTryError(result)) {\n console.error(`User creation failed: ${result.message}`);\n console.error(`Database connection: ${result.context?.dbConnection}`);\n console.error(`User email: ${result.context?.email}`);\n }\n\n return result;\n}\n```\n\n### File Operations with Retry\n\n```typescript\nasync function readFileWithRetry(filePath: string, maxRetries: number = 3) {\n for (let attempt = 1; attempt <= maxRetries; attempt++) {\n const result = await tryAsync(\n () => fs.promises.readFile(filePath, \"utf8\"),\n {\n context: {\n filePath,\n attempt,\n maxRetries,\n timestamp: Date.now(),\n },\n }\n );\n\n if (!isTryError(result)) {\n return result;\n }\n\n // Check if it's a recoverable error\n if (result.type === \"ENOENT\" || result.type === \"EACCES\") {\n if (attempt < maxRetries) {\n await new Promise((resolve) => setTimeout(resolve, 1000 * attempt));\n continue;\n }\n }\n\n return result;\n }\n}\n```",
+  "metadata": {
+    "chunk_id": "tryAsync_deep_dive_usage-examples",
+    "source_document": "rag-docs/tryAsync-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.340Z",
+    "topics": [
+      "usage examples",
+      "basic async error handling",
+      "with timeout",
+      "with cancellation",
+      "database operations with context",
+      "file operations with retry",
+      "typescript",
+      "error",
+      "async",
+      "sync",
+      "promise",
+      "function"
+    ],
+    "complexity": "intermediate",
+    "includes_code": true,
+    "line_count": 130,
+    "token_count": 400,
+    "module": "async",
+    "category": "utilities",
+    "search_keywords": [
+      "tryAsync",
+      "fetch",
+      "isTryError",
+      "error",
+      "log",
+      "includes",
+      "AbortController",
+      "longRunningDataProcessing",
+      "now",
+      "setTimeout",
+      "abort",
+      "createUser",
+      "create",
+      "Date",
+      "toISOString",
+      "readFileWithRetry",
+      "readFile",
+      "Promise",
+      "UserData"
+    ],
+    "common_questions": [
+      "How does usage examples work?",
+      "Usage Examples best practices",
+      "Usage Examples patterns"
+    ],
+    "id": "tryAsync-deep-dive",
+    "title": "tryAsync() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "async",
+      "error-handling",
+      "promises",
+      "cancellation"
+    ],
+    "related": [
+      "trySync",
+      "isTryError",
+      "AbortSignal",
+      "timeout",
+      "Promise"
+    ],
+    "performance_impact": "low",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "async-operations"
+    ],
+    "cross_references": [
+      "create_error_deep_dive_usage-examples",
+      "function_isTryError",
+      "trySync_deep_dive_usage-examples"
+    ]
+  },
+  "hash": "c57c28153285dbc984fbaacedee6bd7d"
+}

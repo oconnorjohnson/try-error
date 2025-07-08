@@ -1,0 +1,100 @@
+{
+  "chunk_id": "isTryError_deep_dive_advanced-usage-patterns",
+  "title": "Advanced Usage Patterns",
+  "content": "## Advanced Usage Patterns\n\n### Error Filtering\n\n```typescript\n// Filter arrays of mixed results\nfunction filterErrors<T>(results: Array<TryResult<T, TryError>>): TryError[] {\n return results.filter(isTryError);\n}\n\nfunction filterSuccess<T>(results: Array<TryResult<T, TryError>>): T[] {\n return results.filter((result) => !isTryError(result));\n}\n\n// Usage\nconst results = [\n trySync(() => processItem(1)),\n trySync(() => processItem(2)),\n trySync(() => processItem(3)),\n];\n\nconst errors = filterErrors(results);\nconst successes = filterSuccess(results);\n\nconsole.log(`${successes.length} succeeded, ${errors.length} failed`);\n```\n\n### Error Transformation\n\n```typescript\n// Transform errors based on type\nfunction transformError(error: TryError): TryError {\n if (error.type === \"ValidationError\") {\n return {\n ...error,\n message: `Validation failed: ${error.message}`,\n context: {\n ...error.context,\n severity: \"warning\",\n },\n };\n }\n\n if (error.type === \"NetworkError\") {\n return {\n ...error,\n message: `Network issue: ${error.message}`,\n context: {\n ...error.context,\n severity: \"error\",\n retryable: true,\n },\n };\n }\n\n return error;\n}\n\n// Usage\nconst result = trySync(() => operation());\n\nif (isTryError(result)) {\n const transformedError = transformError(result);\n console.error(\"Transformed error:\", transformedError);\n}\n```\n\n### Error Aggregation\n\n```typescript\n// Aggregate multiple errors\nfunction aggregateErrors(\n results: Array<TryResult<any, TryError>>\n): TryError | null {\n const errors = results.filter(isTryError);\n\n if (errors.length === 0) {\n return null;\n }\n\n if (errors.length === 1) {\n return errors[0];\n }\n\n return createError({\n type: \"MultipleErrors\",\n message: `${errors.length} operations failed`,\n context: {\n errors: errors.map((e) => ({\n type: e.type,\n message: e.message,\n source: e.source,\n })),\n totalCount: results.length,\n failureCount: errors.length,\n },\n });\n}\n```\n\n### Conditional Processing\n\n```typescript\n// Process based on error type\nfunction processResult<T>(result: TryResult<T, TryError>): T | null {\n if (isTryError(result)) {\n switch (result.type) {\n case \"ValidationError\":\n console.warn(\"Validation failed:\", result.message);\n return null;\n\n case \"NetworkError\":\n console.error(\"Network error:\", result.message);\n // Maybe retry?\n return null;\n\n case \"TimeoutError\":\n console.error(\"Operation timed out:\", result.message);\n return null;\n\n default:\n console.error(\"Unknown error:\", result.message);\n return null;\n }\n }\n\n return result;\n}\n```",
+  "metadata": {
+    "chunk_id": "isTryError_deep_dive_advanced-usage-patterns",
+    "source_document": "rag-docs/isTryError-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.337Z",
+    "topics": [
+      "advanced usage patterns",
+      "error filtering",
+      "error transformation",
+      "error aggregation",
+      "conditional processing",
+      "typescript",
+      "error",
+      "sync",
+      "function",
+      "validation"
+    ],
+    "complexity": "intermediate",
+    "includes_code": true,
+    "line_count": 129,
+    "token_count": 353,
+    "module": "types",
+    "category": "utilities",
+    "search_keywords": [
+      "filter",
+      "isTryError",
+      "trySync",
+      "processItem",
+      "filterErrors",
+      "filterSuccess",
+      "log",
+      "transformError",
+      "operation",
+      "error",
+      "aggregateErrors",
+      "createError",
+      "map",
+      "warn",
+      "Array<TryResult<T",
+      "TryError[]",
+      "T[]",
+      "TryError",
+      "Array<TryResult<any",
+      "TryResult<T"
+    ],
+    "common_questions": [
+      "How does advanced usage patterns work?",
+      "Advanced Usage Patterns best practices",
+      "Advanced Usage Patterns patterns"
+    ],
+    "id": "isTryError-deep-dive",
+    "title": "isTryError() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "type-guard",
+      "type-safety",
+      "discriminated-union"
+    ],
+    "related": [
+      "trySync",
+      "tryAsync",
+      "TryResult",
+      "TryError",
+      "TypeScript"
+    ],
+    "performance_impact": "negligible",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [],
+    "cross_references": [
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "fromThrown_deep_dive_advanced-usage-patterns",
+      "function_createError",
+      "function_filterErrors",
+      "function_filterSuccess",
+      "function_isTryError",
+      "function_validationError",
+      "useTry_deep_dive_advanced-usage-patterns",
+      "wrapError_deep_dive_advanced-usage-patterns"
+    ]
+  },
+  "hash": "94d59faef01a4ddf7acda6c35c72feee"
+}

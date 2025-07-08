@@ -1,0 +1,80 @@
+{
+  "chunk_id": "trySync_deep_dive_signature",
+  "title": "Signature",
+  "content": "## Signature\n\n```typescript\nfunction trySync<T>(\n fn: () => T,\n options?: TrySyncOptions\n): TryResult<T, TryError>;\n\ninterface TrySyncOptions {\n errorType?: string; // Custom error type override\n context?: Record<string, unknown>; // Runtime context injection\n message?: string; // Custom error message\n}\n\n// Return type is a discriminated union\ntype TryResult<T, E> = T | E; // Where E extends TryError\n```",
+  "metadata": {
+    "chunk_id": "trySync_deep_dive_signature",
+    "source_document": "rag-docs/trySync-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.342Z",
+    "topics": [
+      "signature",
+      "typescript",
+      "error",
+      "sync",
+      "function"
+    ],
+    "complexity": "intermediate",
+    "includes_code": true,
+    "line_count": 17,
+    "token_count": 76,
+    "module": "sync",
+    "category": "utilities",
+    "search_keywords": [
+      "TrySyncOptions",
+      "TryResult<T",
+      "Record<string"
+    ],
+    "common_questions": [
+      "How does signature work?",
+      "Signature best practices",
+      "Signature patterns"
+    ],
+    "id": "trySync-deep-dive",
+    "title": "trySync() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "sync",
+      "error-handling",
+      "performance"
+    ],
+    "related": [
+      "tryAsync",
+      "isTryError",
+      "wrapError",
+      "fromThrown",
+      "createError"
+    ],
+    "performance_impact": "low",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [],
+    "cross_references": [
+      "TryErrorBoundary_deep_dive_signature",
+      "configure_deep_dive_signature",
+      "create_error_deep_dive_signature",
+      "create_error_deep_dive_runtime-context-injection",
+      "fromThrown_deep_dive_signature",
+      "isTryError_deep_dive_signature",
+      "tryAsync_deep_dive_signature",
+      "tryAsync_deep_dive_runtime-context-injection",
+      "trySync_deep_dive_runtime-context-injection",
+      "useTry_deep_dive_signature",
+      "wrapError_deep_dive_signature"
+    ]
+  },
+  "hash": "dea42fa8ffe708c07903f0c00c4ed70c"
+}

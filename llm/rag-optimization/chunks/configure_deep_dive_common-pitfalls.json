@@ -1,0 +1,93 @@
+{
+  "chunk_id": "configure_deep_dive_common-pitfalls",
+  "title": "Common Pitfalls",
+  "content": "## Common Pitfalls\n\n### 1. Over-Configuration\n\n```typescript\n// BAD: Too many configuration changes\nconfigure(\"production\");\nconfigure({ captureStackTrace: true });\nconfigure({ includeSource: false });\nconfigure({ onError: handler });\n\n// GOOD: Single configuration\nconfigure({\n ...ConfigPresets.production(),\n captureStackTrace: true,\n includeSource: false,\n onError: handler,\n});\n```\n\n### 2. Runtime Configuration Changes\n\n```typescript\n// BAD: Changing configuration frequently\nfunction handleError(error: Error) {\n configure(\"debug\"); // Don't do this\n const tryError = fromThrown(error);\n configure(\"production\"); // Don't do this\n return tryError;\n}\n\n// GOOD: Stable configuration\nconfigure(\"production\");\n\nfunction handleError(error: Error) {\n return fromThrown(error);\n}\n```\n\n### 3. Missing Error Handlers\n\n```typescript\n// BAD: No error handling in production\nconfigure(\"production\");\n\n// GOOD: Always include error handling\nconfigure({\n ...ConfigPresets.production(),\n onError: (error) => {\n sendToMonitoring(error);\n return error;\n },\n});\n```",
+  "metadata": {
+    "chunk_id": "configure_deep_dive_common-pitfalls",
+    "source_document": "rag-docs/configure-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.283Z",
+    "topics": [
+      "common pitfalls",
+      "1. over-configuration",
+      "2. runtime configuration changes",
+      "3. missing error handlers",
+      "typescript",
+      "error",
+      "function",
+      "configuration"
+    ],
+    "complexity": "advanced",
+    "includes_code": true,
+    "line_count": 54,
+    "token_count": 153,
+    "module": "config",
+    "category": "utilities",
+    "search_keywords": [
+      "configure",
+      "production",
+      "handleError",
+      "fromThrown",
+      "sendToMonitoring",
+      "Too",
+      "Single",
+      "Changing",
+      "Error",
+      "Stable",
+      "No",
+      "Always"
+    ],
+    "common_questions": [
+      "How does common pitfalls work?",
+      "Common Pitfalls best practices",
+      "Common Pitfalls patterns"
+    ],
+    "id": "configure-deep-dive",
+    "title": "configure() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "configuration",
+      "performance",
+      "optimization",
+      "presets"
+    ],
+    "related": [
+      "getConfig",
+      "resetConfig",
+      "ConfigPresets",
+      "performance",
+      "monitoring"
+    ],
+    "performance_impact": "medium",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [],
+    "cross_references": [
+      "TryErrorBoundary_deep_dive_common-pitfalls",
+      "fromThrown_deep_dive_common-pitfalls",
+      "function_configure",
+      "function_fromThrown",
+      "function_handleError",
+      "function_reset",
+      "isTryError_deep_dive_common-pitfalls",
+      "tryAsync_deep_dive_common-pitfalls",
+      "trySync_deep_dive_common-pitfalls",
+      "useTry_deep_dive_common-pitfalls",
+      "wrapError_deep_dive_common-pitfalls"
+    ]
+  },
+  "hash": "22c85c6561d8645727399bf78dbc42c9"
+}

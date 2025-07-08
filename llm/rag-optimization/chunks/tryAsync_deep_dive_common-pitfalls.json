@@ -1,0 +1,95 @@
+{
+  "chunk_id": "tryAsync_deep_dive_common-pitfalls",
+  "title": "Common Pitfalls",
+  "content": "## Common Pitfalls\n\n### 1. Forgetting to Await\n\n```typescript\n// BAD: Not awaiting the Promise\nconst result = tryAsync(() => fetch(\"/api/data\"));\n// result is a Promise, not the actual result\n\n// GOOD: Always await tryAsync\nconst result = await tryAsync(() => fetch(\"/api/data\"));\n```\n\n### 2. Sync Function in tryAsync\n\n```typescript\n// BAD: Using sync function in tryAsync\nconst result = await tryAsync(() => JSON.parse(input));\n// This works but is unnecessary overhead\n\n// GOOD: Use trySync for sync operations\nconst result = trySync(() => JSON.parse(input));\n```\n\n### 3. Double Timeout\n\n```typescript\n// BAD: Setting timeout in multiple places\nconst controller = new AbortController();\nsetTimeout(() => controller.abort(), 5000);\n\nconst result = await tryAsync(\n () => fetch(\"/api/data\", { signal: controller.signal }),\n {\n signal: controller.signal,\n timeout: 5000, // Duplicate timeout!\n }\n);\n\n// GOOD: Use single timeout mechanism\nconst result = await tryAsync(() => fetch(\"/api/data\"), { timeout: 5000 });\n```\n\n### 4. AbortSignal Reuse\n\n```typescript\n// BAD: Reusing aborted AbortSignal\nconst controller = new AbortController();\ncontroller.abort();\n\nconst result = await tryAsync(\n () => fetch(\"/api/data\"),\n { signal: controller.signal } // Already aborted!\n);\n\n// GOOD: Create new AbortController for each operation\nconst controller = new AbortController();\nconst result = await tryAsync(() => fetch(\"/api/data\"), {\n signal: controller.signal,\n});\n```",
+  "metadata": {
+    "chunk_id": "tryAsync_deep_dive_common-pitfalls",
+    "source_document": "rag-docs/tryAsync-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.341Z",
+    "topics": [
+      "common pitfalls",
+      "1. forgetting to await",
+      "2. sync function in tryasync",
+      "3. double timeout",
+      "4. abortsignal reuse",
+      "typescript",
+      "async",
+      "sync",
+      "promise",
+      "function"
+    ],
+    "complexity": "intermediate",
+    "includes_code": true,
+    "line_count": 61,
+    "token_count": 264,
+    "module": "async",
+    "category": "utilities",
+    "search_keywords": [
+      "tryAsync",
+      "fetch",
+      "parse",
+      "trySync",
+      "AbortController",
+      "setTimeout",
+      "abort",
+      "Not",
+      "Always",
+      "Using",
+      "Use",
+      "Setting",
+      "Reusing",
+      "Create"
+    ],
+    "common_questions": [
+      "How does common pitfalls work?",
+      "Common Pitfalls best practices",
+      "Common Pitfalls patterns"
+    ],
+    "id": "tryAsync-deep-dive",
+    "title": "tryAsync() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "async",
+      "error-handling",
+      "promises",
+      "cancellation"
+    ],
+    "related": [
+      "trySync",
+      "isTryError",
+      "AbortSignal",
+      "timeout",
+      "Promise"
+    ],
+    "performance_impact": "low",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "async-operations"
+    ],
+    "cross_references": [
+      "TryErrorBoundary_deep_dive_common-pitfalls",
+      "configure_deep_dive_common-pitfalls",
+      "fromThrown_deep_dive_common-pitfalls",
+      "isTryError_deep_dive_common-pitfalls",
+      "trySync_deep_dive_common-pitfalls",
+      "useTry_deep_dive_common-pitfalls",
+      "wrapError_deep_dive_common-pitfalls"
+    ]
+  },
+  "hash": "1a2a495f7594a6487b760778fdad1374"
+}

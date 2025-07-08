@@ -1,0 +1,97 @@
+{
+  "chunk_id": "fromThrown_deep_dive_basic-usage-examples",
+  "title": "Basic Usage Examples",
+  "content": "## Basic Usage Examples\n\n### Simple Catch Block Integration\n\n```typescript\n// Basic usage in try-catch\nfunction parseJsonSafely(jsonString: string) {\n try {\n return JSON.parse(jsonString);\n } catch (error) {\n return fromThrown(error); // Automatically detects SyntaxError\n }\n}\n\n// Usage example\nconst result = parseJsonSafely('{\"invalid\": json}');\nif (isTryError(result)) {\n console.log(result.type); // \"SyntaxError\"\n console.log(result.message); // \"Unexpected token j in JSON at position 12\"\n console.log(result.cause); // Original SyntaxError object\n}\n```\n\n### Generic Error Handling\n\n```typescript\n// Handle any thrown value\nfunction safeOperation(operation: () => any) {\n try {\n return operation();\n } catch (error) {\n return fromThrown(error);\n }\n}\n\n// Examples of different error types\nfunction throwTypeError() {\n const obj: any = null;\n return obj.someProperty; // TypeError\n}\n\nfunction throwReferenceError() {\n return Variable; // ReferenceError\n}\n\nfunction throwSyntaxError() {\n return eval(\"invalid syntax\"); // SyntaxError\n}\n\nfunction throwStringError() {\n throw \"String error message\"; // String\n}\n\nfunction throwObjectError() {\n throw { code: 500, message: \"Server error\" }; // Object\n}\n\n// All handle correctly\nconst typeError = safeOperation(throwTypeError);\nconsole.log(typeError.type); // \"TypeError\"\n\nconst refError = safeOperation(throwReferenceError);\nconsole.log(refError.type); // \"ReferenceError\"\n\nconst syntaxError = safeOperation(throwSyntaxError);\nconsole.log(syntaxError.type); // \"SyntaxError\"\n\nconst stringError = safeOperation(throwStringError);\nconsole.log(stringError.type); // \"StringError\"\n\nconst objectError = safeOperation(throwObjectError);\nconsole.log(objectError.type); // \"UnknownError\"\n```\n\n### Adding Context\n\n```typescript\n// Add operational context\nfunction processUserAction(userId: string, action: () => any) {\n try {\n return action();\n } catch (error) {\n return fromThrown(error, {\n userId,\n action: action.name,\n timestamp: Date.now(),\n userAgent: navigator.userAgent,\n });\n }\n}\n\n// Usage with context\nconst result = processUserAction(\"user123\", () => {\n throw new Error(\"Operation failed\");\n});\n\nif (isTryError(result)) {\n console.log(result.type); // \"Error\"\n console.log(result.context); // { userId: \"user123\", action: \"anonymous\", ... }\n}\n```",
+  "metadata": {
+    "chunk_id": "fromThrown_deep_dive_basic-usage-examples",
+    "source_document": "rag-docs/fromThrown-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.286Z",
+    "topics": [
+      "basic usage examples",
+      "simple catch block integration",
+      "generic error handling",
+      "adding context",
+      "typescript",
+      "error",
+      "function"
+    ],
+    "complexity": "beginner",
+    "includes_code": true,
+    "line_count": 101,
+    "token_count": 344,
+    "module": "errors",
+    "category": "utilities",
+    "search_keywords": [
+      "parseJsonSafely",
+      "parse",
+      "fromThrown",
+      "isTryError",
+      "log",
+      "safeOperation",
+      "operation",
+      "throwTypeError",
+      "throwReferenceError",
+      "throwSyntaxError",
+      "eval",
+      "throwStringError",
+      "throwObjectError",
+      "processUserAction",
+      "action",
+      "now",
+      "Error",
+      "Date"
+    ],
+    "common_questions": [
+      "How does basic usage examples work?",
+      "Basic Usage Examples best practices",
+      "Basic Usage Examples patterns"
+    ],
+    "id": "fromThrown-deep-dive",
+    "title": "fromThrown() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "auto-detection",
+      "type-classification",
+      "catch-blocks"
+    ],
+    "related": [
+      "wrapError",
+      "createError",
+      "trySync",
+      "tryAsync",
+      "Error"
+    ],
+    "performance_impact": "low",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "error-handling",
+      "testing"
+    ],
+    "cross_references": [
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "create_error_deep_dive_usage-examples",
+      "function_fromThrown",
+      "function_isTryError",
+      "tryAsync_deep_dive_usage-examples",
+      "trySync_deep_dive_usage-examples",
+      "useTry_deep_dive_basic-usage-examples",
+      "wrapError_deep_dive_basic-usage-examples"
+    ]
+  },
+  "hash": "14edcbcbf7d29e2a57c79b5261b0845a"
+}

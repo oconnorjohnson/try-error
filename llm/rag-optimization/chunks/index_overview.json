@@ -1,0 +1,39 @@
+{
+  "chunk_id": "index_overview",
+  "title": "Overview",
+  "content": "## Overview\nThis is comprehensive technical documentation for the try-error library, optimized for RAG (Retrieval Augmented Generation) systems.",
+  "metadata": {
+    "chunk_id": "index_overview",
+    "source_document": "rag-docs/index.md",
+    "chunk_type": "general",
+    "last_updated": "2025-07-08T20:17:18.336Z",
+    "topics": [
+      "overview",
+      "error"
+    ],
+    "complexity": "basic",
+    "includes_code": false,
+    "line_count": 2,
+    "token_count": 24,
+    "module": "core",
+    "category": "utilities",
+    "search_keywords": [],
+    "common_questions": [],
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [],
+    "cross_references": []
+  },
+  "hash": "a0483d0c4241b63fa2b20849327c1598"
+}

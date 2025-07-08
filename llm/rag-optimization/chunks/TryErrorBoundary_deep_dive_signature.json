@@ -1,0 +1,98 @@
+{
+  "chunk_id": "TryErrorBoundary_deep_dive_signature",
+  "title": "Signature",
+  "content": "## Signature\n\n```typescript\n// Core Component\ninterface TryErrorBoundaryProps {\n children: ReactNode;\n fallback?: (\n error: Error | TryError,\n errorInfo: ErrorInfo | null,\n retry: () => void\n ) => ReactNode;\n onError?: (error: Error | TryError, errorInfo: ErrorInfo | null) => void;\n showRetry?: boolean;\n errorMessage?: string;\n showErrorDetails?: boolean;\n className?: string;\n isolate?: boolean;\n errorFilter?: (error: Error) => boolean;\n retryStrategy?: RetryStrategy;\n catchAsyncErrors?: boolean;\n catchEventHandlerErrors?: boolean;\n}\n\n// Retry Strategy\ninterface RetryStrategy {\n maxRetries?: number; // Default: 3\n delay?: number; // Default: 0\n backoff?: \"linear\" | \"exponential\"; // Default: \"linear\"\n}\n\n// HOC Wrapper\nfunction withTryErrorBoundary<P>(\n Component: React.ComponentType<P>,\n boundaryProps?: Omit<TryErrorBoundaryProps, \"children\">\n): React.ComponentType<P>;\n\n// Hooks\nfunction useErrorBoundaryTrigger(): (error: Error) => void;\nfunction useAsyncError(): (error: Error | TryError) => void;\nfunction useAsyncErrorHandler(): (asyncFn: () => Promise<any>) => Promise<any>;\n```",
+  "metadata": {
+    "chunk_id": "TryErrorBoundary_deep_dive_signature",
+    "source_document": "rag-docs/TryErrorBoundary-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.275Z",
+    "topics": [
+      "signature",
+      "typescript",
+      "error",
+      "async",
+      "sync",
+      "promise",
+      "function",
+      "react",
+      "hook",
+      "component"
+    ],
+    "complexity": "intermediate",
+    "includes_code": true,
+    "line_count": 41,
+    "token_count": 159,
+    "module": "react",
+    "category": "utilities",
+    "search_keywords": [
+      "useErrorBoundaryTrigger",
+      "useAsyncError",
+      "useAsyncErrorHandler",
+      "ReactNode",
+      "Error",
+      "ErrorInfo",
+      "RetryStrategy",
+      "React",
+      "Omit<TryErrorBoundaryProps"
+    ],
+    "common_questions": [
+      "How does signature work?",
+      "Signature best practices",
+      "Signature patterns"
+    ],
+    "id": "TryErrorBoundary-deep-dive",
+    "title": "TryErrorBoundary - Complete Implementation Guide",
+    "tags": [
+      "react",
+      "error-boundary",
+      "component",
+      "retry",
+      "async-errors",
+      "event-handlers"
+    ],
+    "related": [
+      "useTry",
+      "useErrorRecovery",
+      "createError",
+      "fromThrown",
+      "React"
+    ],
+    "performance_impact": "low",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization",
+      "TryErrorBoundary_deep_dive_common-pitfalls"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "async-operations",
+      "react-integration"
+    ],
+    "cross_references": [
+      "configure_deep_dive_signature",
+      "create_error_deep_dive_signature",
+      "fromThrown_deep_dive_signature",
+      "function_Component",
+      "function_Wrapper",
+      "function_useAsyncError",
+      "function_useAsyncErrorHandler",
+      "function_useErrorBoundaryTrigger",
+      "function_withTryErrorBoundary",
+      "isTryError_deep_dive_signature",
+      "tryAsync_deep_dive_signature",
+      "trySync_deep_dive_signature",
+      "useTry_deep_dive_signature",
+      "wrapError_deep_dive_signature"
+    ]
+  },
+  "hash": "6e2f8ac9fb8ea915f017e8674ba3c1e1"
+}

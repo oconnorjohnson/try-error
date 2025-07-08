@@ -1,0 +1,97 @@
+{
+  "chunk_id": "isTryError_deep_dive_implementation-details",
+  "title": "Implementation Details",
+  "content": "## Implementation Details\n\n### Algorithm Flow\n\n```\n1. Null/ check → 1ns\n2. Type check (object) → 1ns\n3. Brand symbol validation → 2ns\n4. Required field validation → 3-5ns\n a. type (string)\n b. message (string)\n c. source (string)\n d. timestamp (number)\n5. Optional context validation → 1-2ns\n6. Return boolean result → 0ns\n```\n\n### Performance Characteristics\n\n- **Time Complexity**: O(1) - Constant time regardless of input size\n- **Space Complexity**: O(1) - No additional memory allocation\n- **Execution Time**: 8-12ns per call\n- **Memory Usage**: 0 bytes allocated\n- **Cache Friendly**: No dynamic allocations, CPU cache efficient\n\n### Brand Symbol Validation\n\n```typescript\n// Internal brand symbol (not exported)\nconst TRY_ERROR_BRAND = Symbol(\"TryError\");\n\n// TryError interface with brand\ninterface TryError<T extends string = string> {\n readonly [TRY_ERROR_BRAND]: true; // Symbol branding\n readonly type: T;\n readonly message: string;\n readonly source: string;\n readonly timestamp: number;\n readonly stack?: string;\n readonly context?: Record<string, unknown>;\n readonly cause?: unknown;\n}\n```\n\n### Validation Logic\n\n```typescript\nfunction isTryError<E extends TryError = TryError>(value: unknown): value is E {\n // Fast path: early return for primitive types\n if (typeof value !== \"object\" || value === null) {\n return false;\n }\n\n // Type narrow to object with index signature\n const obj = value as Record<string | symbol, unknown>;\n\n // Brand validation - prevents spoofing\n if (!(TRY_ERROR_BRAND in obj) || obj[TRY_ERROR_BRAND] !== true) {\n return false;\n }\n\n // Required field validation\n if (\n typeof obj.type !== \"string\" ||\n typeof obj.message !== \"string\" ||\n typeof obj.source !== \"string\" ||\n typeof obj.timestamp !== \"number\"\n ) {\n return false;\n }\n\n // Optional context validation\n if (\n \"context\" in obj &&\n obj.context !== undefined &&\n (typeof obj.context !== \"object\" ||\n obj.context === null ||\n Array.isArray(obj.context))\n ) {\n return false;\n }\n\n return true;\n}\n```",
+  "metadata": {
+    "chunk_id": "isTryError_deep_dive_implementation-details",
+    "source_document": "rag-docs/isTryError-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.336Z",
+    "topics": [
+      "implementation details",
+      "algorithm flow",
+      "performance characteristics",
+      "brand symbol validation",
+      "validation logic",
+      "typescript",
+      "error",
+      "function",
+      "validation",
+      "performance"
+    ],
+    "complexity": "intermediate",
+    "includes_code": true,
+    "line_count": 85,
+    "token_count": 377,
+    "module": "types",
+    "category": "utilities",
+    "search_keywords": [
+      "O",
+      "Symbol",
+      "isArray",
+      "No",
+      "Record<string"
+    ],
+    "common_questions": [
+      "How does implementation details work?",
+      "Implementation Details best practices",
+      "Implementation Details patterns"
+    ],
+    "id": "isTryError-deep-dive",
+    "title": "isTryError() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "type-guard",
+      "type-safety",
+      "discriminated-union"
+    ],
+    "related": [
+      "trySync",
+      "tryAsync",
+      "TryResult",
+      "TryError",
+      "TypeScript"
+    ],
+    "performance_impact": "negligible",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "performance-optimization"
+    ],
+    "cross_references": [
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "configure_deep_dive_signature",
+      "configure_deep_dive_implementation-details",
+      "create_error_deep_dive_signature",
+      "create_error_deep_dive_implementation-details",
+      "fromThrown_deep_dive_signature",
+      "fromThrown_deep_dive_implementation-details",
+      "function_intern",
+      "function_isTryError",
+      "isTryError_deep_dive_signature",
+      "tryAsync_deep_dive_signature",
+      "tryAsync_deep_dive_implementation-details",
+      "trySync_deep_dive_signature",
+      "trySync_deep_dive_implementation-details",
+      "useTry_deep_dive_signature",
+      "useTry_deep_dive_implementation-details",
+      "wrapError_deep_dive_signature",
+      "wrapError_deep_dive_implementation-details"
+    ]
+  },
+  "hash": "4f69cc4ee6890a399cd694852d6ccb1d"
+}

@@ -1,0 +1,101 @@
+{
+  "chunk_id": "tryAsync_deep_dive_performance-optimization",
+  "title": "Performance Optimization",
+  "content": "## Performance Optimization\n\n### Success Path - Zero Overhead\n\n```typescript\n// This has ZERO overhead when successful\nconst result = await tryAsync(() => Promise.resolve(42));\n// result === 42 (not wrapped in object)\n\n// No performance difference between:\nconst direct = await fetchData();\nconst wrapped = await tryAsync(() => fetchData());\n// Both execute fetchData() with identical performance\n```\n\n### Cancellation Optimization\n\n```typescript\n// Efficient cancellation with shared AbortController\nconst controller = new AbortController();\n\n// Multiple operations sharing same controller\nconst [result1, result2, result3] = await Promise.all([\n tryAsync(() => fetch(\"/api/data1\", { signal: controller.signal }), {\n signal: controller.signal,\n context: { operation: \"data1\" },\n }),\n tryAsync(() => fetch(\"/api/data2\", { signal: controller.signal }), {\n signal: controller.signal,\n context: { operation: \"data2\" },\n }),\n tryAsync(() => fetch(\"/api/data3\", { signal: controller.signal }), {\n signal: controller.signal,\n context: { operation: \"data3\" },\n }),\n]);\n\n// Cancel all operations with single call\ncontroller.abort();\n```\n\n### Timeout Optimization\n\n```typescript\n// Avoid creating multiple timeout timers\nconst GLOBAL_TIMEOUT = 5000;\n\nasync function fetchWithGlobalTimeout<T>(\n operation: () => Promise<T>,\n operationName: string\n) {\n return await tryAsync(operation, {\n timeout: GLOBAL_TIMEOUT,\n context: { operation: operationName },\n });\n}\n\n// Use AbortSignal for better timeout control\nconst controller = new AbortController();\nconst timeoutId = setTimeout(() => controller.abort(), GLOBAL_TIMEOUT);\n\nconst result = await tryAsync(\n () => fetch(\"/api/data\", { signal: controller.signal }),\n {\n signal: controller.signal,\n context: { operation: \"api-fetch\" },\n }\n);\n\nclearTimeout(timeoutId);\n```\n\n### Hot Path Optimization\n\n```typescript\n// For high-frequency operations, minimize context allocation\nasync function highFrequencyOperation(data: any) {\n // Don't do this for high-frequency operations:\n // return await tryAsync(() => process(data), {\n // context: {\n // timestamp: Date.now(),\n // dataSize: JSON.stringify(data).length\n // }\n // });\n\n // Do this instead:\n return await tryAsync(() => process(data));\n}\n\n// Add context only when needed for debugging\nasync function highFrequencyWithConditionalContext(\n data: any,\n debug: boolean = false\n) {\n if (debug) {\n return await tryAsync(() => process(data), {\n context: {\n timestamp: Date.now(),\n dataSize: JSON.stringify(data).length,\n debug: true,\n },\n });\n }\n\n return await tryAsync(() => process(data));\n}\n```",
+  "metadata": {
+    "chunk_id": "tryAsync_deep_dive_performance-optimization",
+    "source_document": "rag-docs/tryAsync-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.341Z",
+    "topics": [
+      "performance optimization",
+      "success path - zero overhead",
+      "cancellation optimization",
+      "timeout optimization",
+      "hot path optimization",
+      "typescript",
+      "async",
+      "sync",
+      "promise",
+      "function",
+      "performance",
+      "optimization"
+    ],
+    "complexity": "intermediate",
+    "includes_code": true,
+    "line_count": 107,
+    "token_count": 422,
+    "module": "async",
+    "category": "performance",
+    "search_keywords": [
+      "tryAsync",
+      "resolve",
+      "fetchData",
+      "AbortController",
+      "all",
+      "fetch",
+      "abort",
+      "setTimeout",
+      "clearTimeout",
+      "highFrequencyOperation",
+      "process",
+      "now",
+      "stringify",
+      "highFrequencyWithConditionalContext",
+      "GLOBAL_TIMEOUT",
+      "Date",
+      "JSON"
+    ],
+    "common_questions": [
+      "How does performance optimization work?",
+      "Performance Optimization best practices",
+      "Performance Optimization patterns"
+    ],
+    "id": "tryAsync-deep-dive",
+    "title": "tryAsync() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "async",
+      "error-handling",
+      "promises",
+      "cancellation"
+    ],
+    "related": [
+      "trySync",
+      "isTryError",
+      "AbortSignal",
+      "timeout",
+      "Promise"
+    ],
+    "performance_impact": "low",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "async-operations",
+      "performance-optimization"
+    ],
+    "cross_references": [
+      "TryErrorBoundary_deep_dive_performance-optimization",
+      "create_error_deep_dive_performance-optimization",
+      "fromThrown_deep_dive_performance-optimization",
+      "function_clear",
+      "isTryError_deep_dive_performance-optimization",
+      "trySync_deep_dive_performance-optimization",
+      "wrapError_deep_dive_performance-optimization"
+    ]
+  },
+  "hash": "ded11ccc5fef277d2d2d8676f898d39f"
+}

@@ -1,0 +1,95 @@
+{
+  "chunk_id": "configure_deep_dive_configuration-options-deep-dive",
+  "title": "Configuration Options Deep Dive",
+  "content": "## Configuration Options Deep Dive\n\n### Core Error Behavior\n\n```typescript\nconfigure({\n // Stack trace capture (most expensive operation)\n captureStackTrace: true, // Default: true in dev, false in prod\n stackTraceLimit: 10, // Default: 10 frames\n\n // Source location detection\n includeSource: true, // Default: true\n sourceLocation: {\n defaultStackOffset: 3, // Skip wrapper frames\n format: \"file:line:column\", // Source format\n includeFullPath: false, // Just filename vs full path\n formatter: (file, line, col) => `${file}:${line}:${col}`,\n },\n\n // Error content\n defaultErrorType: \"Error\", // Default error type\n skipTimestamp: false, // Skip Date.now() calls\n skipContext: false, // Skip context processing\n});\n```\n\n### Performance Optimization\n\n```typescript\nconfigure({\n // Minimal mode - ultra-lightweight errors\n minimalErrors: true, // ~70% performance improvement\n\n // Advanced performance options\n performance: {\n errorCreation: {\n cacheConstructors: true, // Cache error constructors\n lazyStackTrace: true, // Lazy stack trace evaluation\n objectPooling: true, // Reuse error objects\n poolSize: 100, // Pool size\n },\n\n contextCapture: {\n maxContextSize: 10240, // 10KB context limit\n deepClone: true, // Deep clone context objects\n timeout: 100, // Async context timeout\n },\n\n memory: {\n maxErrorHistory: 100, // Error history limit\n useWeakRefs: true, // Use WeakRef for large contexts\n gcHints: true, // Provide GC hints\n },\n },\n});\n```\n\n### Error Handling Integration\n\n```typescript\nconfigure({\n // Global error transformation\n onError: (error: TryError) => {\n // Send to monitoring service\n sendToSentry(error);\n\n // Add application context\n return {\n ...error,\n context: {\n ...error.context,\n appVersion: process.env.VERSION,\n userId: getCurrentUserId(),\n },\n };\n },\n\n // Custom serialization\n serializer: (error: TryError) => ({\n type: error.type,\n message: error.message,\n timestamp: error.timestamp,\n // Omit sensitive context\n }),\n\n // Development features\n developmentMode: true, // Enable dev features\n});\n```\n\n### Runtime Environment Detection\n\n```typescript\nconfigure({\n runtimeDetection: true, // Enable runtime detection\n\n environmentHandlers: {\n server: (error: TryError) => {\n // Server-side error handling\n logger.error({\n type: error.type,\n message: error.message,\n context: error.context,\n });\n return error;\n },\n\n client: (error: TryError) => {\n // Client-side error handling\n if (window.Sentry) {\n window.Sentry.captureException(error);\n }\n return error;\n },\n\n edge: (error: TryError) => {\n // Edge runtime error handling\n console.log(\n JSON.stringify({\n type: error.type,\n message: error.message,\n timestamp: error.timestamp,\n })\n );\n return error;\n },\n },\n});\n```",
+  "metadata": {
+    "chunk_id": "configure_deep_dive_configuration-options-deep-dive",
+    "source_document": "rag-docs/configure-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.281Z",
+    "topics": [
+      "configuration options deep dive",
+      "core error behavior",
+      "performance optimization",
+      "error handling integration",
+      "runtime environment detection",
+      "typescript",
+      "error",
+      "async",
+      "sync",
+      "performance",
+      "optimization",
+      "configuration"
+    ],
+    "complexity": "advanced",
+    "includes_code": true,
+    "line_count": 129,
+    "token_count": 439,
+    "module": "config",
+    "category": "configuration",
+    "search_keywords": [
+      "configure",
+      "now",
+      "sendToSentry",
+      "getCurrentUserId",
+      "error",
+      "captureException",
+      "log",
+      "stringify",
+      "TryError"
+    ],
+    "common_questions": [
+      "How does configuration options deep dive work?",
+      "Configuration Options Deep Dive best practices",
+      "Configuration Options Deep Dive patterns"
+    ],
+    "id": "configure-deep-dive",
+    "title": "configure() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "configuration",
+      "performance",
+      "optimization",
+      "presets"
+    ],
+    "related": [
+      "getConfig",
+      "resetConfig",
+      "ConfigPresets",
+      "performance",
+      "monitoring"
+    ],
+    "performance_impact": "medium",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "async-operations",
+      "performance-optimization"
+    ],
+    "cross_references": [
+      "TryErrorBoundary_deep_dive_performance-optimization",
+      "create_error_deep_dive_performance-optimization",
+      "fromThrown_deep_dive_performance-optimization",
+      "function_Wrapper",
+      "function_configure",
+      "isTryError_deep_dive_performance-optimization",
+      "tryAsync_deep_dive_performance-optimization",
+      "trySync_deep_dive_performance-optimization",
+      "wrapError_deep_dive_performance-optimization"
+    ]
+  },
+  "hash": "33f07aecd1cb7cd6cdaf8dd040da96b3"
+}

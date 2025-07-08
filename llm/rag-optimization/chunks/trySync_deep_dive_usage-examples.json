@@ -1,0 +1,93 @@
+{
+  "chunk_id": "trySync_deep_dive_usage-examples",
+  "title": "Usage Examples",
+  "content": "## Usage Examples\n\n### Basic Error Handling\n\n```typescript\n// Simple operation that might fail\nconst result = trySync(() => JSON.parse(jsonString));\n\nif (isTryError(result)) {\n console.error(`Parse failed: ${result.message}`);\n console.error(`Error type: ${result.type}`);\n console.error(`Source: ${result.source}`);\n} else {\n console.log(`Parsed successfully:`, result);\n}\n```\n\n### Custom Error Types\n\n```typescript\n// Override automatic error type detection\nconst result = trySync(() => processPayment(amount), {\n errorType: \"PaymentError\",\n message: \"Payment processing failed\",\n context: {\n amount,\n currency: \"USD\",\n paymentMethod: \"credit_card\",\n },\n});\n\n// Result will have type \"PaymentError\" regardless of what was thrown\n```\n\n### File Operations with Context\n\n```typescript\nfunction readConfigFile(filePath: string) {\n return trySync(\n () => {\n const content = fs.readFileSync(filePath, \"utf8\");\n return JSON.parse(content);\n },\n {\n context: {\n filePath,\n operation: \"config-read\",\n fileSize: fs.statSync(filePath).size,\n lastModified: fs.statSync(filePath).mtime,\n },\n }\n );\n}\n\n// Usage\nconst config = readConfigFile(\"./config.json\");\nif (isTryError(config)) {\n console.error(`Config load failed: ${config.message}`);\n console.error(`File: ${config.context?.filePath}`);\n console.error(`Size: ${config.context?.fileSize} bytes`);\n}\n```\n\n### Form Validation Pattern\n\n```typescript\ninterface FormData {\n email: string;\n password: string;\n age: number;\n}\n\nfunction validateForm(data: FormData) {\n // Validate email\n const emailResult = trySync(() => validateEmail(data.email), {\n errorType: \"ValidationError\",\n context: { field: \"email\", value: data.email },\n });\n\n if (isTryError(emailResult)) {\n return emailResult;\n }\n\n // Validate password\n const passwordResult = trySync(() => validatePassword(data.password), {\n errorType: \"ValidationError\",\n context: { field: \"password\", length: data.password.length },\n });\n\n if (isTryError(passwordResult)) {\n return passwordResult;\n }\n\n // Validate age\n const ageResult = trySync(() => validateAge(data.age), {\n errorType: \"ValidationError\",\n context: { field: \"age\", value: data.age },\n });\n\n if (isTryError(ageResult)) {\n return ageResult;\n }\n\n return { email: emailResult, password: passwordResult, age: ageResult };\n}\n```",
+  "metadata": {
+    "chunk_id": "trySync_deep_dive_usage-examples",
+    "source_document": "rag-docs/trySync-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.342Z",
+    "topics": [
+      "usage examples",
+      "basic error handling",
+      "custom error types",
+      "file operations with context",
+      "form validation pattern",
+      "typescript",
+      "error",
+      "sync",
+      "function",
+      "method",
+      "validation"
+    ],
+    "complexity": "intermediate",
+    "includes_code": true,
+    "line_count": 106,
+    "token_count": 324,
+    "module": "sync",
+    "category": "utilities",
+    "search_keywords": [
+      "trySync",
+      "parse",
+      "isTryError",
+      "error",
+      "log",
+      "processPayment",
+      "readConfigFile",
+      "readFileSync",
+      "statSync",
+      "validateForm",
+      "validateEmail",
+      "validatePassword",
+      "validateAge",
+      "FormData"
+    ],
+    "common_questions": [
+      "How does usage examples work?",
+      "Usage Examples best practices",
+      "Usage Examples patterns"
+    ],
+    "id": "trySync-deep-dive",
+    "title": "trySync() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "sync",
+      "error-handling",
+      "performance"
+    ],
+    "related": [
+      "tryAsync",
+      "isTryError",
+      "wrapError",
+      "fromThrown",
+      "createError"
+    ],
+    "performance_impact": "low",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [],
+    "cross_references": [
+      "create_error_deep_dive_usage-examples",
+      "function_isTryError",
+      "function_validateAge",
+      "function_validateEmail",
+      "function_validatePassword",
+      "function_validationError",
+      "tryAsync_deep_dive_usage-examples"
+    ]
+  },
+  "hash": "e39902e8cfc6b232d001519ea3e5d256"
+}

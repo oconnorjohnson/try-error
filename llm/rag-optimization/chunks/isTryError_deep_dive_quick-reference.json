@@ -1,0 +1,73 @@
+{
+  "chunk_id": "isTryError_deep_dive_quick-reference",
+  "title": "Quick Reference",
+  "content": "## Quick Reference\n\nThe primary type guard function that enables type-safe discrimination between success values and error values in the `TryResult` discriminated union. This function is essential for type narrowing in TypeScript and runtime validation of error objects.",
+  "metadata": {
+    "chunk_id": "isTryError_deep_dive_quick-reference",
+    "source_document": "rag-docs/isTryError-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.336Z",
+    "topics": [
+      "quick reference",
+      "error",
+      "function",
+      "typescript",
+      "validation"
+    ],
+    "complexity": "intermediate",
+    "includes_code": true,
+    "line_count": 3,
+    "token_count": 50,
+    "module": "types",
+    "category": "utilities",
+    "search_keywords": [],
+    "common_questions": [
+      "How does quick reference work?",
+      "Quick Reference best practices",
+      "Quick Reference patterns"
+    ],
+    "id": "isTryError-deep-dive",
+    "title": "isTryError() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "type-guard",
+      "type-safety",
+      "discriminated-union"
+    ],
+    "related": [
+      "trySync",
+      "tryAsync",
+      "TryResult",
+      "TryError",
+      "TypeScript"
+    ],
+    "performance_impact": "negligible",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [],
+    "cross_references": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "configure_deep_dive_quick-reference",
+      "create_error_deep_dive_quick-reference",
+      "fromThrown_deep_dive_quick-reference",
+      "tryAsync_deep_dive_quick-reference",
+      "trySync_deep_dive_quick-reference",
+      "useTry_deep_dive_quick-reference",
+      "wrapError_deep_dive_quick-reference"
+    ]
+  },
+  "hash": "d41d66147e5f477b1f218e08b52f1ab2"
+}

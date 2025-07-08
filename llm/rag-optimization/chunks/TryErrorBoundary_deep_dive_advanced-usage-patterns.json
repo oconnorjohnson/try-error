@@ -1,0 +1,101 @@
+{
+  "chunk_id": "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+  "title": "Advanced Usage Patterns",
+  "content": "## Advanced Usage Patterns\n\n### Nested Error Boundaries\n\n```tsx\n// Hierarchical error handling\nfunction App() {\n return (\n <TryErrorBoundary\n fallback={(error, errorInfo, retry) => (\n <div className=\"app-error\">\n <h1>Application Error</h1>\n <p>The entire application has encountered an error.</p>\n <button onClick={retry}>Restart App</button>\n </div>\n )}\n onError={(error) => {\n // Global error reporting\n reportCriticalError(error);\n }}\n >\n <Header />\n\n <main>\n <TryErrorBoundary\n fallback={(error, errorInfo, retry) => (\n <div className=\"sidebar-error\">\n <h3>Sidebar Error</h3>\n <p>The sidebar failed to load.</p>\n <button onClick={retry}>Retry Sidebar</button>\n </div>\n )}\n isolate={true}\n >\n <Sidebar />\n </TryErrorBoundary>\n\n <TryErrorBoundary\n fallback={(error, errorInfo, retry) => (\n <div className=\"content-error\">\n <h3>Content Error</h3>\n <p>The main content failed to load.</p>\n <button onClick={retry}>Retry Content</button>\n </div>\n )}\n isolate={true}\n >\n <MainContent />\n </TryErrorBoundary>\n </main>\n\n <Footer />\n </TryErrorBoundary>\n );\n}\n```\n\n### Error Filtering and Routing\n\n```tsx\n// Selective error handling\nfunction SelectiveErrorBoundary() {\n return (\n <TryErrorBoundary\n errorFilter={(error) => {\n // Only catch specific error types\n return (\n error.name === \"ValidationError\" ||\n error.name === \"NetworkError\" ||\n error.message.includes(\"API\")\n );\n }}\n fallback={(error, errorInfo, retry) => {\n // Different UIs based on error type\n if (error.name === \"ValidationError\") {\n return (\n <div className=\"validation-error\">\n <h3>Validation Error</h3>\n <p>Please check your input and try again.</p>\n <button onClick={retry}>Fix and Retry</button>\n </div>\n );\n }\n\n if (error.name === \"NetworkError\") {\n return (\n <div className=\"network-error\">\n <h3>Network Error</h3>\n <p>Please check your internet connection.</p>\n <button onClick={retry}>Try Again</button>\n </div>\n );\n }\n\n return (\n <div className=\"generic-error\">\n <h3>Something went wrong</h3>\n <p>{error.message}</p>\n <button onClick={retry}>Retry</button>\n </div>\n );\n }}\n >\n <FormComponent />\n </TryErrorBoundary>\n );\n}\n```\n\n### Error Recovery Strategies\n\n```tsx\n// Advanced retry strategies\nfunction ResilientComponent() {\n const [retryCount, setRetryCount] = useState(0);\n\n return (\n <TryErrorBoundary\n retryStrategy={{\n maxRetries: 5,\n delay: 1000,\n backoff: \"exponential\",\n }}\n fallback={(error, errorInfo, retry) => (\n <div className=\"resilient-error\">\n <h3>Temporary Issue</h3>\n <p>We're experiencing some technical difficulties.</p>\n\n {retryCount < 3 && (\n <button onClick={retry} className=\"retry-auto\">\n 🔄 Retry Automatically\n </button>\n )}\n\n {retryCount >= 3 && (\n <div className=\"manual-actions\">\n <p>Multiple retries failed. Try these actions:</p>\n <button onClick={() => window.location.reload()}>\n 🔄 Refresh Page\n </button>\n <button onClick={() => localStorage.clear()}>\n 🗑️ Clear Cache\n </button>\n <button onClick={() => (window.location.href = \"/help\")}>\n ❓ Get Help\n </button>\n </div>\n )}\n\n <details className=\"error-details\">\n <summary>Technical Details</summary>\n <p>Error: {error.message}</p>\n <p>Retry Count: {retryCount}</p>\n <p>Time: {new Date().toLocaleTimeString()}</p>\n </details>\n </div>\n )}\n onError={(error, errorInfo) => {\n setRetryCount((prev) => prev + 1);\n\n // Escalate to different services based on retry count\n if (retryCount === 0) {\n reportToErrorService(error, { level: \"warning\" });\n } else if (retryCount >= 3) {\n reportToErrorService(error, { level: \"critical\" });\n }\n }}\n >\n <CriticalComponent />\n </TryErrorBoundary>\n );\n}\n```\n\n### HOC Pattern\n\n```tsx\n// Higher-order component pattern\nconst withErrorBoundary = <P extends object>(\n Component: React.ComponentType<P>,\n errorBoundaryProps?: Partial<TryErrorBoundaryProps>\n) => {\n const WrappedComponent = (props: P) => (\n <TryErrorBoundary {...errorBoundaryProps}>\n <Component {...props} />\n </TryErrorBoundary>\n );\n\n WrappedComponent.displayName = `withErrorBoundary(${\n Component.displayName || Component.name\n })`;\n return WrappedComponent;\n};\n\n// Usage\nconst SafeUserProfile = withErrorBoundary(UserProfile, {\n errorMessage: \"Failed to load user profile\",\n showRetry: true,\n onError: (error) => reportError(error, { component: \"UserProfile\" }),\n});\n\nconst SafeProductList = withErrorBoundary(ProductList, {\n retryStrategy: { maxRetries: 3, delay: 2000 },\n fallback: (error, errorInfo, retry) => (\n <div className=\"product-list-error\">\n <h3>Products temporarily unavailable</h3>\n <button onClick={retry}>Reload Products</button>\n </div>\n ),\n});\n```",
+  "metadata": {
+    "chunk_id": "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+    "source_document": "rag-docs/TryErrorBoundary-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.277Z",
+    "topics": [
+      "advanced usage patterns",
+      "nested error boundaries",
+      "error filtering and routing",
+      "error recovery strategies",
+      "hoc pattern",
+      "tsx",
+      "error",
+      "function",
+      "react",
+      "component",
+      "validation"
+    ],
+    "complexity": "intermediate",
+    "includes_code": true,
+    "line_count": 211,
+    "token_count": 634,
+    "module": "react",
+    "category": "utilities",
+    "search_keywords": [
+      "App",
+      "reportCriticalError",
+      "SelectiveErrorBoundary",
+      "includes",
+      "ResilientComponent",
+      "useState",
+      "reload",
+      "clear",
+      "Date",
+      "toLocaleTimeString",
+      "setRetryCount",
+      "reportToErrorService",
+      "withErrorBoundary",
+      "reportError",
+      "React",
+      "Partial<TryErrorBoundaryProps>"
+    ],
+    "common_questions": [
+      "How does advanced usage patterns work?",
+      "Advanced Usage Patterns best practices",
+      "Advanced Usage Patterns patterns"
+    ],
+    "id": "TryErrorBoundary-deep-dive",
+    "title": "TryErrorBoundary - Complete Implementation Guide",
+    "tags": [
+      "react",
+      "error-boundary",
+      "component",
+      "retry",
+      "async-errors",
+      "event-handlers"
+    ],
+    "related": [
+      "useTry",
+      "useErrorRecovery",
+      "createError",
+      "fromThrown",
+      "React"
+    ],
+    "performance_impact": "low",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization",
+      "TryErrorBoundary_deep_dive_common-pitfalls"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "react-integration"
+    ],
+    "cross_references": [
+      "fromThrown_deep_dive_advanced-usage-patterns",
+      "function_Component",
+      "function_UserProfile",
+      "function_WrappedComponent",
+      "function_clear",
+      "function_intern",
+      "function_validationError",
+      "isTryError_deep_dive_advanced-usage-patterns",
+      "useTry_deep_dive_advanced-usage-patterns",
+      "wrapError_deep_dive_advanced-usage-patterns"
+    ]
+  },
+  "hash": "1408efb9ccfddbd5464132f004ac1aaa"
+}

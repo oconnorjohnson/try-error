@@ -1,0 +1,95 @@
+{
+  "chunk_id": "TryErrorBoundary_deep_dive_error-monitoring-integration",
+  "title": "Error Monitoring Integration",
+  "content": "## Error Monitoring Integration\n\n### Sentry Integration\n\n```tsx\n// Sentry error reporting\nimport * as Sentry from \"@sentry/react\";\n\nfunction SentryErrorBoundary({ children }: { children: ReactNode }) {\n return (\n <TryErrorBoundary\n onError={(error, errorInfo) => {\n // Enhanced Sentry reporting\n Sentry.withScope((scope) => {\n scope.setTag(\"errorBoundary\", true);\n scope.setLevel(\"error\");\n\n if (isTryError(error)) {\n scope.setTag(\"errorType\", error.type);\n scope.setTag(\"errorSource\", error.source);\n scope.setContext(\"tryError\", {\n type: error.type,\n source: error.source,\n timestamp: error.timestamp,\n context: error.context,\n });\n }\n\n if (errorInfo) {\n scope.setContext(\"errorInfo\", {\n componentStack: errorInfo.componentStack,\n });\n }\n\n Sentry.captureException(error.cause || error);\n });\n }}\n fallback={(error, errorInfo, retry) => (\n <div className=\"sentry-error-ui\">\n <h2>Something went wrong</h2>\n <p>The error has been reported to our team.</p>\n <button onClick={retry}>Try Again</button>\n <button onClick={() => Sentry.showReportDialog()}>\n Report Feedback\n </button>\n </div>\n )}\n >\n {children}\n </TryErrorBoundary>\n );\n}\n```\n\n### Custom Error Service\n\n```tsx\n// Custom error monitoring service\nclass ErrorMonitoringService {\n private static instance: ErrorMonitoringService;\n\n static getInstance() {\n if (!ErrorMonitoringService.instance) {\n ErrorMonitoringService.instance = new ErrorMonitoringService();\n }\n return ErrorMonitoringService.instance;\n }\n\n reportError(error: Error | TryError, context?: any) {\n const errorReport = {\n message: error.message,\n stack: error.stack,\n timestamp: Date.now(),\n url: window.location.href,\n userAgent: navigator.userAgent,\n context,\n };\n\n if (isTryError(error)) {\n Object.assign(errorReport, {\n type: error.type,\n source: error.source,\n tryErrorContext: error.context,\n });\n }\n\n // Send to monitoring service\n fetch(\"/api/errors\", {\n method: \"POST\",\n headers: { \"Content-Type\": \"application/json\" },\n body: JSON.stringify(errorReport),\n });\n }\n}\n\n// Usage\nfunction MonitoredErrorBoundary({ children }: { children: ReactNode }) {\n const errorService = ErrorMonitoringService.getInstance();\n\n return (\n <TryErrorBoundary\n onError={(error, errorInfo) => {\n errorService.reportError(error, {\n componentStack: errorInfo?.componentStack,\n timestamp: Date.now(),\n });\n }}\n >\n {children}\n </TryErrorBoundary>\n );\n}\n```",
+  "metadata": {
+    "chunk_id": "TryErrorBoundary_deep_dive_error-monitoring-integration",
+    "source_document": "rag-docs/TryErrorBoundary-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.277Z",
+    "topics": [
+      "error monitoring integration",
+      "sentry integration",
+      "custom error service",
+      "tsx",
+      "error",
+      "function",
+      "method",
+      "react",
+      "component"
+    ],
+    "complexity": "intermediate",
+    "includes_code": true,
+    "line_count": 113,
+    "token_count": 306,
+    "module": "react",
+    "category": "error-creation",
+    "search_keywords": [
+      "SentryErrorBoundary",
+      "withScope",
+      "setTag",
+      "setLevel",
+      "isTryError",
+      "setContext",
+      "captureException",
+      "showReportDialog",
+      "getInstance",
+      "ErrorMonitoringService",
+      "reportError",
+      "now",
+      "assign",
+      "fetch",
+      "stringify",
+      "MonitoredErrorBoundary",
+      "ReactNode",
+      "Error",
+      "Date",
+      "JSON"
+    ],
+    "common_questions": [
+      "How does error monitoring integration work?",
+      "Error Monitoring Integration best practices",
+      "Error Monitoring Integration patterns"
+    ],
+    "id": "TryErrorBoundary-deep-dive",
+    "title": "TryErrorBoundary - Complete Implementation Guide",
+    "tags": [
+      "react",
+      "error-boundary",
+      "component",
+      "retry",
+      "async-errors",
+      "event-handlers"
+    ],
+    "related": [
+      "useTry",
+      "useErrorRecovery",
+      "createError",
+      "fromThrown",
+      "React"
+    ],
+    "performance_impact": "low",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization",
+      "TryErrorBoundary_deep_dive_common-pitfalls"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "react-integration"
+    ],
+    "cross_references": [
+      "function_Component",
+      "function_isTryError"
+    ]
+  },
+  "hash": "c6089d0199d7a9243e0fa73e0ae675f0"
+}

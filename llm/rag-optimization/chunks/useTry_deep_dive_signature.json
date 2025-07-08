@@ -1,0 +1,91 @@
+{
+  "chunk_id": "useTry_deep_dive_signature",
+  "title": "Signature",
+  "content": "## Signature\n\n```typescript\nfunction useTry<T>(\n asyncFn: (signal: AbortSignal) => Promise<T>,\n options?: UseTryOptions\n): UseTryReturn<T>;\n\ninterface UseTryOptions {\n enabled?: boolean; // Auto-execute on mount/deps change\n deps?: React.DependencyList; // Dependencies for re-execution\n cacheKey?: string; // Cache key for request deduplication\n cacheTime?: number; // Cache TTL in milliseconds\n staleTime?: number; // Stale time in milliseconds\n retryDelay?: number; // Retry delay in milliseconds\n abortMessage?: string; // Custom abort message\n onSuccess?: (data: T) => void; // Success callback\n onError?: (error: TryError) => void; // Error callback\n onSettled?: (data: T | null, error: TryError | null) => void; // Always called\n suspense?: boolean; // Enable React Suspense\n debounceMs?: number; // Debounce execution\n}\n\ninterface UseTryReturn<T> {\n data: T | null; // Success data\n error: TryError | null; // Error state\n isLoading: boolean; // Loading state\n isSuccess: boolean; // Success state\n isError: boolean; // Error state\n execute: () => Promise<void>; // Manual execution\n abort: () => void; // Cancel operation\n reset: () => void; // Reset state\n}\n```",
+  "metadata": {
+    "chunk_id": "useTry_deep_dive_signature",
+    "source_document": "rag-docs/useTry-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.344Z",
+    "topics": [
+      "signature",
+      "typescript",
+      "error",
+      "async",
+      "sync",
+      "promise",
+      "callback",
+      "function",
+      "react"
+    ],
+    "complexity": "advanced",
+    "includes_code": true,
+    "line_count": 34,
+    "token_count": 211,
+    "module": "react",
+    "category": "utilities",
+    "search_keywords": [
+      "AbortSignal",
+      "UseTryOptions",
+      "UseTryReturn<T>",
+      "React",
+      "TryError"
+    ],
+    "common_questions": [
+      "How does signature work?",
+      "Signature best practices",
+      "Signature patterns"
+    ],
+    "id": "useTry-deep-dive",
+    "title": "useTry() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "react",
+      "hooks",
+      "async",
+      "state-management",
+      "cancellation",
+      "caching"
+    ],
+    "related": [
+      "tryAsync",
+      "isTryError",
+      "AbortSignal",
+      "React",
+      "useState",
+      "useEffect"
+    ],
+    "performance_impact": "medium",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "async-operations",
+      "react-integration"
+    ],
+    "cross_references": [
+      "TryErrorBoundary_deep_dive_signature",
+      "configure_deep_dive_signature",
+      "create_error_deep_dive_signature",
+      "fromThrown_deep_dive_signature",
+      "function_isErr",
+      "function_reset",
+      "isTryError_deep_dive_signature",
+      "tryAsync_deep_dive_signature",
+      "trySync_deep_dive_signature",
+      "wrapError_deep_dive_signature"
+    ]
+  },
+  "hash": "82f6c7b8488dfea0c69c60ac7f2369ea"
+}

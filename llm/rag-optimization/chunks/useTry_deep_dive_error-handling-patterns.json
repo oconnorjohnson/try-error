@@ -1,0 +1,95 @@
+{
+  "chunk_id": "useTry_deep_dive_error-handling-patterns",
+  "title": "Error Handling Patterns",
+  "content": "## Error Handling Patterns\n\n### Retry Logic\n\n```typescript\nfunction RetryableComponent() {\n const [retryCount, setRetryCount] = useState(0);\n const maxRetries = 3;\n\n const { data, error, isLoading, execute, reset } = useTry(\n async (signal) => {\n const response = await fetch(\"/api/unreliable-endpoint\", { signal });\n\n if (!response.ok) {\n throw new Error(`HTTP ${response.status}: ${response.statusText}`);\n }\n\n return response.json();\n },\n {\n enabled: false,\n\n onError: (error) => {\n console.error(`Attempt ${retryCount + 1} failed:`, error);\n\n // Auto-retry on network errors\n if (retryCount < maxRetries && error.message.includes(\"HTTP 5\")) {\n setTimeout(() => {\n setRetryCount((prev) => prev + 1);\n execute();\n }, 1000 * Math.pow(2, retryCount)); // Exponential backoff\n }\n },\n\n onSuccess: () => {\n setRetryCount(0);\n },\n }\n );\n\n const handleRetry = () => {\n setRetryCount(0);\n reset();\n execute();\n };\n\n return (\n <div>\n <button onClick={execute} disabled={isLoading}>\n {isLoading ? \"Loading...\" : \"Fetch Data\"}\n </button>\n\n {error && (\n <div>\n <p>Error: {error.message}</p>\n <p>\n Retry attempt: {retryCount + 1}/{maxRetries + 1}\n </p>\n\n {retryCount >= maxRetries && (\n <button onClick={handleRetry}>Try Again</button>\n )}\n </div>\n )}\n\n {data && (\n <div>\n <h2>Success!</h2>\n <pre>{JSON.stringify(data, null, 2)}</pre>\n </div>\n )}\n </div>\n );\n}\n```\n\n### Fallback Strategies\n\n```typescript\nfunction FallbackComponent() {\n const [useFallback, setUseFallback] = useState(false);\n\n const { data, error, isLoading, execute } = useTry(\n async (signal) => {\n const endpoint = useFallback ? \"/api/fallback\" : \"/api/primary\";\n\n const response = await fetch(endpoint, { signal });\n\n if (!response.ok) {\n throw new Error(`${endpoint} failed: ${response.status}`);\n }\n\n return response.json();\n },\n {\n deps: [useFallback],\n\n onError: (error) => {\n // Automatically try fallback on primary failure\n if (!useFallback && error.message.includes(\"/api/primary\")) {\n console.log(\"Primary endpoint failed, trying fallback...\");\n setUseFallback(true);\n }\n },\n\n onSuccess: (data) => {\n console.log(\n `Data loaded from ${useFallback ? \"fallback\" : \"primary\"} endpoint`\n );\n },\n }\n );\n\n return (\n <div>\n <div>\n <h2>Fallback Strategy Demo</h2>\n <p>Using: {useFallback ? \"Fallback\" : \"Primary\"} endpoint</p>\n\n <button onClick={execute} disabled={isLoading}>\n {isLoading ? \"Loading...\" : \"Load Data\"}\n </button>\n\n <button onClick={() => setUseFallback(!useFallback)}>\n Switch to {useFallback ? \"Primary\" : \"Fallback\"}\n </button>\n </div>\n\n {error && (\n <div>\n <p>Error: {error.message}</p>\n {useFallback && <p>Fallback endpoint also failed</p>}\n </div>\n )}\n\n {data && (\n <div>\n <h3>Data loaded successfully</h3>\n <pre>{JSON.stringify(data, null, 2)}</pre>\n </div>\n )}\n </div>\n );\n}\n```",
+  "metadata": {
+    "chunk_id": "useTry_deep_dive_error-handling-patterns",
+    "source_document": "rag-docs/useTry-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.346Z",
+    "topics": [
+      "error handling patterns",
+      "retry logic",
+      "fallback strategies",
+      "typescript",
+      "error",
+      "async",
+      "sync",
+      "function",
+      "component"
+    ],
+    "complexity": "advanced",
+    "includes_code": true,
+    "line_count": 145,
+    "token_count": 436,
+    "module": "react",
+    "category": "error-creation",
+    "search_keywords": [
+      "RetryableComponent",
+      "useState",
+      "useTry",
+      "fetch",
+      "Error",
+      "json",
+      "error",
+      "includes",
+      "setTimeout",
+      "setRetryCount",
+      "execute",
+      "pow",
+      "reset",
+      "stringify",
+      "FallbackComponent",
+      "log",
+      "setUseFallback"
+    ],
+    "common_questions": [
+      "How does error handling patterns work?",
+      "Error Handling Patterns best practices",
+      "Error Handling Patterns patterns"
+    ],
+    "id": "useTry-deep-dive",
+    "title": "useTry() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "react",
+      "hooks",
+      "async",
+      "state-management",
+      "cancellation",
+      "caching"
+    ],
+    "related": [
+      "tryAsync",
+      "isTryError",
+      "AbortSignal",
+      "React",
+      "useState",
+      "useEffect"
+    ],
+    "performance_impact": "medium",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "async-operations"
+    ],
+    "cross_references": [
+      "function_Component",
+      "function_reset",
+      "tryAsync_deep_dive_error-handling-patterns"
+    ]
+  },
+  "hash": "d63d9a22c39fc20f89400b5c7e9468fb"
+}

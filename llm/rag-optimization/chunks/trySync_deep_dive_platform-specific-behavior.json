@@ -1,0 +1,85 @@
+{
+  "chunk_id": "trySync_deep_dive_platform-specific-behavior",
+  "title": "Platform-Specific Behavior",
+  "content": "## Platform-Specific Behavior\n\n### Node.js\n\n```typescript\n// Full stack traces with file paths\nconst result = trySync(() => fs.readFileSync(\"nonexistent.txt\"));\n// result.stack includes full file paths and line numbers\n// result.source includes actual file:line:column information\n```\n\n### Browser\n\n```typescript\n// Stack traces may be limited by browser\nconst result = trySync(() => JSON.parse(\"invalid\"));\n// result.stack format varies by browser\n// result.source may be limited in production builds\n```\n\n### React Native\n\n```typescript\n// Metro bundler affects stack traces\nconst result = trySync(() => processData());\n// result.source may show bundle paths instead of source paths\n// Consider using source maps for better debugging\n```\n\n### Web Workers\n\n```typescript\n// Error serialization across worker boundaries\nself.onmessage = function (e) {\n const result = trySync(() => processInWorker(e.data));\n\n // TryError objects can be serialized/deserialized\n if (isTryError(result)) {\n self.postMessage({\n error: serializeTryError(result),\n });\n } else {\n self.postMessage({ success: result });\n }\n};\n```",
+  "metadata": {
+    "chunk_id": "trySync_deep_dive_platform-specific-behavior",
+    "source_document": "rag-docs/trySync-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.343Z",
+    "topics": [
+      "platform-specific behavior",
+      "node.js",
+      "browser",
+      "react native",
+      "web workers",
+      "typescript",
+      "error",
+      "sync",
+      "function",
+      "react"
+    ],
+    "complexity": "intermediate",
+    "includes_code": true,
+    "line_count": 46,
+    "token_count": 190,
+    "module": "sync",
+    "category": "utilities",
+    "search_keywords": [
+      "trySync",
+      "readFileSync",
+      "parse",
+      "processData",
+      "processInWorker",
+      "isTryError",
+      "postMessage",
+      "serializeTryError"
+    ],
+    "common_questions": [
+      "How does platform-specific behavior work?",
+      "Platform-Specific Behavior best practices",
+      "Platform-Specific Behavior patterns"
+    ],
+    "id": "trySync-deep-dive",
+    "title": "trySync() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "sync",
+      "error-handling",
+      "performance"
+    ],
+    "related": [
+      "tryAsync",
+      "isTryError",
+      "wrapError",
+      "fromThrown",
+      "createError"
+    ],
+    "performance_impact": "low",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "react-integration"
+    ],
+    "cross_references": [
+      "create_error_deep_dive_platform-specific-behavior",
+      "function_isTryError",
+      "function_serializeTryError",
+      "tryAsync_deep_dive_platform-specific-behavior"
+    ]
+  },
+  "hash": "55a8ce31ea92fdbfb484403a8da94aa8"
+}

@@ -1,0 +1,72 @@
+{
+  "chunk_id": "create_error_deep_dive_purpose",
+  "title": "Purpose",
+  "content": "## Purpose\n\n- Primary factory function for creating type-safe error objects\n- Provides consistent error structure across the application\n- Enables runtime context injection for debugging\n- Optimizes performance based on configuration",
+  "metadata": {
+    "chunk_id": "create_error_deep_dive_purpose",
+    "source_document": "rag-docs/create-error-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.284Z",
+    "topics": [
+      "purpose",
+      "error",
+      "function",
+      "performance",
+      "configuration"
+    ],
+    "complexity": "intermediate",
+    "includes_code": false,
+    "line_count": 6,
+    "token_count": 42,
+    "module": "core",
+    "category": "utilities",
+    "search_keywords": [],
+    "common_questions": [
+      "How does purpose work?",
+      "Purpose best practices",
+      "Purpose patterns"
+    ],
+    "id": "create-error-deep-dive",
+    "title": "createError() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "error-creation",
+      "performance",
+      "context-injection"
+    ],
+    "related": null,
+    "performance_impact": "low",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "performance-optimization"
+    ],
+    "cross_references": [
+      "TryErrorBoundary_deep_dive_purpose",
+      "configure_deep_dive_purpose",
+      "create_error_deep_dive_runtime-context-injection",
+      "fromThrown_deep_dive_purpose",
+      "isTryError_deep_dive_purpose",
+      "tryAsync_deep_dive_purpose",
+      "tryAsync_deep_dive_runtime-context-injection",
+      "trySync_deep_dive_purpose",
+      "trySync_deep_dive_runtime-context-injection",
+      "useTry_deep_dive_purpose",
+      "wrapError_deep_dive_purpose"
+    ]
+  },
+  "hash": "bd7ecebbc667ac402f9c855da0fb29c7"
+}

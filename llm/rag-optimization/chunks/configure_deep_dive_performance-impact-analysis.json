@@ -1,0 +1,78 @@
+{
+  "chunk_id": "configure_deep_dive_performance-impact-analysis",
+  "title": "Performance Impact Analysis",
+  "content": "## Performance Impact Analysis\n\n### Configuration Overhead\n\n```typescript\n// Minimal configuration impact\nconfigure(\"minimal\");\n// ~20ns overhead per error creation\n// ~120 bytes per error object\n\n// Standard configuration impact\nconfigure(\"production\");\n// ~100ns overhead per error creation\n// ~450 bytes per error object\n\n// Full configuration impact\nconfigure(\"development\");\n// ~400ns overhead per error creation\n// ~1.2KB per error object\n```\n\n### Memory Usage by Configuration\n\n```typescript\n// Memory usage analysis\nconst memoryUsage = {\n minimal: {\n perError: 120, // bytes\n cacheSize: 0, // No caching\n poolSize: 0, // No pooling\n },\n\n production: {\n perError: 450, // bytes\n cacheSize: 10240, // 10KB cache\n poolSize: 0, // No pooling\n },\n\n performance: {\n perError: 300, // bytes (pooled)\n cacheSize: 20480, // 20KB cache\n poolSize: 51200, // 50KB pool (100 objects)\n },\n};\n```\n\n### Performance Monitoring\n\n```typescript\n// Built-in performance monitoring\nconst performanceResults = await Performance.measureErrorCreation(1000);\n\nconsole.log(`Average error creation time: ${performanceResults.averageTime}ms`);\nconsole.log(`Total time for 1000 errors: ${performanceResults.totalTime}ms`);\n\n// Memory monitoring (Node.js only)\nconst memoryUsage = Performance.getMemoryUsage();\nif (memoryUsage) {\n console.log(`Heap used: ${memoryUsage.heapUsed / 1024 / 1024}MB`);\n console.log(`Heap total: ${memoryUsage.heapTotal / 1024 / 1024}MB`);\n}\n```",
+  "metadata": {
+    "chunk_id": "configure_deep_dive_performance-impact-analysis",
+    "source_document": "rag-docs/configure-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.282Z",
+    "topics": [
+      "performance impact analysis",
+      "configuration overhead",
+      "memory usage by configuration",
+      "performance monitoring",
+      "typescript",
+      "error",
+      "performance",
+      "configuration"
+    ],
+    "complexity": "advanced",
+    "includes_code": true,
+    "line_count": 62,
+    "token_count": 236,
+    "module": "config",
+    "category": "type-checking",
+    "search_keywords": [
+      "configure",
+      "measureErrorCreation",
+      "log",
+      "getMemoryUsage"
+    ],
+    "common_questions": [
+      "How does performance impact analysis work?",
+      "Performance Impact Analysis best practices",
+      "Performance Impact Analysis patterns"
+    ],
+    "id": "configure-deep-dive",
+    "title": "configure() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "configuration",
+      "performance",
+      "optimization",
+      "presets"
+    ],
+    "related": [
+      "getConfig",
+      "resetConfig",
+      "ConfigPresets",
+      "performance",
+      "monitoring"
+    ],
+    "performance_impact": "medium",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "async-operations",
+      "performance-optimization"
+    ],
+    "cross_references": [
+      "function_configure"
+    ]
+  },
+  "hash": "f76301cd83582f839f60fed83c4f8c6e"
+}

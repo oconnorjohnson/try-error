@@ -1,0 +1,78 @@
+{
+  "chunk_id": "configure_deep_dive_migration-and-compatibility",
+  "title": "Migration and Compatibility",
+  "content": "## Migration and Compatibility\n\n### Migrating from Other Libraries\n\n```typescript\n// Migrating from basic try-catch\n// Before:\ntry {\n const result = riskyOperation();\n return result;\n} catch (error) {\n console.error(\"Operation failed:\", error);\n return null;\n}\n\n// After:\nconfigure({\n onError: (error) => {\n console.error(\"Operation failed:\", error);\n return error;\n },\n});\n\nconst result = trySync(() => riskyOperation());\nif (isTryError(result)) {\n return null;\n}\nreturn result;\n```\n\n### Upgrading Configuration\n\n```typescript\n// V1 configuration (deprecated)\nconfigure({\n includeStackTrace: true, // Old property\n sourceLocation: true, // Old property\n});\n\n// V2 configuration (current)\nconfigure({\n captureStackTrace: true, // New property\n includeSource: true, // New property\n});\n```",
+  "metadata": {
+    "chunk_id": "configure_deep_dive_migration-and-compatibility",
+    "source_document": "rag-docs/configure-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.283Z",
+    "topics": [
+      "migration and compatibility",
+      "migrating from other libraries",
+      "upgrading configuration",
+      "typescript",
+      "error",
+      "sync",
+      "configuration"
+    ],
+    "complexity": "advanced",
+    "includes_code": true,
+    "line_count": 45,
+    "token_count": 132,
+    "module": "config",
+    "category": "utilities",
+    "search_keywords": [
+      "riskyOperation",
+      "error",
+      "configure",
+      "trySync",
+      "isTryError"
+    ],
+    "common_questions": [
+      "How does migration and compatibility work?",
+      "Migration and Compatibility best practices",
+      "Migration and Compatibility patterns"
+    ],
+    "id": "configure-deep-dive",
+    "title": "configure() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "configuration",
+      "performance",
+      "optimization",
+      "presets"
+    ],
+    "related": [
+      "getConfig",
+      "resetConfig",
+      "ConfigPresets",
+      "performance",
+      "monitoring"
+    ],
+    "performance_impact": "medium",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "error-handling"
+    ],
+    "cross_references": [
+      "function_configure",
+      "function_isTryError"
+    ]
+  },
+  "hash": "4dbfa1f9f63921e5e40a248e98e61b50"
+}

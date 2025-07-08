@@ -1,0 +1,97 @@
+{
+  "chunk_id": "tryAsync_deep_dive_testing-strategies",
+  "title": "Testing Strategies",
+  "content": "## Testing Strategies\n\n### Unit Testing\n\n```typescript\ndescribe(\"tryAsync\", () => {\n it(\"should return success value directly\", async () => {\n const result = await tryAsync(() => Promise.resolve(42));\n expect(result).toBe(42);\n expect(isTryError(result)).toBe(false);\n });\n\n it(\"should handle promise rejections\", async () => {\n const result = await tryAsync(() => Promise.reject(new Error(\"test\")));\n expect(isTryError(result)).toBe(true);\n expect(result.message).toBe(\"test\");\n });\n\n it(\"should handle timeout\", async () => {\n const result = await tryAsync(\n () => new Promise((resolve) => setTimeout(resolve, 2000)),\n { timeout: 1000 }\n );\n\n expect(isTryError(result)).toBe(true);\n expect(result.message).toContain(\"timed out\");\n });\n\n it(\"should handle cancellation\", async () => {\n const controller = new AbortController();\n\n const resultPromise = tryAsync(\n () => new Promise((resolve) => setTimeout(resolve, 2000)),\n { signal: controller.signal }\n );\n\n setTimeout(() => controller.abort(), 100);\n\n const result = await resultPromise;\n expect(isTryError(result)).toBe(true);\n expect(result.message).toContain(\"aborted\");\n });\n});\n```\n\n### Integration Testing\n\n```typescript\ndescribe(\"tryAsync integration\", () => {\n it(\"should work with real HTTP requests\", async () => {\n const result = await tryAsync(\n () => fetch(\"https://jsonplaceholder.typicode.com/posts/1\"),\n { timeout: 5000 }\n );\n\n if (isTryError(result)) {\n console.log(\"Request failed:\", result.message);\n } else {\n expect(result.ok).toBe(true);\n }\n });\n\n it(\"should handle network errors gracefully\", async () => {\n const result = await tryAsync(\n () => fetch(\"https://nonexistent-domain-12345.com\"),\n { timeout: 1000 }\n );\n\n expect(isTryError(result)).toBe(true);\n expect(result.type).toBe(\"TypeError\");\n });\n});\n```",
+  "metadata": {
+    "chunk_id": "tryAsync_deep_dive_testing-strategies",
+    "source_document": "rag-docs/tryAsync-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.341Z",
+    "topics": [
+      "testing strategies",
+      "unit testing",
+      "integration testing",
+      "typescript",
+      "error",
+      "async",
+      "sync",
+      "promise",
+      "testing"
+    ],
+    "complexity": "intermediate",
+    "includes_code": true,
+    "line_count": 73,
+    "token_count": 247,
+    "module": "async",
+    "category": "testing",
+    "search_keywords": [
+      "describe",
+      "it",
+      "tryAsync",
+      "resolve",
+      "expect",
+      "toBe",
+      "isTryError",
+      "reject",
+      "Error",
+      "Promise",
+      "setTimeout",
+      "toContain",
+      "AbortController",
+      "abort",
+      "fetch",
+      "log"
+    ],
+    "common_questions": [
+      "How does testing strategies work?",
+      "Testing Strategies best practices",
+      "Testing Strategies patterns"
+    ],
+    "id": "tryAsync-deep-dive",
+    "title": "tryAsync() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "async",
+      "error-handling",
+      "promises",
+      "cancellation"
+    ],
+    "related": [
+      "trySync",
+      "isTryError",
+      "AbortSignal",
+      "timeout",
+      "Promise"
+    ],
+    "performance_impact": "low",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "async-operations",
+      "testing"
+    ],
+    "cross_references": [
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "fromThrown_deep_dive_testing-strategies",
+      "function_isTryError",
+      "isTryError_deep_dive_testing-strategies",
+      "trySync_deep_dive_testing-strategies",
+      "useTry_deep_dive_testing-strategies",
+      "wrapError_deep_dive_testing-strategies"
+    ]
+  },
+  "hash": "d8e438bf8e29cba3483934f7f3bef40c"
+}

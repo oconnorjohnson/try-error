@@ -1,0 +1,99 @@
+{
+  "chunk_id": "useTry_deep_dive_common-pitfalls",
+  "title": "Common Pitfalls",
+  "content": "## Common Pitfalls\n\n### 1. Missing Dependencies\n\n```typescript\n// BAD: Missing userId dependency\nconst { data } = useTry(\n async (signal) => {\n const response = await fetch(`/api/users/${userId}`, { signal });\n return response.json();\n },\n { deps: [] } // Should include userId\n);\n\n// GOOD: Include all dependencies\nconst { data } = useTry(\n async (signal) => {\n const response = await fetch(`/api/users/${userId}`, { signal });\n return response.json();\n },\n { deps: [userId] }\n);\n```\n\n### 2. Stale Closure Issues\n\n```typescript\n// BAD: Accessing stale state\nconst [count, setCount] = useState(0);\n\nconst { data } = useTry(\n async (signal) => {\n // This might access stale count value\n return await processData(count);\n },\n { deps: [] } // Missing count dependency\n);\n\n// GOOD: Include state in dependencies\nconst { data } = useTry(\n async (signal) => {\n return await processData(count);\n },\n { deps: [count] }\n);\n```\n\n### 3. Memory Leaks\n\n```typescript\n// BAD: Not cleaning up listeners\nconst { data } = useTry(async (signal) => {\n const eventSource = new EventSource(\"/api/events\");\n\n return new Promise((resolve) => {\n eventSource.onmessage = (event) => {\n resolve(JSON.parse(event.data));\n };\n });\n // EventSource never closed!\n});\n\n// GOOD: Proper cleanup\nconst { data } = useTry(async (signal) => {\n const eventSource = new EventSource(\"/api/events\");\n\n // Clean up on abort\n signal.addEventListener(\"abort\", () => {\n eventSource.close();\n });\n\n return new Promise((resolve, reject) => {\n eventSource.onmessage = (event) => {\n eventSource.close();\n resolve(JSON.parse(event.data));\n };\n\n eventSource.onerror = (error) => {\n eventSource.close();\n reject(error);\n };\n });\n});\n```",
+  "metadata": {
+    "chunk_id": "useTry_deep_dive_common-pitfalls",
+    "source_document": "rag-docs/useTry-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.346Z",
+    "topics": [
+      "common pitfalls",
+      "1. missing dependencies",
+      "2. stale closure issues",
+      "3. memory leaks",
+      "typescript",
+      "error",
+      "async",
+      "sync",
+      "promise"
+    ],
+    "complexity": "advanced",
+    "includes_code": true,
+    "line_count": 84,
+    "token_count": 318,
+    "module": "react",
+    "category": "utilities",
+    "search_keywords": [
+      "useTry",
+      "fetch",
+      "json",
+      "useState",
+      "processData",
+      "EventSource",
+      "Promise",
+      "resolve",
+      "parse",
+      "addEventListener",
+      "close",
+      "reject",
+      "Missing",
+      "Include",
+      "Accessing",
+      "Not",
+      "Proper"
+    ],
+    "common_questions": [
+      "How does common pitfalls work?",
+      "Common Pitfalls best practices",
+      "Common Pitfalls patterns"
+    ],
+    "id": "useTry-deep-dive",
+    "title": "useTry() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "react",
+      "hooks",
+      "async",
+      "state-management",
+      "cancellation",
+      "caching"
+    ],
+    "related": [
+      "tryAsync",
+      "isTryError",
+      "AbortSignal",
+      "React",
+      "useState",
+      "useEffect"
+    ],
+    "performance_impact": "medium",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "async-operations"
+    ],
+    "cross_references": [
+      "TryErrorBoundary_deep_dive_common-pitfalls",
+      "configure_deep_dive_common-pitfalls",
+      "fromThrown_deep_dive_common-pitfalls",
+      "isTryError_deep_dive_common-pitfalls",
+      "tryAsync_deep_dive_common-pitfalls",
+      "trySync_deep_dive_common-pitfalls",
+      "wrapError_deep_dive_common-pitfalls"
+    ]
+  },
+  "hash": "b3a5ce38c9395fa0f0d56e681f26e6a3"
+}

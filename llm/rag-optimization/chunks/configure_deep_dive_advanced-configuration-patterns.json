@@ -1,0 +1,97 @@
+{
+  "chunk_id": "configure_deep_dive_advanced-configuration-patterns",
+  "title": "Advanced Configuration Patterns",
+  "content": "## Advanced Configuration Patterns\n\n### Environment-Based Configuration\n\n```typescript\n// Automatic environment detection\nconfigure(\n createEnvConfig({\n development: {\n captureStackTrace: true,\n developmentMode: true,\n onError: (error) => {\n console.group(`🚨 Dev Error: ${error.type}`);\n console.error(\"Message:\", error.message);\n console.error(\"Context:\", error.context);\n console.groupEnd();\n return error;\n },\n },\n\n production: {\n captureStackTrace: false,\n onError: (error) => {\n sendToMonitoring(error);\n return error;\n },\n },\n\n test: {\n captureStackTrace: true,\n developmentMode: true,\n // No console output in tests\n },\n })\n);\n```\n\n### Feature Flag Integration\n\n```typescript\n// Dynamic configuration based on feature flags\nfunction createFeatureFlagConfig(): TryErrorConfig {\n return {\n captureStackTrace: featureFlags.isEnabled(\"detailed-errors\"),\n includeSource: featureFlags.isEnabled(\"source-location\"),\n developmentMode: featureFlags.isEnabled(\"debug-mode\"),\n\n performance: {\n errorCreation: {\n objectPooling: featureFlags.isEnabled(\"error-pooling\"),\n lazyStackTrace: featureFlags.isEnabled(\"lazy-stack-traces\"),\n },\n },\n\n onError: (error) => {\n if (featureFlags.isEnabled(\"error-monitoring\")) {\n sendToMonitoring(error);\n }\n\n if (featureFlags.isEnabled(\"error-analytics\")) {\n trackErrorAnalytics(error);\n }\n\n return error;\n },\n };\n}\n\n// Update configuration when feature flags change\nfeatureFlags.onChange(() => {\n configure(createFeatureFlagConfig());\n});\n```\n\n### A/B Testing Integration\n\n```typescript\n// Different error handling for A/B test variants\nconfigure({\n captureStackTrace: false,\n includeSource: true,\n\n onError: (error) => {\n const variant = getABTestVariant();\n\n // Enhanced error tracking for treatment group\n if (variant === \"treatment\") {\n sendDetailedErrorReport(error);\n } else {\n sendBasicErrorReport(error);\n }\n\n return {\n ...error,\n context: {\n ...error.context,\n abTestVariant: variant,\n },\n };\n },\n});\n```\n\n### Multi-Tenant Configuration\n\n```typescript\n// Different configuration per tenant\nclass TenantConfigManager {\n private tenantConfigs = new Map<string, TryErrorConfig>();\n\n setTenantConfig(tenantId: string, config: TryErrorConfig) {\n this.tenantConfigs.set(tenantId, config);\n }\n\n applyTenantConfig(tenantId: string) {\n const baseConfig = {\n captureStackTrace: false,\n includeSource: true,\n\n onError: (error) => {\n // Add tenant context\n return {\n ...error,\n context: {\n ...error.context,\n tenantId,\n },\n };\n },\n };\n\n const tenantConfig = this.tenantConfigs.get(tenantId) || {};\n configure({ ...baseConfig, ...tenantConfig });\n }\n}\n\n// Usage\nconst tenantConfig = new TenantConfigManager();\n\ntenantConfig.setTenantConfig(\"enterprise-client\", {\n captureStackTrace: true, // Enhanced debugging for enterprise\n developmentMode: true,\n});\n\ntenantConfig.setTenantConfig(\"basic-client\", {\n minimalErrors: true, // Minimal overhead for basic tier\n});\n```",
+  "metadata": {
+    "chunk_id": "configure_deep_dive_advanced-configuration-patterns",
+    "source_document": "rag-docs/configure-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.282Z",
+    "topics": [
+      "advanced configuration patterns",
+      "environment-based configuration",
+      "feature flag integration",
+      "a/b testing integration",
+      "multi-tenant configuration",
+      "typescript",
+      "error",
+      "function",
+      "testing",
+      "performance",
+      "configuration"
+    ],
+    "complexity": "advanced",
+    "includes_code": true,
+    "line_count": 148,
+    "token_count": 375,
+    "module": "config",
+    "category": "configuration",
+    "search_keywords": [
+      "configure",
+      "createEnvConfig",
+      "group",
+      "error",
+      "groupEnd",
+      "sendToMonitoring",
+      "createFeatureFlagConfig",
+      "isEnabled",
+      "trackErrorAnalytics",
+      "onChange",
+      "getABTestVariant",
+      "sendDetailedErrorReport",
+      "sendBasicErrorReport",
+      "setTenantConfig",
+      "set",
+      "applyTenantConfig",
+      "get",
+      "TenantConfigManager",
+      "TryErrorConfig"
+    ],
+    "common_questions": [
+      "How does advanced configuration patterns work?",
+      "Advanced Configuration Patterns best practices",
+      "Advanced Configuration Patterns patterns"
+    ],
+    "id": "configure-deep-dive",
+    "title": "configure() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "configuration",
+      "performance",
+      "optimization",
+      "presets"
+    ],
+    "related": [
+      "getConfig",
+      "resetConfig",
+      "ConfigPresets",
+      "performance",
+      "monitoring"
+    ],
+    "performance_impact": "medium",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "testing",
+      "performance-optimization"
+    ],
+    "cross_references": [
+      "function_configure",
+      "function_createEnvConfig"
+    ]
+  },
+  "hash": "27efdaf74c72d5a1715daa6e0059f9ae"
+}

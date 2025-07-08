@@ -1,0 +1,83 @@
+{
+  "chunk_id": "create_error_deep_dive_runtime-context-injection",
+  "title": "Runtime Context Injection",
+  "content": "## Runtime Context Injection\n\n### How Context Works\n\nThe `context` parameter accepts any runtime values and is designed for maximum flexibility:\n\n```typescript\n// Static context (compile-time known)\nconst error = createError({\n type: \"ValidationError\",\n message: \"Invalid input\",\n context: { field: \"email\", rule: \"format\" },\n});\n\n// Dynamic context (runtime values)\nconst error = createError({\n type: \"ApiError\",\n message: \"Request failed\",\n context: {\n userId: req.user.id, // From request\n sessionId: req.session.id, // From session\n requestId: crypto.randomUUID(), // Generated\n timestamp: Date.now(), // Current time\n headers: req.headers, // Request headers\n attempt: retryCount, // From closure\n },\n});\n\n// Context with computed values\nfunction createUserError(user: User, operation: string) {\n return createError({\n type: \"UserError\",\n message: `Failed to ${operation} user`,\n context: {\n userId: user.id,\n userName: user.name,\n userRoles: user.roles,\n operation,\n isAdmin: user.roles.includes(\"admin\"),\n accountAge: Date.now() - user.createdAt,\n },\n });\n}\n```\n\n### Context Injection Points\n\n1. **Direct at creation** - Pass context to createError()\n2. **Via middleware** - enrichContextMiddleware adds context\n3. **Through wrapping** - wrapWithContext() adds to existing errors\n4. **In try functions** - trySync/tryAsync accept context option\n\n### Context Best Practices\n\n```typescript\n// DO: Include identifiers for correlation\ncontext: {\n userId: user.id,\n requestId: req.id,\n traceId: span.traceId\n}\n\n// DO: Add debugging information\ncontext: {\n input: sanitizedInput,\n validationRules: activeRules,\n configVersion: config.version\n}\n\n// DON'T: Include sensitive data\ncontext: {\n password: user.password, // NO!\n creditCard: payment.cardNumber, // NO!\n apiKey: process.env.SECRET_KEY // NO!\n}\n\n// DON'T: Include huge objects\ncontext: {\n entireDatabase: db, // NO! Too large\n fullHttpResponse: res, // NO! Circular references\n largeBuffer: buffer // NO! Memory waste\n}\n```",
+  "metadata": {
+    "chunk_id": "create_error_deep_dive_runtime-context-injection",
+    "source_document": "rag-docs/create-error-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.284Z",
+    "topics": [
+      "runtime context injection",
+      "how context works",
+      "context injection points",
+      "context best practices",
+      "typescript",
+      "error",
+      "async",
+      "sync",
+      "function",
+      "validation",
+      "middleware"
+    ],
+    "complexity": "intermediate",
+    "includes_code": true,
+    "line_count": 83,
+    "token_count": 324,
+    "module": "core",
+    "category": "utilities",
+    "search_keywords": [
+      "createError",
+      "randomUUID",
+      "now",
+      "createUserError",
+      "includes",
+      "wrapWithContext",
+      "Date",
+      "User",
+      "Include",
+      "Add"
+    ],
+    "common_questions": [
+      "How does runtime context injection work?",
+      "Runtime Context Injection best practices",
+      "Runtime Context Injection patterns"
+    ],
+    "id": "create-error-deep-dive",
+    "title": "createError() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "error-creation",
+      "performance",
+      "context-injection"
+    ],
+    "related": null,
+    "performance_impact": "low",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "async-operations"
+    ],
+    "cross_references": [
+      "function_createError",
+      "function_validationError",
+      "function_wrapWithContext",
+      "tryAsync_deep_dive_runtime-context-injection",
+      "trySync_deep_dive_runtime-context-injection"
+    ]
+  },
+  "hash": "570f7030db6766ffa06ffd46fada85bd"
+}

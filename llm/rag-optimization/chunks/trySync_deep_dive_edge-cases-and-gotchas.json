@@ -1,0 +1,92 @@
+{
+  "chunk_id": "trySync_deep_dive_edge-cases-and-gotchas",
+  "title": "Edge Cases and Gotchas",
+  "content": "## Edge Cases and Gotchas\n\n### Function That Returns TryError\n\n```typescript\n// Function that returns a TryError as a valid result\nfunction getLastError(): TryError {\n return createError({\n type: \"PreviousError\",\n message: \"This is a valid return value\",\n });\n}\n\n// This will work correctly - the returned TryError is the success value\nconst result = trySync(() => getLastError());\n// result is the TryError object as the success value\n// Use isTryError(result) to check if it's actually an error from trySync\n```\n\n### Sync Function That Throws TryError\n\n```typescript\nfunction problematicFunction() {\n throw createError({\n type: \"CustomError\",\n message: \"I'm throwing a TryError\",\n });\n}\n\nconst result = trySync(() => problematicFunction());\n// result will be the thrown TryError, properly handled\n// The error won't be double-wrapped\n```\n\n### Context Mutation\n\n```typescript\nconst sharedContext = { counter: 0 };\n\n// Context is not deep cloned - mutations affect all references\nconst result1 = trySync(\n () => {\n throw new Error(\"fail\");\n },\n {\n context: sharedContext,\n }\n);\n\nsharedContext.counter++; // This affects result1.context!\n\n// Best practice: pass new objects or freeze context\nconst result2 = trySync(\n () => {\n throw new Error(\"fail\");\n },\n {\n context: Object.freeze({ ...sharedContext }),\n }\n);\n```\n\n### Stack Trace Preservation\n\n```typescript\nfunction deepFunction() {\n function level1() {\n function level2() {\n function level3() {\n throw new Error(\"Deep error\");\n }\n level3();\n }\n level2();\n }\n level1();\n}\n\nconst result = trySync(() => deepFunction());\n// The stack trace is preserved and includes the full call chain\n// Can be disabled with skipContext: true for performance\n```",
+  "metadata": {
+    "chunk_id": "trySync_deep_dive_edge-cases-and-gotchas",
+    "source_document": "rag-docs/trySync-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.343Z",
+    "topics": [
+      "edge cases and gotchas",
+      "function that returns tryerror",
+      "sync function that throws tryerror",
+      "context mutation",
+      "stack trace preservation",
+      "typescript",
+      "error",
+      "sync",
+      "function",
+      "performance"
+    ],
+    "complexity": "intermediate",
+    "includes_code": true,
+    "line_count": 82,
+    "token_count": 325,
+    "module": "sync",
+    "category": "utilities",
+    "search_keywords": [
+      "getLastError",
+      "createError",
+      "trySync",
+      "isTryError",
+      "problematicFunction",
+      "Error",
+      "freeze",
+      "deepFunction",
+      "level1",
+      "level2",
+      "level3",
+      "TryError",
+      "Object"
+    ],
+    "common_questions": [
+      "How does edge cases and gotchas work?",
+      "Edge Cases and Gotchas best practices",
+      "Edge Cases and Gotchas patterns"
+    ],
+    "id": "trySync-deep-dive",
+    "title": "trySync() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "sync",
+      "error-handling",
+      "performance"
+    ],
+    "related": [
+      "tryAsync",
+      "isTryError",
+      "wrapError",
+      "fromThrown",
+      "createError"
+    ],
+    "performance_impact": "low",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "performance-optimization"
+    ],
+    "cross_references": [
+      "create_error_deep_dive_edge-cases-and-gotchas",
+      "function_createError",
+      "function_isTryError",
+      "isTryError_deep_dive_edge-cases-and-gotchas",
+      "tryAsync_deep_dive_edge-cases-and-gotchas",
+      "wrapError_deep_dive_edge-cases-and-gotchas"
+    ]
+  },
+  "hash": "cfa86d0c4c348babb88597f1f36db356"
+}

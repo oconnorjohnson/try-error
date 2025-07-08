@@ -1,0 +1,95 @@
+{
+  "chunk_id": "tryAsync_deep_dive_runtime-context-injection",
+  "title": "Runtime Context Injection",
+  "content": "## Runtime Context Injection\n\n### Basic Async Context Usage\n\n```typescript\n// Static context at call site\nconst result = await tryAsync(() => fetch(\"/api/users\"), {\n context: {\n operation: \"user-fetch\",\n endpoint: \"/api/users\",\n timestamp: Date.now(),\n userAgent: navigator.userAgent,\n },\n});\n\n// Dynamic context with runtime values\nasync function fetchUserData(userId: string, options: RequestOptions) {\n return await tryAsync(() => fetch(`/api/users/${userId}`, options), {\n context: {\n userId,\n method: options.method,\n timeout: options.timeout,\n retryCount: options.retryCount || 0,\n sessionId: await getCurrentSessionId(),\n },\n });\n}\n```\n\n### Request Correlation Context\n\n```typescript\n// Trace async operations across service boundaries\nasync function processOrderChain(orderId: string) {\n const traceId = generateTraceId();\n\n const validateResult = await tryAsync(() => validateOrder(orderId), {\n context: {\n traceId,\n operation: \"validate-order\",\n orderId,\n step: 1,\n totalSteps: 3,\n },\n });\n\n if (isTryError(validateResult)) return validateResult;\n\n const paymentResult = await tryAsync(\n () => processPayment(validateResult.paymentInfo),\n {\n context: {\n traceId,\n operation: \"process-payment\",\n orderId,\n step: 2,\n totalSteps: 3,\n paymentMethod: validateResult.paymentInfo.method,\n },\n }\n );\n\n if (isTryError(paymentResult)) return paymentResult;\n\n const fulfillResult = await tryAsync(\n () => fulfillOrder(orderId, paymentResult.transactionId),\n {\n context: {\n traceId,\n operation: \"fulfill-order\",\n orderId,\n step: 3,\n totalSteps: 3,\n transactionId: paymentResult.transactionId,\n },\n }\n );\n\n return fulfillResult;\n}\n```\n\n### Async Context Inheritance\n\n```typescript\nclass AsyncDataProcessor {\n private baseContext: Record<string, unknown>;\n\n constructor(processorId: string) {\n this.baseContext = {\n processorId,\n version: \"1.0.0\",\n startTime: Date.now(),\n };\n }\n\n async processAsync<T>(\n operation: () => Promise<T>,\n operationName: string,\n options?: TryAsyncOptions\n ) {\n return await tryAsync(operation, {\n ...options,\n context: {\n ...this.baseContext,\n ...options?.context,\n operation: operationName,\n timestamp: Date.now(),\n },\n });\n }\n}\n```",
+  "metadata": {
+    "chunk_id": "tryAsync_deep_dive_runtime-context-injection",
+    "source_document": "rag-docs/tryAsync-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.339Z",
+    "topics": [
+      "runtime context injection",
+      "basic async context usage",
+      "request correlation context",
+      "async context inheritance",
+      "typescript",
+      "error",
+      "async",
+      "sync",
+      "promise",
+      "function",
+      "method"
+    ],
+    "complexity": "intermediate",
+    "includes_code": true,
+    "line_count": 113,
+    "token_count": 301,
+    "module": "async",
+    "category": "utilities",
+    "search_keywords": [
+      "tryAsync",
+      "fetch",
+      "now",
+      "fetchUserData",
+      "getCurrentSessionId",
+      "processOrderChain",
+      "generateTraceId",
+      "validateOrder",
+      "isTryError",
+      "processPayment",
+      "fulfillOrder",
+      "constructor",
+      "Date",
+      "RequestOptions",
+      "Record<string",
+      "TryAsyncOptions"
+    ],
+    "common_questions": [
+      "How does runtime context injection work?",
+      "Runtime Context Injection best practices",
+      "Runtime Context Injection patterns"
+    ],
+    "id": "tryAsync-deep-dive",
+    "title": "tryAsync() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "async",
+      "error-handling",
+      "promises",
+      "cancellation"
+    ],
+    "related": [
+      "trySync",
+      "isTryError",
+      "AbortSignal",
+      "timeout",
+      "Promise"
+    ],
+    "performance_impact": "low",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "async-operations"
+    ],
+    "cross_references": [
+      "create_error_deep_dive_runtime-context-injection",
+      "function_fetchUser",
+      "function_isTryError",
+      "trySync_deep_dive_runtime-context-injection"
+    ]
+  },
+  "hash": "b5726af38b05cf49f376e5d24bf7b2e3"
+}

@@ -1,0 +1,87 @@
+{
+  "chunk_id": "fromThrown_deep_dive_performance-optimization",
+  "title": "Performance Optimization",
+  "content": "## Performance Optimization\n\n### Fast Path Detection\n\n```typescript\n// Optimized version for hot paths\nfunction fromThrownFast(cause: unknown): TryError {\n // Skip context for performance\n if (cause instanceof Error) {\n // Fast path for most common case\n return wrapError(\"Error\", cause);\n }\n\n if (typeof cause === \"string\") {\n // Fast path for string errors\n return wrapError(\"StringError\", cause, cause);\n }\n\n // Fallback to full detection\n return fromThrown(cause);\n}\n```\n\n### Cached Type Detection\n\n```typescript\n// Cache constructor checks for performance\nconst constructorCache = new WeakMap<Function, string>();\n\nfunction fromThrownCached(\n cause: unknown,\n context?: Record<string, unknown>\n): TryError {\n if (cause && typeof cause === \"object\" && \"constructor\" in cause) {\n const constructor = cause.constructor;\n let errorType = constructorCache.get(constructor);\n\n if (!errorType) {\n // Determine type and cache it\n if (constructor === TypeError) errorType = \"TypeError\";\n else if (constructor === ReferenceError) errorType = \"ReferenceError\";\n else if (constructor === SyntaxError) errorType = \"SyntaxError\";\n else if (constructor === Error) errorType = \"Error\";\n else errorType = \"UnknownError\";\n\n constructorCache.set(constructor, errorType);\n }\n\n return wrapError(errorType, cause, , context);\n }\n\n return fromThrown(cause, context);\n}\n```",
+  "metadata": {
+    "chunk_id": "fromThrown_deep_dive_performance-optimization",
+    "source_document": "rag-docs/fromThrown-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.287Z",
+    "topics": [
+      "performance optimization",
+      "fast path detection",
+      "cached type detection",
+      "typescript",
+      "error",
+      "function",
+      "performance",
+      "optimization"
+    ],
+    "complexity": "beginner",
+    "includes_code": true,
+    "line_count": 54,
+    "token_count": 223,
+    "module": "errors",
+    "category": "performance",
+    "search_keywords": [
+      "fromThrownFast",
+      "wrapError",
+      "fromThrown",
+      "fromThrownCached",
+      "get",
+      "set",
+      "TryError",
+      "Record<string"
+    ],
+    "common_questions": [
+      "How does performance optimization work?",
+      "Performance Optimization best practices",
+      "Performance Optimization patterns"
+    ],
+    "id": "fromThrown-deep-dive",
+    "title": "fromThrown() - Complete Implementation Guide",
+    "tags": [
+      "api",
+      "core",
+      "auto-detection",
+      "type-classification",
+      "catch-blocks"
+    ],
+    "related": [
+      "wrapError",
+      "createError",
+      "trySync",
+      "tryAsync",
+      "Error"
+    ],
+    "performance_impact": "low",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_purpose",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "performance-optimization"
+    ],
+    "cross_references": [
+      "TryErrorBoundary_deep_dive_performance-optimization",
+      "create_error_deep_dive_performance-optimization",
+      "function_fromThrown",
+      "function_wrapError",
+      "isTryError_deep_dive_performance-optimization",
+      "tryAsync_deep_dive_performance-optimization",
+      "trySync_deep_dive_performance-optimization",
+      "wrapError_deep_dive_performance-optimization"
+    ]
+  },
+  "hash": "138b236a7591c3eb8c224a035f6c0963"
+}

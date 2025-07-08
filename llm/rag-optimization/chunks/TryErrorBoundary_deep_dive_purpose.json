@@ -1,0 +1,89 @@
+{
+  "chunk_id": "TryErrorBoundary_deep_dive_purpose",
+  "title": "Purpose",
+  "content": "## Purpose\n\n- **React error catching**: Catch errors during React render, lifecycle methods, and constructors\n- **Async error handling**: Handle unhandled promise rejections and event handler errors\n- **Retry mechanism**: Automatic retry with configurable strategies (linear/exponential backoff)\n- **TryError integration**: Special handling for TryError objects with enhanced debugging\n- **Custom fallback UIs**: Flexible error display with custom components\n- **Error reporting**: Integration with error monitoring services\n- **Development tools**: Enhanced error debugging in development mode",
+  "metadata": {
+    "chunk_id": "TryErrorBoundary_deep_dive_purpose",
+    "source_document": "rag-docs/TryErrorBoundary-deep-dive.md",
+    "chunk_type": "deep-dive-section",
+    "last_updated": "2025-07-08T20:17:18.275Z",
+    "topics": [
+      "purpose",
+      "error",
+      "async",
+      "sync",
+      "promise",
+      "method",
+      "react",
+      "component"
+    ],
+    "complexity": "intermediate",
+    "includes_code": false,
+    "line_count": 9,
+    "token_count": 98,
+    "module": "react",
+    "category": "utilities",
+    "search_keywords": [
+      "Catch",
+      "Handle",
+      "Automatic",
+      "Special",
+      "Flexible",
+      "Integration",
+      "Enhanced"
+    ],
+    "common_questions": [
+      "How does purpose work?",
+      "Purpose best practices",
+      "Purpose patterns"
+    ],
+    "id": "TryErrorBoundary-deep-dive",
+    "title": "TryErrorBoundary - Complete Implementation Guide",
+    "tags": [
+      "react",
+      "error-boundary",
+      "component",
+      "retry",
+      "async-errors",
+      "event-handlers"
+    ],
+    "related": [
+      "useTry",
+      "useErrorRecovery",
+      "createError",
+      "fromThrown",
+      "React"
+    ],
+    "performance_impact": "low",
+    "stability": "stable",
+    "related_chunks": [
+      "TryErrorBoundary_deep_dive_quick-reference",
+      "TryErrorBoundary_deep_dive_signature",
+      "TryErrorBoundary_deep_dive_implementation-details",
+      "TryErrorBoundary_deep_dive_basic-usage-examples",
+      "TryErrorBoundary_deep_dive_advanced-usage-patterns",
+      "TryErrorBoundary_deep_dive_hook-integration",
+      "TryErrorBoundary_deep_dive_error-monitoring-integration",
+      "TryErrorBoundary_deep_dive_testing-strategies",
+      "TryErrorBoundary_deep_dive_performance-optimization",
+      "TryErrorBoundary_deep_dive_common-pitfalls"
+    ],
+    "related_functions": [],
+    "usage_patterns": [
+      "async-operations",
+      "react-integration"
+    ],
+    "cross_references": [
+      "configure_deep_dive_purpose",
+      "create_error_deep_dive_purpose",
+      "fromThrown_deep_dive_purpose",
+      "function_Component",
+      "isTryError_deep_dive_purpose",
+      "tryAsync_deep_dive_purpose",
+      "trySync_deep_dive_purpose",
+      "useTry_deep_dive_purpose",
+      "wrapError_deep_dive_purpose"
+    ]
+  },
+  "hash": "f87798a688372ef2babb6e95dd3c857f"
+}
