@@ -8,6 +8,11 @@
 import { TryError, TRY_ERROR_BRAND } from "./types";
 
 /**
+ * Symbol to track lazy evaluation state
+ */
+const LAZY_STATE = Symbol("lazy-state");
+
+/**
  * Lazy property descriptor that computes value on first access
  */
 function createLazyProperty<T>(
@@ -18,11 +23,21 @@ function createLazyProperty<T>(
   let cached: T | undefined;
   let computed = false;
 
+  // Track lazy state in a WeakMap-like structure using symbol
+  if (!target[LAZY_STATE]) {
+    target[LAZY_STATE] = new Map();
+  }
+
+  // Initially mark as lazy (not computed)
+  target[LAZY_STATE].set(propertyKey, false);
+
   Object.defineProperty(target, propertyKey, {
     get(): T {
       if (!computed) {
         cached = compute();
         computed = true;
+        // Mark as computed (no longer lazy)
+        target[LAZY_STATE].set(propertyKey, true);
       }
       return cached!;
     },
@@ -102,7 +117,25 @@ export function makeLazy<E extends TryError>(
  */
 export function isLazyProperty(obj: any, prop: string): boolean {
   const descriptor = Object.getOwnPropertyDescriptor(obj, prop);
-  return descriptor?.get !== undefined;
+  if (!descriptor?.get) {
+    // If it doesn't have a getter, it's not a lazy property
+    return false;
+  }
+
+  // Check if the property has lazy state tracking
+  if (!obj[LAZY_STATE]) {
+    // If no lazy state, but has getter, assume it's lazy (backward compatibility)
+    return true;
+  }
+
+  // Check if the property is in the lazy state map
+  if (!obj[LAZY_STATE].has(prop)) {
+    // If not tracked, but has getter, assume it's lazy (backward compatibility)
+    return true;
+  }
+
+  // Return true if not yet computed, false if computed
+  return !obj[LAZY_STATE].get(prop);
 }
 
 /**

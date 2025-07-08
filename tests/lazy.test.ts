@@ -215,8 +215,8 @@ describe("Lazy Evaluation", () => {
       // Access the property
       const _ = error.source;
 
-      // Should still be detected as lazy (has getter)
-      expect(isLazyProperty(error, "source")).toBe(true);
+      // Should no longer be detected as lazy (already computed)
+      expect(isLazyProperty(error, "source")).toBe(false);
     });
   });
 
