@@ -1,4 +1,5 @@
 // Export all hooks from this directory
+export * from "./useCleanup";
 export * from "./useTry";
 export * from "./useTryCallback";
 export * from "./useTryState";

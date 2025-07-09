@@ -9,6 +9,7 @@ import {
   TryError,
   createError,
 } from "try-error";
+import { useCleanup } from "./useCleanup";
 
 // State interface for try operations
 export interface TryState<T> {
@@ -91,6 +92,10 @@ export function useTry<T>(
     suspense = false,
   } = options;
 
+  // Use universal cleanup hook for proper memory management
+  const { isMounted, addCleanup, createAbortController, nullifyRef } =
+    useCleanup();
+
   // State management
   const [state, setState] = useState<TryState<T>>({
     data: null,
@@ -100,20 +105,14 @@ export function useTry<T>(
     isError: false,
   });
 
-  // Ref to track if component is mounted (prevent state updates after unmount)
-  const isMountedRef = useRef(true);
-
   // Ref to track the current execution ID (handle race conditions)
   const executionIdRef = useRef(0);
 
-  // AbortController ref for cancelling in-flight requests
-  const abortControllerRef = useRef<AbortController | null>(null);
+  // Current AbortController ref
+  const currentAbortControllerRef = useRef<AbortController | null>(null);
 
   // Debounce timeout ref
   const debounceTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  // Cleanup old abort controllers
-  const cleanupAbortControllers = useRef(new Set<AbortController>());
 
   // Suspense promise for concurrent mode
   const suspensePromiseRef = useRef<Promise<T> | null>(null);
@@ -134,64 +133,42 @@ export function useTry<T>(
   cacheKeyRef.current = cacheKey;
   suspenseRef.current = suspense;
 
-  // Cleanup on unmount
-  useEffect(() => {
-    return () => {
-      isMountedRef.current = false;
+  // Register refs for cleanup
+  nullifyRef(executionIdRef);
+  nullifyRef(currentAbortControllerRef);
+  nullifyRef(debounceTimeoutRef);
+  nullifyRef(suspensePromiseRef);
+  nullifyRef(asyncFnRef);
+  nullifyRef(resetOnExecuteRef);
+  nullifyRef(abortMessageRef);
+  nullifyRef(cacheRef);
+  nullifyRef(cacheKeyRef);
+  nullifyRef(suspenseRef);
 
-      // Abort any in-flight requests with error handling
-      try {
-        abortControllerRef.current?.abort();
-      } catch (error) {
-        // Ignore abort errors during cleanup
-      }
-
-      // Clear any pending debounce
-      if (debounceTimeoutRef.current) {
-        clearTimeout(debounceTimeoutRef.current);
-        debounceTimeoutRef.current = null;
-      }
-
-      // Cleanup all abort controllers with error handling
-      try {
-        cleanupAbortControllers.current.forEach((controller) => {
-          try {
-            controller.abort();
-          } catch {
-            // Ignore individual abort errors
-          }
-        });
-        cleanupAbortControllers.current.clear();
-      } catch {
-        // Ignore cleanup errors
-      }
-
-      // Clear all refs to prevent memory leaks
-      abortControllerRef.current = null;
-      suspensePromiseRef.current = null;
-      asyncFnRef.current = null as any;
-      resetOnExecuteRef.current = null as any;
-      abortMessageRef.current = null as any;
-      cacheRef.current = null as any;
-      cacheKeyRef.current = null as any;
-      suspenseRef.current = null as any;
-    };
-  }, []);
+  // Add cleanup for debounce timeout
+  addCleanup(() => {
+    if (debounceTimeoutRef.current) {
+      clearTimeout(debounceTimeoutRef.current);
+      debounceTimeoutRef.current = null;
+    }
+  });
 
   // Abort function to cancel current operation
   const abort = useCallback(() => {
-    abortControllerRef.current?.abort();
+    currentAbortControllerRef.current?.abort();
     if (debounceTimeoutRef.current) {
       clearTimeout(debounceTimeoutRef.current);
       debounceTimeoutRef.current = null;
     }
 
     // Reset loading state when aborting
-    setState((prevState) => ({
-      ...prevState,
-      isLoading: false,
-    }));
-  }, []);
+    if (isMounted()) {
+      setState((prevState) => ({
+        ...prevState,
+        isLoading: false,
+      }));
+    }
+  }, [isMounted]);
 
   // Execute the async function
   const execute = useCallback(async () => {
@@ -215,7 +192,7 @@ export function useTry<T>(
 
   const executeInternal = useCallback(async () => {
     // Check if component is mounted before starting
-    if (!isMountedRef.current) return;
+    if (!isMounted()) return;
 
     // Increment execution ID to handle race conditions
     const currentExecutionId = ++executionIdRef.current;
@@ -226,10 +203,7 @@ export function useTry<T>(
       if (cached && Date.now() - cached.timestamp < 5 * 60 * 1000) {
         // 5 min cache
         // Check if still the current execution
-        if (
-          currentExecutionId !== executionIdRef.current ||
-          !isMountedRef.current
-        ) {
+        if (currentExecutionId !== executionIdRef.current || !isMounted()) {
           return;
         }
 
@@ -250,10 +224,7 @@ export function useTry<T>(
           const result = await pending;
 
           // Check if still the current execution after await
-          if (
-            currentExecutionId !== executionIdRef.current ||
-            !isMountedRef.current
-          ) {
+          if (currentExecutionId !== executionIdRef.current || !isMounted()) {
             return;
           }
 
@@ -272,20 +243,16 @@ export function useTry<T>(
     }
 
     // Abort any previous request
-    if (abortControllerRef.current) {
-      abortControllerRef.current.abort();
-      cleanupAbortControllers.current.add(abortControllerRef.current);
+    if (currentAbortControllerRef.current) {
+      currentAbortControllerRef.current.abort();
     }
 
-    // Create new AbortController for this execution
-    const abortController = new AbortController();
-    abortControllerRef.current = abortController;
+    // Create new AbortController for this execution using our cleanup system
+    const abortController = createAbortController();
+    currentAbortControllerRef.current = abortController;
 
     // Check again before state update
-    if (
-      currentExecutionId !== executionIdRef.current ||
-      !isMountedRef.current
-    ) {
+    if (currentExecutionId !== executionIdRef.current || !isMounted()) {
       abortController.abort();
       return;
     }
@@ -344,7 +311,7 @@ export function useTry<T>(
       // Check if this is still the latest execution and component is mounted
       if (
         currentExecutionId !== executionIdRef.current ||
-        !isMountedRef.current ||
+        !isMounted() ||
         abortController.signal.aborted
       ) {
         return;
@@ -405,7 +372,7 @@ export function useTry<T>(
       // Check if still the current execution
       if (
         currentExecutionId !== executionIdRef.current ||
-        !isMountedRef.current ||
+        !isMounted() ||
         abortController.signal.aborted
       ) {
         return;
@@ -424,21 +391,14 @@ export function useTry<T>(
         isSuccess: false,
         isError: true,
       });
-    } finally {
-      // Clean up old abort controllers
-      if (cleanupAbortControllers.current.size > 10) {
-        const controllers = Array.from(cleanupAbortControllers.current);
-        controllers.slice(0, 5).forEach((controller) => {
-          cleanupAbortControllers.current.delete(controller);
-        });
-      }
     }
-  }, []);
+    // Note: cleanup is now handled automatically by useCleanup hook
+  }, [isMounted, createAbortController]);
 
   // Reset state to initial values
   const reset = useCallback(() => {
     // Abort any in-flight requests
-    abortControllerRef.current?.abort();
+    currentAbortControllerRef.current?.abort();
 
     setState({
       data: null,
@@ -450,23 +410,28 @@ export function useTry<T>(
   }, []);
 
   // Manually set data (useful for optimistic updates)
-  const mutate = useCallback((data: T) => {
-    // Update cache if enabled
-    if (cacheRef.current && cacheKeyRef.current) {
-      requestCache.set(cacheKeyRef.current, {
-        data,
-        timestamp: Date.now(),
-      });
-    }
+  const mutate = useCallback(
+    (data: T) => {
+      // Update cache if enabled
+      if (cacheRef.current && cacheKeyRef.current) {
+        requestCache.set(cacheKeyRef.current, {
+          data,
+          timestamp: Date.now(),
+        });
+      }
 
-    setState({
-      data,
-      error: null,
-      isLoading: false,
-      isSuccess: true,
-      isError: false,
-    });
-  }, []);
+      if (isMounted()) {
+        setState({
+          data,
+          error: null,
+          isLoading: false,
+          isSuccess: true,
+          isError: false,
+        });
+      }
+    },
+    [isMounted]
+  );
 
   // Execute immediately on mount or when deps change
   useEffect(() => {
@@ -477,10 +442,10 @@ export function useTry<T>(
     // Cleanup function to abort request if deps change
     return () => {
       if (immediate) {
-        abortControllerRef.current?.abort();
+        currentAbortControllerRef.current?.abort();
       }
     };
-  }, [immediate, ...deps]);
+  }, [immediate, execute, ...deps]);
 
   // Support for Suspense
   if (suspense && state.isLoading && suspensePromiseRef.current) {
