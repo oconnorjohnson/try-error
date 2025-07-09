@@ -229,7 +229,7 @@ export class TryErrorBoundary extends Component<
     error: Error,
     source: "unhandledRejection" | "globalError"
   ) => {
-    if (!this._isMounted || this.state.hasError) return;
+    if (!this._isMounted) return;
 
     // Check if we should catch this error
     if (this.props.errorFilter && !this.props.errorFilter(error)) {
@@ -242,18 +242,21 @@ export class TryErrorBoundary extends Component<
       timestamp: Date.now(),
     });
 
-    this.setState({
-      hasError: true,
-      error: tryError,
-      errorInfo: null,
-      asyncError: tryError,
-    });
-
     // Always emit event to global event system for async boundary-specific error handling
     emitErrorCreated(tryError);
 
-    // Call the error handler if provided
+    // Call the error handler if provided - always call, even if already in error state
     this.props.onError?.(tryError, null);
+
+    // Update state only if not already in error state with same error
+    if (!this.state.hasError || this.state.error !== tryError) {
+      this.setState({
+        hasError: true,
+        error: tryError,
+        errorInfo: null,
+        asyncError: tryError,
+      });
+    }
 
     // Log error in development
     if (
@@ -619,6 +622,7 @@ export function useAsyncError() {
   const [, setError] = React.useState();
 
   return React.useCallback((error: Error | TryError) => {
+    // Throw the error during next render to be caught by error boundary
     setError(() => {
       throw error;
     });
