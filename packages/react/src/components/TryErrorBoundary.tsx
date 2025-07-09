@@ -281,7 +281,7 @@ export class TryErrorBoundary extends Component<
   // Determine which error should be the primary one to display
   private determinePrimaryError = (
     errors: (Error | TryError)[]
-  ): Error | TryError => {
+  ): Error | TryError | null => {
     if (errors.length === 0) return null;
     if (errors.length === 1) return errors[0];
 
@@ -349,15 +349,8 @@ export class TryErrorBoundary extends Component<
     // Call the error handler if provided - always call, even if already in error state
     this.props.onError?.(tryError, null);
 
-    // Update state only if not already in error state with same error
-    if (!this.state.hasError || this.state.error !== tryError) {
-      this.setState({
-        hasError: true,
-        error: tryError,
-        errorInfo: null,
-        asyncError: tryError,
-      });
-    }
+    // Use concurrent error handling system
+    this.addConcurrentError(tryError, null, "async");
 
     // Log error in development
     if (
