@@ -46,13 +46,17 @@ export interface TryErrorBoundaryProps {
   catchEventHandlerErrors?: boolean;
 }
 
-// State for the error boundary
+// State for the error boundary with concurrent error support
 interface TryErrorBoundaryState {
   hasError: boolean;
-  error: Error | TryError | null;
+  error: Error | TryError | null; // Primary error to display
   errorInfo: ErrorInfo | null;
   retryCount: number;
   asyncError?: Error | TryError | null;
+  // New: Concurrent error handling
+  errors: (Error | TryError)[]; // Array of all errors
+  errorCount: number; // Total count of errors processed
+  lastErrorTimestamp: number; // For deduplication
 }
 
 // Global registry for async error boundaries
@@ -180,6 +184,10 @@ export class TryErrorBoundary extends Component<
       errorInfo: null,
       retryCount: 0,
       asyncError: null,
+      // Initialize concurrent error handling
+      errors: [],
+      errorCount: 0,
+      lastErrorTimestamp: 0,
     };
   }
 
@@ -214,6 +222,8 @@ export class TryErrorBoundary extends Component<
     error: Error
   ): Partial<TryErrorBoundaryState> {
     // Update state so the next render will show the fallback UI
+    // Note: We can't use this.addConcurrentError here since this is a static method
+    // The main error handling will be done in componentDidCatch
     return {
       hasError: true,
       error,
@@ -223,6 +233,97 @@ export class TryErrorBoundary extends Component<
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     this.handleError(error, errorInfo);
   }
+
+  // Add error to concurrent queue and determine primary error to display
+  private addConcurrentError = (
+    error: Error | TryError,
+    errorInfo: ErrorInfo | null = null,
+    source?: string
+  ) => {
+    const now = Date.now();
+
+    // Deduplicate errors that occur within 10ms (likely the same error)
+    if (now - this.state.lastErrorTimestamp < 10) {
+      const isDuplicate = this.state.errors.some((existingError) => {
+        const existingName =
+          "name" in existingError ? existingError.name : existingError.type;
+        const currentName = "name" in error ? error.name : error.type;
+        return (
+          existingError.message === error.message &&
+          existingName === currentName
+        );
+      });
+      if (isDuplicate) {
+        return; // Skip duplicate error
+      }
+    }
+
+    this.setState((prevState) => {
+      const newErrors = [...prevState.errors, error];
+      const newErrorCount = prevState.errorCount + 1;
+
+      // Determine primary error using priority system
+      const primaryError = this.determinePrimaryError(newErrors);
+
+      return {
+        hasError: true,
+        error: primaryError,
+        errorInfo: error === primaryError ? errorInfo : prevState.errorInfo,
+        errors: newErrors,
+        errorCount: newErrorCount,
+        lastErrorTimestamp: now,
+        // Keep async error if this is an async error
+        asyncError: source === "async" ? error : prevState.asyncError,
+      };
+    });
+  };
+
+  // Determine which error should be the primary one to display
+  private determinePrimaryError = (
+    errors: (Error | TryError)[]
+  ): Error | TryError => {
+    if (errors.length === 0) return null;
+    if (errors.length === 1) return errors[0];
+
+    // Priority rules:
+    // 1. TryError with type "CRITICAL" or "FATAL" (highest priority)
+    // 2. Most recent TryError
+    // 3. Most recent regular Error
+
+    let highestPriorityError = errors[0];
+
+    for (const error of errors) {
+      if (isTryError(error)) {
+        // Critical errors get highest priority
+        if (error.type === "CRITICAL" || error.type === "FATAL") {
+          return error;
+        }
+
+        // TryErrors have higher priority than regular errors
+        if (!isTryError(highestPriorityError)) {
+          highestPriorityError = error;
+        } else {
+          // Among TryErrors, prefer the most recent (last in array)
+          const currentIndex = errors.indexOf(error);
+          const highestIndex = errors.indexOf(highestPriorityError);
+          if (currentIndex > highestIndex) {
+            highestPriorityError = error;
+          }
+        }
+      } else {
+        // Among regular errors, prefer the most recent
+        if (!isTryError(highestPriorityError)) {
+          const currentIndex = errors.indexOf(error);
+          const highestIndex = errors.indexOf(highestPriorityError);
+          if (currentIndex > highestIndex) {
+            highestPriorityError = error;
+          }
+        }
+      }
+    }
+
+    return highestPriorityError;
+  };
 
   // Handle async errors caught by global handlers
   handleAsyncError = (
