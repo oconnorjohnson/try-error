@@ -72,12 +72,13 @@ function getInterfaceData(slug: string) {
   };
 }
 
-export default function InterfacePage({
+export default async function InterfacePage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
-  const interfaceData = getInterfaceData(params.slug);
+  const { slug } = await params;
+  const interfaceData = getInterfaceData(slug);
 
   if (!interfaceData) {
     notFound();
