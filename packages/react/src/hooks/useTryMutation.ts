@@ -5,6 +5,7 @@ import {
   TryError,
   isTryError,
   createError,
+  emitErrorCreated,
 } from "try-error";
 import { useCleanup } from "./useCleanup";
 
