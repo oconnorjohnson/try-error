@@ -297,7 +297,7 @@ export function useTryMutation<T, TVariables = void>(
     }
 
     isProcessingQueueRef.current = false;
-  }, [isMounted, mutateAsyncInternal]);
+  }, [isMounted]);
 
   const mutateAsyncInternal = useCallback(
     async (
@@ -336,7 +336,7 @@ export function useTryMutation<T, TVariables = void>(
       previousDataRef.current = data;
 
       // Apply optimistic update if provided
-      if (optimisticData !== undefined && isMountedRef.current) {
+      if (optimisticData !== undefined && isMounted()) {
         const optimisticValue =
           typeof optimisticData === "function"
             ? (
@@ -418,7 +418,7 @@ export function useTryMutation<T, TVariables = void>(
             });
 
         // Check if component is still mounted and request wasn't aborted
-        if (!isMountedRef.current || abortController.signal.aborted) {
+        if (!isMounted() || abortController.signal.aborted) {
           // Rollback optimistic update if needed
           if (
             optimisticData !== undefined &&
