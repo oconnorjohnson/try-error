@@ -6,6 +6,7 @@ import { ChevronLeft, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import { MarkdownRenderer } from "@/components/MarkdownRenderer";
 
 // Generate static params for all type alias pages
 export async function generateStaticParams() {
@@ -121,11 +122,10 @@ export default async function TypeAliasPage({
       {/* Content */}
       <Card>
         <CardContent className="p-6">
-          <div className="prose prose-neutral dark:prose-invert max-w-none">
-            <pre className="whitespace-pre-wrap text-sm">
-              {typeAliasData.content}
-            </pre>
-          </div>
+          <MarkdownRenderer
+            content={typeAliasData.content}
+            className="prose prose-neutral dark:prose-invert max-w-none"
+          />
         </CardContent>
       </Card>
 

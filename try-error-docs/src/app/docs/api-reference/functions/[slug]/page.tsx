@@ -6,6 +6,7 @@ import { ChevronLeft, Code2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import { MarkdownRenderer } from "@/components/MarkdownRenderer";
 
 // Generate static params for all function pages
 export async function generateStaticParams() {
@@ -121,11 +122,10 @@ export default async function FunctionPage({
       {/* Content */}
       <Card>
         <CardContent className="p-6">
-          <div className="prose prose-neutral dark:prose-invert max-w-none">
-            <pre className="whitespace-pre-wrap text-sm">
-              {functionData.content}
-            </pre>
-          </div>
+          <MarkdownRenderer
+            content={functionData.content}
+            className="prose prose-neutral dark:prose-invert max-w-none"
+          />
         </CardContent>
       </Card>
 
