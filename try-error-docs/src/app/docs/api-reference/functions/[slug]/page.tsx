@@ -72,8 +72,13 @@ function getFunctionData(slug: string) {
   };
 }
 
-export default function FunctionPage({ params }: { params: { slug: string } }) {
-  const functionData = getFunctionData(params.slug);
+export default async function FunctionPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const functionData = getFunctionData(slug);
 
   if (!functionData) {
     notFound();

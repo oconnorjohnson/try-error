@@ -72,8 +72,13 @@ function getClassData(slug: string) {
   };
 }
 
-export default function ClassPage({ params }: { params: { slug: string } }) {
-  const classData = getClassData(params.slug);
+export default async function ClassPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const classData = getClassData(slug);
 
   if (!classData) {
     notFound();
