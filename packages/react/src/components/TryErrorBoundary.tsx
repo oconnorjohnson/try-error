@@ -374,17 +374,15 @@ export class TryErrorBoundary extends Component<
       errorBoundary: true,
     });
 
-    this.setState({
-      error: tryError,
-      errorInfo,
-    });
-
     // Always emit event to global event system for boundary-specific error handling
     // This provides observability into React error boundary activity
     emitErrorCreated(tryError);
 
     // Call the error handler if provided
     this.props.onError?.(tryError, errorInfo);
+
+    // Use concurrent error handling system
+    this.addConcurrentError(tryError, errorInfo, "boundary");
 
     // Log error in development with deduplication
     if (
