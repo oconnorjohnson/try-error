@@ -6,6 +6,7 @@ import {
   isTryError,
   createError,
 } from "try-error";
+import { useCleanup } from "./useCleanup";
 
 export interface UseTryMutationOptions<T, TVariables = void> {
   onSuccess?: (data: T, variables: TVariables) => void;
@@ -121,6 +122,10 @@ export function useTryMutation<T, TVariables = void>(
   options: UseTryMutationOptions<T, TVariables> = {},
   deps: React.DependencyList = []
 ): UseTryMutationResult<T, TVariables> {
+  // Use universal cleanup hook for proper memory management
+  const { isMounted, addCleanup, createAbortController, nullifyRef } =
+    useCleanup();
+
   const [data, setDataState] = useState<T | null>(null);
   const [error, setError] = useState<TryError | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -139,11 +144,8 @@ export function useTryMutation<T, TVariables = void>(
     invalidateOnSuccess = true,
   } = options;
 
-  // AbortController ref for cancelling in-flight mutations
-  const abortControllerRef = useRef<AbortController | null>(null);
-
-  // Track if component is mounted
-  const isMountedRef = useRef(true);
+  // Current AbortController ref
+  const currentAbortControllerRef = useRef<AbortController | null>(null);
 
   // Mutation queue
   const mutationQueueRef = useRef<QueuedMutation<TVariables>[]>([]);
@@ -158,63 +160,70 @@ export function useTryMutation<T, TVariables = void>(
   // Retry timeout
   const retryTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Cleanup on unmount
-  useEffect(() => {
-    return () => {
-      isMountedRef.current = false;
+  // Register all refs for cleanup
+  nullifyRef(currentAbortControllerRef);
+  nullifyRef(mutationQueueRef);
+  nullifyRef(isProcessingQueueRef);
+  nullifyRef(previousDataRef);
+  nullifyRef(cacheKeyRef);
+  nullifyRef(retryTimeoutRef);
 
-      // Abort any in-flight mutations with error handling
-      try {
-        abortControllerRef.current?.abort();
-      } catch {
-        // Ignore abort errors during cleanup
+  // Add cleanup for retry timeout
+  addCleanup(() => {
+    if (retryTimeoutRef.current) {
+      clearTimeout(retryTimeoutRef.current);
+      retryTimeoutRef.current = null;
+    }
+  });
+
+  // Add cleanup for mutation queue
+  addCleanup(() => {
+    try {
+      mutationQueueRef.current?.forEach(({ reject }) => {
+        reject(
+          createError({
+            type: "COMPONENT_UNMOUNTED",
+            message: "Component unmounted before mutation could complete",
+          })
+        );
+      });
+      if (mutationQueueRef.current) {
+        mutationQueueRef.current.length = 0; // Clear array efficiently
       }
+    } catch {
+      // Ignore queue cleanup errors
+    }
+  });
 
-      if (retryTimeoutRef.current) {
-        clearTimeout(retryTimeoutRef.current);
-        retryTimeoutRef.current = null;
-      }
-
-      // Clear the queue with error handling
-      try {
-        mutationQueueRef.current.forEach(({ reject }) => {
-          reject(
-            createError({
-              type: "COMPONENT_UNMOUNTED",
-              message: "Component unmounted before mutation could complete",
-            })
-          );
-        });
-        mutationQueueRef.current = [];
-      } catch {
-        // Ignore queue cleanup errors
-      }
-
-      // Clear all refs to prevent memory leaks
-      abortControllerRef.current = null;
-      previousDataRef.current = null;
-      cacheKeyRef.current = null;
-    };
-  }, []);
+  // Add cleanup for cache entries (prevent global cache pollution)
+  addCleanup(() => {
+    if (cacheKeyRef.current) {
+      mutationCache.delete(cacheKeyRef.current);
+    }
+  });
 
   const abort = useCallback(() => {
-    abortControllerRef.current?.abort();
+    currentAbortControllerRef.current?.abort();
     if (retryTimeoutRef.current) {
       clearTimeout(retryTimeoutRef.current);
       retryTimeoutRef.current = null;
     }
     // Clear loading state when aborting
-    setIsLoading(false);
-  }, []);
+    if (isMounted()) {
+      setIsLoading(false);
+    }
+  }, [isMounted]);
 
   const reset = useCallback(() => {
     abort();
-    setDataState(null);
-    setError(null);
-    setIsLoading(false);
-    setFailureCount(0);
+    if (isMounted()) {
+      setDataState(null);
+      setError(null);
+      setIsLoading(false);
+      setFailureCount(0);
+    }
     previousDataRef.current = null;
-  }, [abort]);
+  }, [abort, isMounted]);
 
   // Enhanced setData that supports functional updates
   const setData = useCallback((updater: T | ((prev: T | null) => T) | null) => {
@@ -292,13 +301,13 @@ export function useTryMutation<T, TVariables = void>(
       retryCount = 0
     ): Promise<TryResult<T, TryError>> => {
       // Abort any previous mutation
-      abortControllerRef.current?.abort();
+      currentAbortControllerRef.current?.abort();
 
-      // Create new AbortController for this mutation
-      const abortController = new AbortController();
-      abortControllerRef.current = abortController;
+      // Create new AbortController for this mutation using cleanup system
+      const abortController = createAbortController();
+      currentAbortControllerRef.current = abortController;
 
-      if (!isMountedRef.current) {
+      if (!isMounted()) {
         return createError({
           type: "COMPONENT_UNMOUNTED",
           message: "Component unmounted before mutation could start",
@@ -343,7 +352,7 @@ export function useTryMutation<T, TVariables = void>(
         const result = await mutationFn(variables, abortController.signal);
 
         // Check if component is still mounted and request wasn't aborted
-        if (!isMountedRef.current || abortController.signal.aborted) {
+        if (!isMounted() || abortController.signal.aborted) {
           // Rollback optimistic update if needed
           if (
             optimisticData !== undefined &&
@@ -382,7 +391,7 @@ export function useTryMutation<T, TVariables = void>(
         setFailureCount(0);
         onSuccess?.(result, variables);
 
-        if (isMountedRef.current) {
+        if (isMounted()) {
           setIsLoading(false);
           onSettled?.(result, null, variables);
         }
