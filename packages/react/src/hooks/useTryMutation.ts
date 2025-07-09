@@ -275,13 +275,16 @@ export function useTryMutation<T, TVariables = void>(
   );
 
   const processMutationQueue = useCallback(async () => {
-    if (isProcessingQueueRef.current || mutationQueueRef.current.length === 0) {
+    if (
+      isProcessingQueueRef.current ||
+      mutationQueueRef.current?.length === 0
+    ) {
       return;
     }
 
     isProcessingQueueRef.current = true;
 
-    while (mutationQueueRef.current.length > 0 && isMountedRef.current) {
+    while (mutationQueueRef.current?.length > 0 && isMounted()) {
       const mutation = mutationQueueRef.current.shift();
       if (!mutation) continue;
 
@@ -294,7 +297,7 @@ export function useTryMutation<T, TVariables = void>(
     }
 
     isProcessingQueueRef.current = false;
-  }, []);
+  }, [isMounted, mutateAsyncInternal]);
 
   const mutateAsyncInternal = useCallback(
     async (
