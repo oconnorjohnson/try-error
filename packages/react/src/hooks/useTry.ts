@@ -325,20 +325,32 @@ export function useTry<T>(
           (result.cause.name === "AbortError" || result.type === "ABORTED");
 
         if (isAbortError) {
+          const abortError = createError({
+            type: "ABORTED",
+            message: abortMessageRef.current,
+            context: {
+              reason: "manual_abort",
+              source: "useTry",
+              hookType: "useTry",
+            },
+            cause: result.cause,
+          });
+
+          // Emit event for observability
+          emitErrorCreated(abortError);
+
           // Only update state if we're still the current execution
           setState((prevState) => ({
             data: null,
-            error: createError({
-              type: "ABORTED",
-              message: abortMessageRef.current,
-              context: { reason: "manual_abort" },
-              cause: result.cause,
-            }),
+            error: abortError,
             isLoading: false,
             isSuccess: false,
             isError: true,
           }));
         } else {
+          // Emit event for the TryError result
+          emitErrorCreated(result);
+
           setState({
             data: null,
             error: result,
