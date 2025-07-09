@@ -72,12 +72,13 @@ function getTypeAliasData(slug: string) {
   };
 }
 
-export default function TypeAliasPage({
+export default async function TypeAliasPage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
-  const typeAliasData = getTypeAliasData(params.slug);
+  const { slug } = await params;
+  const typeAliasData = getTypeAliasData(slug);
 
   if (!typeAliasData) {
     notFound();
