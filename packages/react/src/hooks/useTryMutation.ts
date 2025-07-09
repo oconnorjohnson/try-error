@@ -452,7 +452,7 @@ export function useTryMutation<T, TVariables = void>(
               cause: result.cause,
             });
 
-            if (isMountedRef.current) {
+            if (isMounted()) {
               // Rollback optimistic update
               if (
                 optimisticData !== undefined &&
@@ -482,7 +482,7 @@ export function useTryMutation<T, TVariables = void>(
 
             return new Promise((resolve) => {
               retryTimeoutRef.current = setTimeout(() => {
-                if (isMountedRef.current) {
+                if (isMounted()) {
                   setFailureCount(currentFailureCount);
                   resolve(mutateAsyncInternal(variables, retryCount + 1));
                 } else {
@@ -531,7 +531,7 @@ export function useTryMutation<T, TVariables = void>(
           onSuccess?.(result, variables);
         }
 
-        if (isMountedRef.current) {
+        if (isMounted()) {
           setIsLoading(false);
           onSettled?.(
             isTryError(result) ? null : result,
@@ -558,6 +558,8 @@ export function useTryMutation<T, TVariables = void>(
       cacheTime,
       invalidateOnSuccess,
       setData,
+      isMounted,
+      createAbortController,
       ...deps,
     ]
   );
