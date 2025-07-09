@@ -7,7 +7,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { EnhancedCodeBlock } from "@/components/EnhancedCodeBlock";
 
 export default function MiddlewarePage() {
@@ -16,8 +15,7 @@ export default function MiddlewarePage() {
       <div>
         <h1 className="text-4xl font-bold mb-4">Middleware System</h1>
         <p className="text-xl text-muted-foreground">
-          Extend tryError with custom logic using a powerful middleware
-          pipeline
+          Extend tryError with custom logic using a powerful middleware pipeline
         </p>
       </div>
 
