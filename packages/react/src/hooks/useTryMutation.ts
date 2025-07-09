@@ -448,9 +448,16 @@ export function useTryMutation<T, TVariables = void>(
             const abortError = createError({
               type: "ABORTED",
               message: abortMessage,
-              context: { reason: "manual_abort" },
+              context: {
+                reason: "manual_abort",
+                source: "useTryMutation",
+                hookType: "useTryMutation",
+              },
               cause: result.cause,
             });
+
+            // Emit event for observability
+            emitErrorCreated(abortError);
 
             if (isMounted()) {
               // Rollback optimistic update
@@ -505,6 +512,9 @@ export function useTryMutation<T, TVariables = void>(
             setData(previousDataRef.current);
             rollbackOnError?.(result, variables, previousDataRef.current);
           }
+
+          // Emit event for observability
+          emitErrorCreated(result);
 
           setError(result);
           setData(null);
