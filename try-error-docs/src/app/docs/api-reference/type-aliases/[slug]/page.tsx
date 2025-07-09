@@ -40,7 +40,7 @@ function getTypeAliasData(slug: string) {
   const lines = content.split("\n");
   let title = slug;
   let description = "";
-  let markdownContent = content;
+  const markdownContent = content;
 
   // Extract title from first heading
   const titleLine = lines.find((line) => line.startsWith("# "));
