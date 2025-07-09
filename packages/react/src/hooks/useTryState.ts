@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import {
   trySync,
   tryAsync,
@@ -36,6 +36,13 @@ export function useTryState<T>(
   // Use ref to avoid stale closure
   const stateRef = useRef(state);
   stateRef.current = state;
+
+  // Cleanup on unmount to prevent memory leaks
+  useEffect(() => {
+    return () => {
+      stateRef.current = null as any;
+    };
+  }, []);
 
   const setTryState = useCallback((updater: T | ((current: T) => T)) => {
     const result = trySync(() => {

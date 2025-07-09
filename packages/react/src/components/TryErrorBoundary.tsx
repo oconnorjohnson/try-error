@@ -61,6 +61,11 @@ const asyncErrorBoundaries = new Set<TryErrorBoundary>();
 // Global error handlers setup flag
 let globalHandlersSetup = false;
 
+// Store references to handlers for cleanup
+let unhandledRejectionHandler: ((event: PromiseRejectionEvent) => void) | null =
+  null;
+let globalErrorHandler: ((event: ErrorEvent) => void) | null = null;
+
 // Setup global error handlers for async errors
 function setupGlobalErrorHandlers() {
   if (globalHandlersSetup || typeof window === "undefined") return;
@@ -68,7 +73,7 @@ function setupGlobalErrorHandlers() {
   globalHandlersSetup = true;
 
   // Handle unhandled promise rejections
-  window.addEventListener("unhandledrejection", (event) => {
+  unhandledRejectionHandler = (event: PromiseRejectionEvent) => {
     const error = new Error(
       event.reason?.message || "Unhandled Promise Rejection"
     );
@@ -83,10 +88,10 @@ function setupGlobalErrorHandlers() {
 
     // Prevent default browser behavior
     event.preventDefault();
-  });
+  };
 
   // Handle global errors (including event handler errors)
-  window.addEventListener("error", (event) => {
+  globalErrorHandler = (event: ErrorEvent) => {
     // Check if this is an event handler error
     const isEventHandlerError =
       !event.filename && !event.lineno && !event.colno;
@@ -102,7 +107,34 @@ function setupGlobalErrorHandlers() {
         );
       }
     });
-  });
+  };
+
+  window.addEventListener("unhandledrejection", unhandledRejectionHandler);
+  window.addEventListener("error", globalErrorHandler);
+}
+
+// Cleanup global error handlers when no more boundaries need them
+function cleanupGlobalErrorHandlers() {
+  if (!globalHandlersSetup || typeof window === "undefined") return;
+
+  try {
+    if (unhandledRejectionHandler) {
+      window.removeEventListener(
+        "unhandledrejection",
+        unhandledRejectionHandler
+      );
+      unhandledRejectionHandler = null;
+    }
+
+    if (globalErrorHandler) {
+      window.removeEventListener("error", globalErrorHandler);
+      globalErrorHandler = null;
+    }
+  } catch {
+    // Ignore cleanup errors
+  }
+
+  globalHandlersSetup = false;
 }
 
 /**
@@ -171,6 +203,11 @@ export class TryErrorBoundary extends Component<
 
     // Unregister from async error handling
     asyncErrorBoundaries.delete(this);
+
+    // Cleanup global handlers if no more boundaries need them
+    if (asyncErrorBoundaries.size === 0) {
+      cleanupGlobalErrorHandlers();
+    }
   }
 
   static getDerivedStateFromError(
@@ -282,6 +319,20 @@ export class TryErrorBoundary extends Component<
       return { tryError, wasAlreadyTryError: true };
     }
 
+    // Extract component name from component stack if available
+    const componentStack =
+      additionalContext?.componentStack || (error as any).componentStack;
+    let componentName: string | undefined;
+
+    if (componentStack && typeof componentStack === "string") {
+      // Extract first component name from the stack
+      // Component stack format: "at ComponentName (path/to/file.tsx:line:col)"
+      const match = componentStack.match(/at\s+([A-Z][a-zA-Z0-9_]*)/);
+      if (match) {
+        componentName = match[1];
+      }
+    }
+
     const tryError = createError({
       type: "ReactError",
       message: error.message,
@@ -289,6 +340,8 @@ export class TryErrorBoundary extends Component<
       context: {
         // Preserve original error's component stack if it exists
         originalStack: (error as any).componentStack,
+        componentStack,
+        ...(componentName && { componentName }),
         ...additionalContext,
       },
     });

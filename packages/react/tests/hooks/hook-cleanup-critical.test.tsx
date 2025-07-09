@@ -41,11 +41,9 @@ describe("Hook Cleanup Critical Edge Cases", () => {
       let aborted = false;
 
       const AsyncComponent = () => {
-        const { execute } = useTry(async () => {
-          abortController = new AbortController();
-
+        const { execute } = useTry(async (signal) => {
           return new Promise((resolve, reject) => {
-            abortController!.signal.addEventListener("abort", () => {
+            signal.addEventListener("abort", () => {
               aborted = true;
               reject(new Error("Aborted"));
             });
@@ -63,10 +61,8 @@ describe("Hook Cleanup Critical Edge Cases", () => {
 
       const { unmount } = render(<AsyncComponent />);
 
-      // Wait for AbortController to be created
-      await waitFor(() => {
-        expect(abortController).toBeTruthy();
-      });
+      // Wait for the async operation to start
+      await new Promise((resolve) => setTimeout(resolve, 50));
 
       // Unmount should trigger abort
       unmount();
@@ -81,12 +77,11 @@ describe("Hook Cleanup Critical Edge Cases", () => {
       let abortedCount = 0;
 
       const ConcurrentComponent = () => {
-        const { execute } = useTry(async (id: number) => {
-          const controller = new AbortController();
-          abortControllers.push(controller);
+        const { execute } = useTry(async (signal) => {
+          const id = abortControllers.length;
 
           return new Promise((resolve, reject) => {
-            controller.signal.addEventListener("abort", () => {
+            signal.addEventListener("abort", () => {
               abortedCount++;
               reject(new Error(`Aborted ${id}`));
             });
@@ -98,7 +93,7 @@ describe("Hook Cleanup Critical Edge Cases", () => {
         React.useEffect(() => {
           // Start multiple concurrent operations
           for (let i = 0; i < 5; i++) {
-            execute(i);
+            execute();
           }
         }, [execute]);
 
@@ -107,10 +102,8 @@ describe("Hook Cleanup Critical Edge Cases", () => {
 
       const { unmount } = render(<ConcurrentComponent />);
 
-      // Wait for AbortControllers to be created
-      await waitFor(() => {
-        expect(abortControllers.length).toBe(5);
-      });
+      // Wait for the async operations to start
+      await new Promise((resolve) => setTimeout(resolve, 50));
 
       // Unmount should abort all operations
       unmount();
@@ -240,10 +233,14 @@ describe("Hook Cleanup Critical Edge Cases", () => {
       const callbackRefs: WeakRef<Function>[] = [];
 
       const CallbackComponent = () => {
-        const callback = useTryCallback(async (data: any) => {
-          // Large data processing
-          return data.map((item: any) => ({ ...item, processed: true }));
-        }, []);
+        const callback = useTryCallback(
+          async (data: any) => {
+            // Large data processing
+            return data.map((item: any) => ({ ...item, processed: true }));
+          },
+          {},
+          []
+        );
 
         callbackRefs.push(new WeakRef(callback));
 
@@ -479,9 +476,12 @@ describe("Hook Cleanup Critical Edge Cases", () => {
   describe("Hook Dependency Edge Cases", () => {
     it("should handle cleanup with changing dependencies", async () => {
       const DependencyComponent = ({ config }: { config: any }) => {
-        const { execute } = useTry(async () => {
-          return `result-${config.id}`;
-        }, [config.id]);
+        const { execute } = useTry(
+          async () => {
+            return `result-${config.id}`;
+          },
+          { deps: [config.id] }
+        );
 
         React.useEffect(() => {
           execute();

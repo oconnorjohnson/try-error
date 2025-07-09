@@ -77,7 +77,7 @@ const pendingRequests = new Map<string, Promise<any>>();
  * ```
  */
 export function useTry<T>(
-  asyncFn: (signal: AbortSignal) => Promise<T>,
+  asyncFn: ((signal: AbortSignal) => Promise<T>) | (() => Promise<T>),
   options: UseTryOptions = {}
 ): UseTryReturn<T> {
   const {
@@ -138,17 +138,43 @@ export function useTry<T>(
   useEffect(() => {
     return () => {
       isMountedRef.current = false;
-      // Abort any in-flight requests
-      abortControllerRef.current?.abort();
+
+      // Abort any in-flight requests with error handling
+      try {
+        abortControllerRef.current?.abort();
+      } catch (error) {
+        // Ignore abort errors during cleanup
+      }
+
       // Clear any pending debounce
       if (debounceTimeoutRef.current) {
         clearTimeout(debounceTimeoutRef.current);
+        debounceTimeoutRef.current = null;
       }
-      // Cleanup all abort controllers
-      cleanupAbortControllers.current.forEach((controller) =>
-        controller.abort()
-      );
-      cleanupAbortControllers.current.clear();
+
+      // Cleanup all abort controllers with error handling
+      try {
+        cleanupAbortControllers.current.forEach((controller) => {
+          try {
+            controller.abort();
+          } catch {
+            // Ignore individual abort errors
+          }
+        });
+        cleanupAbortControllers.current.clear();
+      } catch {
+        // Ignore cleanup errors
+      }
+
+      // Clear all refs to prevent memory leaks
+      abortControllerRef.current = null;
+      suspensePromiseRef.current = null;
+      asyncFnRef.current = null as any;
+      resetOnExecuteRef.current = null as any;
+      abortMessageRef.current = null as any;
+      cacheRef.current = null as any;
+      cacheKeyRef.current = null as any;
+      suspenseRef.current = null as any;
     };
   }, []);
 
@@ -285,9 +311,18 @@ export function useTry<T>(
 
     try {
       // Create promise for the operation
-      const promise = tryAsync(() =>
-        asyncFnRef.current(abortController.signal)
-      );
+      // Handle both signal-aware and signal-unaware async functions
+      const promise = tryAsync(() => {
+        const fn = asyncFnRef.current;
+        // Check if function expects signal parameter
+        if (fn.length > 0) {
+          return (fn as (signal: AbortSignal) => Promise<T>)(
+            abortController.signal
+          );
+        } else {
+          return (fn as () => Promise<T>)();
+        }
+      });
 
       // Store in pending requests if caching
       if (cacheRef.current && cacheKeyRef.current) {

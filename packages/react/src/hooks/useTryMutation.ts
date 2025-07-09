@@ -162,20 +162,38 @@ export function useTryMutation<T, TVariables = void>(
   useEffect(() => {
     return () => {
       isMountedRef.current = false;
-      abortControllerRef.current?.abort();
+
+      // Abort any in-flight mutations with error handling
+      try {
+        abortControllerRef.current?.abort();
+      } catch {
+        // Ignore abort errors during cleanup
+      }
+
       if (retryTimeoutRef.current) {
         clearTimeout(retryTimeoutRef.current);
+        retryTimeoutRef.current = null;
       }
-      // Clear the queue
-      mutationQueueRef.current.forEach(({ reject }) => {
-        reject(
-          createError({
-            type: "COMPONENT_UNMOUNTED",
-            message: "Component unmounted before mutation could complete",
-          })
-        );
-      });
-      mutationQueueRef.current = [];
+
+      // Clear the queue with error handling
+      try {
+        mutationQueueRef.current.forEach(({ reject }) => {
+          reject(
+            createError({
+              type: "COMPONENT_UNMOUNTED",
+              message: "Component unmounted before mutation could complete",
+            })
+          );
+        });
+        mutationQueueRef.current = [];
+      } catch {
+        // Ignore queue cleanup errors
+      }
+
+      // Clear all refs to prevent memory leaks
+      abortControllerRef.current = null;
+      previousDataRef.current = null;
+      cacheKeyRef.current = null;
     };
   }, []);
 

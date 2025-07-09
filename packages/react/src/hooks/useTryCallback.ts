@@ -1,7 +1,7 @@
 // useTryCallback hook for React error handling
 // TODO: Implement React callback hook for try-error integration
 
-import { useCallback, useState, useRef, useMemo } from "react";
+import { useCallback, useState, useRef, useMemo, useEffect } from "react";
 import { tryAsync, trySync, isTryError, TryResult, TryError } from "try-error";
 
 // Options for useTryCallback hook
@@ -127,6 +127,18 @@ export function useTryCallbackWithState<TArgs extends any[], TReturn>(
   const [isLoading, setIsLoading] = useState(false);
   const abortControllerRef = useRef<AbortController | null>(null);
 
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      try {
+        abortControllerRef.current?.abort();
+      } catch {
+        // Ignore abort errors during cleanup
+      }
+      abortControllerRef.current = null;
+    };
+  }, []);
+
   const enhancedCallback = useTryCallback(
     async (...args: TArgs) => {
       setIsLoading(true);
@@ -142,7 +154,11 @@ export function useTryCallbackWithState<TArgs extends any[], TReturn>(
 
   const reset = useCallback(() => {
     setIsLoading(false);
-    abortControllerRef.current?.abort();
+    try {
+      abortControllerRef.current?.abort();
+    } catch {
+      // Ignore abort errors during reset
+    }
   }, []);
 
   return {
