@@ -1,6 +1,6 @@
 [**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
-***
+---
 
 [tryError API Documentation](../index.md) / serializeDomainError
 
@@ -10,7 +10,7 @@
 function serializeDomainError<E>(error): Record<string, unknown>;
 ```
 
-Defined in: [factories.ts:196](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/factories.ts#L196)
+Defined in: [factories.ts:196](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/factories.ts#L196)
 
 Create a serializable version of domain-specific errors
 
@@ -18,7 +18,7 @@ Create a serializable version of domain-specific errors
 
 ### E
 
-`E` *extends* [`TryError`](../interfaces/TryError.md)\<`string`\>
+`E` _extends_ [`TryError`](../interfaces/TryError.md)\<`string`\>
 
 ## Parameters
 
@@ -39,7 +39,7 @@ A JSON-safe object with all fields
 ```typescript
 const error = createPaymentError("CardDeclined", "Card declined", {
   transactionId: "tx_123",
-  amount: 99.99
+  amount: 99.99,
 });
 
 const serialized = serializeDomainError(error);

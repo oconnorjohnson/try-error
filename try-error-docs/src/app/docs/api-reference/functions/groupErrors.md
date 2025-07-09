@@ -1,6 +1,6 @@
 [**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
-***
+---
 
 [tryError API Documentation](../index.md) / groupErrors
 
@@ -10,7 +10,7 @@
 function groupErrors<E, K>(errors, keyFn): Map<K, E[]>;
 ```
 
-Defined in: [utils.ts:612](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/utils.ts#L612)
+Defined in: [utils.ts:612](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/utils.ts#L612)
 
 Group errors by a specific field
 
@@ -18,7 +18,7 @@ Group errors by a specific field
 
 ### E
 
-`E` *extends* [`TryError`](../interfaces/TryError.md)\<`string`\>
+`E` _extends_ [`TryError`](../interfaces/TryError.md)\<`string`\>
 
 ### K
 
@@ -50,9 +50,9 @@ Map of grouped errors
 const errors = [
   createError({ type: "ValidationError", message: "Invalid email" }),
   createError({ type: "ValidationError", message: "Invalid password" }),
-  createError({ type: "NetworkError", message: "Timeout" })
+  createError({ type: "NetworkError", message: "Timeout" }),
 ];
 
-const grouped = groupErrors(errors, error => error.type);
+const grouped = groupErrors(errors, (error) => error.type);
 // Map { "ValidationError" => [...], "NetworkError" => [...] }
 ```

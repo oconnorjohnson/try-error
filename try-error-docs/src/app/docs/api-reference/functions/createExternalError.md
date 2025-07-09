@@ -1,6 +1,6 @@
 [**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
-***
+---
 
 [tryError API Documentation](../index.md) / createExternalError
 
@@ -8,13 +8,14 @@
 
 ```ts
 function createExternalError<T>(
-   provider, 
-   errorType, 
-   message, 
-options?): ExternalError<T>;
+  provider,
+  errorType,
+  message,
+  options?
+): ExternalError<T>;
 ```
 
-Defined in: [factories.ts:523](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/factories.ts#L523)
+Defined in: [factories.ts:523](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/factories.ts#L523)
 
 Pre-built factory for external service errors with validation
 
@@ -22,7 +23,7 @@ Pre-built factory for external service errors with validation
 
 ### T
 
-`T` *extends* `string`
+`T` _extends_ `string`
 
 ## Parameters
 
@@ -41,8 +42,8 @@ Pre-built factory for external service errors with validation
 ### options?
 
 [`ErrorFactoryOptions`](../interfaces/ErrorFactoryOptions.md) & \{
-  `externalId?`: `string`;
-  `statusCode?`: `number`;
+`externalId?`: `string`;
+`statusCode?`: `number`;
 \}
 
 ## Returns
@@ -52,8 +53,13 @@ Pre-built factory for external service errors with validation
 ## Example
 
 ```typescript
-const apiError = createExternalError("stripe", "NetworkError", "Connection failed", {
-  statusCode: 500,
-  externalId: "req_123"
-});
+const apiError = createExternalError(
+  "stripe",
+  "NetworkError",
+  "Connection failed",
+  {
+    statusCode: 500,
+    externalId: "req_123",
+  }
+);
 ```

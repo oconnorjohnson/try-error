@@ -1,6 +1,6 @@
 [**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
-***
+---
 
 [tryError API Documentation](../index.md) / createErrorFactory
 
@@ -8,12 +8,13 @@
 
 ```ts
 function createErrorFactory<T, E>(
-   defaultFields?, 
-   requiredFields?, 
-   factoryName?): (type, message, domainFields?, options?) => E;
+  defaultFields?,
+  requiredFields?,
+  factoryName?
+): (type, message, domainFields?, options?) => E;
 ```
 
-Defined in: [factories.ts:73](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/factories.ts#L73)
+Defined in: [factories.ts:73](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/factories.ts#L73)
 
 Creates a factory function for domain-specific errors
 
@@ -24,11 +25,11 @@ Each domain can have its own factory with consistent defaults.
 
 ### T
 
-`T` *extends* `string`
+`T` _extends_ `string`
 
 ### E
 
-`E` *extends* [`TryError`](../interfaces/TryError.md)\<`T`\>
+`E` _extends_ [`TryError`](../interfaces/TryError.md)\<`T`\>
 
 ## Parameters
 
@@ -56,9 +57,9 @@ A factory function for creating errors of type E
 
 ```ts
 (
-   type, 
-   message, 
-   domainFields?, 
+   type,
+   message,
+   domainFields?,
    options?): E;
 ```
 
@@ -87,19 +88,25 @@ A factory function for creating errors of type E
 ## Example
 
 ```typescript
-type PaymentErrorType = "CardDeclined" | "InsufficientFunds" | "ProcessingError";
+type PaymentErrorType =
+  | "CardDeclined"
+  | "InsufficientFunds"
+  | "ProcessingError";
 interface PaymentError extends TryError<PaymentErrorType> {
   readonly transactionId: string;
   readonly amount: number;
   readonly provider: string;
 }
 
-const createPaymentError = createErrorFactory<PaymentErrorType, PaymentError>({
-  provider: "stripe" // Default for all payment errors
-}, ["transactionId", "amount"]);
+const createPaymentError = createErrorFactory<PaymentErrorType, PaymentError>(
+  {
+    provider: "stripe", // Default for all payment errors
+  },
+  ["transactionId", "amount"]
+);
 
 const error = createPaymentError("CardDeclined", "Card was declined", {
   transactionId: "tx_123",
-  amount: 99.99
+  amount: 99.99,
 });
 ```

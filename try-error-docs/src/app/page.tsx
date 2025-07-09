@@ -71,7 +71,7 @@ export default function HomePage() {
                 View Documentation
               </a>
               <a
-                href="https://github.com/oconnorjohnson/tryError"
+                href="https://github.com/oconnorjohnson/try-error"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3 sm:py-4 border border-border bg-card/50 backdrop-blur-sm rounded-lg hover:bg-card hover:border-primary/50 transition-all duration-300 font-medium text-sm sm:text-base"

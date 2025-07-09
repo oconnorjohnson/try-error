@@ -1,6 +1,6 @@
 [**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
-***
+---
 
 [tryError API Documentation](../index.md) / createScope
 
@@ -9,35 +9,35 @@
 ```ts
 function createScope(config): {
   config: {
-     captureStackTrace?: boolean;
-     defaultErrorType?: string;
-     developmentMode?: boolean;
-     environmentHandlers?: {
-        client?: (error) => TryError;
-        edge?: (error) => TryError;
-        server?: (error) => TryError;
-     };
-     includeSource?: boolean;
-     minimalErrors?: boolean;
-     onError?: (error) => TryError;
-     performance?: PerformanceConfig;
-     runtimeDetection?: boolean;
-     serializer?: (error) => Record<string, unknown>;
-     skipContext?: boolean;
-     skipTimestamp?: boolean;
-     sourceLocation?: {
-        defaultStackOffset?: number;
-        format?: "full" | "file:line:column" | "file:line" | "file";
-        formatter?: (file, line, column) => string;
-        includeFullPath?: boolean;
-     };
-     stackTraceLimit?: number;
+    captureStackTrace?: boolean;
+    defaultErrorType?: string;
+    developmentMode?: boolean;
+    environmentHandlers?: {
+      client?: (error) => TryError;
+      edge?: (error) => TryError;
+      server?: (error) => TryError;
+    };
+    includeSource?: boolean;
+    minimalErrors?: boolean;
+    onError?: (error) => TryError;
+    performance?: PerformanceConfig;
+    runtimeDetection?: boolean;
+    serializer?: (error) => Record<string, unknown>;
+    skipContext?: boolean;
+    skipTimestamp?: boolean;
+    sourceLocation?: {
+      defaultStackOffset?: number;
+      format?: "full" | "file:line:column" | "file:line" | "file";
+      formatter?: (file, line, column) => string;
+      includeFullPath?: boolean;
+    };
+    stackTraceLimit?: number;
   };
   createError: (options) => Promise<TryError<string>>;
 };
 ```
 
-Defined in: [config.ts:820](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/config.ts#L820)
+Defined in: [config.ts:820](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/config.ts#L820)
 
 Create a scoped configuration that doesn't affect global state
 Useful for testing or isolated components
@@ -126,7 +126,7 @@ Whether to capture stack traces (expensive operation)
 ##### Default
 
 ```ts
-true in development, false in production
+true in development, false in production;
 ```
 
 #### config.defaultErrorType?
@@ -140,7 +140,7 @@ Default error type for untyped errors
 ##### Default
 
 ```ts
-"Error"
+"Error";
 ```
 
 #### config.developmentMode?
@@ -154,7 +154,7 @@ Enable development mode features (verbose logging, etc.)
 ##### Default
 
 ```ts
-false
+false;
 ```
 
 #### config.environmentHandlers?
@@ -228,7 +228,7 @@ Include source location in errors
 ##### Default
 
 ```ts
-true
+true;
 ```
 
 #### config.minimalErrors?
@@ -242,7 +242,7 @@ Enable minimal error mode for ultra-lightweight errors
 ##### Default
 
 ```ts
-false
+false;
 ```
 
 #### config.onError()?
@@ -283,7 +283,7 @@ When enabled, environment-specific handlers are called based on runtime detectio
 ##### Default
 
 ```ts
-false
+false;
 ```
 
 #### config.serializer()?
@@ -315,7 +315,7 @@ Skip context processing
 ##### Default
 
 ```ts
-false
+false;
 ```
 
 #### config.skipTimestamp?
@@ -329,7 +329,7 @@ Skip timestamp generation (Date.now() calls)
 ##### Default
 
 ```ts
-false
+false;
 ```
 
 #### config.sourceLocation?
@@ -357,7 +357,7 @@ Useful when wrapping error creation
 ##### Default
 
 ```ts
-3
+3;
 ```
 
 #### config.sourceLocation.format?
@@ -371,7 +371,7 @@ Format for source location string
 ##### Default
 
 ```ts
-"file:line:column"
+"file:line:column";
 ```
 
 #### config.sourceLocation.formatter()?
@@ -425,7 +425,7 @@ Maximum stack trace depth to capture
 ##### Default
 
 ```ts
-10
+10;
 ```
 
 ### createError()
@@ -439,7 +439,7 @@ createError: (options) => Promise<TryError<string>>;
 ##### options
 
 `Omit`\<[`CreateErrorOptions`](../interfaces/CreateErrorOptions.md)\<`string`\>, `"type"`\> & \{
-  `type?`: `string`;
+`type?`: `string`;
 \}
 
 #### Returns
@@ -451,8 +451,8 @@ createError: (options) => Promise<TryError<string>>;
 ```typescript
 const { createError } = createScope({
   captureStackTrace: false,
-  defaultErrorType: 'CustomError'
+  defaultErrorType: "CustomError",
 });
 
-const error = createError({ message: 'Test error' });
+const error = createError({ message: "Test error" });
 ```

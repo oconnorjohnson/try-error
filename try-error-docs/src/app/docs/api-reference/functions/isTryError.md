@@ -1,6 +1,6 @@
 [**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
-***
+---
 
 [tryError API Documentation](../index.md) / isTryError
 
@@ -10,7 +10,7 @@
 function isTryError<E>(value): value is E;
 ```
 
-Defined in: [types.ts:75](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/types.ts#L75)
+Defined in: [types.ts:75](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/types.ts#L75)
 
 Type guard to check if a value is a TryError
 
@@ -21,7 +21,7 @@ Now uses Symbol branding to prevent spoofing and validates all fields
 
 ### E
 
-`E` *extends* [`TryError`](../interfaces/TryError.md)\<`string`\> = [`TryError`](../interfaces/TryError.md)\<`string`\>
+`E` _extends_ [`TryError`](../interfaces/TryError.md)\<`string`\> = [`TryError`](../interfaces/TryError.md)\<`string`\>
 
 ## Parameters
 

@@ -1,12 +1,12 @@
 [**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
-***
+---
 
 [tryError API Documentation](../index.md) / ExternalError
 
 # Interface: ExternalError\<T\>
 
-Defined in: [factories.ts:306](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/factories.ts#L306)
+Defined in: [factories.ts:306](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/factories.ts#L306)
 
 Base type for errors from external services (APIs, third-party services, etc.)
 
@@ -15,7 +15,8 @@ Provides consistent fields for external service errors across different integrat
 ## Example
 
 ```typescript
-interface ApiError extends ExternalError<"NetworkError" | "AuthError" | "RateLimited"> {
+interface ApiError
+  extends ExternalError<"NetworkError" | "AuthError" | "RateLimited"> {
   readonly endpoint: string;
 }
 
@@ -24,7 +25,7 @@ const error: ApiError = {
   provider: "stripe",
   externalId: "req_123",
   statusCode: 429,
-  endpoint: "/v1/charges"
+  endpoint: "/v1/charges",
 };
 ```
 
@@ -36,7 +37,7 @@ const error: ApiError = {
 
 ### T
 
-`T` *extends* `string`
+`T` _extends_ `string`
 
 ## Properties
 
@@ -46,7 +47,7 @@ const error: ApiError = {
 readonly optional cause: unknown;
 ```
 
-Defined in: [types.ts:50](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/types.ts#L50)
+Defined in: [types.ts:50](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/types.ts#L50)
 
 The original error or thrown value that caused this error
 
@@ -54,7 +55,7 @@ The original error or thrown value that caused this error
 
 [`TryError`](TryError.md).[`cause`](TryError.md#cause)
 
-***
+---
 
 ### context?
 
@@ -62,7 +63,7 @@ The original error or thrown value that caused this error
 readonly optional context: Record<string, unknown>;
 ```
 
-Defined in: [types.ts:45](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/types.ts#L45)
+Defined in: [types.ts:45](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/types.ts#L45)
 
 Additional context data for debugging
 
@@ -70,7 +71,7 @@ Additional context data for debugging
 
 [`TryError`](TryError.md).[`context`](TryError.md#context)
 
-***
+---
 
 ### externalId?
 
@@ -78,11 +79,11 @@ Additional context data for debugging
 readonly optional externalId: string;
 ```
 
-Defined in: [factories.ts:315](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/factories.ts#L315)
+Defined in: [factories.ts:315](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/factories.ts#L315)
 
 External reference ID (request ID, transaction ID, etc.)
 
-***
+---
 
 ### message
 
@@ -90,7 +91,7 @@ External reference ID (request ID, transaction ID, etc.)
 readonly message: string;
 ```
 
-Defined in: [types.ts:25](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/types.ts#L25)
+Defined in: [types.ts:25](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/types.ts#L25)
 
 Human-readable error message
 
@@ -98,7 +99,7 @@ Human-readable error message
 
 [`TryError`](TryError.md).[`message`](TryError.md#message)
 
-***
+---
 
 ### provider
 
@@ -106,11 +107,11 @@ Human-readable error message
 readonly provider: string;
 ```
 
-Defined in: [factories.ts:310](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/factories.ts#L310)
+Defined in: [factories.ts:310](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/factories.ts#L310)
 
 The name of the external service/provider
 
-***
+---
 
 ### source
 
@@ -118,7 +119,7 @@ The name of the external service/provider
 readonly source: string;
 ```
 
-Defined in: [types.ts:35](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/types.ts#L35)
+Defined in: [types.ts:35](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/types.ts#L35)
 
 Source location where the error occurred (file:line:column)
 
@@ -126,7 +127,7 @@ Source location where the error occurred (file:line:column)
 
 [`TryError`](TryError.md).[`source`](TryError.md#source)
 
-***
+---
 
 ### stack?
 
@@ -134,7 +135,7 @@ Source location where the error occurred (file:line:column)
 readonly optional stack: string;
 ```
 
-Defined in: [types.ts:30](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/types.ts#L30)
+Defined in: [types.ts:30](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/types.ts#L30)
 
 Stack trace if available (may be stripped in production)
 
@@ -142,7 +143,7 @@ Stack trace if available (may be stripped in production)
 
 [`TryError`](TryError.md).[`stack`](TryError.md#stack)
 
-***
+---
 
 ### statusCode?
 
@@ -150,11 +151,11 @@ Stack trace if available (may be stripped in production)
 readonly optional statusCode: number;
 ```
 
-Defined in: [factories.ts:320](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/factories.ts#L320)
+Defined in: [factories.ts:320](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/factories.ts#L320)
 
 HTTP status code or equivalent error code
 
-***
+---
 
 ### timestamp
 
@@ -162,7 +163,7 @@ HTTP status code or equivalent error code
 readonly timestamp: number;
 ```
 
-Defined in: [types.ts:40](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/types.ts#L40)
+Defined in: [types.ts:40](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/types.ts#L40)
 
 Timestamp when the error was created
 
@@ -170,7 +171,7 @@ Timestamp when the error was created
 
 [`TryError`](TryError.md).[`timestamp`](TryError.md#timestamp)
 
-***
+---
 
 ### type
 
@@ -178,7 +179,7 @@ Timestamp when the error was created
 readonly type: T;
 ```
 
-Defined in: [types.ts:20](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/types.ts#L20)
+Defined in: [types.ts:20](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/types.ts#L20)
 
 The type of error - used for discriminated unions
 

@@ -1,6 +1,6 @@
 [**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
-***
+---
 
 [tryError API Documentation](../index.md) / deserializeTryError
 
@@ -10,7 +10,7 @@
 function deserializeTryError<T>(obj): null | TryError<T>;
 ```
 
-Defined in: [types.ts:196](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/types.ts#L196)
+Defined in: [types.ts:196](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/types.ts#L196)
 
 Deserialize a JSON object back to a TryError
 Adds back the Symbol property
@@ -19,7 +19,7 @@ Adds back the Symbol property
 
 ### T
 
-`T` *extends* `string` = `string`
+`T` _extends_ `string` = `string`
 
 ## Parameters
 

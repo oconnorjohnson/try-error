@@ -1,6 +1,6 @@
 **tryError API Documentation v0.0.1-alpha.1**
 
-***
+---
 
 # tryError
 
@@ -213,13 +213,13 @@ function UserProfile({ userId }) {
 ## Comparison with Alternatives
 
 | Feature        | tryError | fp-ts    | neverthrow | native try/catch |
-| -------------- | --------- | -------- | ---------- | ---------------- |
-| Type Safety    | ✅ Full   | ✅ Full  | ✅ Full    | ❌ None          |
-| Bundle Size    | 4.7KB     | ~50KB    | ~12KB      | 0KB              |
-| Learning Curve | Low       | High     | Medium     | Low              |
-| Zero Overhead  | ✅ Yes    | ❌ No    | ❌ No      | ✅ Yes           |
-| Async Support  | ✅ Yes    | ✅ Yes   | ✅ Yes     | ✅ Yes           |
-| Error Context  | ✅ Rich   | ❌ Basic | ❌ Basic   | ❌ Basic         |
+| -------------- | -------- | -------- | ---------- | ---------------- |
+| Type Safety    | ✅ Full  | ✅ Full  | ✅ Full    | ❌ None          |
+| Bundle Size    | 4.7KB    | ~50KB    | ~12KB      | 0KB              |
+| Learning Curve | Low      | High     | Medium     | Low              |
+| Zero Overhead  | ✅ Yes   | ❌ No    | ❌ No      | ✅ Yes           |
+| Async Support  | ✅ Yes   | ✅ Yes   | ✅ Yes     | ✅ Yes           |
+| Error Context  | ✅ Rich  | ❌ Basic | ❌ Basic   | ❌ Basic         |
 
 ## Examples
 
@@ -365,7 +365,7 @@ const ConfigPresets: Readonly<{
   minimal: () => TryErrorConfig;
   nextjs: () => TryErrorConfig;
   performance: () => TryErrorConfig & {
-     performance: PerformanceConfig;
+    performance: PerformanceConfig;
   };
   production: () => TryErrorConfig;
   serverProduction: () => TryErrorConfig;
@@ -373,12 +373,12 @@ const ConfigPresets: Readonly<{
 }>;
 ```
 
-Defined in: [config.ts:386](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/config.ts#L386)
+Defined in: [config.ts:386](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/config.ts#L386)
 
 Environment-specific configuration presets
 Made immutable by using Object.freeze
 
-***
+---
 
 ### errorEvents
 
@@ -386,11 +386,11 @@ Made immutable by using Object.freeze
 const errorEvents: ErrorEventEmitter;
 ```
 
-Defined in: [events.ts:207](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/events.ts#L207)
+Defined in: [events.ts:207](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/events.ts#L207)
 
 Global error event emitter
 
-***
+---
 
 ### ErrorSampling
 
@@ -403,7 +403,7 @@ const ErrorSampling: {
 };
 ```
 
-Defined in: [utils.ts:631](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/utils.ts#L631)
+Defined in: [utils.ts:631](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/utils.ts#L631)
 
 Error sampling utilities
 
@@ -442,8 +442,8 @@ Whether to include the error
 ```typescript
 const samplingRates = new Map([
   ["ValidationError", 0.01], // 1% of validation errors
-  ["NetworkError", 0.5],     // 50% of network errors
-  ["CriticalError", 1.0]     // 100% of critical errors
+  ["NetworkError", 0.5], // 50% of network errors
+  ["CriticalError", 1.0], // 100% of critical errors
 ]);
 
 if (ErrorSampling.byType(error, samplingRates)) {
@@ -476,7 +476,8 @@ Whether to include the error
 ###### Example
 
 ```typescript
-if (ErrorSampling.random(0.1)) { // 10% sampling
+if (ErrorSampling.random(0.1)) {
+  // 10% sampling
   logError(error);
 }
 ```
@@ -513,7 +514,8 @@ Whether to include the error
 
 ```typescript
 let errorCount = 0;
-if (ErrorSampling.rate(++errorCount, 100)) { // Every 100th error
+if (ErrorSampling.rate(++errorCount, 100)) {
+  // Every 100th error
   logError(error);
 }
 ```
@@ -550,13 +552,14 @@ Whether to include the error
 
 ```typescript
 let lastSample = 0;
-if (ErrorSampling.timeBased(lastSample, 60000)) { // Once per minute
+if (ErrorSampling.timeBased(lastSample, 60000)) {
+  // Once per minute
   lastSample = Date.now();
   logError(error);
 }
 ```
 
-***
+---
 
 ### FEATURES
 
@@ -574,9 +577,9 @@ const FEATURES: Readonly<{
 }>;
 ```
 
-Defined in: [index.ts:8](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/index.ts#L8)
+Defined in: [index.ts:8](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/index.ts#L8)
 
-***
+---
 
 ### globalRegistry
 
@@ -584,9 +587,9 @@ Defined in: [index.ts:8](https://github.com/oconnorjohnson/tryError/blob/e3ae030
 const globalRegistry: MiddlewareRegistry;
 ```
 
-Defined in: [middleware.ts:142](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/middleware.ts#L142)
+Defined in: [middleware.ts:142](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/middleware.ts#L142)
 
-***
+---
 
 ### Performance
 
@@ -594,16 +597,16 @@ Defined in: [middleware.ts:142](https://github.com/oconnorjohnson/tryError/blob/
 const Performance: {
   getMemoryUsage: () => null | MemoryUsage;
   measureErrorCreation: (iterations) => Promise<{
-     averageTime: number;
-     errors: number;
-     iterations: number;
-     totalTime: number;
+    averageTime: number;
+    errors: number;
+    iterations: number;
+    totalTime: number;
   }>;
   now: number;
 };
 ```
 
-Defined in: [config.ts:915](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/config.ts#L915)
+Defined in: [config.ts:915](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/config.ts#L915)
 
 Performance monitoring utilities
 
@@ -624,12 +627,13 @@ Get memory usage information (Node.js only)
 ##### measureErrorCreation()
 
 ```ts
-measureErrorCreation: (iterations) => Promise<{
-  averageTime: number;
-  errors: number;
-  iterations: number;
-  totalTime: number;
-}>;
+measureErrorCreation: (iterations) =>
+  Promise<{
+    averageTime: number;
+    errors: number;
+    iterations: number;
+    totalTime: number;
+  }>;
 ```
 
 Measure error creation performance
@@ -643,10 +647,10 @@ Measure error creation performance
 ###### Returns
 
 `Promise`\<\{
-  `averageTime`: `number`;
-  `errors`: `number`;
-  `iterations`: `number`;
-  `totalTime`: `number`;
+`averageTime`: `number`;
+`errors`: `number`;
+`iterations`: `number`;
+`totalTime`: `number`;
 \}\>
 
 ##### now()
@@ -662,7 +666,7 @@ Falls back gracefully based on environment
 
 `number`
 
-***
+---
 
 ### pluginManager
 
@@ -670,11 +674,11 @@ Falls back gracefully based on environment
 const pluginManager: PluginManager;
 ```
 
-Defined in: [plugins.ts:369](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/plugins.ts#L369)
+Defined in: [plugins.ts:369](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/plugins.ts#L369)
 
 Global plugin manager instance
 
-***
+---
 
 ### sentryPlugin
 
@@ -682,11 +686,11 @@ Global plugin manager instance
 const sentryPlugin: Plugin;
 ```
 
-Defined in: [plugins.ts:410](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/plugins.ts#L410)
+Defined in: [plugins.ts:410](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/plugins.ts#L410)
 
 Example plugin: Sentry integration
 
-***
+---
 
 ### VERSION
 
@@ -694,7 +698,7 @@ Example plugin: Sentry integration
 const VERSION: "1.0.0" = "1.0.0";
 ```
 
-Defined in: [index.ts:5](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/index.ts#L5)
+Defined in: [index.ts:5](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/index.ts#L5)
 
 ## Functions
 
@@ -819,7 +823,7 @@ Defined in: [index.ts:5](https://github.com/oconnorjohnson/tryError/blob/e3ae030
 
 Renames and re-exports [trySync](functions/trySync.md)
 
-***
+---
 
 ### try$$
 

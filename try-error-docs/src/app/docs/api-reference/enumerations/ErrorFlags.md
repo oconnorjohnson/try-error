@@ -1,12 +1,12 @@
 [**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
-***
+---
 
 [tryError API Documentation](../index.md) / ErrorFlags
 
 # Enumeration: ErrorFlags
 
-Defined in: [bitflags.ts:11](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/bitflags.ts#L11)
+Defined in: [bitflags.ts:11](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/bitflags.ts#L11)
 
 Bit flags for TryError boolean properties
 
@@ -18,9 +18,9 @@ Bit flags for TryError boolean properties
 HasCause: 4;
 ```
 
-Defined in: [bitflags.ts:15](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/bitflags.ts#L15)
+Defined in: [bitflags.ts:15](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/bitflags.ts#L15)
 
-***
+---
 
 ### HasContext
 
@@ -28,9 +28,9 @@ Defined in: [bitflags.ts:15](https://github.com/oconnorjohnson/tryError/blob/e3a
 HasContext: 2;
 ```
 
-Defined in: [bitflags.ts:14](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/bitflags.ts#L14)
+Defined in: [bitflags.ts:14](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/bitflags.ts#L14)
 
-***
+---
 
 ### HasStack
 
@@ -38,9 +38,9 @@ Defined in: [bitflags.ts:14](https://github.com/oconnorjohnson/tryError/blob/e3a
 HasStack: 1;
 ```
 
-Defined in: [bitflags.ts:13](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/bitflags.ts#L13)
+Defined in: [bitflags.ts:13](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/bitflags.ts#L13)
 
-***
+---
 
 ### IsLazy
 
@@ -48,9 +48,9 @@ Defined in: [bitflags.ts:13](https://github.com/oconnorjohnson/tryError/blob/e3a
 IsLazy: 16;
 ```
 
-Defined in: [bitflags.ts:17](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/bitflags.ts#L17)
+Defined in: [bitflags.ts:17](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/bitflags.ts#L17)
 
-***
+---
 
 ### IsMinimal
 
@@ -58,9 +58,9 @@ Defined in: [bitflags.ts:17](https://github.com/oconnorjohnson/tryError/blob/e3a
 IsMinimal: 64;
 ```
 
-Defined in: [bitflags.ts:19](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/bitflags.ts#L19)
+Defined in: [bitflags.ts:19](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/bitflags.ts#L19)
 
-***
+---
 
 ### IsPooled
 
@@ -68,9 +68,9 @@ Defined in: [bitflags.ts:19](https://github.com/oconnorjohnson/tryError/blob/e3a
 IsPooled: 32;
 ```
 
-Defined in: [bitflags.ts:18](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/bitflags.ts#L18)
+Defined in: [bitflags.ts:18](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/bitflags.ts#L18)
 
-***
+---
 
 ### IsProduction
 
@@ -78,9 +78,9 @@ Defined in: [bitflags.ts:18](https://github.com/oconnorjohnson/tryError/blob/e3a
 IsProduction: 8;
 ```
 
-Defined in: [bitflags.ts:16](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/bitflags.ts#L16)
+Defined in: [bitflags.ts:16](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/bitflags.ts#L16)
 
-***
+---
 
 ### None
 
@@ -88,4 +88,4 @@ Defined in: [bitflags.ts:16](https://github.com/oconnorjohnson/tryError/blob/e3a
 None: 0;
 ```
 
-Defined in: [bitflags.ts:12](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/bitflags.ts#L12)
+Defined in: [bitflags.ts:12](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/bitflags.ts#L12)

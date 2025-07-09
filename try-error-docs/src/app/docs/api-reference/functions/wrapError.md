@@ -1,20 +1,16 @@
 [**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
-***
+---
 
 [tryError API Documentation](../index.md) / wrapError
 
 # Function: wrapError()
 
 ```ts
-function wrapError<T>(
-   type, 
-   cause, 
-   message?, 
-context?): TryError<T>;
+function wrapError<T>(type, cause, message?, context?): TryError<T>;
 ```
 
-Defined in: [errors.ts:715](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/errors.ts#L715)
+Defined in: [errors.ts:715](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/errors.ts#L715)
 
 Wrap an existing error or thrown value into a TryError
 
@@ -22,7 +18,7 @@ Wrap an existing error or thrown value into a TryError
 
 ### T
 
-`T` *extends* `string` = `string`
+`T` _extends_ `string` = `string`
 
 ## Parameters
 

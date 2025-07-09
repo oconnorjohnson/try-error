@@ -1,6 +1,6 @@
 [**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
-***
+---
 
 [tryError API Documentation](../index.md) / createEntityError
 
@@ -8,14 +8,15 @@
 
 ```ts
 function createEntityError<T>(
-   entityType, 
-   entityId, 
-   errorType, 
-   message, 
-options?): EntityError<T>;
+  entityType,
+  entityId,
+  errorType,
+  message,
+  options?
+): EntityError<T>;
 ```
 
-Defined in: [factories.ts:450](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/factories.ts#L450)
+Defined in: [factories.ts:450](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/factories.ts#L450)
 
 Pre-built factory for entity-related errors with validation
 
@@ -23,7 +24,7 @@ Pre-built factory for entity-related errors with validation
 
 ### T
 
-`T` *extends* `string`
+`T` _extends_ `string`
 
 ## Parameters
 
@@ -54,6 +55,16 @@ Pre-built factory for entity-related errors with validation
 ## Example
 
 ```typescript
-const userError = createEntityError("user", "user_123", "UserNotFound", "User not found");
-const orderError = createEntityError("order", "order_456", "OrderCancelled", "Order was cancelled");
+const userError = createEntityError(
+  "user",
+  "user_123",
+  "UserNotFound",
+  "User not found"
+);
+const orderError = createEntityError(
+  "order",
+  "order_456",
+  "OrderCancelled",
+  "Order was cancelled"
+);
 ```

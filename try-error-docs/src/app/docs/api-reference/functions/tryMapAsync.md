@@ -1,16 +1,19 @@
 [**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
-***
+---
 
 [tryError API Documentation](../index.md) / tryMapAsync
 
 # Function: tryMapAsync()
 
 ```ts
-function tryMapAsync<T, U, E>(resultPromise, mapper): Promise<TryResult<U, TryError<string> | E>>;
+function tryMapAsync<T, U, E>(
+  resultPromise,
+  mapper
+): Promise<TryResult<U, TryError<string> | E>>;
 ```
 
-Defined in: [async.ts:197](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/async.ts#L197)
+Defined in: [async.ts:197](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/async.ts#L197)
 
 Transform a successful async result, leaving errors unchanged
 
@@ -26,7 +29,7 @@ Transform a successful async result, leaving errors unchanged
 
 ### E
 
-`E` *extends* [`TryError`](../interfaces/TryError.md)\<`string`\>
+`E` _extends_ [`TryError`](../interfaces/TryError.md)\<`string`\>
 
 ## Parameters
 
@@ -51,6 +54,8 @@ Promise of transformed result or original error
 ## Example
 
 ```typescript
-const fetchResult = tryAsync(() => fetch('/api/user'));
-const jsonResult = await tryMapAsync(fetchResult, async (response) => response.json());
+const fetchResult = tryAsync(() => fetch("/api/user"));
+const jsonResult = await tryMapAsync(fetchResult, async (response) =>
+  response.json()
+);
 ```

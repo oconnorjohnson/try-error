@@ -1,41 +1,47 @@
 [**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
-***
+---
 
 [tryError API Documentation](../index.md) / diffErrors
 
 # Function: diffErrors()
 
 ```ts
-function diffErrors<E1, E2>(error1, error2): {
+function diffErrors<E1, E2>(
+  error1,
+  error2
+): {
   context?: {
-     added: Record<string, unknown>;
-     changed: Record<string, {
+    added: Record<string, unknown>;
+    changed: Record<
+      string,
+      {
         from: unknown;
         to: unknown;
-     }>;
-     removed: Record<string, unknown>;
+      }
+    >;
+    removed: Record<string, unknown>;
   };
   message?: {
-     from: string;
-     to: string;
+    from: string;
+    to: string;
   };
   source?: {
-     from: string;
-     to: string;
+    from: string;
+    to: string;
   };
   timestamp?: {
-     from: number;
-     to: number;
+    from: number;
+    to: number;
   };
   type?: {
-     from: string;
-     to: string;
+    from: string;
+    to: string;
   };
 };
 ```
 
-Defined in: [utils.ts:524](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/utils.ts#L524)
+Defined in: [utils.ts:524](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/utils.ts#L524)
 
 Diff two errors to see what changed
 
@@ -43,11 +49,11 @@ Diff two errors to see what changed
 
 ### E1
 
-`E1` *extends* [`TryError`](../interfaces/TryError.md)\<`string`\>
+`E1` _extends_ [`TryError`](../interfaces/TryError.md)\<`string`\>
 
 ### E2
 
-`E2` *extends* [`TryError`](../interfaces/TryError.md)\<`string`\>
+`E2` _extends_ [`TryError`](../interfaces/TryError.md)\<`string`\>
 
 ## Parameters
 
@@ -118,10 +124,13 @@ added: Record<string, unknown>;
 #### context.changed
 
 ```ts
-changed: Record<string, {
-  from: unknown;
-  to: unknown;
-}>;
+changed: Record<
+  string,
+  {
+    from: unknown;
+    to: unknown;
+  }
+>;
 ```
 
 #### context.removed

@@ -25,7 +25,7 @@ export default function DocsLayout({
           <div className="flex items-center gap-1 sm:gap-2 shrink-0">
             <SearchDialog />
             <a
-              href="https://github.com/oconnorjohnson/tryError"
+              href="https://github.com/oconnorjohnson/try-error"
               target="_blank"
               rel="noopener noreferrer"
               className="hidden sm:inline-flex items-center gap-2 px-2 sm:px-3 py-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors border border-border rounded-md hover:bg-accent"

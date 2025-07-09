@@ -1,6 +1,6 @@
 [**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
-***
+---
 
 [tryError API Documentation](../index.md) / circuitBreakerMiddleware
 
@@ -10,7 +10,7 @@
 function circuitBreakerMiddleware<T, E>(options): ErrorMiddleware<T, E>;
 ```
 
-Defined in: [middleware.ts:218](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/middleware.ts#L218)
+Defined in: [middleware.ts:218](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/middleware.ts#L218)
 
 Circuit breaker middleware
 
@@ -22,7 +22,7 @@ Circuit breaker middleware
 
 ### E
 
-`E` *extends* [`TryError`](../interfaces/TryError.md)\<`string`\>
+`E` _extends_ [`TryError`](../interfaces/TryError.md)\<`string`\>
 
 ## Parameters
 

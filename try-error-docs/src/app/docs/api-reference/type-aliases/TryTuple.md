@@ -1,6 +1,6 @@
 [**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
-***
+---
 
 [tryError API Documentation](../index.md) / TryTuple
 
@@ -10,7 +10,7 @@
 type TryTuple<T, E> = readonly [T, null] | readonly [null, E];
 ```
 
-Defined in: [types.ts:65](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/types.ts#L65)
+Defined in: [types.ts:65](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/types.ts#L65)
 
 Tuple result for Go-style error handling
 Success: [value, null]
@@ -24,4 +24,4 @@ Error: [null, error]
 
 ### E
 
-`E` *extends* [`TryError`](../interfaces/TryError.md) = [`TryError`](../interfaces/TryError.md)
+`E` _extends_ [`TryError`](../interfaces/TryError.md) = [`TryError`](../interfaces/TryError.md)

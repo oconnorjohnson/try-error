@@ -1,6 +1,6 @@
 [**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
-***
+---
 
 [tryError API Documentation](../index.md) / getErrorMessage
 
@@ -10,7 +10,7 @@
 function getErrorMessage(value, fallback): string;
 ```
 
-Defined in: [utils.ts:169](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/utils.ts#L169)
+Defined in: [utils.ts:169](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/utils.ts#L169)
 
 Extract error message with fallback
 

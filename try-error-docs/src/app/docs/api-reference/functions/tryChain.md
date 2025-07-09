@@ -1,6 +1,6 @@
 [**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
-***
+---
 
 [tryError API Documentation](../index.md) / tryChain
 
@@ -10,7 +10,7 @@
 function tryChain<T, U, E1, E2>(result, chainer): TryResult<U, E1 | E2>;
 ```
 
-Defined in: [sync.ts:207](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/sync.ts#L207)
+Defined in: [sync.ts:207](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/sync.ts#L207)
 
 Chain operations that return TryResult, short-circuiting on errors
 
@@ -26,11 +26,11 @@ Chain operations that return TryResult, short-circuiting on errors
 
 ### E1
 
-`E1` *extends* [`TryError`](../interfaces/TryError.md)\<`string`\>
+`E1` _extends_ [`TryError`](../interfaces/TryError.md)\<`string`\>
 
 ### E2
 
-`E2` *extends* [`TryError`](../interfaces/TryError.md)\<`string`\>
+`E2` _extends_ [`TryError`](../interfaces/TryError.md)\<`string`\>
 
 ## Parameters
 

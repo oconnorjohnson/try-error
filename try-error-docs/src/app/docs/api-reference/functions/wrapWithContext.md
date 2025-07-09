@@ -1,6 +1,6 @@
 [**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
-***
+---
 
 [tryError API Documentation](../index.md) / wrapWithContext
 
@@ -10,7 +10,7 @@
 function wrapWithContext<E>(error, additionalContext): E;
 ```
 
-Defined in: [factories.ts:424](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/factories.ts#L424)
+Defined in: [factories.ts:424](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/factories.ts#L424)
 
 Wrap an error with additional context while preserving the original type
 
@@ -21,7 +21,7 @@ such as adding request IDs or user context.
 
 ### E
 
-`E` *extends* [`TryError`](../interfaces/TryError.md)\<`string`\>
+`E` _extends_ [`TryError`](../interfaces/TryError.md)\<`string`\>
 
 ## Parameters
 
@@ -46,9 +46,12 @@ The same error with additional context
 ## Example
 
 ```typescript
-const error = createError({ type: "ValidationError", message: "Invalid input" });
+const error = createError({
+  type: "ValidationError",
+  message: "Invalid input",
+});
 const contextualError = wrapWithContext(error, {
   requestId: "req_123",
-  userId: "user_456"
+  userId: "user_456",
 });
 ```

@@ -1,6 +1,6 @@
 [**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
-***
+---
 
 [tryError API Documentation](../index.md) / correlateErrors
 
@@ -10,7 +10,7 @@
 function correlateErrors<E>(errors, correlationFn): E[][];
 ```
 
-Defined in: [utils.ts:730](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/utils.ts#L730)
+Defined in: [utils.ts:730](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/utils.ts#L730)
 
 Correlate related errors across operations
 
@@ -18,7 +18,7 @@ Correlate related errors across operations
 
 ### E
 
-`E` *extends* [`TryError`](../interfaces/TryError.md)\<`string`\>
+`E` _extends_ [`TryError`](../interfaces/TryError.md)\<`string`\>
 
 ## Parameters
 

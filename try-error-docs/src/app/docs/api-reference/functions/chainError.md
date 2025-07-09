@@ -1,6 +1,6 @@
 [**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
-***
+---
 
 [tryError API Documentation](../index.md) / chainError
 
@@ -8,13 +8,14 @@
 
 ```ts
 function chainError<T, E>(
-   originalError, 
-   newType, 
-   newMessage, 
-   additionalFields?): E;
+  originalError,
+  newType,
+  newMessage,
+  additionalFields?
+): E;
 ```
 
-Defined in: [factories.ts:385](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/factories.ts#L385)
+Defined in: [factories.ts:385](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/factories.ts#L385)
 
 Chain errors while preserving the original error context
 
@@ -25,11 +26,11 @@ while maintaining the full error chain for debugging.
 
 ### T
 
-`T` *extends* `string`
+`T` _extends_ `string`
 
 ### E
 
-`E` *extends* [`TryError`](../interfaces/TryError.md)\<`T`\>
+`E` _extends_ [`TryError`](../interfaces/TryError.md)\<`T`\>
 
 ## Parameters
 
@@ -70,7 +71,7 @@ const dbError = trySync(() => database.query("SELECT * FROM users"));
 if (isErr(dbError)) {
   return chainError(dbError, "UserServiceError", "Failed to fetch user data", {
     operation: "getUserById",
-    userId: "123"
+    userId: "123",
   });
 }
 ```

@@ -1,6 +1,6 @@
 [**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
-***
+---
 
 [tryError API Documentation](../index.md) / internError
 
@@ -8,16 +8,17 @@
 
 ```ts
 function internError(
-   type, 
-   message, 
-   source): {
+  type,
+  message,
+  source
+): {
   message: string;
   source: string;
   type: string;
 };
 ```
 
-Defined in: [intern.ts:171](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/intern.ts#L171)
+Defined in: [intern.ts:171](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/intern.ts#L171)
 
 Intern common error properties
 

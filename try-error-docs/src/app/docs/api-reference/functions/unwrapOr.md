@@ -1,6 +1,6 @@
 [**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
-***
+---
 
 [tryError API Documentation](../index.md) / unwrapOr
 
@@ -10,7 +10,7 @@
 function unwrapOr<T, D, E>(result, defaultValue): T | D;
 ```
 
-Defined in: [sync.ts:257](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/sync.ts#L257)
+Defined in: [sync.ts:257](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/sync.ts#L257)
 
 Extract the success value from a TryResult, returning a default if it's an error
 
@@ -26,7 +26,7 @@ Extract the success value from a TryResult, returning a default if it's an error
 
 ### E
 
-`E` *extends* [`TryError`](../interfaces/TryError.md)\<`string`\>
+`E` _extends_ [`TryError`](../interfaces/TryError.md)\<`string`\>
 
 ## Parameters
 

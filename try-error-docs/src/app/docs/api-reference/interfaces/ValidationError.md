@@ -1,12 +1,12 @@
 [**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
-***
+---
 
 [tryError API Documentation](../index.md) / ValidationError
 
 # Interface: ValidationError\<T\>
 
-Defined in: [factories.ts:345](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/factories.ts#L345)
+Defined in: [factories.ts:345](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/factories.ts#L345)
 
 Base type for validation errors with field-level details
 
@@ -23,10 +23,10 @@ const error: FormValidationError = {
   ...createError({ type: "FormValidation", message: "Form validation failed" }),
   fields: {
     email: ["Must be a valid email address"],
-    password: ["Must be at least 8 characters", "Must contain a number"]
+    password: ["Must be at least 8 characters", "Must contain a number"],
   },
   code: "FORM_VALIDATION_ERROR",
-  formId: "user-signup"
+  formId: "user-signup",
 };
 ```
 
@@ -38,7 +38,7 @@ const error: FormValidationError = {
 
 ### T
 
-`T` *extends* `string`
+`T` _extends_ `string`
 
 ## Properties
 
@@ -48,7 +48,7 @@ const error: FormValidationError = {
 readonly optional cause: unknown;
 ```
 
-Defined in: [types.ts:50](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/types.ts#L50)
+Defined in: [types.ts:50](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/types.ts#L50)
 
 The original error or thrown value that caused this error
 
@@ -56,7 +56,7 @@ The original error or thrown value that caused this error
 
 [`TryError`](TryError.md).[`cause`](TryError.md#cause)
 
-***
+---
 
 ### code
 
@@ -64,11 +64,11 @@ The original error or thrown value that caused this error
 readonly code: string;
 ```
 
-Defined in: [factories.ts:355](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/factories.ts#L355)
+Defined in: [factories.ts:355](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/factories.ts#L355)
 
 Validation error code for programmatic handling
 
-***
+---
 
 ### context?
 
@@ -76,7 +76,7 @@ Validation error code for programmatic handling
 readonly optional context: Record<string, unknown>;
 ```
 
-Defined in: [types.ts:45](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/types.ts#L45)
+Defined in: [types.ts:45](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/types.ts#L45)
 
 Additional context data for debugging
 
@@ -84,7 +84,7 @@ Additional context data for debugging
 
 [`TryError`](TryError.md).[`context`](TryError.md#context)
 
-***
+---
 
 ### fields
 
@@ -92,12 +92,12 @@ Additional context data for debugging
 readonly fields: Record<string, string[]>;
 ```
 
-Defined in: [factories.ts:350](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/factories.ts#L350)
+Defined in: [factories.ts:350](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/factories.ts#L350)
 
 Field-level validation errors
 Key is the field name, value is array of error messages for that field
 
-***
+---
 
 ### message
 
@@ -105,7 +105,7 @@ Key is the field name, value is array of error messages for that field
 readonly message: string;
 ```
 
-Defined in: [types.ts:25](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/types.ts#L25)
+Defined in: [types.ts:25](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/types.ts#L25)
 
 Human-readable error message
 
@@ -113,7 +113,7 @@ Human-readable error message
 
 [`TryError`](TryError.md).[`message`](TryError.md#message)
 
-***
+---
 
 ### source
 
@@ -121,7 +121,7 @@ Human-readable error message
 readonly source: string;
 ```
 
-Defined in: [types.ts:35](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/types.ts#L35)
+Defined in: [types.ts:35](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/types.ts#L35)
 
 Source location where the error occurred (file:line:column)
 
@@ -129,7 +129,7 @@ Source location where the error occurred (file:line:column)
 
 [`TryError`](TryError.md).[`source`](TryError.md#source)
 
-***
+---
 
 ### stack?
 
@@ -137,7 +137,7 @@ Source location where the error occurred (file:line:column)
 readonly optional stack: string;
 ```
 
-Defined in: [types.ts:30](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/types.ts#L30)
+Defined in: [types.ts:30](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/types.ts#L30)
 
 Stack trace if available (may be stripped in production)
 
@@ -145,7 +145,7 @@ Stack trace if available (may be stripped in production)
 
 [`TryError`](TryError.md).[`stack`](TryError.md#stack)
 
-***
+---
 
 ### timestamp
 
@@ -153,7 +153,7 @@ Stack trace if available (may be stripped in production)
 readonly timestamp: number;
 ```
 
-Defined in: [types.ts:40](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/types.ts#L40)
+Defined in: [types.ts:40](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/types.ts#L40)
 
 Timestamp when the error was created
 
@@ -161,7 +161,7 @@ Timestamp when the error was created
 
 [`TryError`](TryError.md).[`timestamp`](TryError.md#timestamp)
 
-***
+---
 
 ### type
 
@@ -169,7 +169,7 @@ Timestamp when the error was created
 readonly type: T;
 ```
 
-Defined in: [types.ts:20](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/types.ts#L20)
+Defined in: [types.ts:20](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/types.ts#L20)
 
 The type of error - used for discriminated unions
 

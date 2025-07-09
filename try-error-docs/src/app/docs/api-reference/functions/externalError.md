@@ -1,6 +1,6 @@
 [**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
-***
+---
 
 [tryError API Documentation](../index.md) / externalError
 
@@ -8,13 +8,14 @@
 
 ```ts
 function externalError<T>(
-   service, 
-   operation, 
-   message, 
-context?): ExternalError<T>;
+  service,
+  operation,
+  message,
+  context?
+): ExternalError<T>;
 ```
 
-Defined in: [factories.ts:671](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/factories.ts#L671)
+Defined in: [factories.ts:671](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/factories.ts#L671)
 
 IMPROVED: More intuitive external service error factory
 
@@ -22,7 +23,7 @@ IMPROVED: More intuitive external service error factory
 
 ### T
 
-`T` *extends* `string` = `"ExternalError"`
+`T` _extends_ `string` = `"ExternalError"`
 
 ## Parameters
 
@@ -41,8 +42,8 @@ IMPROVED: More intuitive external service error factory
 ### context?
 
 `Record`\<`string`, `unknown`\> & \{
-  `externalId?`: `string`;
-  `statusCode?`: `number`;
+`externalId?`: `string`;
+`statusCode?`: `number`;
 \}
 
 ## Returns
@@ -52,8 +53,8 @@ IMPROVED: More intuitive external service error factory
 ## Example
 
 ```typescript
-const error = externalError('API', 'failed', 'Service unavailable', {
-  transactionId: 'tx_123',
-  statusCode: 503
+const error = externalError("API", "failed", "Service unavailable", {
+  transactionId: "tx_123",
+  statusCode: 503,
 });
 ```

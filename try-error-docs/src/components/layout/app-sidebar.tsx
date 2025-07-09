@@ -355,7 +355,7 @@ export function AppSidebar() {
           </div>
           <div className="pt-2 border-t border-border">
             <a
-              href="https://github.com/oconnorjohnson/tryError"
+              href="https://github.com/oconnorjohnson/try-error"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground transition-colors"

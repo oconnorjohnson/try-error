@@ -1,12 +1,12 @@
 [**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
-***
+---
 
 [tryError API Documentation](../index.md) / PluginAPI
 
 # Interface: PluginAPI
 
-Defined in: [plugins.ts:398](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/plugins.ts#L398)
+Defined in: [plugins.ts:398](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/plugins.ts#L398)
 
 Plugin API provided to plugins during setup
 
@@ -18,7 +18,7 @@ Plugin API provided to plugins during setup
 addMiddleware: (...middleware) => ErrorMiddleware[];
 ```
 
-Defined in: [plugins.ts:403](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/plugins.ts#L403)
+Defined in: [plugins.ts:403](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/plugins.ts#L403)
 
 #### Parameters
 
@@ -30,7 +30,7 @@ Defined in: [plugins.ts:403](https://github.com/oconnorjohnson/tryError/blob/e3a
 
 [`ErrorMiddleware`](../type-aliases/ErrorMiddleware.md)[]
 
-***
+---
 
 ### addUtility()
 
@@ -38,7 +38,7 @@ Defined in: [plugins.ts:403](https://github.com/oconnorjohnson/tryError/blob/e3a
 addUtility: (name, fn) => Record<string, Function>;
 ```
 
-Defined in: [plugins.ts:404](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/plugins.ts#L404)
+Defined in: [plugins.ts:404](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/plugins.ts#L404)
 
 #### Parameters
 
@@ -54,15 +54,16 @@ Defined in: [plugins.ts:404](https://github.com/oconnorjohnson/tryError/blob/e3a
 
 `Record`\<`string`, `Function`\>
 
-***
+---
 
 ### createErrorType()
 
 ```ts
-createErrorType: (type, factory) => Record<string, (message, context?) => TryError>;
+createErrorType: (type, factory) =>
+  Record<string, (message, context?) => TryError>;
 ```
 
-Defined in: [plugins.ts:399](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/plugins.ts#L399)
+Defined in: [plugins.ts:399](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/plugins.ts#L399)
 
 #### Parameters
 

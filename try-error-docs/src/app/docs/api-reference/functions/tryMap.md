@@ -1,6 +1,6 @@
 [**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
-***
+---
 
 [tryError API Documentation](../index.md) / tryMap
 
@@ -10,7 +10,7 @@
 function tryMap<T, U, E>(result, mapper): TryResult<U, TryError<string> | E>;
 ```
 
-Defined in: [sync.ts:182](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/sync.ts#L182)
+Defined in: [sync.ts:182](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/sync.ts#L182)
 
 Transform a successful result, leaving errors unchanged
 
@@ -26,7 +26,7 @@ Transform a successful result, leaving errors unchanged
 
 ### E
 
-`E` *extends* [`TryError`](../interfaces/TryError.md)\<`string`\>
+`E` _extends_ [`TryError`](../interfaces/TryError.md)\<`string`\>
 
 ## Parameters
 

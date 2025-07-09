@@ -1,19 +1,16 @@
 [**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
-***
+---
 
 [tryError API Documentation](../index.md) / combineErrors
 
 # Function: combineErrors()
 
 ```ts
-function combineErrors<E>(
-   errors, 
-   type, 
-   message): TryError;
+function combineErrors<E>(errors, type, message): TryError;
 ```
 
-Defined in: [utils.ts:390](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/utils.ts#L390)
+Defined in: [utils.ts:390](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/utils.ts#L390)
 
 Combine multiple errors into a single error
 
@@ -21,7 +18,7 @@ Combine multiple errors into a single error
 
 ### E
 
-`E` *extends* [`TryError`](../interfaces/TryError.md)\<`string`\>
+`E` _extends_ [`TryError`](../interfaces/TryError.md)\<`string`\>
 
 ## Parameters
 
@@ -53,6 +50,9 @@ A single error containing all the individual errors
 
 ```typescript
 const validationErrors = filterErrors(validationResults);
-const combinedError = combineErrors(validationErrors, "MultipleValidationErrors",
-  `${validationErrors.length} validation errors occurred`);
+const combinedError = combineErrors(
+  validationErrors,
+  "MultipleValidationErrors",
+  `${validationErrors.length} validation errors occurred`
+);
 ```

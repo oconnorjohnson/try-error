@@ -1,16 +1,25 @@
 [**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
-***
+---
 
 [tryError API Documentation](../index.md) / tryAllAsync
 
 # Function: tryAllAsync()
 
 ```ts
-function tryAllAsync<T>(resultPromises): Promise<TryResult<{ [K in string | number | symbol]: T[K<K>] extends Promise<any> ? U : never }, TryError<string>>>;
+function tryAllAsync<T>(
+  resultPromises
+): Promise<
+  TryResult<
+    {
+      [K in string | number | symbol]: T[K<K>] extends Promise<any> ? U : never;
+    },
+    TryError<string>
+  >
+>;
 ```
 
-Defined in: [async.ts:312](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/async.ts#L312)
+Defined in: [async.ts:312](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/async.ts#L312)
 
 Combine multiple async TryResults, succeeding only if all succeed
 
@@ -18,7 +27,7 @@ Combine multiple async TryResults, succeeding only if all succeed
 
 ### T
 
-`T` *extends* readonly `Promise`\<`any`\>[]
+`T` _extends_ readonly `Promise`\<`any`\>[]
 
 ## Parameters
 
@@ -38,8 +47,8 @@ Promise of array of success values or first error encountered
 
 ```typescript
 const results = await tryAllAsync([
-  tryAsync(() => fetch('/api/user')),
-  tryAsync(() => fetch('/api/posts')),
-  tryAsync(() => fetch('/api/comments'))
+  tryAsync(() => fetch("/api/user")),
+  tryAsync(() => fetch("/api/posts")),
+  tryAsync(() => fetch("/api/comments")),
 ]);
 ```

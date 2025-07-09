@@ -1,6 +1,6 @@
 [**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
-***
+---
 
 [tryError API Documentation](../index.md) / getInternStats
 
@@ -17,7 +17,7 @@ function getInternStats(): {
 };
 ```
 
-Defined in: [intern.ts:190](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/intern.ts#L190)
+Defined in: [intern.ts:190](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/intern.ts#L190)
 
 Get intern pool statistics
 

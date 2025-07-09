@@ -1,12 +1,12 @@
 [**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
-***
+---
 
 [tryError API Documentation](../index.md) / PluginManager
 
 # Class: PluginManager
 
-Defined in: [plugins.ts:98](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/plugins.ts#L98)
+Defined in: [plugins.ts:98](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/plugins.ts#L98)
 
 Plugin manager
 
@@ -30,7 +30,7 @@ new PluginManager(): PluginManager;
 disable(name): Promise<void>;
 ```
 
-Defined in: [plugins.ts:201](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/plugins.ts#L201)
+Defined in: [plugins.ts:201](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/plugins.ts#L201)
 
 Disable a plugin
 
@@ -44,7 +44,7 @@ Disable a plugin
 
 `Promise`\<`void`\>
 
-***
+---
 
 ### enable()
 
@@ -52,7 +52,7 @@ Disable a plugin
 enable(name): Promise<void>;
 ```
 
-Defined in: [plugins.ts:171](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/plugins.ts#L171)
+Defined in: [plugins.ts:171](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/plugins.ts#L171)
 
 Enable a plugin
 
@@ -66,7 +66,7 @@ Enable a plugin
 
 `Promise`\<`void`\>
 
-***
+---
 
 ### get()
 
@@ -74,7 +74,7 @@ Enable a plugin
 get(name): undefined | Plugin;
 ```
 
-Defined in: [plugins.ts:250](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/plugins.ts#L250)
+Defined in: [plugins.ts:250](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/plugins.ts#L250)
 
 Get a specific plugin
 
@@ -88,7 +88,7 @@ Get a specific plugin
 
 `undefined` \| [`Plugin`](../interfaces/Plugin.md)
 
-***
+---
 
 ### getAllErrorTypes()
 
@@ -96,7 +96,7 @@ Get a specific plugin
 getAllErrorTypes(): Record<string, (message, context?) => TryError>;
 ```
 
-Defined in: [plugins.ts:314](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/plugins.ts#L314)
+Defined in: [plugins.ts:314](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/plugins.ts#L314)
 
 Get all custom error types from enabled plugins
 
@@ -104,7 +104,7 @@ Get all custom error types from enabled plugins
 
 `Record`\<`string`, (`message`, `context?`) => [`TryError`](../interfaces/TryError.md)\>
 
-***
+---
 
 ### getAllMiddleware()
 
@@ -112,7 +112,7 @@ Get all custom error types from enabled plugins
 getAllMiddleware(): ErrorMiddleware[];
 ```
 
-Defined in: [plugins.ts:296](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/plugins.ts#L296)
+Defined in: [plugins.ts:296](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/plugins.ts#L296)
 
 Get all middleware from enabled plugins
 
@@ -120,7 +120,7 @@ Get all middleware from enabled plugins
 
 [`ErrorMiddleware`](../type-aliases/ErrorMiddleware.md)[]
 
-***
+---
 
 ### getAllUtilities()
 
@@ -128,7 +128,7 @@ Get all middleware from enabled plugins
 getAllUtilities(): Record<string, Function>;
 ```
 
-Defined in: [plugins.ts:338](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/plugins.ts#L338)
+Defined in: [plugins.ts:338](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/plugins.ts#L338)
 
 Get all utilities from enabled plugins
 
@@ -136,7 +136,7 @@ Get all utilities from enabled plugins
 
 `Record`\<`string`, `Function`\>
 
-***
+---
 
 ### getEnabled()
 
@@ -144,7 +144,7 @@ Get all utilities from enabled plugins
 getEnabled(): PluginMetadata[];
 ```
 
-Defined in: [plugins.ts:241](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/plugins.ts#L241)
+Defined in: [plugins.ts:241](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/plugins.ts#L241)
 
 Get all enabled plugins
 
@@ -152,7 +152,7 @@ Get all enabled plugins
 
 [`PluginMetadata`](../interfaces/PluginMetadata.md)[]
 
-***
+---
 
 ### getInstalled()
 
@@ -160,7 +160,7 @@ Get all enabled plugins
 getInstalled(): PluginMetadata[];
 ```
 
-Defined in: [plugins.ts:234](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/plugins.ts#L234)
+Defined in: [plugins.ts:234](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/plugins.ts#L234)
 
 Get all installed plugins
 
@@ -168,7 +168,7 @@ Get all installed plugins
 
 [`PluginMetadata`](../interfaces/PluginMetadata.md)[]
 
-***
+---
 
 ### getMergedConfig()
 
@@ -176,7 +176,7 @@ Get all installed plugins
 getMergedConfig(): Partial<TryErrorConfig>;
 ```
 
-Defined in: [plugins.ts:271](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/plugins.ts#L271)
+Defined in: [plugins.ts:271](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/plugins.ts#L271)
 
 Get merged configuration from all enabled plugins
 
@@ -184,7 +184,7 @@ Get merged configuration from all enabled plugins
 
 `Partial`\<[`TryErrorConfig`](../interfaces/TryErrorConfig.md)\>
 
-***
+---
 
 ### install()
 
@@ -192,7 +192,7 @@ Get merged configuration from all enabled plugins
 install(plugin): Promise<void>;
 ```
 
-Defined in: [plugins.ts:106](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/plugins.ts#L106)
+Defined in: [plugins.ts:106](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/plugins.ts#L106)
 
 Install a plugin
 
@@ -206,7 +206,7 @@ Install a plugin
 
 `Promise`\<`void`\>
 
-***
+---
 
 ### isEnabled()
 
@@ -214,7 +214,7 @@ Install a plugin
 isEnabled(name): boolean;
 ```
 
-Defined in: [plugins.ts:264](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/plugins.ts#L264)
+Defined in: [plugins.ts:264](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/plugins.ts#L264)
 
 Check if a plugin is enabled
 
@@ -228,7 +228,7 @@ Check if a plugin is enabled
 
 `boolean`
 
-***
+---
 
 ### isInstalled()
 
@@ -236,7 +236,7 @@ Check if a plugin is enabled
 isInstalled(name): boolean;
 ```
 
-Defined in: [plugins.ts:257](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/plugins.ts#L257)
+Defined in: [plugins.ts:257](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/plugins.ts#L257)
 
 Check if a plugin is installed
 
@@ -250,7 +250,7 @@ Check if a plugin is installed
 
 `boolean`
 
-***
+---
 
 ### notifyConfigChange()
 
@@ -258,7 +258,7 @@ Check if a plugin is installed
 notifyConfigChange(config): Promise<void>;
 ```
 
-Defined in: [plugins.ts:356](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/plugins.ts#L356)
+Defined in: [plugins.ts:356](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/plugins.ts#L356)
 
 Notify all plugins of a configuration change
 
@@ -272,7 +272,7 @@ Notify all plugins of a configuration change
 
 `Promise`\<`void`\>
 
-***
+---
 
 ### uninstall()
 
@@ -280,7 +280,7 @@ Notify all plugins of a configuration change
 uninstall(name): Promise<void>;
 ```
 
-Defined in: [plugins.ts:137](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/plugins.ts#L137)
+Defined in: [plugins.ts:137](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/plugins.ts#L137)
 
 Uninstall a plugin
 

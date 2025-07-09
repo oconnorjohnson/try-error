@@ -1,24 +1,26 @@
 [**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
-***
+---
 
 [tryError API Documentation](../index.md) / unwrapTryResult
 
 # Function: unwrapTryResult()
 
 ```ts
-function unwrapTryResult<T, E>(result): 
+function unwrapTryResult<T, E>(
+  result
+):
   | {
-  data: T;
-  success: true;
-}
+      data: T;
+      success: true;
+    }
   | {
-  error: E;
-  success: false;
-};
+      error: E;
+      success: false;
+    };
 ```
 
-Defined in: [types.ts:169](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/types.ts#L169)
+Defined in: [types.ts:169](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/types.ts#L169)
 
 IMPROVED: Type-safe result unwrapping with better inference
 
@@ -30,7 +32,7 @@ IMPROVED: Type-safe result unwrapping with better inference
 
 ### E
 
-`E` *extends* [`TryError`](../interfaces/TryError.md)\<`string`\>
+`E` _extends_ [`TryError`](../interfaces/TryError.md)\<`string`\>
 
 ## Parameters
 
@@ -40,11 +42,11 @@ IMPROVED: Type-safe result unwrapping with better inference
 
 ## Returns
 
-  \| \{
-  `data`: `T`;
-  `success`: `true`;
+\| \{
+`data`: `T`;
+`success`: `true`;
 \}
-  \| \{
-  `error`: `E`;
-  `success`: `false`;
+\| \{
+`error`: `E`;
+`success`: `false`;
 \}

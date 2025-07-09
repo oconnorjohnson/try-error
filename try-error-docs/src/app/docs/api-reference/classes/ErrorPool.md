@@ -1,12 +1,12 @@
 [**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
-***
+---
 
 [tryError API Documentation](../index.md) / ErrorPool
 
 # Class: ErrorPool
 
-Defined in: [pool.ts:48](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/pool.ts#L48)
+Defined in: [pool.ts:48](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/pool.ts#L48)
 
 Object pool for TryError instances
 
@@ -18,7 +18,7 @@ Object pool for TryError instances
 new ErrorPool(maxSize): ErrorPool;
 ```
 
-Defined in: [pool.ts:59](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/pool.ts#L59)
+Defined in: [pool.ts:59](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/pool.ts#L59)
 
 #### Parameters
 
@@ -38,7 +38,7 @@ Defined in: [pool.ts:59](https://github.com/oconnorjohnson/tryError/blob/e3ae030
 acquire<T>(): PoolableError<T> & TryError<T>;
 ```
 
-Defined in: [pool.ts:106](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/pool.ts#L106)
+Defined in: [pool.ts:106](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/pool.ts#L106)
 
 Acquire an error from the pool
 
@@ -46,13 +46,13 @@ Acquire an error from the pool
 
 ##### T
 
-`T` *extends* `string` = `string`
+`T` _extends_ `string` = `string`
 
 #### Returns
 
 `PoolableError`\<`T`\> & [`TryError`](../interfaces/TryError.md)\<`T`\>
 
-***
+---
 
 ### clear()
 
@@ -60,7 +60,7 @@ Acquire an error from the pool
 clear(): void;
 ```
 
-Defined in: [pool.ts:156](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/pool.ts#L156)
+Defined in: [pool.ts:156](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/pool.ts#L156)
 
 Clear the pool
 
@@ -68,7 +68,7 @@ Clear the pool
 
 `void`
 
-***
+---
 
 ### getStats()
 
@@ -85,7 +85,7 @@ getStats(): {
 };
 ```
 
-Defined in: [pool.ts:143](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/pool.ts#L143)
+Defined in: [pool.ts:143](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/pool.ts#L143)
 
 Get pool statistics
 
@@ -152,7 +152,7 @@ poolSize: number;
 returns: number = 0;
 ```
 
-***
+---
 
 ### release()
 
@@ -160,7 +160,7 @@ returns: number = 0;
 release(error): void;
 ```
 
-Defined in: [pool.ts:125](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/pool.ts#L125)
+Defined in: [pool.ts:125](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/pool.ts#L125)
 
 Release an error back to the pool
 
@@ -174,7 +174,7 @@ Release an error back to the pool
 
 `void`
 
-***
+---
 
 ### resize()
 
@@ -182,7 +182,7 @@ Release an error back to the pool
 resize(newSize): void;
 ```
 
-Defined in: [pool.ts:164](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/pool.ts#L164)
+Defined in: [pool.ts:164](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/pool.ts#L164)
 
 Resize the pool
 

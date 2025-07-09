@@ -1,16 +1,19 @@
 [**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
-***
+---
 
 [tryError API Documentation](../index.md) / tryChainAsync
 
 # Function: tryChainAsync()
 
 ```ts
-function tryChainAsync<T, U, E1, E2>(resultPromise, chainer): Promise<TryResult<U, E1 | E2>>;
+function tryChainAsync<T, U, E1, E2>(
+  resultPromise,
+  chainer
+): Promise<TryResult<U, E1 | E2>>;
 ```
 
-Defined in: [async.ts:253](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/async.ts#L253)
+Defined in: [async.ts:253](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/async.ts#L253)
 
 Chain async operations that return Promise<TryResult>, short-circuiting on errors
 
@@ -26,11 +29,11 @@ Chain async operations that return Promise<TryResult>, short-circuiting on error
 
 ### E1
 
-`E1` *extends* [`TryError`](../interfaces/TryError.md)\<`string`\>
+`E1` _extends_ [`TryError`](../interfaces/TryError.md)\<`string`\>
 
 ### E2
 
-`E2` *extends* [`TryError`](../interfaces/TryError.md)\<`string`\>
+`E2` _extends_ [`TryError`](../interfaces/TryError.md)\<`string`\>
 
 ## Parameters
 
@@ -56,7 +59,7 @@ Promise of chained result or first error encountered
 
 ```typescript
 const result = await tryChainAsync(
-  tryAsync(() => fetch('/api/user')),
+  tryAsync(() => fetch("/api/user")),
   async (response) => tryAsync(() => response.json())
 );
 ```

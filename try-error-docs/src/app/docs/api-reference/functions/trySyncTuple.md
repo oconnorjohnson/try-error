@@ -1,6 +1,6 @@
 [**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
-***
+---
 
 [tryError API Documentation](../index.md) / trySyncTuple
 
@@ -10,7 +10,7 @@
 function trySyncTuple<T>(fn, options?): TryTuple<T, TryError<string>>;
 ```
 
-Defined in: [sync.ts:94](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/sync.ts#L94)
+Defined in: [sync.ts:94](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/sync.ts#L94)
 
 Wrap a synchronous operation and return a tuple [result, error]
 Go-style error handling
@@ -46,8 +46,8 @@ Tuple with [result, null] on success or [null, error] on failure
 ```typescript
 const [result, error] = trySyncTuple(() => JSON.parse(jsonString));
 if (error) {
-  console.error('Parse failed:', error.message);
+  console.error("Parse failed:", error.message);
 } else {
-  console.log('Parsed:', result);
+  console.log("Parsed:", result);
 }
 ```

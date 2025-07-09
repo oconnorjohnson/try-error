@@ -1,6 +1,6 @@
 [**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
-***
+---
 
 [tryError API Documentation](../index.md) / tryCall
 
@@ -9,10 +9,13 @@
 ## Call Signature
 
 ```ts
-function tryCall<TArgs, TReturn>(fn, ...args): TryResult<TReturn, TryError<string>>;
+function tryCall<TArgs, TReturn>(
+  fn,
+  ...args
+): TryResult<TReturn, TryError<string>>;
 ```
 
-Defined in: [sync.ts:122](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/sync.ts#L122)
+Defined in: [sync.ts:122](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/sync.ts#L122)
 
 Call a function with arguments, wrapping any thrown errors
 
@@ -20,7 +23,7 @@ Call a function with arguments, wrapping any thrown errors
 
 #### TArgs
 
-`TArgs` *extends* readonly `unknown`[]
+`TArgs` _extends_ readonly `unknown`[]
 
 #### TReturn
 
@@ -60,12 +63,13 @@ const result2 = tryCall(JSON.parse, { errorType: "ParseError" }, invalidJson);
 
 ```ts
 function tryCall<TArgs, TReturn>(
-   fn, 
-   options, ...
-args): TryResult<TReturn, TryError<string>>;
+  fn,
+  options,
+  ...args
+): TryResult<TReturn, TryError<string>>;
 ```
 
-Defined in: [sync.ts:126](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/sync.ts#L126)
+Defined in: [sync.ts:126](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/sync.ts#L126)
 
 Call a function with arguments, wrapping any thrown errors
 
@@ -73,7 +77,7 @@ Call a function with arguments, wrapping any thrown errors
 
 #### TArgs
 
-`TArgs` *extends* readonly `unknown`[]
+`TArgs` _extends_ readonly `unknown`[]
 
 #### TReturn
 

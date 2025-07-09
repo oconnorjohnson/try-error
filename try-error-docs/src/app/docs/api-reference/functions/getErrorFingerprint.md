@@ -1,6 +1,6 @@
 [**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
-***
+---
 
 [tryError API Documentation](../index.md) / getErrorFingerprint
 
@@ -10,7 +10,7 @@
 function getErrorFingerprint(error, fields): string;
 ```
 
-Defined in: [utils.ts:772](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/utils.ts#L772)
+Defined in: [utils.ts:772](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/utils.ts#L772)
 
 Create a fingerprint for an error for deduplication
 

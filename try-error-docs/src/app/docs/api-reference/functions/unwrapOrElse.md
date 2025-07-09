@@ -1,6 +1,6 @@
 [**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
-***
+---
 
 [tryError API Documentation](../index.md) / unwrapOrElse
 
@@ -10,7 +10,7 @@
 function unwrapOrElse<T, D, E>(result, defaultFn): T | D;
 ```
 
-Defined in: [sync.ts:283](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/sync.ts#L283)
+Defined in: [sync.ts:283](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/sync.ts#L283)
 
 Extract the success value from a TryResult, computing a default if it's an error
 
@@ -26,7 +26,7 @@ Extract the success value from a TryResult, computing a default if it's an error
 
 ### E
 
-`E` *extends* [`TryError`](../interfaces/TryError.md)\<`string`\>
+`E` _extends_ [`TryError`](../interfaces/TryError.md)\<`string`\>
 
 ## Parameters
 
@@ -53,7 +53,7 @@ The success value or computed default
 ```typescript
 const result = trySync(() => JSON.parse(jsonString));
 const parsed = unwrapOrElse(result, (error) => {
-  console.warn('Parse failed:', error.message);
+  console.warn("Parse failed:", error.message);
   return {};
 });
 ```

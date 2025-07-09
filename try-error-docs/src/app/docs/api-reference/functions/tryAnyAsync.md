@@ -1,16 +1,18 @@
 [**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
-***
+---
 
 [tryError API Documentation](../index.md) / tryAnyAsync
 
 # Function: tryAnyAsync()
 
 ```ts
-function tryAnyAsync<T>(attemptPromises): Promise<TryResult<T, TryError<string>>>;
+function tryAnyAsync<T>(
+  attemptPromises
+): Promise<TryResult<T, TryError<string>>>;
 ```
 
-Defined in: [async.ts:353](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/async.ts#L353)
+Defined in: [async.ts:353](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/async.ts#L353)
 
 Try multiple async operations, returning the first successful result
 Uses Promise.allSettled to wait for all attempts
@@ -39,8 +41,8 @@ Promise of first successful result or last error if all fail
 
 ```typescript
 const result = await tryAnyAsync([
-  tryAsync(() => fetch('/api/primary')),
-  tryAsync(() => fetch('/api/fallback')),
-  tryAsync(() => fetch('/api/backup'))
+  tryAsync(() => fetch("/api/primary")),
+  tryAsync(() => fetch("/api/fallback")),
+  tryAsync(() => fetch("/api/backup")),
 ]);
 ```

@@ -1,12 +1,12 @@
 [**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
-***
+---
 
 [tryError API Documentation](../index.md) / ErrorEventEmitter
 
 # Class: ErrorEventEmitter
 
-Defined in: [events.ts:51](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/events.ts#L51)
+Defined in: [events.ts:51](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/events.ts#L51)
 
 Event emitter for error lifecycle
 
@@ -30,7 +30,7 @@ new ErrorEventEmitter(): ErrorEventEmitter;
 clear(): void;
 ```
 
-Defined in: [events.ts:180](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/events.ts#L180)
+Defined in: [events.ts:180](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/events.ts#L180)
 
 Clear all listeners
 
@@ -38,7 +38,7 @@ Clear all listeners
 
 `void`
 
-***
+---
 
 ### emit()
 
@@ -46,7 +46,7 @@ Clear all listeners
 emit(event): void;
 ```
 
-Defined in: [events.ts:118](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/events.ts#L118)
+Defined in: [events.ts:118](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/events.ts#L118)
 
 Emit an event
 
@@ -60,7 +60,7 @@ Emit an event
 
 `void`
 
-***
+---
 
 ### getListenerCount()
 
@@ -68,7 +68,7 @@ Emit an event
 getListenerCount(eventType?): number;
 ```
 
-Defined in: [events.ts:189](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/events.ts#L189)
+Defined in: [events.ts:189](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/events.ts#L189)
 
 Get listener count
 
@@ -82,7 +82,7 @@ Get listener count
 
 `number`
 
-***
+---
 
 ### off()
 
@@ -90,7 +90,7 @@ Get listener count
 off(eventType, listener): void;
 ```
 
-Defined in: [events.ts:104](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/events.ts#L104)
+Defined in: [events.ts:104](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/events.ts#L104)
 
 Unsubscribe from a specific event type
 
@@ -108,7 +108,7 @@ Unsubscribe from a specific event type
 
 `void`
 
-***
+---
 
 ### offAll()
 
@@ -116,7 +116,7 @@ Unsubscribe from a specific event type
 offAll(listener): void;
 ```
 
-Defined in: [events.ts:111](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/events.ts#L111)
+Defined in: [events.ts:111](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/events.ts#L111)
 
 Unsubscribe from all events
 
@@ -130,7 +130,7 @@ Unsubscribe from all events
 
 `void`
 
-***
+---
 
 ### on()
 
@@ -138,7 +138,7 @@ Unsubscribe from all events
 on(eventType, listener): () => void;
 ```
 
-Defined in: [events.ts:61](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/events.ts#L61)
+Defined in: [events.ts:61](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/events.ts#L61)
 
 Subscribe to a specific event type
 
@@ -162,7 +162,7 @@ Subscribe to a specific event type
 
 `void`
 
-***
+---
 
 ### onAll()
 
@@ -170,7 +170,7 @@ Subscribe to a specific event type
 onAll(listener): () => void;
 ```
 
-Defined in: [events.ts:76](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/events.ts#L76)
+Defined in: [events.ts:76](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/events.ts#L76)
 
 Subscribe to all events
 
@@ -190,7 +190,7 @@ Subscribe to all events
 
 `void`
 
-***
+---
 
 ### once()
 
@@ -198,7 +198,7 @@ Subscribe to all events
 once(eventType, listener): () => void;
 ```
 
-Defined in: [events.ts:88](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/events.ts#L88)
+Defined in: [events.ts:88](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/events.ts#L88)
 
 Subscribe to an event once
 

@@ -1,12 +1,12 @@
 [**tryError API Documentation v0.0.1-alpha.1**](../index.md)
 
-***
+---
 
 [tryError API Documentation](../index.md) / PluginHooks
 
 # Interface: PluginHooks
 
-Defined in: [plugins.ts:26](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/plugins.ts#L26)
+Defined in: [plugins.ts:26](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/plugins.ts#L26)
 
 Plugin lifecycle hooks
 
@@ -18,7 +18,7 @@ Plugin lifecycle hooks
 optional onConfigChange: (config) => void | Promise<void>;
 ```
 
-Defined in: [plugins.ts:50](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/plugins.ts#L50)
+Defined in: [plugins.ts:50](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/plugins.ts#L50)
 
 Called when configuration changes
 
@@ -32,7 +32,7 @@ Called when configuration changes
 
 `void` \| `Promise`\<`void`\>
 
-***
+---
 
 ### onDisable()?
 
@@ -40,7 +40,7 @@ Called when configuration changes
 optional onDisable: () => void | Promise<void>;
 ```
 
-Defined in: [plugins.ts:45](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/plugins.ts#L45)
+Defined in: [plugins.ts:45](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/plugins.ts#L45)
 
 Called when the plugin is disabled
 
@@ -48,7 +48,7 @@ Called when the plugin is disabled
 
 `void` \| `Promise`\<`void`\>
 
-***
+---
 
 ### onEnable()?
 
@@ -56,7 +56,7 @@ Called when the plugin is disabled
 optional onEnable: () => void | Promise<void>;
 ```
 
-Defined in: [plugins.ts:40](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/plugins.ts#L40)
+Defined in: [plugins.ts:40](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/plugins.ts#L40)
 
 Called when the plugin is enabled
 
@@ -64,7 +64,7 @@ Called when the plugin is enabled
 
 `void` \| `Promise`\<`void`\>
 
-***
+---
 
 ### onInstall()?
 
@@ -72,7 +72,7 @@ Called when the plugin is enabled
 optional onInstall: () => void | Promise<void>;
 ```
 
-Defined in: [plugins.ts:30](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/plugins.ts#L30)
+Defined in: [plugins.ts:30](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/plugins.ts#L30)
 
 Called when the plugin is installed
 
@@ -80,7 +80,7 @@ Called when the plugin is installed
 
 `void` \| `Promise`\<`void`\>
 
-***
+---
 
 ### onUninstall()?
 
@@ -88,7 +88,7 @@ Called when the plugin is installed
 optional onUninstall: () => void | Promise<void>;
 ```
 
-Defined in: [plugins.ts:35](https://github.com/oconnorjohnson/tryError/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/plugins.ts#L35)
+Defined in: [plugins.ts:35](https://github.com/oconnorjohnson/try-error/blob/e3ae0308069a4fba073f4543d527ad76373db795/src/plugins.ts#L35)
 
 Called when the plugin is uninstalled
 
