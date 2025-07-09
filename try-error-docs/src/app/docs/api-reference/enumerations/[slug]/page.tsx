@@ -72,12 +72,13 @@ function getEnumerationData(slug: string) {
   };
 }
 
-export default function EnumerationPage({
+export default async function EnumerationPage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
-  const enumerationData = getEnumerationData(params.slug);
+  const { slug } = await params;
+  const enumerationData = getEnumerationData(slug);
 
   if (!enumerationData) {
     notFound();
