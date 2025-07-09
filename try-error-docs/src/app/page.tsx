@@ -248,7 +248,7 @@ return result; // Type-safe success value`}
           </a>
 
           <a
-            href="/docs/react"
+            href="/docs/react/installation"
             className="group p-5 sm:p-6 border border-border bg-card rounded-xl hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10"
           >
             <div className="font-semibold text-base sm:text-lg mb-1 sm:mb-2 group-hover:text-primary transition-colors">
