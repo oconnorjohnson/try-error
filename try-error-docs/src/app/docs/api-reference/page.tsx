@@ -53,6 +53,24 @@ const apiSections = [
       { name: "ConfigPresets", description: "Pre-defined configurations" },
     ],
   },
+  {
+    title: "Classes",
+    description: "Class definitions and implementations",
+    path: "/docs/api-reference/classes",
+    icon: Package,
+    items: [
+      { name: "ErrorPool", description: "Error pooling for performance" },
+      { name: "PluginManager", description: "Plugin system management" },
+      { name: "CircuitBreaker", description: "Circuit breaker pattern" },
+    ],
+  },
+  {
+    title: "Enumerations",
+    description: "Enumeration values and constants",
+    path: "/docs/api-reference/enumerations",
+    icon: FileText,
+    items: [{ name: "ErrorFlags", description: "Error flag constants" }],
+  },
 ];
 
 export default function ApiReferencePage() {
