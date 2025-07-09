@@ -392,14 +392,23 @@ export function useTry<T>(
       }
 
       // Handle unexpected errors
+      const unexpectedError = createError({
+        type: "UNEXPECTED_ERROR",
+        message: error instanceof Error ? error.message : "Unknown error",
+        context: {
+          originalError: error,
+          source: "useTry",
+          hookType: "useTry",
+        },
+        cause: error,
+      });
+
+      // Emit event for observability
+      emitErrorCreated(unexpectedError);
+
       setState({
         data: null,
-        error: createError({
-          type: "UNEXPECTED_ERROR",
-          message: error instanceof Error ? error.message : "Unknown error",
-          context: { originalError: error },
-          cause: error,
-        }),
+        error: unexpectedError,
         isLoading: false,
         isSuccess: false,
         isError: true,
