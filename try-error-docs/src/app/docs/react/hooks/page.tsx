@@ -404,6 +404,236 @@ function TodoList({ todos, setTodos }: {
 
         <Card>
           <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Badge>useCleanup</Badge>
+              Memory Management Hook
+            </CardTitle>
+            <CardDescription>
+              Universal cleanup hook for proper memory management in React
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div>
+              <h4 className="font-semibold mb-2">Basic Usage</h4>
+              <CodeBlock language="typescript" title="useCleanup basic example">
+                {`import { useCleanup } from '@tryError/react';
+
+function DataFetcher() {
+  const { isMounted, addCleanup, createAbortController } = useCleanup();
+  const [data, setData] = useState(null);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const controller = createAbortController();
+
+    async function fetchData() {
+      try {
+        const response = await fetch('/api/data', { 
+          signal: controller.signal 
+        });
+        
+        if (isMounted()) {
+          setData(await response.json());
+        }
+      } catch (err) {
+        if (isMounted() && !controller.signal.aborted) {
+          setError(err);
+        }
+      }
+    }
+
+    fetchData();
+
+    // Register additional cleanup
+    addCleanup(() => {
+      console.log('Component cleanup executed');
+    });
+  }, [isMounted, addCleanup, createAbortController]);
+
+  return (
+    <div>
+      {error && <div>Error: {error.message}</div>}
+      {data && <div>Data: {JSON.stringify(data)}</div>}
+    </div>
+  );
+}`}
+              </CodeBlock>
+            </div>
+
+            <div>
+              <h4 className="font-semibold mb-2">
+                Advanced Usage with Ref Management
+              </h4>
+              <CodeBlock
+                language="typescript"
+                title="useCleanup with ref nullification"
+              >
+                {`import { useCleanup } from '@tryError/react';
+
+function VideoPlayer({ videoUrl }: { videoUrl: string }) {
+  const { isMounted, addCleanup, createAbortController, nullifyRef } = useCleanup();
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const streamRef = useRef<MediaStream | null>(null);
+
+  useEffect(() => {
+    const controller = createAbortController();
+
+    async function setupVideo() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        streamRef.current = stream;
+        
+        if (isMounted() && videoRef.current) {
+          videoRef.current.srcObject = stream;
+        }
+
+        // Register cleanup for the stream
+        addCleanup(() => {
+          if (streamRef.current) {
+            streamRef.current.getTracks().forEach(track => track.stop());
+          }
+        });
+
+        // Register ref for nullification
+        nullifyRef(streamRef);
+        
+      } catch (err) {
+        if (isMounted()) {
+          console.error('Failed to setup video:', err);
+        }
+      }
+    }
+
+    setupVideo();
+  }, [videoUrl, isMounted, addCleanup, createAbortController, nullifyRef]);
+
+  return <video ref={videoRef} autoPlay muted />;
+}`}
+              </CodeBlock>
+            </div>
+
+            <div>
+              <h4 className="font-semibold mb-2">Custom Hook Integration</h4>
+              <CodeBlock
+                language="typescript"
+                title="useCleanup in custom hooks"
+              >
+                {`import { useCleanup } from '@tryError/react';
+
+function useWebSocket(url: string) {
+  const { isMounted, addCleanup, createAbortController } = useCleanup();
+  const [socket, setSocket] = useState<WebSocket | null>(null);
+  const [messages, setMessages] = useState<string[]>([]);
+
+  useEffect(() => {
+    const ws = new WebSocket(url);
+    
+    ws.onopen = () => {
+      if (isMounted()) {
+        setSocket(ws);
+      }
+    };
+
+    ws.onmessage = (event) => {
+      if (isMounted()) {
+        setMessages(prev => [...prev, event.data]);
+      }
+    };
+
+    ws.onclose = () => {
+      if (isMounted()) {
+        setSocket(null);
+      }
+    };
+
+    // Register cleanup for WebSocket
+    addCleanup(() => {
+      if (ws.readyState === WebSocket.OPEN) {
+        ws.close();
+      }
+    });
+
+    return () => {
+      ws.close();
+    };
+  }, [url, isMounted, addCleanup]);
+
+  const sendMessage = useCallback((message: string) => {
+    if (socket && socket.readyState === WebSocket.OPEN) {
+      socket.send(message);
+    }
+  }, [socket]);
+
+  return { socket, messages, sendMessage };
+}`}
+              </CodeBlock>
+            </div>
+
+            <div>
+              <h4 className="font-semibold mb-2">API Reference</h4>
+              <CodeBlock
+                language="typescript"
+                title="useCleanup type signature"
+              >
+                {`function useCleanup(): {
+  // Core functions
+  isMounted: () => boolean;
+  addCleanup: (cleanup: () => void) => void;
+  createAbortController: () => AbortController;
+  nullifyRef: <T>(ref: React.MutableRefObject<T>) => void;
+
+  // Management functions
+  removeAbortController: (controller: AbortController) => void;
+  removeCleanup: (cleanup: () => void) => boolean;
+  triggerCleanup: () => void;
+
+  // Debugging
+  getCleanupStats: () => {
+    isMounted: boolean;
+    cleanupFunctions: number;
+    abortControllers: number;
+    refsToNullify: number;
+  };
+}`}
+              </CodeBlock>
+            </div>
+
+            <div>
+              <h4 className="font-semibold mb-2">Key Features</h4>
+              <div className="space-y-2 text-sm">
+                <div className="flex items-center gap-2">
+                  <Badge variant="secondary">isMounted</Badge>
+                  <span>Prevents state updates after component unmount</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Badge variant="secondary">addCleanup</Badge>
+                  <span>
+                    Register cleanup functions for automatic execution
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Badge variant="secondary">createAbortController</Badge>
+                  <span>Automatic AbortController management with cleanup</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Badge variant="secondary">nullifyRef</Badge>
+                  <span>
+                    Prevents memory leaks by nullifying refs on unmount
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Badge variant="secondary">StrictMode</Badge>
+                  <span>
+                    Compatible with React StrictMode (effects run twice)
+                  </span>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
             <CardTitle>Best Practices</CardTitle>
             <CardDescription>
               Recommended patterns for using tryError hooks effectively

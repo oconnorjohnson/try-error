@@ -8,6 +8,7 @@ import {
   isTryError,
   TryError,
   createError,
+  emitErrorCreated,
 } from "try-error";
 import { useCleanup } from "./useCleanup";
 
