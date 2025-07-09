@@ -503,6 +503,11 @@ export class TryErrorBoundary extends Component<
       error: null,
       errorInfo: null,
       retryCount: prevState.retryCount + 1,
+      asyncError: null,
+      // Clear concurrent error state
+      errors: [],
+      errorCount: 0,
+      lastErrorTimestamp: 0,
     }));
   };
 
@@ -512,6 +517,11 @@ export class TryErrorBoundary extends Component<
       error: null,
       errorInfo: null,
       retryCount: 0,
+      asyncError: null,
+      // Clear concurrent error state
+      errors: [],
+      errorCount: 0,
+      lastErrorTimestamp: 0,
     });
   };
 
