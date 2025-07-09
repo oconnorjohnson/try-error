@@ -40,11 +40,7 @@ function getFunctionData(slug: string) {
   const lines = content.split("\n");
   let title = slug;
   let description = "";
-  let signature = "";
-  let parameters = "";
-  let returns = "";
-  let examples = "";
-  let markdownContent = content;
+  const markdownContent = content;
 
   // Extract title from first heading
   const titleLine = lines.find((line) => line.startsWith("# "));
