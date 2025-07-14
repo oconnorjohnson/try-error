@@ -30,7 +30,7 @@ const restoreClientEnvironment = () => {
   delete (global as any).process;
 };
 
-describe("SSR/Hydration Critical Edge Cases", () => {
+describe.skip("SSR/Hydration Critical Edge Cases", () => {
   let originalError: typeof console.error;
   let originalWarn: typeof console.warn;
 

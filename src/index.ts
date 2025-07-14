@@ -2,7 +2,7 @@
 // This file will export all public APIs
 
 // Library version
-export const VERSION = "1.0.0";
+export const VERSION = "0.0.1-alpha.1";
 
 // Feature flags
 export const FEATURES = /*#__PURE__*/ Object.freeze({

@@ -135,7 +135,7 @@ export { createSentryProvider } from "./telemetry/providers/sentry";
 export { createConsoleProvider } from "./telemetry/providers/console";
 
 // Version info
-export const VERSION = process.env.npm_package_version || "unknown";
+export const VERSION = "0.0.1-alpha.1";
 
 // Utility to check try-error core version compatibility
 export function checkCoreVersion(): boolean {

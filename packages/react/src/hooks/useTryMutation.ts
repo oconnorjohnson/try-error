@@ -145,6 +145,27 @@ export function useTryMutation<T, TVariables = void>(
     invalidateOnSuccess = true,
   } = options;
 
+  // Store mutation function in ref to avoid circular references
+  const mutationFnRef = useRef(mutationFn);
+  const onSuccessRef = useRef(onSuccess);
+  const onErrorRef = useRef(onError);
+  const onSettledRef = useRef(onSettled);
+  const rollbackOnErrorRef = useRef(rollbackOnError);
+
+  // Update refs when values change
+  mutationFnRef.current = mutationFn;
+  onSuccessRef.current = onSuccess;
+  onErrorRef.current = onError;
+  onSettledRef.current = onSettled;
+  rollbackOnErrorRef.current = rollbackOnError;
+
+  // Register refs for cleanup
+  nullifyRef(mutationFnRef);
+  nullifyRef(onSuccessRef);
+  nullifyRef(onErrorRef);
+  nullifyRef(onSettledRef);
+  nullifyRef(rollbackOnErrorRef);
+
   // Current AbortController ref
   const currentAbortControllerRef = useRef<AbortController | null>(null);
 
@@ -158,6 +179,9 @@ export function useTryMutation<T, TVariables = void>(
   // Cache key for this mutation
   const cacheKeyRef = useRef<string | null>(null);
 
+  // Track all cache keys created by this component for cleanup
+  const cacheKeysRef = useRef<Set<string>>(new Set());
+
   // Retry timeout
   const retryTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -167,6 +191,7 @@ export function useTryMutation<T, TVariables = void>(
   nullifyRef(isProcessingQueueRef);
   nullifyRef(previousDataRef);
   nullifyRef(cacheKeyRef);
+  nullifyRef(cacheKeysRef);
   nullifyRef(retryTimeoutRef);
 
   // Add cleanup for retry timeout
@@ -198,8 +223,19 @@ export function useTryMutation<T, TVariables = void>(
 
   // Add cleanup for cache entries (prevent global cache pollution)
   addCleanup(() => {
-    if (cacheKeyRef.current) {
-      mutationCache.delete(cacheKeyRef.current);
+    try {
+      // Clean up all cache keys created by this component
+      cacheKeysRef.current?.forEach((key) => {
+        mutationCache.delete(key);
+      });
+      cacheKeysRef.current?.clear();
+
+      // Also clean up current cache key if it exists
+      if (cacheKeyRef.current) {
+        mutationCache.delete(cacheKeyRef.current);
+      }
+    } catch {
+      // Ignore cache cleanup errors
     }
   });
 
@@ -242,6 +278,8 @@ export function useTryMutation<T, TVariables = void>(
           data: newData,
           timestamp: Date.now(),
         });
+        // Track this cache key for cleanup
+        cacheKeysRef.current?.add(cacheKeyRef.current);
       }
 
       return newData;
@@ -251,6 +289,7 @@ export function useTryMutation<T, TVariables = void>(
   const invalidate = useCallback(() => {
     if (cacheKeyRef.current) {
       mutationCache.delete(cacheKeyRef.current);
+      cacheKeysRef.current?.delete(cacheKeyRef.current);
     }
   }, []);
 
@@ -323,6 +362,9 @@ export function useTryMutation<T, TVariables = void>(
         variables,
       });
 
+      // Track this cache key for cleanup
+      cacheKeysRef.current?.add(cacheKeyRef.current);
+
       // Check cache first
       const cached = mutationCache.get(cacheKeyRef.current);
       if (cached && Date.now() - cached.timestamp < cacheTime) {
@@ -353,7 +395,10 @@ export function useTryMutation<T, TVariables = void>(
 
       try {
         // Call mutation function directly to preserve error types for retry logic
-        const result = await mutationFn(variables, abortController.signal);
+        const result = await mutationFnRef.current(
+          variables,
+          abortController.signal
+        );
 
         // Check if component is still mounted and request wasn't aborted
         if (!isMounted() || abortController.signal.aborted) {
@@ -382,22 +427,25 @@ export function useTryMutation<T, TVariables = void>(
             data: result,
             timestamp: Date.now(),
           });
+          // Track this cache key for cleanup
+          cacheKeysRef.current?.add(cacheKeyRef.current);
         }
 
         // Invalidate cache if requested
         if (invalidateOnSuccess && cacheKeyRef.current) {
           // Only invalidate this specific cache entry, not the entire cache
           mutationCache.delete(cacheKeyRef.current);
+          cacheKeysRef.current?.delete(cacheKeyRef.current);
         }
 
         setData(result);
         setError(null);
         setFailureCount(0);
-        onSuccess?.(result, variables);
+        onSuccessRef.current?.(result, variables);
 
         if (isMounted()) {
           setIsLoading(false);
-          onSettled?.(result, null, variables);
+          onSettledRef.current?.(result, null, variables);
         }
 
         return result;
@@ -475,8 +523,8 @@ export function useTryMutation<T, TVariables = void>(
 
               setError(abortError);
               setIsLoading(false);
-              onError?.(abortError, variables);
-              onSettled?.(null, abortError, variables);
+              onErrorRef.current?.(abortError, variables);
+              onSettledRef.current?.(null, abortError, variables);
             }
 
             return abortError;
@@ -510,7 +558,11 @@ export function useTryMutation<T, TVariables = void>(
             previousDataRef.current !== undefined
           ) {
             setData(previousDataRef.current);
-            rollbackOnError?.(result, variables, previousDataRef.current);
+            rollbackOnErrorRef.current?.(
+              result,
+              variables,
+              previousDataRef.current
+            );
           }
 
           // Emit event for observability
@@ -519,7 +571,7 @@ export function useTryMutation<T, TVariables = void>(
           setError(result);
           setData(null);
           setFailureCount(retryCount);
-          onError?.(result, variables);
+          onErrorRef.current?.(result, variables);
         } else {
           // Success - update cache
           if (cacheKeyRef.current) {
@@ -527,23 +579,26 @@ export function useTryMutation<T, TVariables = void>(
               data: result,
               timestamp: Date.now(),
             });
+            // Track this cache key for cleanup
+            cacheKeysRef.current?.add(cacheKeyRef.current);
           }
 
           // Invalidate cache if requested
           if (invalidateOnSuccess && cacheKeyRef.current) {
             // Only invalidate this specific cache entry, not the entire cache
             mutationCache.delete(cacheKeyRef.current);
+            cacheKeysRef.current?.delete(cacheKeyRef.current);
           }
 
           setData(result);
           setError(null);
           setFailureCount(0);
-          onSuccess?.(result, variables);
+          onSuccessRef.current?.(result, variables);
         }
 
         if (isMounted()) {
           setIsLoading(false);
-          onSettled?.(
+          onSettledRef.current?.(
             isTryError(result) ? null : result,
             isTryError(result) ? result : null,
             variables
@@ -555,14 +610,9 @@ export function useTryMutation<T, TVariables = void>(
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [
-      mutationFn,
-      onSuccess,
-      onError,
-      onSettled,
       abortMessage,
       data,
       optimisticData,
-      rollbackOnError,
       shouldRetry,
       getRetryDelay,
       cacheTime,

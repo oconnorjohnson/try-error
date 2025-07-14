@@ -7,6 +7,7 @@ import {
   isTryError,
   createError,
 } from "try-error";
+import { useCleanup } from "./useCleanup";
 
 /**
  * State management hook with try-error integration
@@ -33,36 +34,44 @@ export function useTryState<T>(
   const [state, setState] = useState<T>(initialValue);
   const [error, setError] = useState<TryError | null>(null);
 
+  // Use universal cleanup hook for proper memory management
+  const { isMounted, nullifyRef } = useCleanup();
+
   // Use ref to avoid stale closure
   const stateRef = useRef(state);
   stateRef.current = state;
 
-  // Cleanup on unmount to prevent memory leaks
-  useEffect(() => {
-    return () => {
-      stateRef.current = null as any;
-    };
-  }, []);
+  // Register refs for cleanup
+  nullifyRef(stateRef);
 
-  const setTryState = useCallback((updater: T | ((current: T) => T)) => {
-    const result = trySync(() => {
-      if (typeof updater === "function") {
-        return (updater as (current: T) => T)(stateRef.current);
+  const setTryState = useCallback(
+    (updater: T | ((current: T) => T)) => {
+      if (!isMounted()) return;
+
+      const result = trySync(() => {
+        if (typeof updater === "function") {
+          return (updater as (current: T) => T)(stateRef.current);
+        }
+        return updater;
+      });
+
+      if (isMounted()) {
+        if (isTryError(result)) {
+          setError(result);
+        } else {
+          setState(result);
+          setError(null);
+        }
       }
-      return updater;
-    });
-
-    if (isTryError(result)) {
-      setError(result);
-    } else {
-      setState(result);
-      setError(null);
-    }
-  }, []);
+    },
+    [isMounted]
+  );
 
   const clearError = useCallback(() => {
-    setError(null);
-  }, []);
+    if (isMounted()) {
+      setError(null);
+    }
+  }, [isMounted]);
 
   return [state, setTryState, error, clearError];
 }
@@ -97,12 +106,20 @@ export function useTryStateAsync<T>(
   const [error, setError] = useState<TryError | null>(null);
   const [isUpdating, setIsUpdating] = useState(false);
 
+  // Use universal cleanup hook for proper memory management
+  const { isMounted, nullifyRef } = useCleanup();
+
   // Use ref to avoid stale closure
   const stateRef = useRef(state);
   stateRef.current = state;
 
+  // Register refs for cleanup
+  nullifyRef(stateRef);
+
   const setTryStateAsync = useCallback(
     async (updater: T | ((current: T) => T) | ((current: T) => Promise<T>)) => {
+      if (!isMounted()) return;
+
       setIsUpdating(true);
       setError(null);
 
@@ -124,30 +141,38 @@ export function useTryStateAsync<T>(
           result = updater;
         }
 
-        if (isTryError(result)) {
-          setError(result);
-        } else {
-          setState(result);
-          setError(null);
+        if (isMounted()) {
+          if (isTryError(result)) {
+            setError(result);
+          } else {
+            setState(result);
+            setError(null);
+          }
         }
       } catch (e) {
-        setError(
-          createError({
-            type: "StateUpdateError",
-            message: e instanceof Error ? e.message : "State update failed",
-            cause: e,
-          })
-        );
+        if (isMounted()) {
+          setError(
+            createError({
+              type: "StateUpdateError",
+              message: e instanceof Error ? e.message : "State update failed",
+              cause: e,
+            })
+          );
+        }
       } finally {
-        setIsUpdating(false);
+        if (isMounted()) {
+          setIsUpdating(false);
+        }
       }
     },
-    []
+    [isMounted]
   );
 
   const clearError = useCallback(() => {
-    setError(null);
-  }, []);
+    if (isMounted()) {
+      setError(null);
+    }
+  }, [isMounted]);
 
   return [state, setTryStateAsync, error, clearError, isUpdating];
 }

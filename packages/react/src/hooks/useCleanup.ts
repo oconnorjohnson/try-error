@@ -73,6 +73,20 @@ export function useCleanup() {
           if (typeof console !== "undefined" && console.warn) {
             console.warn(`Cleanup function ${index} failed:`, error);
           }
+
+          // Emit global error event so error boundaries can catch it
+          if (typeof window !== "undefined") {
+            const errorEvent = new ErrorEvent("error", {
+              error: error,
+              message: `Cleanup function ${index} failed: ${
+                error instanceof Error ? error.message : String(error)
+              }`,
+              filename: "useCleanup",
+              lineno: 0,
+              colno: 0,
+            });
+            window.dispatchEvent(errorEvent);
+          }
         }
       });
 
@@ -134,8 +148,12 @@ export function useCleanup() {
       // Remove from set when it's aborted (for memory efficiency)
       const originalAbort = controller.abort.bind(controller);
       controller.abort = (reason?: any) => {
-        abortControllersRef.current.delete(controller);
-        originalAbort(reason);
+        try {
+          abortControllersRef.current.delete(controller);
+          originalAbort(reason);
+        } catch (error) {
+          // Ignore abort errors during cleanup
+        }
       };
     }
 
@@ -182,11 +200,25 @@ export function useCleanup() {
    */
   const triggerCleanup = useCallback((): void => {
     // Execute cleanup functions
-    cleanupFunctionsRef.current.forEach((cleanup) => {
+    cleanupFunctionsRef.current.forEach((cleanup, index) => {
       try {
         cleanup();
       } catch (error) {
         console.warn("Manual cleanup function failed:", error);
+
+        // Emit global error event so error boundaries can catch it
+        if (typeof window !== "undefined") {
+          const errorEvent = new ErrorEvent("error", {
+            error: error,
+            message: `Manual cleanup function ${index} failed: ${
+              error instanceof Error ? error.message : String(error)
+            }`,
+            filename: "useCleanup",
+            lineno: 0,
+            colno: 0,
+          });
+          window.dispatchEvent(errorEvent);
+        }
       }
     });
 

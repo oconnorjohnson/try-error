@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, ErrorInfo } from "react";
 import {
   render,
   RenderOptions,
@@ -11,6 +11,7 @@ import {
   TryErrorBoundary,
   TryErrorBoundaryProps,
 } from "../components/TryErrorBoundary";
+import { useCleanup } from "../hooks/useCleanup";
 
 // Custom render function that includes TryErrorBoundary
 interface CustomRenderOptions extends Omit<RenderOptions, "wrapper"> {
@@ -163,6 +164,64 @@ export function expectErrorState(element: HTMLElement, errorMessage?: string) {
   if (errorMessage) {
     expect(element).toHaveTextContent(errorMessage);
   }
+}
+
+/**
+ * Test component that properly handles cleanup errors using useCleanup hook
+ * This should be used instead of raw useEffect for testing cleanup errors
+ */
+export function TestCleanupErrorComponent({
+  onCleanup,
+  throwAsync = false,
+}: {
+  onCleanup?: () => void;
+  throwAsync?: boolean;
+}) {
+  const { addCleanup } = useCleanup();
+
+  React.useEffect(() => {
+    if (onCleanup) {
+      addCleanup(onCleanup);
+    }
+
+    if (throwAsync) {
+      addCleanup(() => {
+        setTimeout(() => {
+          throw new Error("Async cleanup error");
+        }, 10);
+      });
+    }
+  }, [addCleanup, onCleanup, throwAsync]);
+
+  return <div>Test Component</div>;
+}
+
+/**
+ * Render component with error boundary that catches cleanup errors
+ */
+export function renderWithCleanupErrorBoundary(
+  component: React.ReactElement,
+  options: {
+    onError?: (error: Error | TryError, errorInfo: ErrorInfo | null) => void;
+    catchAsyncErrors?: boolean;
+    catchEventHandlerErrors?: boolean;
+  } = {}
+): RenderResult {
+  const {
+    onError,
+    catchAsyncErrors = true,
+    catchEventHandlerErrors = true,
+  } = options;
+
+  return render(
+    <TryErrorBoundary
+      onError={onError}
+      catchAsyncErrors={catchAsyncErrors}
+      catchEventHandlerErrors={catchEventHandlerErrors}
+    >
+      {component}
+    </TryErrorBoundary>
+  );
 }
 
 // Re-export commonly used testing utilities

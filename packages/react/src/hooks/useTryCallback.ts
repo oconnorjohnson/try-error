@@ -3,6 +3,7 @@
 
 import { useCallback, useState, useRef, useMemo, useEffect } from "react";
 import { tryAsync, trySync, isTryError, TryResult, TryError } from "try-error";
+import { useCleanup } from "./useCleanup";
 
 // Options for useTryCallback hook
 export interface UseTryCallbackOptions<T = unknown> {
@@ -60,6 +61,24 @@ export function useTryCallback<TArgs extends any[], TReturn>(
 ): (...args: TArgs) => Promise<TryResult<TReturn, TryError>> {
   const { onError, onSuccess, transformError, transformData } = options;
 
+  // Use universal cleanup hook for proper memory management
+  const { isMounted, nullifyRef } = useCleanup();
+
+  // Store callback references for cleanup
+  const callbackRef = useRef(callback);
+  const onErrorRef = useRef(onError);
+  const onSuccessRef = useRef(onSuccess);
+
+  // Update refs
+  callbackRef.current = callback;
+  onErrorRef.current = onError;
+  onSuccessRef.current = onSuccess;
+
+  // Register refs for cleanup
+  nullifyRef(callbackRef);
+  nullifyRef(onErrorRef);
+  nullifyRef(onSuccessRef);
+
   // Memoize transform functions to prevent unnecessary re-renders
   const memoizedTransformError = useMemo(
     () => transformError,
@@ -70,31 +89,38 @@ export function useTryCallback<TArgs extends any[], TReturn>(
 
   return useCallback(
     async (...args: TArgs): Promise<TryResult<TReturn, TryError>> => {
-      const result = await tryAsync(() => callback(...args));
-
-      if (isTryError(result)) {
-        const finalError = memoizedTransformError
-          ? memoizedTransformError(result)
-          : result;
-        onError?.(finalError);
-        return finalError;
-      } else {
-        const finalData = memoizedTransformData
-          ? memoizedTransformData(result)
-          : result;
-        onSuccess?.(finalData);
-        return finalData;
+      if (!isMounted()) {
+        return {
+          success: false,
+          error: {
+            type: "COMPONENT_UNMOUNTED",
+            message: "Component unmounted before callback could execute",
+          },
+        } as TryResult<TReturn, TryError>;
       }
+
+      const result = await tryAsync(() => callbackRef.current(...args));
+
+      if (isMounted()) {
+        if (isTryError(result)) {
+          const finalError = memoizedTransformError
+            ? memoizedTransformError(result)
+            : result;
+          onErrorRef.current?.(finalError);
+          return finalError;
+        } else {
+          const finalData = memoizedTransformData
+            ? memoizedTransformData(result)
+            : result;
+          onSuccessRef.current?.(finalData);
+          return finalData;
+        }
+      }
+
+      return result;
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [
-      callback,
-      onError,
-      onSuccess,
-      memoizedTransformError,
-      memoizedTransformData,
-      ...deps,
-    ]
+    [isMounted, memoizedTransformError, memoizedTransformData, ...deps]
   );
 }
 
@@ -127,39 +153,41 @@ export function useTryCallbackWithState<TArgs extends any[], TReturn>(
   const [isLoading, setIsLoading] = useState(false);
   const abortControllerRef = useRef<AbortController | null>(null);
 
-  // Cleanup on unmount
-  useEffect(() => {
-    return () => {
-      try {
-        abortControllerRef.current?.abort();
-      } catch {
-        // Ignore abort errors during cleanup
-      }
-      abortControllerRef.current = null;
-    };
-  }, []);
+  // Use universal cleanup hook for proper memory management
+  const { isMounted, nullifyRef } = useCleanup();
+
+  // Register refs for cleanup
+  nullifyRef(abortControllerRef);
 
   const enhancedCallback = useTryCallback(
     async (...args: TArgs) => {
+      if (!isMounted()) {
+        throw new Error("Component unmounted before callback could execute");
+      }
+
       setIsLoading(true);
       try {
         return await callback(...args);
       } finally {
-        setIsLoading(false);
+        if (isMounted()) {
+          setIsLoading(false);
+        }
       }
     },
     options,
-    deps
+    [...deps, isMounted]
   );
 
   const reset = useCallback(() => {
-    setIsLoading(false);
+    if (isMounted()) {
+      setIsLoading(false);
+    }
     try {
       abortControllerRef.current?.abort();
     } catch {
       // Ignore abort errors during reset
     }
-  }, []);
+  }, [isMounted]);
 
   return {
     callback: enhancedCallback,

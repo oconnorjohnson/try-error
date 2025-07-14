@@ -94,16 +94,24 @@ function setupGlobalErrorHandlers() {
     event.preventDefault();
   };
 
-  // Handle global errors (including event handler errors)
+  // Handle global errors (including event handler errors and cleanup errors)
   globalErrorHandler = (event: ErrorEvent) => {
     // Check if this is an event handler error
     const isEventHandlerError =
       !event.filename && !event.lineno && !event.colno;
 
+    // Check if this is a cleanup error (common patterns)
+    const isCleanupError =
+      event.message?.includes("Cleanup") ||
+      event.message?.includes("cleanup") ||
+      event.error?.message?.includes("Cleanup") ||
+      event.error?.message?.includes("cleanup");
+
     asyncErrorBoundaries.forEach((boundary) => {
       if (
         (boundary.props.catchAsyncErrors && !isEventHandlerError) ||
-        (boundary.props.catchEventHandlerErrors && isEventHandlerError)
+        (boundary.props.catchEventHandlerErrors &&
+          (isEventHandlerError || isCleanupError))
       ) {
         boundary.handleAsyncError(
           event.error || new Error(event.message),
@@ -330,7 +338,9 @@ export class TryErrorBoundary extends Component<
     error: Error,
     source: "unhandledRejection" | "globalError"
   ) => {
-    if (!this._isMounted) return;
+    if (!this._isMounted) {
+      return;
+    }
 
     // Check if we should catch this error
     if (this.props.errorFilter && !this.props.errorFilter(error)) {
