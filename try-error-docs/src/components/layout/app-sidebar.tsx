@@ -241,11 +241,11 @@ const navigation = [
         url: "/docs/guides/middleware",
         icon: Settings,
       },
-      {
-        title: "Plugin System",
-        url: "/docs/guides/plugins",
-        icon: Puzzle,
-      },
+      // {
+      //   title: "Plugin System",
+      //   url: "/docs/guides/plugins",
+      //   icon: Puzzle,
+      // },
     ],
   },
   {
