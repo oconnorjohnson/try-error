@@ -6,7 +6,7 @@ import {
   useErrorBoundaryTrigger,
   withTryErrorBoundary,
 } from "../../src/components/TryErrorBoundary";
-import { createError } from "try-error";
+import { createError } from "@try-error/core";
 
 // Component that throws an error
 const ThrowError: React.FC<{ error?: Error | null }> = ({ error }) => {

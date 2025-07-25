@@ -5,7 +5,7 @@ import {
   useTryCallbackSync,
   useFormSubmitCallback,
 } from "../../src/hooks/useTryCallback";
-import { isTryError } from "try-error";
+import { isTryError } from "@try-error/core";
 
 describe("useTryCallback", () => {
   beforeEach(() => {

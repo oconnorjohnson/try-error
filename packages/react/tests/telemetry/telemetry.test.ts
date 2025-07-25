@@ -1,4 +1,4 @@
-import { createError } from "try-error";
+import { createError } from "@try-error/core";
 import {
   telemetry,
   TelemetryProvider,

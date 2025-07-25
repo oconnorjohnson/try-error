@@ -1,5 +1,5 @@
 import React from "react";
-import { TryError, isTryError } from "try-error";
+import { TryError, isTryError } from "@try-error/core";
 import { ReactTryError, isReactTryError } from "../types";
 
 /**

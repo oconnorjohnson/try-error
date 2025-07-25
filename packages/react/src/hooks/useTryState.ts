@@ -6,7 +6,7 @@ import {
   TryError,
   isTryError,
   createError,
-} from "try-error";
+} from "@try-error/core";
 import { useCleanup } from "./useCleanup";
 
 /**

@@ -1,4 +1,4 @@
-import { TryError } from "try-error";
+import { TryError } from "@try-error/core";
 import { ReactTryError } from "../../types";
 import {
   TelemetryProvider,

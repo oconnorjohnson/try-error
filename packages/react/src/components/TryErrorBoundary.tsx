@@ -8,7 +8,7 @@ import React, {
   useEffect,
   useRef,
 } from "react";
-import { isTryError, TryError, createError, emitErrorCreated } from "try-error";
+import { isTryError, TryError, createError, emitErrorCreated } from "@try-error/core";
 import { ErrorProvider, ErrorContextValue } from "../context/ErrorContext";
 
 // Props for the TryErrorBoundary component

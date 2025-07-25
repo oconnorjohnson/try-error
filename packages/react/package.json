@@ -1,6 +1,6 @@
 {
   "name": "@try-error/react",
-  "version": "0.0.1-alpha.1",
+  "version": "0.0.1-alpha.2",
   "description": "React integration for try-error - hooks and components for type-safe error handling",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -26,7 +26,7 @@
   "peerDependencies": {
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0",
-    "try-error": "workspace:*"
+    "@try-error/core": "*"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.0.0",
@@ -41,7 +41,7 @@
     "react-dom": "^18.0.0",
     "ts-jest": "^29.1.0",
     "typescript": "^5.0.0",
-    "try-error": "workspace:*"
+    "@try-error/core": "workspace:*"
   },
   "engines": {
     "node": ">=16.0.0"

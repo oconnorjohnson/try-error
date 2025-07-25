@@ -1,10 +1,10 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { TryErrorBoundary } from "../../src/components/TryErrorBoundary";
-import { createError, TryError } from "try-error";
+import { createError, TryError } from "@try-error/core";
 
 // Import event system from try-error package (same as TryErrorBoundary)
-import { errorEvents, emitErrorCreated } from "try-error";
+import { errorEvents, emitErrorCreated } from "@try-error/core";
 
 // Test component that throws an error
 function ThrowingComponent({ shouldThrow = true }: { shouldThrow?: boolean }) {

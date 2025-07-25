@@ -37,7 +37,7 @@ export default function APIFrameworksGuidePage() {
                 showLineNumbers={true}
               >
                 {`import { initTRPC, TRPCError } from '@trpc/server';
-import { tryAsync, isTryError, createError } from 'try-error';
+import { tryAsync, isTryError, createError } from '@try-error/core';
 import { z } from 'zod';
 
 const t = initTRPC.create();
@@ -145,7 +145,7 @@ export const userRouter = t.router({
                 showLineNumbers={true}
               >
                 {`import { createTRPCProxyClient, httpBatchLink } from '@trpc/client';
-import { tryAsync, isTryError } from 'try-error';
+import { tryAsync, isTryError } from '@try-error/core';
 
 const trpc = createTRPCProxyClient<AppRouter>({
   links: [
@@ -214,7 +214,7 @@ function UserProfile({ userId }: { userId: string }) {
                 showLineNumbers={true}
               >
                 {`import { ApolloServer, gql, ApolloError } from 'apollo-server';
-import { tryAsync, isTryError, createError } from 'try-error';
+import { tryAsync, isTryError, createError } from '@try-error/core';
 
 // Type definitions
 const typeDefs = gql\`
@@ -339,7 +339,7 @@ const server = new ApolloServer({
                 showLineNumbers={true}
               >
                 {`import { ApolloClient, InMemoryCache, gql } from '@apollo/client';
-import { tryAsync, isTryError, createError } from 'try-error';
+import { tryAsync, isTryError, createError } from '@try-error/core';
 
 const client = new ApolloClient({
   uri: 'http://localhost:4000/graphql',
@@ -420,7 +420,7 @@ export function useUser(userId: string) {
                 title="Wrapping OpenAPI-generated clients"
                 showLineNumbers={true}
               >
-                {`import { tryAsync, createError, TryResult } from 'try-error';
+                {`import { tryAsync, createError, TryResult } from '@try-error/core';
 import { UserApi, Configuration } from './generated-api-client';
 
 // Create a wrapper for OpenAPI-generated clients
@@ -539,7 +539,7 @@ if (isTryError(userResult)) {
                 title="Building a REST client with tryError"
                 showLineNumbers={true}
               >
-                {`import { tryAsync, createError, TryResult, TryError } from 'try-error';
+                {`import { tryAsync, createError, TryResult, TryError } from '@try-error/core';
 
 // Define API-specific error types
 type ApiErrorType = 

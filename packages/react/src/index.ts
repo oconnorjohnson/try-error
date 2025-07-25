@@ -84,7 +84,7 @@ export {
   externalError,
   entityError,
   fieldValidationError,
-} from "try-error";
+} from "@try-error/core";
 
 // Export React-specific hooks (without conflicting exports)
 export {

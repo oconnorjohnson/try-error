@@ -1,7 +1,7 @@
 // Type definitions for React integration
 // TODO: Implement React-specific types for error handling
 
-import { TryError, TryResult, isTryError, createError } from "try-error";
+import { TryError, TryResult, isTryError, createError } from "@try-error/core";
 import { ReactNode, ErrorInfo } from "react";
 
 // ============================================================================

@@ -6,7 +6,7 @@ import {
   isTryError,
   createError,
   emitErrorCreated,
-} from "try-error";
+} from "@try-error/core";
 import { useCleanup } from "./useCleanup";
 
 export interface UseTryMutationOptions<T, TVariables = void> {

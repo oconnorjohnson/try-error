@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef, useEffect } from "react";
-import { TryError, createError, isTryError } from "try-error";
+import { TryError, createError, isTryError } from "@try-error/core";
 
 export interface CircuitBreakerOptions {
   // Number of failures before opening the circuit

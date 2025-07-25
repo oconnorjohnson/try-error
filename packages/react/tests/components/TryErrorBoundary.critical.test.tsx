@@ -12,7 +12,7 @@ import {
   useAsyncError,
   useAsyncErrorHandler,
 } from "../../src/components/TryErrorBoundary";
-import { createError } from "try-error";
+import { createError } from "@try-error/core";
 import "../test-setup";
 
 // Mock React 18 concurrent features

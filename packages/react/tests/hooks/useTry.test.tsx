@@ -1,7 +1,7 @@
 import React from "react";
 import { renderHook, act, waitFor } from "@testing-library/react";
 import { useTry } from "../../src/hooks/useTry";
-import { isTryError } from "try-error";
+import { isTryError } from "@try-error/core";
 
 describe("useTry", () => {
   beforeEach(() => {

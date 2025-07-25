@@ -4,7 +4,7 @@ import {
   useTryMutation,
   __clearMutationCache,
 } from "../../src/hooks/useTryMutation";
-import { createError } from "try-error";
+import { createError } from "@try-error/core";
 
 describe("useTryMutation - Optimistic Updates", () => {
   beforeEach(() => {

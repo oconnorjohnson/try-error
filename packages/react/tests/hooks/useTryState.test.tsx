@@ -1,7 +1,7 @@
 import React from "react";
 import { renderHook, act } from "@testing-library/react";
 import { useTryState, useStateWithError } from "../../src/hooks/useTryState";
-import { createError } from "try-error";
+import { createError } from "@try-error/core";
 
 describe("useTryState", () => {
   describe("basic functionality", () => {

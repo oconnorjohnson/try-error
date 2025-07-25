@@ -7,7 +7,7 @@ import {
   RenderResult,
 } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import { TryError, createError } from "try-error";
+import { TryError, createError } from "@try-error/core";
 import {
   TryErrorBoundary,
   TryErrorBoundaryProps,

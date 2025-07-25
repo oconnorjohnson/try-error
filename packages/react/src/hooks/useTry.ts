@@ -9,7 +9,7 @@ import {
   TryError,
   createError,
   emitErrorCreated,
-} from "try-error";
+} from "@try-error/core";
 import { useCleanup } from "./useCleanup";
 
 // State interface for try operations

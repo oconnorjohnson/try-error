@@ -4,7 +4,7 @@ import {
   useExponentialBackoff,
   useBulkhead,
 } from "../../src/hooks/useErrorRecovery";
-import { createError } from "try-error";
+import { createError } from "@try-error/core";
 
 describe("useErrorRecovery", () => {
   beforeEach(() => {

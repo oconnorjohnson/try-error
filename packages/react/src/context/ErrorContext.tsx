@@ -1,5 +1,5 @@
 import React, { createContext, useContext, ReactNode } from "react";
-import { TryError } from "try-error";
+import { TryError } from "@try-error/core";
 import { ErrorInfo } from "react";
 
 export interface ErrorContextValue {

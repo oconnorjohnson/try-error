@@ -1,5 +1,5 @@
 {
-  "name": "@try-error/core",
+  "name": "try-error",
   "version": "0.0.1-alpha.1",
   "description": "Lightweight, progressive, type-safe error handling for TypeScript",
   "main": "dist/index.js",
@@ -32,29 +32,6 @@
   "files": [
     "dist"
   ],
-  "scripts": {
-    "build": "pnpm build:cjs && pnpm build:esm",
-    "build:cjs": "tsc",
-    "build:esm": "tsc -p tsconfig.esm.json",
-    "build:browser": "pnpm build:browser:full && pnpm build:browser:sync && pnpm build:browser:async",
-    "build:browser:full": "esbuild src/index.ts --bundle --format=esm --outfile=dist/try-error.esm.js --platform=browser --target=es2020 --tree-shaking=true",
-    "build:browser:sync": "esbuild src/sync-only.ts --bundle --format=esm --outfile=dist/try-error-sync.esm.js --platform=browser --target=es2020 --tree-shaking=true",
-    "build:browser:async": "esbuild src/async-only.ts --bundle --format=esm --outfile=dist/try-error-async.esm.js --platform=browser --target=es2020 --tree-shaking=true",
-    "build:all": "pnpm build && pnpm build:browser && pnpm -r build",
-    "test": "jest && pnpm -r test",
-    "test:watch": "jest --watch",
-    "test:types": "tsc --noEmit",
-    "dev": "tsc --watch",
-    "benchmark": "ts-node benchmark/performance.ts",
-    "benchmark:minimal": "tsx benchmark/minimal-overhead.ts",
-    "clean": "rm -rf dist && pnpm -r clean",
-    "pack": "pnpm build && pnpm pack",
-    "prepublishOnly": "pnpm build && pnpm build:browser",
-    "size": "size-limit",
-    "analyze": "size-limit --why",
-    "docs:api": "typedoc",
-    "docs:api:watch": "typedoc --watch"
-  },
   "keywords": [
     "typescript",
     "error-handling",
@@ -85,12 +62,12 @@
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "size-limit": "^11.2.0",
-    "@try-error/core": "workspace:*",
     "ts-jest": "^29.1.0",
     "ts-node": "^10.9.2",
     "typedoc": "^0.28.5",
     "typedoc-plugin-markdown": "^4.7.0",
-    "typescript": "^5.0.0"
+    "typescript": "^5.0.0",
+    "try-error": "0.0.1-alpha.1"
   },
   "engines": {
     "node": ">=16.0.0"
@@ -138,5 +115,27 @@
       "path": "dist/try-error-async.esm.js",
       "limit": "6 KB"
     }
-  ]
+  ],
+  "scripts": {
+    "build": "pnpm build:cjs && pnpm build:esm",
+    "build:cjs": "tsc",
+    "build:esm": "tsc -p tsconfig.esm.json",
+    "build:browser": "pnpm build:browser:full && pnpm build:browser:sync && pnpm build:browser:async",
+    "build:browser:full": "esbuild src/index.ts --bundle --format=esm --outfile=dist/try-error.esm.js --platform=browser --target=es2020 --tree-shaking=true",
+    "build:browser:sync": "esbuild src/sync-only.ts --bundle --format=esm --outfile=dist/try-error-sync.esm.js --platform=browser --target=es2020 --tree-shaking=true",
+    "build:browser:async": "esbuild src/async-only.ts --bundle --format=esm --outfile=dist/try-error-async.esm.js --platform=browser --target=es2020 --tree-shaking=true",
+    "build:all": "pnpm build && pnpm build:browser && pnpm -r build",
+    "test": "jest && pnpm -r test",
+    "test:watch": "jest --watch",
+    "test:types": "tsc --noEmit",
+    "dev": "tsc --watch",
+    "benchmark": "ts-node benchmark/performance.ts",
+    "benchmark:minimal": "tsx benchmark/minimal-overhead.ts",
+    "clean": "rm -rf dist && pnpm -r clean",
+    "pack": "pnpm build && pnpm pack",
+    "size": "size-limit",
+    "analyze": "size-limit --why",
+    "docs:api": "typedoc",
+    "docs:api:watch": "typedoc --watch"
+  }
 }

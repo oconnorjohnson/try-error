@@ -6,7 +6,7 @@ import {
   useAsyncError,
   useAsyncErrorHandler,
 } from "../../src/components/TryErrorBoundary";
-import { createError } from "try-error";
+import { createError } from "@try-error/core";
 import "../test-setup";
 
 describe("Async Error Boundary", () => {
