@@ -435,14 +435,16 @@ const degradationMiddleware: ErrorMiddleware = (result, next) => {
                 {`// Async middleware for external services
 const asyncNotificationMiddleware: ErrorMiddleware = (result, next) => {
   if (isTryError(result) && result.type === 'CriticalError') {
-    // Fire and forget
+    // Fire and forget using tryAsync
     (async () => {
-      try {
+      const notifyResult = await tryAsync(async () => {
         await notifyOpsTeam(result);
         await createJiraTicket(result);
         await updateStatusPage('degraded');
-      } catch (e) {
-        console.error('Failed to send notifications:', e);
+      });
+      
+      if (isTryError(notifyResult)) {
+        console.error('Failed to send notifications:', notifyResult.message);
       }
     })();
   }
@@ -541,16 +543,18 @@ const goodMiddleware = (result, next) => {
               </CardHeader>
               <CardContent>
                 <EnhancedCodeBlock language="typescript">
-                  {`// Wrap middleware operations in try-catch
+                  {`// Use trySync to safely handle middleware operations
 const safeMiddleware: ErrorMiddleware = (result, next) => {
-  try {
-    if (isTryError(result)) {
-      // Potentially failing operation
+  if (isTryError(result)) {
+    // Safely call external service
+    const logResult = trySync(() => {
       externalService.logError(result);
+    });
+    
+    if (isTryError(logResult)) {
+      // Don't let middleware errors break the app
+      console.error('Middleware error:', logResult.message);
     }
-  } catch (e) {
-    // Don't let middleware errors break the app
-    console.error('Middleware error:', e);
   }
   
   return next();

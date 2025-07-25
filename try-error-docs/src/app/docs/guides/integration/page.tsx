@@ -232,82 +232,89 @@ export default async function UserPage({ params }: { params: { id: string } }) {
             className="mb-4"
           >
             {`import { PrismaClient, Prisma } from '@prisma/client';
-import { tryAsync, isTryError, createTryError } from '@try-error/core';
+import { tryAsync, isTryError, createTryError, fromThrown } from '@try-error/core';
 
 const prisma = new PrismaClient();
 
-// Database service with tryError
+// Helper to map Prisma errors to domain errors
+function mapPrismaError(error: unknown) {
+  if (error instanceof Prisma.PrismaClientKnownRequestError) {
+    switch (error.code) {
+      case 'P2002':
+        return createTryError('ConflictError', 'Resource already exists', {
+          field: error.meta?.target,
+          originalError: error
+        });
+      case 'P2025':
+        return createTryError('NotFoundError', 'Resource not found', {
+          originalError: error
+        });
+      case 'P2003':
+        return createTryError('ValidationError', 'Foreign key constraint failed', {
+          field: error.meta?.field_name,
+          originalError: error
+        });
+    }
+  }
+  
+  // Return the original error wrapped
+  return fromThrown(error);
+}
+
+// Database service with tryError - no try-catch needed!
 export class UserService {
   static async findById(id: string) {
-    return tryAsync(async () => {
-      const user = await prisma.user.findUnique({
-        where: { id },
-        include: { posts: true }
+    const result = await tryAsync(() => prisma.user.findUnique({
+      where: { id },
+      include: { posts: true }
+    }));
+
+    if (isTryError(result)) {
+      return mapPrismaError(result);
+    }
+    
+    if (!result) {
+      return createTryError('NotFoundError', \`User with id \${id} not found\`, {
+        userId: id
       });
-      
-      if (!user) {
-        throw createTryError('NotFoundError', \`User with id \${id} not found\`, {
-          userId: id
-        });
-      }
-      
-      return user;
-    });
+    }
+    
+    return result;
   }
 
   static async create(data: Prisma.UserCreateInput) {
-    return tryAsync(async () => {
-      try {
-        return await prisma.user.create({ data });
-      } catch (error) {
-        if (error instanceof Prisma.PrismaClientKnownRequestError) {
-          if (error.code === 'P2002') {
-            throw createTryError('ConflictError', 'User already exists', {
-              field: error.meta?.target,
-              originalError: error
-            });
-          }
-        }
-        throw error;
-      }
-    });
+    const result = await tryAsync(() => prisma.user.create({ data }));
+    
+    if (isTryError(result)) {
+      return mapPrismaError(result);
+    }
+    
+    return result;
   }
 
   static async update(id: string, data: Prisma.UserUpdateInput) {
-    return tryAsync(async () => {
-      try {
-        return await prisma.user.update({
-          where: { id },
-          data
-        });
-      } catch (error) {
-        if (error instanceof Prisma.PrismaClientKnownRequestError) {
-          if (error.code === 'P2025') {
-            throw createTryError('NotFoundError', \`User with id \${id} not found\`, {
-              userId: id
-            });
-          }
-        }
-        throw error;
-      }
-    });
+    const result = await tryAsync(() => prisma.user.update({
+      where: { id },
+      data
+    }));
+    
+    if (isTryError(result)) {
+      return mapPrismaError(result);
+    }
+    
+    return result;
   }
 
   static async delete(id: string) {
-    return tryAsync(async () => {
-      try {
-        await prisma.user.delete({ where: { id } });
-      } catch (error) {
-        if (error instanceof Prisma.PrismaClientKnownRequestError) {
-          if (error.code === 'P2025') {
-            throw createTryError('NotFoundError', \`User with id \${id} not found\`, {
-              userId: id
-            });
-          }
-        }
-        throw error;
-      }
-    });
+    const result = await tryAsync(() => prisma.user.delete({ 
+      where: { id } 
+    }));
+    
+    if (isTryError(result)) {
+      return mapPrismaError(result);
+    }
+    
+    return { success: true };
   }
 }
 
@@ -318,6 +325,9 @@ async function handleUserRequest(userId: string) {
   if (isTryError(userResult)) {
     if (userResult.type === 'NotFoundError') {
       return { status: 404, error: 'User not found' };
+    }
+    if (userResult.type === 'ConflictError') {
+      return { status: 409, error: 'Conflict' };
     }
     return { status: 500, error: 'Database error' };
   }

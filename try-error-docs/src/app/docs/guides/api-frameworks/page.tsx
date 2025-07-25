@@ -60,24 +60,20 @@ function tryErrorToTRPCError(error: TryError): TRPCError {
   });
 }
 
-// Middleware to handle tryError results
-const tryErrorMiddleware = t.middleware(async ({ next, ctx }) => {
-  try {
-    return await next({ ctx });
-  } catch (error) {
-    if (isTryError(error)) {
-      throw tryErrorToTRPCError(error);
-    }
-    throw error;
+// Helper to convert tryError results to tRPC responses
+const handleTryResult = <T>(result: T | TryError): T => {
+  if (isTryError(result)) {
+    throw tryErrorToTRPCError(result);
   }
-});
+  return result;
+};
 
-// Create protected procedure with tryError handling
-const protectedProcedure = t.procedure.use(tryErrorMiddleware);
+// Create base procedure
+const publicProcedure = t.procedure;
 
 // Example router
 export const userRouter = t.router({
-  getUser: protectedProcedure
+  getUser: publicProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ input }) => {
       // Use tryAsync for database operations
@@ -96,14 +92,10 @@ export const userRouter = t.router({
         return user;
       });
 
-      if (isTryError(userResult)) {
-        throw userResult; // Middleware will convert to TRPCError
-      }
-
-      return userResult;
+      return handleTryResult(userResult);
     }),
 
-  createUser: protectedProcedure
+  createUser: publicProcedure
     .input(z.object({
       name: z.string(),
       email: z.string().email(),
@@ -125,11 +117,7 @@ export const userRouter = t.router({
         return await db.user.create({ data: input });
       });
 
-      if (isTryError(result)) {
-        throw result;
-      }
-
-      return result;
+      return handleTryResult(result);
     }),
 });`}
               </CodeBlock>
@@ -437,77 +425,90 @@ export class ApiClient {
   }
 
   async getUser(userId: string): Promise<TryResult<User, ApiError>> {
-    return tryAsync(async () => {
-      try {
-        const response = await this.userApi.getUser(userId);
-        return response.data;
-      } catch (error: any) {
-        // Map HTTP status codes to tryError types
-        if (error.response) {
-          const status = error.response.status;
-          const data = error.response.data;
-          
-          switch (status) {
-            case 400:
-              throw createError({
-                type: 'ValidationError',
-                message: data.message || 'Invalid request',
-                context: { errors: data.errors }
-              });
-            case 401:
-              throw createError({
-                type: 'AuthenticationError',
-                message: 'Authentication required'
-              });
-            case 403:
-              throw createError({
-                type: 'AuthorizationError',
-                message: 'Insufficient permissions'
-              });
-            case 404:
-              throw createError({
-                type: 'NotFoundError',
-                message: \`User \${userId} not found\`
-              });
-            case 429:
-              throw createError({
-                type: 'RateLimitError',
-                message: 'Too many requests',
-                context: { retryAfter: error.response.headers['retry-after'] }
-              });
-            default:
-              throw createError({
-                type: 'ServerError',
-                message: data.message || \`Server error: \${status}\`,
-                context: { status, data }
-              });
-          }
-        }
+    const response = await tryAsync(() => this.userApi.getUser(userId));
+    
+    if (isTryError(response)) {
+      // The generated client threw an error - map it to our domain errors
+      const error = response.cause as any;
+      
+      if (error?.response) {
+        const status = error.response.status;
+        const data = error.response.data;
         
-        // Network errors
-        if (error.request) {
-          throw createError({
-            type: 'NetworkError',
-            message: 'Network request failed',
-            cause: error
-          });
+        switch (status) {
+          case 400:
+            return createError({
+              type: 'ValidationError',
+              message: data.message || 'Invalid request',
+              context: { errors: data.errors }
+            });
+          case 401:
+            return createError({
+              type: 'AuthenticationError',
+              message: 'Authentication required'
+            });
+          case 403:
+            return createError({
+              type: 'AuthorizationError',
+              message: 'Insufficient permissions'
+            });
+          case 404:
+            return createError({
+              type: 'NotFoundError',
+              message: \`User \${userId} not found\`
+            });
+          case 429:
+            return createError({
+              type: 'RateLimitError',
+              message: 'Too many requests',
+              context: { retryAfter: error.response.headers['retry-after'] }
+            });
+          default:
+            return createError({
+              type: 'ServerError',
+              message: data.message || \`Server error: \${status}\`,
+              context: { status, data }
+            });
         }
-        
-        throw error;
       }
-    });
+      
+      // Network errors
+      if (error?.request) {
+        return createError({
+          type: 'NetworkError',
+          message: 'Network request failed',
+          context: { originalError: response }
+        });
+      }
+      
+      return response; // Return original error if we can't map it
+    }
+    
+    return response.data;
   }
 
   async createUser(userData: CreateUserRequest): Promise<TryResult<User, ApiError>> {
-    return tryAsync(async () => {
-      try {
-        const response = await this.userApi.createUser(userData);
-        return response.data;
-      } catch (error: any) {
-        // Similar error mapping as above
-        // ...
-      }
-    });
+    const response = await tryAsync(() => this.userApi.createUser(userData));
+    
+    if (isTryError(response)) {
+      // Similar error mapping as getUser
+      return this.mapApiError(response);
+    }
+    
+    return response.data;
+  }
+  
+  private mapApiError(error: TryError): TryError {
+    // Reusable error mapping logic
+    const cause = error.cause as any;
+    if (cause?.response?.status === 409) {
+      return createError({
+        type: 'ConflictError',
+        message: 'Resource already exists',
+        cause: error
+      });
+    }
+    return error;
   }
 }
 
@@ -762,50 +763,68 @@ function UserProfile({ userId }: { userId: string }) {
             title="Gradual migration strategy"
             showLineNumbers={true}
           >
-            {`// Step 1: Create a wrapper for existing error handling
-function wrapExistingApi<T>(
-  apiCall: () => Promise<T>
-): Promise<TryResult<T, ApiError>> {
-  return tryAsync(async () => {
-    try {
-      return await apiCall();
-    } catch (error: any) {
-      // Map existing error format to tryError
-      if (error.response?.data?.error) {
-        throw createError({
-          type: mapErrorType(error.response.status),
-          message: error.response.data.error.message,
-          context: error.response.data.error
-        });
-      }
-      throw error;
+            {`// Step 1: Wrap existing API calls with tryAsync
+// Before: API client that throws errors
+class LegacyApiClient {
+  async getUser(id: string) {
+    const response = await fetch(\`/api/users/\${id}\`);
+    if (!response.ok) {
+      throw new Error(\`HTTP \${response.status}\`);
     }
-  });
-}
-
-// Step 2: Gradually migrate endpoints
-// Before:
-async function getUser(id: string) {
-  try {
-    const response = await api.get(\`/users/\${id}\`);
-    return response.data;
-  } catch (error) {
-    console.error('Failed to get user:', error);
-    throw error;
+    return response.json();
   }
 }
 
-// After:
-async function getUser(id: string) {
-  return wrapExistingApi(() => api.get(\`/users/\${id}\`));
+// Step 2: Create a wrapper that uses tryAsync
+class ApiWrapper {
+  constructor(private client: LegacyApiClient) {}
+  
+  async getUser(id: string): Promise<TryResult<User, TryError>> {
+    const result = await tryAsync(() => this.client.getUser(id));
+    
+    // If the legacy client threw, enhance the error
+    if (isTryError(result)) {
+      const message = result.message;
+      
+      // Map common HTTP errors to domain errors
+      if (message.includes('HTTP 404')) {
+        return createError({
+          type: 'NotFoundError',
+          message: \`User \${id} not found\`,
+          cause: result
+        });
+      }
+      
+      if (message.includes('HTTP 401')) {
+        return createError({
+          type: 'AuthenticationError',
+          message: 'Authentication required',
+          cause: result
+        });
+      }
+      
+      // Return enhanced error for other cases
+      return createError({
+        type: 'ApiError',
+        message: result.message,
+        cause: result
+      });
+    }
+    
+    return result;
+  }
 }
 
-// Step 3: Update consumers to handle TryResult
-const userResult = await getUser('123');
+// Step 3: Use the wrapped API
+const api = new ApiWrapper(new LegacyApiClient());
+
+// Now all consumers get TryResult instead of exceptions
+const userResult = await api.getUser('123');
 if (isTryError(userResult)) {
-  // Handle error
+  console.error('Failed to get user:', userResult.message);
+  // No try-catch needed!
 } else {
-  // Use user data
+  console.log('User:', userResult.name);
 }`}
           </CodeBlock>
         </section>

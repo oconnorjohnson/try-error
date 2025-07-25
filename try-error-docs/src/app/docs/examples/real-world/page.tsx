@@ -160,7 +160,7 @@ export default async function UserPage({ params }: { params: { id: string } }) {
           <CardContent>
             <CodeBlock language="typescript" title="app/api/users/route.ts">
               {`import { NextRequest, NextResponse } from 'next/server';
-import { tryAsync, trySync, isOk, isTryError } from '@try-error/core';
+import { tryAsync, trySync, isOk, isTryError, createError, fromThrown } from '@try-error/core';
 import { z } from 'zod';
 
 // Validation schemas
@@ -222,80 +222,60 @@ function validateUserData(body: unknown) {
   });
 }
 
-// POST handler
+// POST handler - no try-catch needed!
 export async function POST(request: NextRequest) {
-  try {
-    // Parse request body
-    const bodyResult = await tryAsync(() => request.json());
-    
-    if (isTryError(bodyResult)) {
-      return NextResponse.json(
-        { 
-          error: 'Invalid JSON in request body',
-          type: 'ParseError',
-          details: bodyResult.message 
-        },
-        { status: 400 }
-      );
-    }
-
-    // Validate data
-    const validationResult = validateUserData(bodyResult);
-    
-    if (isTryError(validationResult)) {
-      return NextResponse.json(
-        {
-          error: validationResult.message,
-          type: validationResult.type,
-          details: validationResult.context
-        },
-        { status: 400 }
-      );
-    }
-
-    // Create user
-    const userResult = await createUser(validationResult);
-    
-    if (isTryError(userResult)) {
-      const statusCode = userResult.type === 'UserAlreadyExistsError' ? 409 : 500;
-      
-      return NextResponse.json(
-        {
-          error: userResult.message,
-          type: userResult.type,
-          details: userResult.context
-        },
-        { status: statusCode }
-      );
-    }
-
-    // Success response
+  // Parse request body
+  const bodyResult = await tryAsync(() => request.json());
+  
+  if (isTryError(bodyResult)) {
     return NextResponse.json(
       { 
-        user: userResult,
-        message: 'User created successfully' 
+        error: 'Invalid JSON in request body',
+        type: 'ParseError',
+        details: bodyResult.message 
       },
-      { status: 201 }
-    );
-
-  } catch (error) {
-    // Catch any unexpected errors
-    const unexpectedError = fromThrown(error, {
-      endpoint: '/api/users',
-      method: 'POST'
-    });
-
-    console.error('Unexpected error in POST /api/users:', unexpectedError);
-
-    return NextResponse.json(
-      {
-        error: 'Internal server error',
-        type: 'InternalError',
-        requestId: crypto.randomUUID()
-      },
-      { status: 500 }
+      { status: 400 }
     );
   }
+
+  // Validate data
+  const validationResult = validateUserData(bodyResult);
+  
+  if (isTryError(validationResult)) {
+    return NextResponse.json(
+      {
+        error: validationResult.message,
+        type: validationResult.type,
+        details: validationResult.context
+      },
+      { status: 400 }
+    );
+  }
+
+  // Create user
+  const userResult = await createUser(validationResult);
+  
+  if (isTryError(userResult)) {
+    const statusCode = userResult.type === 'UserAlreadyExistsError' ? 409 : 500;
+    
+    return NextResponse.json(
+      {
+        error: userResult.message,
+        type: userResult.type,
+        details: userResult.context
+      },
+      { status: statusCode }
+    );
+  }
+
+  // Success response
+  return NextResponse.json(
+    { 
+      user: userResult,
+      message: 'User created successfully' 
+    },
+    { status: 201 }
+  );
 }`}
             </CodeBlock>
           </CardContent>

@@ -1,29 +1,29 @@
-# try-error
+# @try-error/core
 
 > Lightweight, progressive, type-safe error handling for TypeScript
 
-[![npm version](https://img.shields.io/npm/v/try-error.svg)](https://www.npmjs.com/package/try-error)
-[![npm downloads](https://img.shields.io/npm/dm/try-error.svg)](https://www.npmjs.com/package/try-error)
-[![Bundle Size](https://img.shields.io/bundlephobia/minzip/try-error)](https://bundlephobia.com/package/try-error)
-[![gzip size](https://img.badgesize.io/https://unpkg.com/try-error/dist/index.js?compression=gzip&label=gzip%20size)](https://unpkg.com/try-error/dist/index.js)
+[![npm version](https://img.shields.io/npm/v/@try-error/core.svg)](https://www.npmjs.com/package/@try-error/core)
+[![npm downloads](https://img.shields.io/npm/dm/@try-error/core.svg)](https://www.npmjs.com/package/@try-error/core)
+[![Bundle Size](https://img.shields.io/bundlephobia/minzip/@try-error/core)](https://bundlephobia.com/package/@try-error/core)
+[![gzip size](https://img.badgesize.io/https://unpkg.com/@try-error/core/dist/index.js?compression=gzip&label=gzip%20size)](https://unpkg.com/@try-error/core/dist/index.js)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue.svg)](https://www.typescriptlang.org/)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/danieljohnson/try-error/blob/main/CONTRIBUTING.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![npm](https://img.shields.io/npm/v/try-error/alpha)](https://www.npmjs.com/package/try-error)
+[![npm](https://img.shields.io/npm/v/@try-error/core/alpha)](https://www.npmjs.com/package/@try-error/core)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/danieljohnson/try-error/graphs/commit-activity)
-[![Dependencies](https://img.shields.io/librariesio/release/npm/try-error)](https://libraries.io/npm/try-error)
+[![Dependencies](https://img.shields.io/librariesio/release/npm/@try-error/core)](https://libraries.io/npm/@try-error/core)
 
 ⚠️ **Alpha Version**: This library is currently in alpha and APIs may change. Not recommended for production use yet.
 
-## Why try-error?
+## Why @try-error/core?
 
 Traditional error handling in JavaScript forces you to choose between:
 
 - **try/catch blocks**: Clunky syntax, no type safety, hidden control flow
 - **Functional libraries**: Heavy abstractions, steep learning curve, large bundle size
 
-**try-error** provides a middle ground:
+**@try-error/core** provides a middle ground:
 
 - ✅ **Errors as values** - Explicit error handling without exceptions
 - ✅ **Zero overhead** - Success values are returned directly
@@ -35,17 +35,17 @@ Traditional error handling in JavaScript forces you to choose between:
 ## Installation
 
 ```bash
-npm install try-error
+npm install @try-error/core
 # or
-yarn add try-error
+yarn add @try-error/core
 # or
-pnpm add try-error
+pnpm add @try-error/core
 ```
 
 ## Quick Start
 
 ```typescript
-import { trySync, tryAsync, isTryError } from "try-error";
+import { trySync, tryAsync, isTryError } from "@try-error/core";
 
 // Wrap synchronous operations
 const result = trySync(() => JSON.parse(jsonString));
@@ -208,7 +208,7 @@ function UserProfile({ userId }) {
 
 ## Comparison with Alternatives
 
-| Feature        | try-error | fp-ts    | neverthrow | native try/catch |
+| Feature        | @try-error/core | fp-ts    | neverthrow | native try/catch |
 | -------------- | --------- | -------- | ---------- | ---------------- |
 | Type Safety    | ✅ Full   | ✅ Full  | ✅ Full    | ❌ None          |
 | Bundle Size    | 4.7KB     | ~50KB    | ~12KB      | 0KB              |
@@ -292,9 +292,22 @@ We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) f
 
 MIT © Daniel Johnson
 
+## Documentation
+
+For comprehensive documentation, examples, and API reference, visit:
+
+**📚 [Full Documentation](https://try-error-docs.vercel.app/)**
+
+### Quick Links
+- [Installation Guide](https://try-error-docs.vercel.app/docs/installation)
+- [Quick Start Tutorial](https://try-error-docs.vercel.app/docs/quick-start)
+- [API Reference](https://try-error-docs.vercel.app/docs/api-reference)
+- [Examples](https://try-error-docs.vercel.app/docs/examples/basic)
+- [React Integration](https://try-error-docs.vercel.app/docs/react/installation)
+- [Migration Guide](https://try-error-docs.vercel.app/docs/guides/migration)
+
 ## Links
 
-- [Documentation](https://try-error.dev)
-- [GitHub Repository](https://github.com/danieljohnson/try-error)
-- [npm Package](https://www.npmjs.com/package/try-error)
-- [Issue Tracker](https://github.com/danieljohnson/try-error/issues)
+- [GitHub Repository](https://github.com/oconnorjohnson/try-error)
+- [npm Package](https://www.npmjs.com/package/@try-error/core)
+- [Issue Tracker](https://github.com/oconnorjohnson/try-error/issues)

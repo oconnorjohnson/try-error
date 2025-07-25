@@ -125,7 +125,7 @@ export default function MigrationPage() {
   }
   
   const user = await tryAsync(() => response.json());
-  return user; // Could be success or error
+  return user; // is success
 }`}
                 </CodeBlock>
               </div>
