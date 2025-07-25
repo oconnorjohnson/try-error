@@ -118,7 +118,7 @@ export default function ErrorTypesPage() {
             showLineNumbers={true}
             className="mb-4"
           >
-            {`import { createTryError } from 'tryError';
+            {`import { createTryError } from '@try-error/core';
 
 // Basic custom error
 const validationError = createTryError(
@@ -312,7 +312,7 @@ const dbError = createDatabaseError('INSERT', 'users', originalError);`}
             showLineNumbers={true}
             className="mb-4"
           >
-            {`import { tryAsync, isTryError } from 'tryError';
+            {`import { tryAsync, isTryError } from '@try-error/core';
 
 async function handleUserOperation(userId: string) {
   const result = await tryAsync(() => fetchUser(userId));

@@ -31,7 +31,7 @@ export default function SuccessVsErrorPage() {
             showLineNumbers={true}
             className="mb-4"
           >
-            {`import { tryAsync, isTryError } from 'tryError';
+            {`import { tryAsync, isTryError } from '@try-error/core';
 
 // Function returns either User or TryError
 const result = await tryAsync(() => fetchUser('123'));
@@ -208,7 +208,7 @@ const error = trySync(() => JSON.parse(invalidJson));
               title="Performance Optimization Strategies"
               showLineNumbers={true}
             >
-              {`import { configure, ConfigPresets } from 'tryError';
+              {`import { configure, ConfigPresets } from '@try-error/core';
 
 // High-performance parsing (expected errors)
 function parseUserInput(input: string) {
@@ -292,7 +292,7 @@ function processDataPipeline(data: unknown[]) {
                 showLineNumbers={true}
                 className="mb-4"
               >
-                {`import { tryAsync, isTryError, TryResult } from 'tryError';
+                {`import { tryAsync, isTryError, TryResult } from '@try-error/core';
 
 async function handleUserFetch(userId: string) {
   const result = await tryAsync(() => fetchUser(userId));
@@ -345,7 +345,7 @@ function processResult<T>(result: TryResult<T, TryError>) {
                 showLineNumbers={true}
                 className="mb-4"
               >
-                {`import { tryAsync, isTrySuccess, isTryError } from 'tryError';
+                {`import { tryAsync, isTrySuccess, isTryError } from '@try-error/core';
 
 async function fetchMultipleUsers(userIds: string[]) {
   const results = await Promise.all(
@@ -424,7 +424,7 @@ function processValidResults<T>(results: TryResult<T, TryError>[]) {
                 showLineNumbers={true}
                 className="mb-4"
               >
-                {`import { createTryError } from 'tryError';
+                {`import { createTryError } from '@try-error/core';
 
 // Define your custom error types
 export const createValidationError = (message: string, field: string) =>
@@ -457,7 +457,7 @@ async function performUserOperation(userId: string) {
                 showLineNumbers={true}
                 className="mb-4"
               >
-                {`import { tryAsync, isTryError, hasErrorType } from 'tryError';
+                {`import { tryAsync, isTryError, hasErrorType } from '@try-error/core';
 
 async function handleUserOperation(userId: string) {
   const result = await tryAsync(() => performUserOperation(userId));
@@ -667,7 +667,7 @@ function matchWithErrorTypes<T, R>(
                 showLineNumbers={true}
                 className="mb-4"
               >
-                {`import { mapResult, flatMapResult } from 'tryError';
+                {`import { mapResult, flatMapResult } from '@try-error/core';
 
 // Chain transformations
 async function processUserChain(userId: string) {
@@ -748,7 +748,7 @@ async function processUserPipeline(userId: string) {
                 showLineNumbers={true}
                 className="mb-4"
               >
-                {`import { unwrapOr } from 'tryError';
+                {`import { unwrapOr } from '@try-error/core';
 
 // Simple fallback
 async function getUserWithFallback(userId: string) {

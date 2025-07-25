@@ -276,7 +276,7 @@ const errorPool = new ErrorPool();`}
                 showLineNumbers={true}
                 className="mb-3"
               >
-                {`import { configure, ConfigPresets } from 'tryError';
+                {`import { configure, ConfigPresets } from '@try-error/core';
 
 // Development: Full debugging (100-120% error overhead)
 configure(ConfigPresets.development());
@@ -371,7 +371,7 @@ async function fetchCriticalData(id: string) {
 }
 
 // Mixed scenario with scoped configs
-import { createScope } from 'tryError';
+import { createScope } from '@try-error/core';
 
 const validationScope = createScope({
   captureStackTrace: false,
@@ -829,7 +829,7 @@ setupNode({
 //   server.ts
 
 // src/config/tryError.config.ts
-import { configureTryError, configurePerformance } from 'tryError';
+import { configureTryError, configurePerformance } from '@try-error/core';
 
 export function initializeTryError() {
   // Configure based on environment
@@ -922,7 +922,7 @@ app.listen(PORT, () => {
 //   instrumentation.ts (for server initialization)
 
 // src/lib/tryError.config.ts
-import { configureTryError } from 'tryError';
+import { configureTryError } from '@try-error/core';
 
 export function initializeTryError() {
   configureTryError({
@@ -983,7 +983,7 @@ export default function RootLayout({
 }
 
 // src/app/api/users/route.ts
-import { tryAsync, isTryError } from 'tryError';
+import { tryAsync, isTryError } from '@try-error/core';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
@@ -1039,7 +1039,7 @@ export async function GET(request: NextRequest) {
 //   App.tsx
 
 // src/config/tryError.config.ts
-import { configureTryError } from 'tryError';
+import { configureTryError } from '@try-error/core';
 
 export function initializeTryError() {
   configureTryError({
@@ -1084,7 +1084,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 );
 
 // src/App.tsx
-import { TryErrorBoundary } from '@tryError/react';
+import { TryErrorBoundary } from '@try-error/react';
 import { UserProfile } from './components/UserProfile';
 
 function App() {
@@ -1127,7 +1127,7 @@ export default App;`}
 //   test.ts
 
 // config/tryError/index.ts
-import { TryErrorConfig } from 'tryError';
+import { TryErrorConfig } from '@try-error/core';
 
 const env = process.env.NODE_ENV || 'development';
 
@@ -1147,7 +1147,7 @@ switch (env) {
 export default config;
 
 // config/tryError/development.ts
-import { TryErrorConfig } from 'tryError';
+import { TryErrorConfig } from '@try-error/core';
 
 const config: TryErrorConfig = {
   captureStackTrace: true,
@@ -1167,7 +1167,7 @@ const config: TryErrorConfig = {
 export default config;
 
 // config/tryError/production.ts
-import { TryErrorConfig } from 'tryError';
+import { TryErrorConfig } from '@try-error/core';
 
 const config: TryErrorConfig = {
   captureStackTrace: false,
@@ -1189,7 +1189,7 @@ export default config;
 
 // Usage in your app:
 // src/app.ts
-import { configureTryError } from 'tryError';
+import { configureTryError } from '@try-error/core';
 import tryErrorConfig from '../config/tryError';
 
 // Apply configuration

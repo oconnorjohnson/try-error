@@ -22,7 +22,7 @@ export default function InstallationPage() {
             Package Installation
           </h2>
 
-          <InstallCommand packageName="tryError" className="mb-3 sm:mb-4" />
+          <InstallCommand packageName="@try-error/core" className="mb-3 sm:mb-4" />
 
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 sm:p-4">
             <p className="text-blue-800 text-sm sm:text-base">
@@ -54,12 +54,12 @@ export default function InstallationPage() {
             <p className="text-slate-600 text-xs sm:text-sm mb-3">
               You install the same{" "}
               <code className="bg-slate-200 px-1 py-0.5 rounded text-xs sm:text-sm">
-                tryError
+                @try-error/core
               </code>{" "}
               package regardless of which module you use. The different imports
               are just entry points within the package.
             </p>
-            <InstallCommand packageName="tryError" className="mt-2" />
+            <InstallCommand packageName="@try-error/core" className="mt-2" />
           </div>
 
           <p className="text-slate-600 mb-3 sm:mb-4 text-sm sm:text-base">
@@ -82,7 +82,7 @@ export default function InstallationPage() {
                   language="typescript"
                   className="mb-2 text-xs sm:text-sm"
                 >
-                  {`import { trySync, tryAsync, isTryError } from 'tryError';`}
+                  {`import { trySync, tryAsync, isTryError } from '@try-error/core';`}
                 </CodeBlock>
               </div>
             </div>
@@ -101,7 +101,7 @@ export default function InstallationPage() {
                   language="typescript"
                   className="mb-2 text-xs md:text-sm"
                 >
-                  {`import { trySync, isTryError } from 'tryError/sync';`}
+                  {`import { trySync, isTryError } from '@try-error/core/sync';`}
                 </CodeBlock>
               </div>
             </div>
@@ -120,7 +120,7 @@ export default function InstallationPage() {
                   language="typescript"
                   className="mb-2 text-xs sm:text-sm"
                 >
-                  {`import { tryAsync, isTryError } from 'tryError/async';`}
+                  {`import { tryAsync, isTryError } from '@try-error/core/async';`}
                 </CodeBlock>
               </div>
             </div>
@@ -139,7 +139,7 @@ export default function InstallationPage() {
                   language="typescript"
                   className="mb-2 text-xs sm:text-sm"
                 >
-                  {`import { isTryError, createError } from 'tryError/core';`}
+                  {`import { isTryError, createError } from '@try-error/core/core';`}
                 </CodeBlock>
               </div>
             </div>
@@ -199,7 +199,7 @@ export default function InstallationPage() {
             showLineNumbers={true}
             className="mb-3 sm:mb-4 text-xs sm:text-sm"
           >
-            {`import { trySync, tryAsync, isTryError } from 'tryError';
+            {`import { trySync, tryAsync, isTryError } from '@try-error/core';
 
 // Synchronous operations
 const result = trySync(() => JSON.parse(jsonString));

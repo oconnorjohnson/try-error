@@ -28,14 +28,14 @@ export default function ReactInstallationPage() {
               <h3 className="text-lg font-semibold text-slate-900 mb-2">
                 Core Library
               </h3>
-              <InstallCommand packageName="tryError" className="mb-4" />
+              <InstallCommand packageName="@try-error/core" className="mb-4" />
             </div>
 
             <div>
               <h3 className="text-lg font-semibold text-slate-900 mb-2">
                 React Integration (Optional)
               </h3>
-              <InstallCommand packageName="@tryError/react" className="mb-4" />
+              <InstallCommand packageName="@try-error/react" className="mb-4" />
             </div>
           </div>
 
@@ -64,8 +64,8 @@ export default function ReactInstallationPage() {
             showLineNumbers={true}
             className="mb-4"
           >
-            {`import { useTryAsync, useTrySync } from '@tryError/react';
-import { tryAsync, isTryError } from 'tryError';
+            {`import { useTryAsync, useTrySync } from '@try-error/react';
+import { tryAsync, isTryError } from '@try-error/core';
 
 function UserProfile({ userId }: { userId: string }) {
   // Using the React hook
@@ -135,7 +135,7 @@ function UserProfile({ userId }: { userId: string }) {
             className="mb-4"
           >
             {`import { ErrorBoundary } from 'react-error-boundary';
-import { TryErrorBoundary } from '@tryError/react';
+import { TryErrorBoundary } from '@try-error/react';
 
 function App() {
   return (

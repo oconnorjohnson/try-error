@@ -160,7 +160,7 @@ setupNextJs({
                   title="lib/error-tracking.ts"
                   showLineNumbers={true}
                 >
-                  {`import { TryError } from 'tryError';
+                  {`import { TryError } from '@try-error/core';
 import * as Sentry from '@sentry/nextjs';
 import { track } from '@vercel/analytics';
 
@@ -294,7 +294,7 @@ setupNextJs({
               showLineNumbers={true}
             >
               {`import { track } from '@vercel/analytics';
-import { TryError } from 'tryError';
+import { TryError } from '@try-error/core';
 
 export function trackError(error: TryError) {
   // Track basic error event
@@ -355,7 +355,7 @@ export function trackError(error: TryError) {
               title="lib/error-management.ts"
               showLineNumbers={true}
             >
-              {`import { setupNextJs, TryError } from 'tryError';
+              {`import { setupNextJs, TryError } from '@try-error/core';
 import * as Sentry from '@sentry/nextjs';
 import { track } from '@vercel/analytics';
 

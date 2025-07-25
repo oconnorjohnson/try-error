@@ -68,7 +68,7 @@ if (!user) {
               title="tryError Approach"
               showLineNumbers={true}
             >
-              {`import { tryAsync, isTryError } from 'tryError';
+              {`import { tryAsync, isTryError } from '@try-error/core';
 
 async function fetchUser(id: string): Promise<TryResult<User, TryError>> {
   return tryAsync(async () => {
@@ -159,7 +159,7 @@ result.match(
               title="tryError Equivalent"
               showLineNumbers={true}
             >
-              {`import { tryAsync, isTryError } from 'tryError';
+              {`import { tryAsync, isTryError } from '@try-error/core';
 
 async function fetchUser(id: string): Promise<TryResult<User, TryError>> {
   return tryAsync(async () => {
@@ -241,7 +241,7 @@ pipe(
               After (tryError)
             </h3>
             <CodeBlock language="typescript" title="tryError Equivalent">
-              {`import { tryAsync, isTryError } from 'tryError';
+              {`import { tryAsync, isTryError } from '@try-error/core';
 
 const fetchUser = (id: string) =>
   tryAsync(() => fetch(\`/api/users/\${id}\`).then(r => r.json()));
@@ -268,7 +268,7 @@ if (isTryError(result)) {
               <h3 className="font-semibold text-slate-900 mb-2">
                 1. Install tryError
               </h3>
-              <InstallCommand packageName="tryError" />
+              <InstallCommand packageName="@try-error/core" />
             </div>
 
             <div className="border border-slate-200 rounded-lg p-4">

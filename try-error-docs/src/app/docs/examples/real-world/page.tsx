@@ -41,7 +41,7 @@ export default function RealWorldExamplesPage() {
           </CardHeader>
           <CardContent className="space-y-4">
             <CodeBlock language="typescript" title="app/users/[id]/page.tsx">
-              {`import { tryAsync, isOk, isTryError } from 'tryError';
+              {`import { tryAsync, isOk, isTryError } from '@try-error/core';
 import { UserProfile } from '@/components/UserProfile';
 import { ErrorDisplay } from '@/components/ErrorDisplay';
 import { NotFound } from '@/components/NotFound';
@@ -160,7 +160,7 @@ export default async function UserPage({ params }: { params: { id: string } }) {
           <CardContent>
             <CodeBlock language="typescript" title="app/api/users/route.ts">
               {`import { NextRequest, NextResponse } from 'next/server';
-import { tryAsync, trySync, isOk, isTryError } from 'tryError';
+import { tryAsync, trySync, isOk, isTryError } from '@try-error/core';
 import { z } from 'zod';
 
 // Validation schemas
@@ -314,8 +314,8 @@ export async function POST(request: NextRequest) {
           <CardContent>
             <CodeBlock language="typescript" title="components/UserForm.tsx">
               {`import { useState } from 'react';
-import { trySync, tryAsync, isOk, isTryError } from 'tryError';
-import { useTryCallback } from '@tryError/react';
+import { trySync, tryAsync, isOk, isTryError } from '@try-error/core';
+import { useTryCallback } from '@try-error/react';
 
 interface FormData {
   name: string;
@@ -610,8 +610,8 @@ export default function UserForm({ onSuccess }: { onSuccess?: (user: any) => voi
               title="components/AppErrorBoundary.tsx"
             >
               {`import React from 'react';
-import { TryErrorBoundary } from '@tryError/react';
-import { fromThrown, createError } from 'tryError';
+import { TryErrorBoundary } from '@try-error/react';
+import { fromThrown, createError } from '@try-error/core';
 
 interface ErrorDisplayProps {
   error: TryError;

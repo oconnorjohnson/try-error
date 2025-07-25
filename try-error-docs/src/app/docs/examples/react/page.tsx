@@ -30,8 +30,8 @@ export default function ReactExamplesPage() {
             showLineNumbers={true}
             className="mb-4"
           >
-            {`import { useTryAsync, TryErrorBoundary } from '@tryError/react';
-import { tryAsync, isTryError } from 'tryError';
+            {`import { useTryAsync, TryErrorBoundary } from '@try-error/react';
+import { tryAsync, isTryError } from '@try-error/core';
 
 interface User {
   id: string;
@@ -237,8 +237,8 @@ function App() {
             showLineNumbers={true}
             className="mb-4"
           >
-            {`import { useTryMutation, useTryCallback } from '@tryError/react';
-import { trySync, isTryError } from 'tryError';
+            {`import { useTryMutation, useTryCallback } from '@try-error/react';
+import { trySync, isTryError } from '@try-error/core';
 import { useState } from 'react';
 
 interface CreateUserForm {
@@ -482,8 +482,8 @@ function FormField({
             showLineNumbers={true}
             className="mb-4"
           >
-            {`import { useTryAsync } from '@tryError/react';
-import { tryAsync, isTryError } from 'tryError';
+            {`import { useTryAsync } from '@try-error/react';
+import { tryAsync, isTryError } from '@try-error/core';
 import { useState, useCallback } from 'react';
 
 interface ApiData {

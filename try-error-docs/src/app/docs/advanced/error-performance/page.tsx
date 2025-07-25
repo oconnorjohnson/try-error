@@ -228,7 +228,7 @@ export default function ErrorPerformancePage() {
           language="typescript"
           title="High-Performance Error Handling"
         >
-          {`import { configure, ConfigPresets, trySync } from 'tryError';
+          {`import { configure, ConfigPresets, trySync } from '@try-error/core';
 
 // Configure for production performance
 configure({

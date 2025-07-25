@@ -86,7 +86,7 @@ export default function ErrorAPIPage() {
                 showLineNumbers={true}
                 className="mb-4"
               >
-                {`import { createTryError } from 'tryError';
+                {`import { createTryError } from '@try-error/core';
 
 // Simple error
 const error = createTryError('ValidationError', 'Email is required');
@@ -189,7 +189,7 @@ const typedError = createTryError<ValidationContext>(
                 showLineNumbers={true}
                 className="mb-4"
               >
-                {`import { createValidationError, createFieldError } from 'tryError';
+                {`import { createValidationError, createFieldError } from '@try-error/core';
 
 // Field validation error
 const fieldError = createFieldError('email', 'user@invalid', 'Invalid email format');
@@ -229,7 +229,7 @@ const multipleErrors = createValidationError('Multiple validation failures', {
                 showLineNumbers={true}
                 className="mb-4"
               >
-                {`import { createNetworkError, createHttpError, createTimeoutError } from 'tryError';
+                {`import { createNetworkError, createHttpError, createTimeoutError } from '@try-error/core';
 
 // HTTP error
 const httpError = createHttpError(404, 'User not found', {
@@ -272,7 +272,7 @@ const rateLimitError = createHttpError(429, 'Rate limit exceeded', {
   createAuthError, 
   createPermissionError, 
   createTokenError 
-} from 'tryError';
+} from '@try-error/core';
 
 // Authentication error
 const authError = createAuthError('Invalid credentials', {
@@ -335,7 +335,7 @@ const mfaError = createAuthError('MFA verification required', {
   sanitizeError, 
   transformError,
   chainError 
-} from 'tryError';
+} from '@try-error/core';
 
 // Enrich error with additional context
 const enrichedError = enrichError(originalError, {
@@ -381,7 +381,7 @@ const chainedError = chainError(
   deserializeError, 
   toJSON,
   fromJSON 
-} from 'tryError';
+} from '@try-error/core';
 
 // Serialize for logging
 const serialized = serializeError(error, {
@@ -431,7 +431,7 @@ const customSerialized = serializeError(error, {
   getCategory,
   extractCause,
   getErrorChain 
-} from 'tryError';
+} from '@try-error/core';
 
 // Check if error is retryable
 const canRetry = isRetryable(error);
@@ -482,7 +482,7 @@ const errorSummary = aggregateErrors([error1, error2, error3], {
             showLineNumbers={true}
             className="mb-4"
           >
-            {`import { ErrorBuilder } from 'tryError';
+            {`import { ErrorBuilder } from '@try-error/core';
 
 // Fluent error building
 const error = new ErrorBuilder()

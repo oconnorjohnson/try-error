@@ -29,7 +29,7 @@ export default function BasicExamplesPage() {
             showLineNumbers={true}
             className="mb-4"
           >
-            {`import { trySync, isTryError } from 'tryError';
+            {`import { trySync, isTryError } from '@try-error/core';
 
 function parseUserConfig(jsonString: string) {
   const result = trySync(() => JSON.parse(jsonString));
@@ -73,7 +73,7 @@ console.log(fallbackConfig.theme); // "light" (default)`}
             showLineNumbers={true}
             className="mb-4"
           >
-            {`import { tryAsync, isTryError } from 'tryError';
+            {`import { tryAsync, isTryError } from '@try-error/core';
 
 async function fetchUserProfile(userId: string) {
   // Fetch user data
@@ -142,7 +142,7 @@ if (profile.error) {
             showLineNumbers={true}
             className="mb-4"
           >
-            {`import { trySync, tryAsync, isTryError } from 'tryError';
+            {`import { trySync, tryAsync, isTryError } from '@try-error/core';
 import fs from 'fs';
 
 // Synchronous file reading
@@ -212,7 +212,7 @@ if (!saved) {
             showLineNumbers={true}
             className="mb-4"
           >
-            {`import { trySync, isTryError } from 'tryError';
+            {`import { trySync, isTryError } from '@try-error/core';
 
 interface UserForm {
   email: string;
@@ -320,7 +320,7 @@ if (validation.valid) {
             showLineNumbers={true}
             className="mb-4"
           >
-            {`import { tryAsync, isTryError } from 'tryError';
+            {`import { tryAsync, isTryError } from '@try-error/core';
 
 class UserRepository {
   constructor(private db: any) {}
@@ -419,7 +419,7 @@ if (user) {
             showLineNumbers={true}
             className="mb-4"
           >
-            {`import { trySync, isTryError } from 'tryError';
+            {`import { trySync, isTryError } from '@try-error/core';
 
 interface AppConfig {
   port: number;

@@ -66,7 +66,7 @@ export default function AsyncAPIPage() {
             showLineNumbers={true}
             className="mb-4"
           >
-            {`import { tryAsync, isTryError } from 'tryError';
+            {`import { tryAsync, isTryError } from '@try-error/core';
 
 // API calls
 const fetchUser = async (id: string) => {

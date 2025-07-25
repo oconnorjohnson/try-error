@@ -49,7 +49,7 @@ export default function ReactComponentsPage() {
             showLineNumbers={true}
             className="mb-4"
           >
-            {`import { TryErrorBoundary } from '@tryError/react';
+            {`import { TryErrorBoundary } from '@try-error/react';
 
 function ErrorFallback({ error, resetError, retry }) {
   return (
@@ -137,7 +137,7 @@ function App() {
             showLineNumbers={true}
             className="mb-4"
           >
-            {`import { AsyncComponent } from '@tryError/react';
+            {`import { AsyncComponent } from '@try-error/react';
 
 function UserProfile({ userId }: { userId: string }) {
   return (
@@ -208,7 +208,7 @@ function UserProfile({ userId }: { userId: string }) {
             showLineNumbers={true}
             className="mb-4"
           >
-            {`import { TryForm } from '@tryError/react';
+            {`import { TryForm } from '@try-error/react';
 
 function CreateUserForm() {
   return (
@@ -307,7 +307,7 @@ function CreateUserForm() {
             showLineNumbers={true}
             className="mb-4"
           >
-            {`import { RetryButton } from '@tryError/react';
+            {`import { RetryButton } from '@try-error/react';
 
 function DataFetcher() {
   const [data, setData] = useState(null);
@@ -378,7 +378,7 @@ function DataFetcher() {
             showLineNumbers={true}
             className="mb-4"
           >
-            {`import { ErrorDisplay } from '@tryError/react';
+            {`import { ErrorDisplay } from '@try-error/react';
 
 function UserProfile({ userId }: { userId: string }) {
   const { data: user, error } = useTryAsync(

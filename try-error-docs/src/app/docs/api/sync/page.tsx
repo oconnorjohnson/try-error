@@ -66,7 +66,7 @@ export default function SyncAPIPage() {
             showLineNumbers={true}
             className="mb-4"
           >
-            {`import { trySync, isTryError } from 'tryError';
+            {`import { trySync, isTryError } from '@try-error/core';
 
 // JSON parsing
 const parseResult = trySync(() => JSON.parse('{"name": "John"}'));

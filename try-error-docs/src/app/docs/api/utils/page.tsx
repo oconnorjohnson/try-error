@@ -39,7 +39,7 @@ export default function UtilsAPIPage() {
                 showLineNumbers={true}
                 className="mb-4"
               >
-                {`import { isTryError } from 'tryError';
+                {`import { isTryError } from '@try-error/core';
 
 function isTryError<T = any>(value: unknown): value is TryError<T>
 
@@ -79,7 +79,7 @@ function handleResult<T>(result: TryResult<T, TryError>) {
                 showLineNumbers={true}
                 className="mb-4"
               >
-                {`import { isTrySuccess } from 'tryError';
+                {`import { isTrySuccess } from '@try-error/core';
 
 function isTrySuccess<T, E extends TryError>(
   result: TryResult<T, E>
@@ -126,7 +126,7 @@ function processResults<T>(results: TryResult<T, TryError>[]) {
                 showLineNumbers={true}
                 className="mb-4"
               >
-                {`import { hasErrorType } from 'tryError';
+                {`import { hasErrorType } from '@try-error/core';
 
 function hasErrorType<T extends string>(
   error: TryError,
@@ -185,7 +185,7 @@ function isRetryableError(error: TryError): boolean {
                 showLineNumbers={true}
                 className="mb-4"
               >
-                {`import { mapResult } from 'tryError';
+                {`import { mapResult } from '@try-error/core';
 
 function mapResult<T, U, E extends TryError>(
   result: TryResult<T, E>,
@@ -235,7 +235,7 @@ async function mapResultAsync<T, U, E extends TryError>(
                 showLineNumbers={true}
                 className="mb-4"
               >
-                {`import { mapError } from 'tryError';
+                {`import { mapError } from '@try-error/core';
 
 function mapError<T, E1 extends TryError, E2 extends TryError>(
   result: TryResult<T, E1>,
@@ -292,7 +292,7 @@ const apiResult = mapError(result, error => {
                 showLineNumbers={true}
                 className="mb-4"
               >
-                {`import { flatMapResult } from 'tryError';
+                {`import { flatMapResult } from '@try-error/core';
 
 function flatMapResult<T, U, E extends TryError>(
   result: TryResult<T, E>,
@@ -368,7 +368,7 @@ async function processUserWorkflow(userId: string) {
                 showLineNumbers={true}
                 className="mb-4"
               >
-                {`import { combineResults } from 'tryError';
+                {`import { combineResults } from '@try-error/core';
 
 function combineResults<T extends readonly TryResult<any, any>[]>(
   results: T
@@ -436,7 +436,7 @@ function combineWithPartialSuccess<T extends Record<string, TryResult<any, any>>
                 showLineNumbers={true}
                 className="mb-4"
               >
-                {`import { raceResults } from 'tryError';
+                {`import { raceResults } from '@try-error/core';
 
 function raceResults<T>(
   results: Promise<TryResult<T, TryError>>[]
@@ -494,7 +494,7 @@ async function fetchWithTimeout<T>(
                 showLineNumbers={true}
                 className="mb-4"
               >
-                {`import { sequenceResults } from 'tryError';
+                {`import { sequenceResults } from '@try-error/core';
 
 function sequenceResults<T>(
   operations: (() => Promise<TryResult<T, TryError>>)[]
@@ -570,7 +570,7 @@ const pipelineResult = await processPipeline(userData, [
                 showLineNumbers={true}
                 className="mb-4"
               >
-                {`import { unwrapOr } from 'tryError';
+                {`import { unwrapOr } from '@try-error/core';
 
 function unwrapOr<T>(result: TryResult<T, TryError>, defaultValue: T): T
 
@@ -627,7 +627,7 @@ if (maybeUser) {
                 showLineNumbers={true}
                 className="mb-4"
               >
-                {`import { retry, RetryOptions } from 'tryError';
+                {`import { retry, RetryOptions } from '@try-error/core';
 
 interface RetryOptions {
   maxAttempts: number;
@@ -708,7 +708,7 @@ async function retryWithJitter<T>(
                 showLineNumbers={true}
                 className="mb-4"
               >
-                {`import { timeout } from 'tryError';
+                {`import { timeout } from '@try-error/core';
 
 function timeout<T>(
   operation: () => Promise<T>,
@@ -884,7 +884,7 @@ async function progressiveTimeout<T>(
   configureErrorPool, 
   resetErrorPool,
   getErrorPoolStats 
-} from 'tryError';
+} from '@try-error/core';
 
 // Create a custom pool
 const pool = new ErrorPool(100); // Pool size
@@ -942,7 +942,7 @@ const stats = pool.getStats(); // Get pool statistics`}
   isLazyProperty, 
   forceLazyEvaluation,
   createDebugProxy 
-} from 'tryError';
+} from '@try-error/core';
 
 // Create error with lazy properties
 const error = createLazyError({
@@ -995,7 +995,7 @@ console.log(debugError.stack);`}
                 showLineNumbers={true}
                 className="mb-4"
               >
-                {`import { configure, ConfigPresets } from 'tryError';
+                {`import { configure, ConfigPresets } from '@try-error/core';
 
 // Maximum performance - minimal features
 configure(ConfigPresets.minimal());
@@ -1061,7 +1061,7 @@ configure({
                 showLineNumbers={true}
                 className="mb-4"
               >
-                {`import { MiddlewarePipeline, ErrorMiddleware } from 'tryError';
+                {`import { MiddlewarePipeline, ErrorMiddleware } from '@try-error/core';
 
 // Create a pipeline
 const pipeline = new MiddlewarePipeline();
@@ -1115,7 +1115,7 @@ console.log(pipeline.length); // Number of middleware`}
   rateLimitMiddleware,
   filterMiddleware,
   compose
-} from 'tryError';
+} from '@try-error/core';
 
 // Logging
 pipeline.use(loggingMiddleware(console.error));
@@ -1177,7 +1177,7 @@ const errorHandling = compose(
                 showLineNumbers={true}
                 className="mb-4"
               >
-                {`import { globalRegistry } from 'tryError';
+                {`import { globalRegistry } from '@try-error/core';
 
 // Create named pipelines
 const apiPipeline = new MiddlewarePipeline()
@@ -1232,7 +1232,7 @@ globalRegistry.remove('api'); // returns boolean`}
                 showLineNumbers={true}
                 className="mb-4"
               >
-                {`import { pluginManager, Plugin } from 'tryError';
+                {`import { pluginManager, Plugin } from '@try-error/core';
 
 // Install a plugin
 await pluginManager.install(myPlugin);
@@ -1283,7 +1283,7 @@ await pluginManager.notifyConfigChange(newConfig);`}
                 showLineNumbers={true}
                 className="mb-4"
               >
-                {`import { createPlugin, Plugin, PluginAPI } from 'tryError';
+                {`import { createPlugin, Plugin, PluginAPI } from '@try-error/core';
 
 // Using createPlugin helper
 const myPlugin = createPlugin(

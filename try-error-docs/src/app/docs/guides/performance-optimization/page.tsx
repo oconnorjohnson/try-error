@@ -62,7 +62,7 @@ export default function PerformanceOptimizationPage() {
 
             <TabsContent value="basic">
               <EnhancedCodeBlock language="typescript" showLineNumbers>
-                {`import { configure, trySync } from 'tryError';
+                {`import { configure, trySync } from '@try-error/core';
 
 // Enable object pooling globally
 configure({
@@ -91,7 +91,7 @@ function processRequest(data: unknown) {
 
             <TabsContent value="configuration">
               <EnhancedCodeBlock language="typescript" showLineNumbers>
-                {`import { configureErrorPool, getErrorPoolStats } from 'tryError';
+                {`import { configureErrorPool, getErrorPoolStats } from '@try-error/core';
 
 // Configure the global error pool
 configureErrorPool({
@@ -100,7 +100,7 @@ configureErrorPool({
 });
 
 // Or configure per-scope pools
-import { ErrorPool } from 'tryError';
+import { ErrorPool } from '@try-error/core';
 
 const requestPool = new ErrorPool(50);
 
@@ -121,7 +121,7 @@ function handleRequest() {
 
             <TabsContent value="monitoring">
               <EnhancedCodeBlock language="typescript" showLineNumbers>
-                {`import { getErrorPoolStats } from 'tryError';
+                {`import { getErrorPoolStats } from '@try-error/core';
 
 // Monitor pool performance
 const stats = getErrorPoolStats();
@@ -193,7 +193,7 @@ console.log({
 
             <TabsContent value="auto">
               <EnhancedCodeBlock language="typescript" showLineNumbers>
-                {`import { configure, trySync } from 'tryError';
+                {`import { configure, trySync } from '@try-error/core';
 
 // Enable lazy evaluation globally
 configure({
@@ -220,7 +220,7 @@ if (isTryError(result)) {
 
             <TabsContent value="manual">
               <EnhancedCodeBlock language="typescript" showLineNumbers>
-                {`import { createLazyError, makeLazy, forceLazyEvaluation } from 'tryError';
+                {`import { createLazyError, makeLazy, forceLazyEvaluation } from '@try-error/core';
 
 // Create an error with lazy properties
 const error = createLazyError({
@@ -250,7 +250,7 @@ const evaluatedError = forceLazyEvaluation(lazyError);`}
 
             <TabsContent value="debugging">
               <EnhancedCodeBlock language="typescript" showLineNumbers>
-                {`import { createDebugProxy, isLazyProperty } from 'tryError';
+                {`import { createDebugProxy, isLazyProperty } from '@try-error/core';
 
 // Create a debug proxy to monitor property access
 const debugError = createDebugProxy(error);
@@ -281,7 +281,7 @@ const monitoredError = createDebugProxy(error);
           </p>
 
           <EnhancedCodeBlock language="typescript" showLineNumbers>
-            {`import { configure, ConfigPresets } from 'tryError';
+            {`import { configure, ConfigPresets } from '@try-error/core';
 
 // Use preset configurations
 configure(ConfigPresets.minimal()); // Maximum performance

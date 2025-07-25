@@ -108,7 +108,7 @@ export default function ConfigurationPage() {
                     showLineNumbers={true}
                   >
                     {`// At the very top of your entry file
-import { setupNode } from 'tryError/setup';
+import { setupNode } from '@try-error/core/setup';
 
 // Configure before anything else
 setupNode();
@@ -130,7 +130,7 @@ const app = express();
                     showLineNumbers={true}
                   >
                     {`// At the very top of your entry file
-import { setupReact } from 'tryError/setup';
+import { setupReact } from '@try-error/core/setup';
 
 // Configure before React
 setupReact();
@@ -153,7 +153,7 @@ ReactDOM.createRoot(...).render(<App />);`}
                   showLineNumbers={true}
                 >
                   {`// For App Router: app/layout.tsx
-import { setupNextJs } from 'tryError/setup';
+import { setupNextJs } from '@try-error/core/setup';
 
 // Simple setup (same config for both server and client)
 setupNextJs();
@@ -207,7 +207,7 @@ export default function RootLayout({
                 className="mb-3"
               >
                 {`// Create a configuration module
-import { configure } from 'tryError';
+import { configure } from '@try-error/core';
 
 // Your custom configuration
 configure({
@@ -263,7 +263,7 @@ const app = express();
                 title="config/index.ts"
                 showLineNumbers={true}
               >
-                {`import { configure, ConfigPresets } from 'tryError';
+                {`import { configure, ConfigPresets } from '@try-error/core';
 
 // Configure based on environment
 switch (process.env.NODE_ENV) {
@@ -278,7 +278,7 @@ switch (process.env.NODE_ENV) {
 }
 
 // Or use the auto-setup
-import { autoSetup } from 'tryError/setup';
+import { autoSetup } from '@try-error/core/setup';
 autoSetup(); // Automatically detects environment`}
               </CodeBlock>
             </div>
@@ -321,7 +321,7 @@ autoSetup(); // Automatically detects environment`}
               showLineNumbers={true}
               className="mt-2"
             >
-              {`import { configure } from 'tryError';
+              {`import { configure } from '@try-error/core';
 
 beforeAll(() => {
   configure({
@@ -364,7 +364,7 @@ beforeAll(() => {
               className="mb-4"
             >
               {`// Import setup utilities (tree-shakeable)
-import { setupNode, setupReact, setupNextJs, autoSetup } from 'tryError/setup';
+import { setupNode, setupReact, setupNextJs, autoSetup } from '@try-error/core/setup';
 
 // Node.js/Express - Automatic environment detection
 setupNode(); // ✨ Optimized for dev/prod automatically
@@ -379,11 +379,11 @@ setupNextJs(); // ✨ Works for both server and client
 autoSetup(); // ✨ Detects Node.js, React, Next.js, etc.
 
 // High-performance (for critical applications)
-import { setupPerformance } from 'tryError/setup';
+import { setupPerformance } from '@try-error/core/setup';
 setupPerformance(); // ✨ Maximum performance, minimal overhead
 
 // Testing environment
-import { setupTesting } from 'tryError/setup';
+import { setupTesting } from '@try-error/core/setup';
 setupTesting(); // ✨ Test-friendly configuration`}
             </CodeBlock>
             <div className="bg-green-900 border border-green-300 rounded-lg p-3">
@@ -623,7 +623,7 @@ setupNextJs({
                 showLineNumbers={true}
                 className="mb-3"
               >
-                {`import { createCustomSetup } from 'tryError/setup';
+                {`import { createCustomSetup } from '@try-error/core/setup';
 
 // Create your organization's standard setup
 const setupMyApp = createCustomSetup({
@@ -779,7 +779,7 @@ setupMyApp({ developmentMode: true }); // Override specific options`}
                 showLineNumbers={true}
                 className="mb-3"
               >
-                {`import { configure } from 'tryError';
+                {`import { configure } from '@try-error/core';
 
 // Step 1: Basic configuration
 configure({
@@ -1057,7 +1057,7 @@ configure({
                 showLineNumbers={true}
                 className="mb-3"
               >
-                {`import { configure, TryErrorConfig } from 'tryError';
+                {`import { configure, TryErrorConfig } from '@try-error/core';
 
 // Configure global settings
 configure({
@@ -1116,7 +1116,7 @@ configure('development'); // Uses ConfigPresets.development()`}
                 showLineNumbers={true}
                 className="mb-3"
               >
-                {`import { ConfigPresets, configure } from 'tryError';
+                {`import { ConfigPresets, configure } from '@try-error/core';
 
 // Use built-in presets
 configure(ConfigPresets.development()); // Full debugging features
@@ -1139,7 +1139,7 @@ const customConfig = {
 configure(customConfig);
 
 // Helper for error service integration
-import { withErrorService } from 'tryError';
+import { withErrorService } from '@try-error/core';
 
 configure(withErrorService((error) => {
   Sentry.captureException(error);
@@ -1160,7 +1160,7 @@ configure(withErrorService((error) => {
                 showLineNumbers={true}
                 className="mb-3"
               >
-                {`import { createScope } from 'tryError';
+                {`import { createScope } from '@try-error/core';
 
 // Create a scoped configuration
 const { config, createError } = createScope({
@@ -1395,7 +1395,7 @@ const globalError = createTryError('GlobalError', 'Uses global config');`}
                   title="app/layout.tsx"
                   showLineNumbers={true}
                 >
-                  {`import { setupNextJs } from 'tryError/setup';
+                  {`import { setupNextJs } from '@try-error/core/setup';
 
 // This runs on both server and client
 // tryError automatically detects the runtime environment for each error
@@ -1440,7 +1440,7 @@ export default function RootLayout({
                   title="app/layout.tsx - Production-Ready Setup"
                   showLineNumbers={true}
                 >
-                  {`import { setupNextJs } from 'tryError/setup';
+                  {`import { setupNextJs } from '@try-error/core/setup';
 import * as Sentry from '@sentry/nextjs';
 import { logger } from '@/lib/logger';
 
@@ -1514,7 +1514,7 @@ setupNextJs({
                 >
                   {`'use server';
 
-import { tryAsync, isTryError } from 'tryError';
+import { tryAsync, isTryError } from '@try-error/core';
 import { revalidatePath } from 'next/cache';
 
 export async function updateUser(userId: string, data: UpdateUserData) {
@@ -1561,7 +1561,7 @@ export async function updateUser(userId: string, data: UpdateUserData) {
                   title="app/api/users/route.ts"
                   showLineNumbers={true}
                 >
-                  {`import { tryAsync, isTryError } from 'tryError';
+                  {`import { tryAsync, isTryError } from '@try-error/core';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
@@ -1599,7 +1599,7 @@ export async function GET(request: NextRequest) {
                   title="lib/tryError-setup.ts"
                   showLineNumbers={true}
                 >
-                  {`import { setupNextJs } from 'tryError/setup';
+                  {`import { setupNextJs } from '@try-error/core/setup';
 import * as Sentry from '@sentry/nextjs';
 import { Logger } from 'winston';
 
@@ -1721,7 +1721,7 @@ Sentry.init({
                       title="app/layout.tsx or _app.tsx"
                       showLineNumbers={true}
                     >
-                      {`import { configure } from 'tryError';
+                      {`import { configure } from '@try-error/core';
 import * as Sentry from '@sentry/nextjs';
 
 // Configure tryError to send all errors to Sentry
@@ -1778,7 +1778,7 @@ configure({
                       title="Enhanced error creation with Sentry context"
                       showLineNumbers={true}
                     >
-                      {`import { createTryError } from 'tryError';
+                      {`import { createTryError } from '@try-error/core';
 import * as Sentry from '@sentry/nextjs';
 
 // Create errors with Sentry-friendly context
@@ -1864,7 +1864,7 @@ export async function processPayment(userId: string, amount: number) {
                       showLineNumbers={true}
                     >
                       {`import { Analytics } from '@vercel/analytics/react';
-import { configure } from 'tryError';
+import { configure } from '@try-error/core';
 import { track } from '@vercel/analytics';
 
 // Configure tryError to track errors as custom events
@@ -1928,7 +1928,7 @@ export default function RootLayout({ children }) {
                       showLineNumbers={true}
                     >
                       {`import { track } from '@vercel/analytics';
-import { tryAsync, isTryError } from 'tryError';
+import { tryAsync, isTryError } from '@try-error/core';
 
 export function PaymentForm() {
   const [retryCount, setRetryCount] = useState(0);
@@ -1987,7 +1987,7 @@ export function PaymentForm() {
                       title="Error metrics tracking"
                       showLineNumbers={true}
                     >
-                      {`import { configure } from 'tryError';
+                      {`import { configure } from '@try-error/core';
 import { track } from '@vercel/analytics';
 
 // Track error metrics for analytics dashboard
@@ -2079,7 +2079,7 @@ function isRecoverableError(error) {
                   title="lib/error-monitoring.ts"
                   showLineNumbers={true}
                 >
-                  {`import { configure } from 'tryError';
+                  {`import { configure } from '@try-error/core';
 import * as Sentry from '@sentry/nextjs';
 import { track } from '@vercel/analytics';
 
@@ -2466,7 +2466,7 @@ return 'client';`}
                 className="mb-3"
               >
                 {`// config/development.ts
-import { configure } from 'tryError';
+import { configure } from '@try-error/core';
 
 configure({
   captureStackTrace: true,
@@ -2510,7 +2510,7 @@ configure({
                 className="mb-3"
               >
                 {`// config/production.ts
-import { configure } from 'tryError';
+import { configure } from '@try-error/core';
 
 configure({
   captureStackTrace: false, // Disable for performance
@@ -2549,7 +2549,7 @@ configure({
                 className="mb-3"
               >
                 {`// config/testing.ts
-import { configure } from 'tryError';
+import { configure } from '@try-error/core';
 
 // Collect errors for test assertions
 const testErrors: TryError[] = [];
@@ -2608,7 +2608,7 @@ export function clearTestErrors(): void {
                 showLineNumbers={true}
                 className="mb-3"
               >
-                {`import { configure, ConfigPresets } from 'tryError';
+                {`import { configure, ConfigPresets } from '@try-error/core';
 
 // Use the performance preset
 configure(ConfigPresets.performance());
@@ -2653,7 +2653,7 @@ configure({
                 showLineNumbers={true}
                 className="mb-3"
               >
-                {`import { Performance } from 'tryError';
+                {`import { Performance } from '@try-error/core';
 
 // Measure error creation performance
 const metrics = Performance.measureErrorCreation(1000);
@@ -2740,7 +2740,7 @@ configure({
                 showLineNumbers={true}
                 className="mb-3"
               >
-                {`import { configure, ConfigPresets } from 'tryError';
+                {`import { configure, ConfigPresets } from '@try-error/core';
 
 // Use the minimal preset for <50% overhead
 configure(ConfigPresets.minimal());
@@ -2783,7 +2783,7 @@ const error = trySync(() => JSON.parse("invalid"));
                 showLineNumbers={true}
                 className="mb-3"
               >
-                {`import { createMinimalError } from 'tryError';
+                {`import { createMinimalError } from '@try-error/core';
 
 // Bypass all processing - near-zero overhead
 const error = createMinimalError(
@@ -2934,7 +2934,7 @@ const error = createMinimalError("ParseError", "Invalid JSON");
                 className="mb-3"
               >
                 {`// Step 1: Start with defaults in development
-import { trySync } from 'tryError';
+import { trySync } from '@try-error/core';
 
 // Step 2: Profile and identify bottlenecks
 if (process.env.NODE_ENV === 'production') {

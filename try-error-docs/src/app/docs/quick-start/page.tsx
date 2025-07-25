@@ -32,7 +32,7 @@ export default function QuickStartPage() {
             title="Synchronous Examples"
             className="mb-3 sm:mb-4 text-xs sm:text-sm"
           >
-            {`import { trySync, isTryError } from 'tryError';
+            {`import { trySync, isTryError } from '@try-error/core';
 
 // JSON parsing
 const parseResult = trySync(() => JSON.parse(jsonString));
@@ -71,7 +71,7 @@ return JSON.parse(fileResult);`}
             title="Async Examples"
             className="mb-3 sm:mb-4 text-xs sm:text-sm"
           >
-            {`import { tryAsync, isTryError } from 'tryError';
+            {`import { tryAsync, isTryError } from '@try-error/core';
 
 // API calls
 const fetchUser = async (id: string) => {

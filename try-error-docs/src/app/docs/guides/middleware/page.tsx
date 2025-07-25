@@ -39,7 +39,7 @@ export default function MiddlewarePage() {
           </p>
 
           <EnhancedCodeBlock language="typescript" showLineNumbers>
-            {`import { ErrorMiddleware, TryResult, TryError } from 'tryError';
+            {`import { ErrorMiddleware, TryResult, TryError } from '@try-error/core';
 
 // Basic middleware signature
 type ErrorMiddleware<T = any, E extends TryError = TryError> = (
@@ -69,7 +69,7 @@ const loggingMiddleware: ErrorMiddleware = (result, next) => {
 
             <TabsContent value="pipeline">
               <EnhancedCodeBlock language="typescript" showLineNumbers>
-                {`import { MiddlewarePipeline } from 'tryError';
+                {`import { MiddlewarePipeline } from '@try-error/core';
 
 // Create a middleware pipeline
 const pipeline = new MiddlewarePipeline();
@@ -97,7 +97,7 @@ const result = safeFn(16); // Middleware applied automatically`}
 
             <TabsContent value="global">
               <EnhancedCodeBlock language="typescript" showLineNumbers>
-                {`import { globalRegistry, MiddlewarePipeline } from 'tryError';
+                {`import { globalRegistry, MiddlewarePipeline } from '@try-error/core';
 
 // Create named pipelines
 const apiPipeline = new MiddlewarePipeline()
@@ -121,7 +121,7 @@ const result = apiMiddleware.execute(tryAsync(() => fetchData()));`}
 
             <TabsContent value="composition">
               <EnhancedCodeBlock language="typescript" showLineNumbers>
-                {`import { compose, filterMiddleware } from 'tryError';
+                {`import { compose, filterMiddleware } from '@try-error/core';
 
 // Compose multiple middleware into one
 const errorHandling = compose(
@@ -166,7 +166,7 @@ pipeline.use(errorHandling).use(networkErrorHandler);`}
               </CardHeader>
               <CardContent>
                 <EnhancedCodeBlock language="typescript">
-                  {`import { loggingMiddleware } from 'tryError';
+                  {`import { loggingMiddleware } from '@try-error/core';
 
 // Simple console logging
 pipeline.use(loggingMiddleware(console.error));
@@ -196,7 +196,7 @@ pipeline.use(loggingMiddleware(customLogger));`}
               </CardHeader>
               <CardContent>
                 <EnhancedCodeBlock language="typescript">
-                  {`import { retryMiddleware } from 'tryError';
+                  {`import { retryMiddleware } from '@try-error/core';
 
 // Retry up to 3 times
 pipeline.use(retryMiddleware(3));
@@ -225,7 +225,7 @@ pipeline.use(retryMiddleware(5, shouldRetry));
               </CardHeader>
               <CardContent>
                 <EnhancedCodeBlock language="typescript">
-                  {`import { transformMiddleware } from 'tryError';
+                  {`import { transformMiddleware } from '@try-error/core';
 
 // Add additional context
 const addRequestId = transformMiddleware(error => ({
@@ -257,7 +257,7 @@ pipeline.use(addRequestId).use(sanitize);`}
               </CardHeader>
               <CardContent>
                 <EnhancedCodeBlock language="typescript">
-                  {`import { circuitBreakerMiddleware } from 'tryError';
+                  {`import { circuitBreakerMiddleware } from '@try-error/core';
 
 const circuitBreaker = circuitBreakerMiddleware({
   threshold: 5,        // Open after 5 failures
@@ -288,7 +288,7 @@ pipeline.use(circuitBreaker);
               </CardHeader>
               <CardContent>
                 <EnhancedCodeBlock language="typescript">
-                  {`import { rateLimitMiddleware } from 'tryError';
+                  {`import { rateLimitMiddleware } from '@try-error/core';
 
 // Allow max 100 errors per second
 const rateLimiter = rateLimitMiddleware(1000, 100);
@@ -314,7 +314,7 @@ pipeline.use(rateLimiter);
               </CardHeader>
               <CardContent>
                 <EnhancedCodeBlock language="typescript">
-                  {`import { enrichContextMiddleware } from 'tryError';
+                  {`import { enrichContextMiddleware } from '@try-error/core';
 
 // Add static context
 pipeline.use(enrichContextMiddleware(() => ({

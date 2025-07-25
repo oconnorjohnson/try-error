@@ -39,7 +39,7 @@ export default function PluginsPage() {
           </p>
 
           <EnhancedCodeBlock language="typescript" showLineNumbers>
-            {`import { Plugin, PluginMetadata, PluginHooks, PluginCapabilities } from 'tryError';
+            {`import { Plugin, PluginMetadata, PluginHooks, PluginCapabilities } from '@try-error/core';
 
 interface Plugin {
   // Plugin identification and dependencies
@@ -93,7 +93,7 @@ interface PluginCapabilities {
 
             <TabsContent value="install">
               <EnhancedCodeBlock language="typescript" showLineNumbers>
-                {`import { pluginManager } from 'tryError';
+                {`import { pluginManager } from '@try-error/core';
 import sentryPlugin from 'tryError-sentry';
 import datadogPlugin from 'tryError-datadog';
 
@@ -187,7 +187,7 @@ await pluginManager.notifyConfigChange(newConfig);`}
             <TabsContent value="basic">
               <EnhancedCodeBlock language="typescript" showLineNumbers>
                 {`// my-plugin.ts
-import { Plugin } from 'tryError';
+import { Plugin } from '@try-error/core';
 
 export const myPlugin: Plugin = {
   metadata: {
@@ -258,7 +258,7 @@ export const myPlugin: Plugin = {
 
             <TabsContent value="helper">
               <EnhancedCodeBlock language="typescript" showLineNumbers>
-                {`import { createPlugin } from 'tryError';
+                {`import { createPlugin } from '@try-error/core';
 
 // Use the helper function for better type safety
 export const myPlugin = createPlugin(
@@ -317,7 +317,7 @@ export const myPlugin = createPlugin(
             <TabsContent value="advanced">
               <EnhancedCodeBlock language="typescript" showLineNumbers>
                 {`// Advanced plugin with external service integration
-import { Plugin, TryError, isTryError } from 'tryError';
+import { Plugin, TryError, isTryError } from '@try-error/core';
 import { SentryClient } from '@sentry/node';
 
 class SentryIntegrationPlugin implements Plugin {

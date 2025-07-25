@@ -56,7 +56,7 @@ export default function ErrorSamplingPage() {
           showLineNumbers={true}
           className="mb-4"
         >
-          {`import { configure } from 'tryError';
+          {`import { configure } from '@try-error/core';
 import * as Sentry from '@sentry/nextjs';
 
 // Sample 10% of non-critical errors, 100% of critical errors
@@ -642,7 +642,7 @@ configure({
           showLineNumbers={true}
           className="mb-4"
         >
-          {`import { configure, TryError } from 'tryError';
+          {`import { configure, TryError } from '@try-error/core';
 import * as Sentry from '@sentry/nextjs';
 import { track } from '@vercel/analytics';
 

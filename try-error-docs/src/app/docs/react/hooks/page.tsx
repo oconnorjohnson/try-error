@@ -42,7 +42,7 @@ export default function ReactHooksPage() {
             <div>
               <h4 className="font-semibold mb-2">Basic Usage</h4>
               <CodeBlock language="typescript" title="useTry basic example">
-                {`import { useTry } from '@tryError/react';
+                {`import { useTry } from '@try-error/react';
 
 function UserProfile({ userId }: { userId: string }) {
   const { data, error, loading, execute, reset } = useTry(
@@ -144,7 +144,7 @@ interface UseTryResult<T> {
             <div>
               <h4 className="font-semibold mb-2">Basic Usage</h4>
               <CodeBlock language="typescript" title="useTryCallback example">
-                {`import { useTryCallback } from '@tryError/react';
+                {`import { useTryCallback } from '@try-error/react';
 
 function CreateUserForm() {
   const [name, setName] = useState('');
@@ -257,7 +257,7 @@ interface UseTryCallbackResult<TArgs extends any[]> {
             <div>
               <h4 className="font-semibold mb-2">Basic Usage</h4>
               <CodeBlock language="typescript" title="useTryState example">
-                {`import { useTryState } from '@tryError/react';
+                {`import { useTryState } from '@try-error/react';
 
 interface User {
   id: string;
@@ -345,7 +345,7 @@ function UserManager() {
                 language="typescript"
                 title="useTryMutation with optimistic updates"
               >
-                {`import { useTryMutation } from '@tryError/react';
+                {`import { useTryMutation } from '@try-error/react';
 
 function TodoList({ todos, setTodos }: { 
   todos: Todo[], 
@@ -416,7 +416,7 @@ function TodoList({ todos, setTodos }: {
             <div>
               <h4 className="font-semibold mb-2">Basic Usage</h4>
               <CodeBlock language="typescript" title="useCleanup basic example">
-                {`import { useCleanup } from '@tryError/react';
+                {`import { useCleanup } from '@try-error/react';
 
 function DataFetcher() {
   const { isMounted, addCleanup, createAbortController } = useCleanup();
@@ -468,7 +468,7 @@ function DataFetcher() {
                 language="typescript"
                 title="useCleanup with ref nullification"
               >
-                {`import { useCleanup } from '@tryError/react';
+                {`import { useCleanup } from '@try-error/react';
 
 function VideoPlayer({ videoUrl }: { videoUrl: string }) {
   const { isMounted, addCleanup, createAbortController, nullifyRef } = useCleanup();
@@ -518,7 +518,7 @@ function VideoPlayer({ videoUrl }: { videoUrl: string }) {
                 language="typescript"
                 title="useCleanup in custom hooks"
               >
-                {`import { useCleanup } from '@tryError/react';
+                {`import { useCleanup } from '@try-error/react';
 
 function useWebSocket(url: string) {
   const { isMounted, addCleanup, createAbortController } = useCleanup();
@@ -648,7 +648,7 @@ function useWebSocket(url: string) {
                 language="typescript"
                 title="Combining hooks with error boundaries"
               >
-                {`import { TryErrorBoundary } from '@tryError/react';
+                {`import { TryErrorBoundary } from '@try-error/react';
 
 function App() {
   return (

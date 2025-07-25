@@ -32,7 +32,7 @@ export default function IntegrationGuidesPage() {
             className="mb-4"
           >
             {`import express from 'express';
-import { tryAsync, isTryError } from 'tryError';
+import { tryAsync, isTryError } from '@try-error/core';
 
 const app = express();
 
@@ -123,7 +123,7 @@ app.post('/users', handleTryError(async (req, res) => {
               >
                 {`// pages/api/users/[id].ts
 import { NextApiRequest, NextApiResponse } from 'next';
-import { tryAsync, isTryError } from 'tryError';
+import { tryAsync, isTryError } from '@try-error/core';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'GET') {
@@ -168,7 +168,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
               >
                 {`// app/api/users/[id]/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import { tryAsync, isTryError } from 'tryError';
+import { tryAsync, isTryError } from '@try-error/core';
 
 export async function GET(
   request: NextRequest,
@@ -232,7 +232,7 @@ export default async function UserPage({ params }: { params: { id: string } }) {
             className="mb-4"
           >
             {`import { PrismaClient, Prisma } from '@prisma/client';
-import { tryAsync, isTryError, createTryError } from 'tryError';
+import { tryAsync, isTryError, createTryError } from '@try-error/core';
 
 const prisma = new PrismaClient();
 
@@ -345,7 +345,7 @@ async function handleUserRequest(userId: string) {
             className="mb-4"
           >
             {`import { z } from 'zod';
-import { trySync, isTryError, createTryError } from 'tryError';
+import { trySync, isTryError, createTryError } from '@try-error/core';
 
 // Schema definitions
 const UserSchema = z.object({
@@ -445,7 +445,7 @@ function validateBody<T>(schema: z.ZodSchema<T>) {
                 showLineNumbers={true}
               >
                 {`// jest-setup.ts
-import { isTryError } from 'tryError';
+import { isTryError } from '@try-error/core';
 
 declare global {
   namespace jest {
@@ -762,7 +762,7 @@ Sentry.init({
 });
 
 // 3. Configure tryError with Sentry
-import { configure } from 'tryError';
+import { configure } from '@try-error/core';
 
 configure({
   onError: (error) => {
@@ -877,7 +877,7 @@ export async function processOrder(orderId: string) {
 // 2. Setup Analytics in your layout
 import { Analytics } from '@vercel/analytics/react';
 import { track } from '@vercel/analytics';
-import { configure } from 'tryError';
+import { configure } from '@try-error/core';
 
 // 3. Configure tryError to track errors
 configure({
@@ -1008,7 +1008,7 @@ export function RootLayout({ children }) {
                 showLineNumbers={true}
                 className="mb-4"
               >
-                {`import { configure } from 'tryError';
+                {`import { configure } from '@try-error/core';
 import { Bugsnag, LogRocket, Rollbar, DataDog } from './monitoring-services';
 
 configure({
