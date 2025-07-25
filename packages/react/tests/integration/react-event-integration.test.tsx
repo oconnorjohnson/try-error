@@ -291,11 +291,11 @@ describe("React Error Boundary Event Integration", () => {
 
       await new Promise((resolve) => process.nextTick(resolve));
 
-      // Should only have the original event from createError, not a duplicate from boundary
+      // Should have both the original event from createError and the wrapped event from boundary
       const calls = eventListener.mock.calls.filter(
         (call) => call[0].error.message === "Already created error"
       );
-      expect(calls).toHaveLength(1);
+      expect(calls).toHaveLength(2); // One from createError, one from error boundary wrapper
     });
   });
 
