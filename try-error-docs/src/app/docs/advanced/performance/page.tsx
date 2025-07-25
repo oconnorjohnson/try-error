@@ -754,23 +754,23 @@ async function processLargeDataset(data: any[]) {
               className="mb-4"
             >
               {`// Node.js/Express - Automatic environment detection
-import { setupNode } from 'tryError/setup';
+import { setupNode } from '@try-error/core/setup';
 setupNode(); // ✨ That's it! Optimized for dev/prod automatically
 
 // React/Vite - Browser-optimized configuration  
-import { setupReact } from 'tryError/setup';
+import { setupReact } from '@try-error/core/setup';
 setupReact(); // ✨ Perfect for client-side apps
 
 // Next.js - Handles both SSR and client-side
-import { setupNextJs } from 'tryError/setup';
+import { setupNextJs } from '@try-error/core/setup';
 setupNextJs(); // ✨ Works for both server and client
 
 // Auto-detect environment (works everywhere)
-import { autoSetup } from 'tryError/setup';
+import { autoSetup } from '@try-error/core/setup';
 autoSetup(); // ✨ Detects Node.js, React, Next.js, etc.
 
 // High-performance (for critical applications)
-import { setupPerformance } from 'tryError/setup';
+import { setupPerformance } from '@try-error/core/setup';
 setupPerformance(); // ✨ Maximum performance, minimal overhead
 
 // With custom options (still easy!)

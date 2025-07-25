@@ -39,17 +39,17 @@ Traditional error handling in JavaScript forces you to choose between:
 ## Installation
 
 ```bash
-npm install tryError
+npm install @try-error/core
 # or
-yarn add tryError
+yarn add @try-error/core
 # or
-pnpm add tryError
+pnpm add @try-error/core
 ```
 
 ## Quick Start
 
 ```typescript
-import { trySync, tryAsync, isTryError } from "tryError";
+import { trySync, tryAsync, isTryError } from "@try-error/core";
 
 // Wrap synchronous operations
 const result = trySync(() => JSON.parse(jsonString));
@@ -190,11 +190,11 @@ const results = await tryAllAsync([
 ## React Integration
 
 ```bash
-npm install @tryError/react
+npm install @try-error/react
 ```
 
 ```tsx
-import { useTry } from "@tryError/react";
+import { useTry } from "@try-error/react";
 
 function UserProfile({ userId }) {
   const {

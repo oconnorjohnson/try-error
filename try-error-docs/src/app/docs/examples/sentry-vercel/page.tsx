@@ -93,7 +93,7 @@ npx @sentry/wizard@latest -i nextjs`}
                   title="app/layout.tsx"
                   showLineNumbers={true}
                 >
-                  {`import { setupNextJs } from 'tryError/setup';
+                  {`import { setupNextJs } from '@try-error/core/setup';
 import * as Sentry from '@sentry/nextjs';
 
 // Configure tryError to send errors to Sentry
@@ -252,7 +252,7 @@ export function handleErrorWithTracking(error: TryError) {
                   showLineNumbers={true}
                   className="mt-4"
                 >
-                  {`import { setupNextJs } from 'tryError/setup';
+                  {`import { setupNextJs } from '@try-error/core/setup';
 import { handleErrorWithTracking } from '@/lib/error-tracking';
 
 // Use the advanced handler
