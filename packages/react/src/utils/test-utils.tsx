@@ -6,6 +6,7 @@ import {
   RenderHookOptions,
   RenderResult,
 } from "@testing-library/react";
+import "@testing-library/jest-dom";
 import { TryError, createError } from "try-error";
 import {
   TryErrorBoundary,
@@ -100,7 +101,7 @@ export function renderHookWithErrorBoundary<TResult, TProps>(
 export class MockAbortController implements AbortController {
   signal: AbortSignal;
   private _aborted = false;
-  private _reason: any = undefined;
+  private _reason: any = undefined; // Used to store abort reason
   private _listeners: Set<() => void> = new Set();
 
   constructor() {
