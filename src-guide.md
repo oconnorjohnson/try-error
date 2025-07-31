@@ -453,7 +453,7 @@ const error = createPaymentError("CardDeclined", "Card was declined", {
 - **Production Mode**: ~2-3x overhead with source location
 - **Development Mode**: ~5-10x overhead with full stack traces
 - **Memory**: Configurable object pooling and weak references
-- **Bundle Size**: Core ~2KB minified + gzipped
+- **Bundle Size**: Core ~2.7KB minified + gzipped
 
 ## 🔗 Module Dependencies
 

@@ -29,7 +29,7 @@ Traditional error handling in JavaScript forces you to choose between:
 - ✅ **Zero overhead** - Success values are returned directly
 - ✅ **Type safe** - Full TypeScript support with type inference
 - ✅ **Progressive** - Start simple, add complexity as needed
-- ✅ **Tiny** - 4.7KB minified + gzipped (core), 3.1KB (React)
+- ✅ **Tiny** - 2.7KB minified + gzipped (core), 3.1KB (React)
 - ✅ **Familiar** - Looks and feels like JavaScript
 
 ## Installation
@@ -209,13 +209,13 @@ function UserProfile({ userId }) {
 ## Comparison with Alternatives
 
 | Feature        | @try-error/core | fp-ts    | neverthrow | native try/catch |
-| -------------- | --------- | -------- | ---------- | ---------------- |
-| Type Safety    | ✅ Full   | ✅ Full  | ✅ Full    | ❌ None          |
-| Bundle Size    | 4.7KB     | ~50KB    | ~12KB      | 0KB              |
-| Learning Curve | Low       | High     | Medium     | Low              |
-| Zero Overhead  | ✅ Yes    | ❌ No    | ❌ No      | ✅ Yes           |
-| Async Support  | ✅ Yes    | ✅ Yes   | ✅ Yes     | ✅ Yes           |
-| Error Context  | ✅ Rich   | ❌ Basic | ❌ Basic   | ❌ Basic         |
+| -------------- | --------------- | -------- | ---------- | ---------------- |
+| Type Safety    | ✅ Full         | ✅ Full  | ✅ Full    | ❌ None          |
+| Bundle Size    | 2.7KB           | ~50KB    | ~12KB      | 0KB              |
+| Learning Curve | Low             | High     | Medium     | Low              |
+| Zero Overhead  | ✅ Yes          | ❌ No    | ❌ No      | ✅ Yes           |
+| Async Support  | ✅ Yes          | ✅ Yes   | ✅ Yes     | ✅ Yes           |
+| Error Context  | ✅ Rich         | ❌ Basic | ❌ Basic   | ❌ Basic         |
 
 ## Examples
 
@@ -299,6 +299,7 @@ For comprehensive documentation, examples, and API reference, visit:
 **📚 [Full Documentation](https://try-error-docs.vercel.app/)**
 
 ### Quick Links
+
 - [Installation Guide](https://try-error-docs.vercel.app/docs/installation)
 - [Quick Start Tutorial](https://try-error-docs.vercel.app/docs/quick-start)
 - [API Reference](https://try-error-docs.vercel.app/docs/api-reference)

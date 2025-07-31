@@ -12,7 +12,7 @@ import { trySync, tryAsync, isTryError } from "try-error";
 
 - Contains all functionality
 - Use when you need both sync and async error handling
-- Bundle size: ~8KB minified
+- Bundle size: ~13.5KB minified (with all dependencies)
 
 ### Sync-Only Module
 
@@ -23,7 +23,7 @@ import { trySync, isTryError } from "try-error/sync";
 - Contains only synchronous error handling functions
 - Includes core types, factories, and utilities
 - Perfect for Node.js scripts, CLI tools, or browser apps without async operations
-- Bundle size: ~4KB minified (50% smaller!)
+- Bundle size: ~3-4KB minified (optimized for sync operations)
 
 ### Async-Only Module
 
@@ -34,7 +34,7 @@ import { tryAsync, isTryError } from "try-error/async";
 - Contains only asynchronous error handling functions
 - Includes core types and utilities
 - Ideal for modern async-first applications
-- Bundle size: ~4KB minified (50% smaller!)
+- Bundle size: ~3-4KB minified (optimized for sync operations)
 
 ### Core Module
 
@@ -45,7 +45,7 @@ import { isTryError, createError } from "try-error/core";
 - Contains only core types and utilities
 - No sync or async operations
 - Use when building custom error handling on top of try-error
-- Bundle size: ~3KB minified
+- Bundle size: ~2.5KB minified
 
 ## Usage Examples
 
@@ -106,9 +106,9 @@ const data = await tryAsync(() => fetchUserData());
 
 | Import            | Size (minified) | Size (gzipped) | Use Case               |
 | ----------------- | --------------- | -------------- | ---------------------- |
-| `try-error`       | ~8KB            | ~3KB           | Full functionality     |
-| `try-error/sync`  | ~4KB            | ~1.5KB         | Sync-only apps         |
-| `try-error/async` | ~4KB            | ~1.5KB         | Async-only apps        |
+| `try-error`       | ~13.5KB         | ~2.7KB         | Full functionality     |
+| `try-error/sync`  | ~3-4KB          | ~1.5KB         | Sync-only apps         |
+| `try-error/async` | ~3-4KB          | ~1.5KB         | Async-only apps        |
 | `try-error/core`  | ~3KB            | ~1KB           | Custom implementations |
 
 ## Tree-Shaking Benefits

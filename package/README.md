@@ -29,7 +29,7 @@ Traditional error handling in JavaScript forces you to choose between:
 - ✅ **Zero overhead** - Success values are returned directly
 - ✅ **Type safe** - Full TypeScript support with type inference
 - ✅ **Progressive** - Start simple, add complexity as needed
-- ✅ **Tiny** - 4.7KB minified + gzipped (core), 3.1KB (React)
+- ✅ **Tiny** - 2.7KB minified + gzipped (core), 3.1KB (React)
 - ✅ **Familiar** - Looks and feels like JavaScript
 
 ## Installation
@@ -211,7 +211,7 @@ function UserProfile({ userId }) {
 | Feature        | try-error | fp-ts    | neverthrow | native try/catch |
 | -------------- | --------- | -------- | ---------- | ---------------- |
 | Type Safety    | ✅ Full   | ✅ Full  | ✅ Full    | ❌ None          |
-| Bundle Size    | 4.7KB     | ~50KB    | ~12KB      | 0KB              |
+| Bundle Size    | 2.7KB     | ~50KB    | ~12KB      | 0KB              |
 | Learning Curve | Low       | High     | Medium     | Low              |
 | Zero Overhead  | ✅ Yes    | ❌ No    | ❌ No      | ✅ Yes           |
 | Async Support  | ✅ Yes    | ✅ Yes   | ✅ Yes     | ✅ Yes           |

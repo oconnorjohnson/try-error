@@ -5,17 +5,21 @@
 ### 🎉 TRY-ERROR LIBRARY IS READY FOR ALPHA v0.0.1-alpha.1
 
 **Final Status:**
+
 - ✅ Core Library: 453/453 tests passing (100%)
 - ✅ React Package: 258/258 tests passing (100%)
 - ✅ TypeScript: All type errors resolved
-- ✅ Bundle Sizes: Within targets (~4.7KB core, ~3.1KB React)
+- ✅ Bundle Sizes: Updated to accurate measurements (~2.7KB core gzipped, ~13.5KB with dependencies, ~3.1KB React)
 - ✅ Documentation: Comprehensive README and docs site structure
 - ✅ No Critical Issues: All memory leaks fixed, SSR working perfectly
 
-**Last Fixes Applied:**
-1. Added `@testing-library/jest-dom` import to fix TypeScript errors for `toHaveAttribute` and `toHaveTextContent`
-2. Fixed event deduplication test expectation (correctly expects 2 events)
-3. All tests now passing consistently
+**Last Fixes Applied (July 30, 2025):**
+
+1. Updated bundle size references across repository - corrected from incorrect 4.7KB claim to accurate 2.7KB gzipped (13.5KB with dependencies)
+2. Verified package.json "files" arrays only include "dist" folder - no benchmarks, docs, or llm content being bundled
+3. Added `@testing-library/jest-dom` import to fix TypeScript errors for `toHaveAttribute` and `toHaveTextContent`
+4. Fixed event deduplication test expectation (correctly expects 2 events)
+5. All tests now passing consistently
 
 **Ready for npm publish as `0.0.1-alpha.1`!**
 
